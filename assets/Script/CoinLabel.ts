@@ -1,20 +1,33 @@
 import { _decorator, Component, Label } from 'cc';
 import { GlobalState, GlobalStateName } from "db://assets/Script/Util/GlobalState";
+import { EventName } from "db://assets/Script/Util/Constant";
 
 const { ccclass, property } = _decorator;
 
+/**
+ * 金币数量Label
+ */
 @ccclass('CoinLabel')
 export class CoinLabel extends Component {
+    /**
+     * Label
+     */
+    private _label: Label;
+
     start() {
-        GlobalState.getState(GlobalStateName.EVENT_TARGET).on('GetCoin', (coin: number) => this.onGetCoin(coin));
+        this._label = this.getComponent(Label);
+
+        GlobalState.getState(GlobalStateName.EVENT_TARGET)
+            .on(EventName.GET_COIN, (coin: number) => this.onGetCoin(coin));
     }
 
-    update(deltaTime: number) {
-
-    }
-
+    /**
+     * 触发获取金币
+     *
+     * @param coin 金币数
+     */
     onGetCoin(coin: number) {
-        this.node.getComponent(Label).string = `Coin: ${coin}`;
+        this._label.string = `Coin: ${coin}`;
     }
 }
 

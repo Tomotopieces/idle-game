@@ -1,7 +1,8 @@
-import { _decorator, Animation, Component, ProgressBar, EventTarget } from 'cc';
+import { _decorator, Animation, CCFloat, Component, EventTarget, ProgressBar, sys } from 'cc';
 import { EntityComponent } from "db://assets/Script/Component/EntityComponent";
 import { GlobalState, GlobalStateName } from "db://assets/Script/Util/GlobalState";
 import { EnemyController } from "db://assets/Script/EnemyController";
+import { EventName } from "db://assets/Script/Util/Constant";
 
 const { ccclass, property } = _decorator;
 
@@ -10,6 +11,12 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('PlayerController')
 export class PlayerController extends Component {
+    /**
+     * 攻击间隔（秒）
+     */
+    @property({ type: CCFloat, tooltip: '攻击间隔（秒）' })
+    public attackInterval: number = 1;
+
     /**
      * 动画机
      */
@@ -25,31 +32,39 @@ export class PlayerController extends Component {
      */
     private _entity: EntityComponent = new EntityComponent();
 
+    /**
+     * 自定义事件管理器
+     */
     private _eventTarget: EventTarget;
 
+    /**
+     * 金币数
+     */
     private _coin: number = 0;
+
+    /**
+     * 自动攻击Interval ID
+     */
+    private _autoAttackInterval: number;
 
     start() {
         // 玩家对象放入全局状态
         GlobalState.setState(GlobalStateName.PLAYER, this);
 
         // 获取组件
-        this._anim = this.node.getComponent(Animation);
+        this._anim = this.getComponent(Animation);
         this._healthBar = this.node.getChildByName('HealthBar').getComponent(ProgressBar);
+        this._eventTarget = GlobalState.getState(GlobalStateName.EVENT_TARGET);
         if (!this._anim) {
-            console.error(`get _anim failed`);
+            console.error(`[PlayerController.start] get _anim failed`);
             return;
         } else if (!this._healthBar) {
-            console.error(`get _healthBar failed`);
+            console.error(`[PlayerController.start] get _healthBar failed`);
             return;
         }
 
         // 监听敌人死亡事件
-        this._eventTarget = GlobalState.getState(GlobalStateName.EVENT_TARGET);
-        this._eventTarget.on('EnemyDie', (enemy: EnemyController) => this.onEnemyDie(enemy));
-
-        // 自动攻击
-        setInterval(() => this.attack(), 1000);
+        this._eventTarget.on(EventName.ENEMY_DIE, (enemy: EnemyController) => this.onEnemyDie(enemy));
 
         this.init();
     }
@@ -58,9 +73,22 @@ export class PlayerController extends Component {
      * 初始化基础数据
      */
     init() {
+        const coin = parseInt(sys.localStorage.getItem('coin'));
+        if (coin) {
+            this._coin = coin;
+            this._eventTarget.emit(EventName.GET_COIN, this._coin);
+            console.log(`Load player coin: ${this._coin}`);
+        }
+
         this._entity.health = 200;
         this._entity.damage = 20;
         this.updateHealthBar();
+
+        // 自动攻击
+        if (this._autoAttackInterval) {
+            clearInterval(this._autoAttackInterval);
+        }
+        this._autoAttackInterval = setInterval(() => this.attack(), this.attackInterval * 1000);
     }
 
     /**
@@ -72,6 +100,8 @@ export class PlayerController extends Component {
 
     /**
      * 造成伤害
+     *
+     * 动画帧事件触发
      */
     makeDamage() {
         const enemy = GlobalState.getState(GlobalStateName.ENEMY) as EnemyController;
@@ -87,11 +117,34 @@ export class PlayerController extends Component {
 
     /**
      * 敌人死亡
+     *
      * @param enemy 敌人
      */
     onEnemyDie(enemy: EnemyController) {
-        this._coin += enemy.reward;
-        this._eventTarget.emit('GetCoin', this._coin);
+        this._coin += enemy.drop;
+        this._eventTarget.emit(EventName.GET_COIN, this._coin);
+    }
+
+    /**
+     * 受伤
+     *
+     * @param damage 伤害值
+     */
+    hurt(damage: number) {
+        this._entity.health -= damage;
+        this.updateHealthBar();
+
+        if (this._entity.health === 0) {
+            this._eventTarget.emit(EventName.PLAYER_DIE);
+            // TODO 复活
+        }
+    }
+
+    /**
+     * 获取金币数
+     */
+    public get coin(): number {
+        return this._coin;
     }
 }
 

@@ -4,8 +4,19 @@
  * 避免使用魔法值
  */
 export enum GlobalStateName {
+    /**
+     * 自定义事件管理器
+     */
     EVENT_TARGET = 'EventTarget',
+
+    /**
+     * 玩家
+     */
     PLAYER = 'Player',
+
+    /**
+     * 敌人
+     */
     ENEMY = 'Enemy',
 }
 
