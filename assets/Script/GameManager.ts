@@ -1,4 +1,4 @@
-import { _decorator, CCInteger, Component, EventTarget, sys } from 'cc';
+import { _decorator, CCInteger, Component, director, EventTarget, sys } from 'cc';
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { PlayerController } from "db://assets/Script/Entity/PlayerController";
 import { ItemStack } from "db://assets/Script/Item/Item";
@@ -79,15 +79,13 @@ export class GameManager extends Component {
                 const itemStack = ItemStack.fromObject(item);
                 return [itemStack.itemId, itemStack];
             }));
-        console.log(this._storeHouse);
     }
 
     /**
      * 恢复敌人数据
      */
     restoreEnemyData() {
-        // TODO 从存档中读取
-        this.enemy.info = GlobalState.getState(GlobalStateName.ENEMY_TABLE).get(1);
+        this.enemy.info = GlobalState.getState(GlobalStateName.ENEMY_TABLE).get(this._latestSaveData.enemyId);
     }
 
     /**
@@ -99,7 +97,6 @@ export class GameManager extends Component {
             return;
         }
         this._latestSaveData = SaveData.fromJson(rawData);
-        console.log(`Load data: ${JSON.stringify(this._latestSaveData)}`)
     }
 
     /**
@@ -107,10 +104,19 @@ export class GameManager extends Component {
      */
     saveData() {
         const storeHouseJson = JSON.stringify(Array.from(this._storeHouse.values()));
-        console.log(storeHouseJson);
         this._latestSaveData = new SaveData(this.player.coin, storeHouseJson, this.enemy.info.id);
         sys.localStorage.setItem(ConfigName.SAVE_DATA, JSON.stringify(this._latestSaveData));
-        console.log(`Save data: ${JSON.stringify(this._latestSaveData)}`);
+        console.log(`Auto Save`);
+    }
+
+    /**
+     * 处理道具掉落
+     *
+     * @param dropList 掉落道具列表
+     */
+    private handleDropItem(dropList: Array<DropItem>) {
+        StoreHouseUtil.putIn(this._storeHouse, DropItemFactory.produce(dropList));
+        this.player.coin = this._storeHouse.get(COIN_ID)?.count ?? 0;
     }
 
     /**
@@ -123,13 +129,12 @@ export class GameManager extends Component {
     }
 
     /**
-     * 处理道具掉落
+     * 暂停游戏
      *
-     * @param dropList 掉落道具列表
+     * 按钮触发
      */
-    private handleDropItem(dropList: Array<DropItem>) {
-        StoreHouseUtil.putIn(this._storeHouse, DropItemFactory.produce(dropList));
-        this.player.coin = this._storeHouse.get(COIN_ID)?.count ?? 0;
+    pause() {
+        director.isPaused() ? director.resume() : director.pause();
     }
 }
 

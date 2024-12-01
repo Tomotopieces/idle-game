@@ -43,9 +43,9 @@ export class PlayerController extends Component {
     private _coin: number = 0;
 
     /**
-     * 自动攻击Interval ID
+     * 自动攻击计时器
      */
-    private _autoAttackInterval: number;
+    private _autoAttackTimer = 0;
 
     start() {
         // 玩家对象放入全局状态
@@ -70,6 +70,10 @@ export class PlayerController extends Component {
         this._eventTarget.emit(EventName.PLAYER_RESTORE_SAVE_DATA);
     }
 
+    update(dt: number) {
+        this.autoAttack(dt);
+    }
+
     /**
      * 初始化基础数据
      */
@@ -77,12 +81,20 @@ export class PlayerController extends Component {
         this._entity.health = 200;
         this._entity.damage = 20;
         this.updateHealthBar();
+    }
 
-        // 自动攻击
-        if (this._autoAttackInterval) {
-            clearInterval(this._autoAttackInterval);
+    /**
+     * 自动攻击
+     *
+     * @param dt delta time
+     */
+    autoAttack(dt: number) {
+        this._autoAttackTimer += dt;
+
+        if (this._autoAttackTimer >= this.attackInterval) {
+            this.attack();
+            this._autoAttackTimer -= this.attackInterval;
         }
-        this._autoAttackInterval = setInterval(() => this.attack(), this.attackInterval * 1000);
     }
 
     /**

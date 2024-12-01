@@ -30,11 +30,6 @@ export abstract class EnemyController extends Component {
     private _healthBar: ProgressBar = null;
 
     /**
-     * 自动攻击Interval ID
-     */
-    private _autoAttackInterval: number;
-
-    /**
      * 基本信息
      */
     private _info: EnemyInfo = null;
@@ -48,6 +43,11 @@ export abstract class EnemyController extends Component {
      * 自定义事件处理器
      */
     private _eventTarget: EventTarget = null;
+
+    /**
+     * 自动攻击计时器
+     */
+    private _autoAttackTimer: number = 0;
 
     start() {
         GlobalState.setState(GlobalStateName.ENEMY, this);
@@ -67,6 +67,10 @@ export abstract class EnemyController extends Component {
         this._eventTarget.emit(EventName.ENEMY_RESTORE_SAVE_DATA);
     }
 
+    update(dt: number) {
+        this.autoAttack(dt);
+    }
+
     /**
      * 初始化基础数据
      */
@@ -74,13 +78,27 @@ export abstract class EnemyController extends Component {
         this._entity.health = this._info.health;
         this._entity.damage = this._info.damage;
         this.updateHealthBar();
+    }
 
+    /**
+     * 自动攻击
+     *
+     * @param dt 时间间隔
+     */
+    autoAttack(dt: number) {
+        this._autoAttackTimer += dt;
 
-        // 自动攻击
-        if (this._autoAttackInterval) {
-            clearInterval(this._autoAttackInterval);
+        if (this._autoAttackTimer >= this.attackInterval) {
+            this.attack();
+            this._autoAttackTimer -= this.attackInterval;
         }
-        this._autoAttackInterval = setInterval(() => this.attack(), this.attackInterval * 1000);
+    }
+
+    /**
+     * 攻击
+     */
+    attack() {
+        this._anim.play('Attack');
     }
 
     /**
@@ -110,13 +128,6 @@ export abstract class EnemyController extends Component {
     onDie() {
         this._eventTarget.emit(EventName.ENEMY_DIE, this);
         this.init();
-    }
-
-    /**
-     * 攻击
-     */
-    attack() {
-        this._anim.play('Attack');
     }
 
     /**
