@@ -18,15 +18,15 @@ export class CoinLabel extends Component {
         this._label = this.getComponent(Label);
 
         GlobalState.getState(GlobalStateName.EVENT_TARGET)
-            .on(EventName.UPDATE_COIN, (coin: number) => this.onGetCoin(coin));
+            .on(EventName.UPDATE_COIN, (coin: number) => this.updateCoin(coin));
     }
 
     /**
-     * 触发获取金币
+     * 更新金币数Label
      *
      * @param coin 金币数
      */
-    onGetCoin(coin: number) {
+    updateCoin(coin: number) {
         this._label.string = `${coin}`;
     }
 }

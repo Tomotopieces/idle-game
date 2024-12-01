@@ -63,9 +63,14 @@ export enum EventName {
     CALCULATE_DROP_ITEM = 'CALCULATE_DROP_ITEM',
 
     /**
-     * 获取金币
+     * 更新金币
      */
     UPDATE_COIN = 'UPDATE_COIN',
+
+    /**
+     * 更新玩家攻击力
+     */
+    UPDATE_PLAYER_DAMAGE = 'UPDATE_PLAYER_DAMAGE',
 }
 
 /**

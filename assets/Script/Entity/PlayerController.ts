@@ -80,6 +80,7 @@ export class PlayerController extends Component {
     init() {
         this._entity.health = 200;
         this._entity.damage = 20;
+        GlobalState.getState(GlobalStateName.EVENT_TARGET).emit(EventName.UPDATE_PLAYER_DAMAGE, this._entity.damage);
         this.updateHealthBar();
     }
 
