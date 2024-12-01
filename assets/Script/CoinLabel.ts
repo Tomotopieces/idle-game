@@ -27,7 +27,7 @@ export class CoinLabel extends Component {
      * @param coin 金币数
      */
     onGetCoin(coin: number) {
-        this._label.string = `灵韵: ${coin}`;
+        this._label.string = `${coin}`;
     }
 }
 

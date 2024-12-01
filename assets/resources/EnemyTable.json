@@ -8,8 +8,8 @@
       {
         "itemId": 1,
         "dropRate": 1,
-        "max": 1,
-        "min": 1
+        "max": 10,
+        "min": 5
       },
       {
         "itemId": 2,

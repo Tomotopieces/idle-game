@@ -85,7 +85,11 @@ export class GameManager extends Component {
      * 恢复敌人数据
      */
     restoreEnemyData() {
-        this.enemy.info = GlobalState.getState(GlobalStateName.ENEMY_TABLE).get(this._latestSaveData.enemyId);
+        if (this._latestSaveData) {
+            this.enemy.info = GlobalState.getState(GlobalStateName.ENEMY_TABLE).get(this._latestSaveData.enemyId);
+        } else {
+            this.enemy.info = GlobalState.getState(GlobalStateName.ENEMY_TABLE).get(1);
+        }
     }
 
     /**
