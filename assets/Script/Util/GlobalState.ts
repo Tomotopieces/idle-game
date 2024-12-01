@@ -1,24 +1,4 @@
-/**
- * 全局状态名称枚举
- *
- * 避免使用魔法值
- */
-export enum GlobalStateName {
-    /**
-     * 自定义事件管理器
-     */
-    EVENT_TARGET = 'EventTarget',
-
-    /**
-     * 玩家
-     */
-    PLAYER = 'Player',
-
-    /**
-     * 敌人
-     */
-    ENEMY = 'Enemy',
-}
+import { GlobalStateName } from "db://assets/Script/Util/Constant";
 
 /**
  * 全局状态

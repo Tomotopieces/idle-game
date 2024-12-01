@@ -25,23 +25,29 @@ export class Item {
     /**
      * ID
      */
-    private _id: number;
+    private readonly _id: number;
 
     /**
      * 名称
      */
-    private _name: string;
+    private readonly _name: string;
 
     /**
      * 类型
      */
-    private _type: ItemType;
+    private readonly _type: ItemType;
 
     /**
      * 描述
      */
-    private _description: string;
+    private readonly _description: string;
 
+    constructor(id: number, name: string, type: ItemType, description: string) {
+        this._id = id;
+        this._name = name;
+        this._type = type;
+        this._description = description;
+    }
 
     get id(): number {
         return this._id;
@@ -65,18 +71,25 @@ export class Item {
  */
 export class ItemStack {
     /**
-     * 物品
+     * 物品ID
      */
-    private _item: Item;
+    itemId: number;
 
     /**
      * 数量
      */
-    private _count: number;
+    count: number;
 
+    constructor(itemId: number, count: number) {
+        this.itemId = itemId;
+        this.count = count;
+    }
 
-    constructor(item: Item, count: number) {
-        this._item = item;
-        this._count = count;
+    /**
+     * 从对象创建
+     * @param obj
+     */
+    static fromObject(obj: any): ItemStack {
+        return new ItemStack(obj.itemId, obj.count);
     }
 }

@@ -1,8 +1,10 @@
-import { _decorator, CCFloat, Component, ProgressBar, Animation, EventTarget } from 'cc';
-import { GlobalState, GlobalStateName } from "db://assets/Script/Util/GlobalState";
+import { _decorator, Animation, CCFloat, Component, EventTarget, ProgressBar } from 'cc';
+import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { EntityComponent } from "db://assets/Script/Component/EntityComponent";
-import { EventName } from "db://assets/Script/Util/Constant";
-import { PlayerController } from "db://assets/Script/PlayerController";
+import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
+import { PlayerController } from "db://assets/Script/Entity/PlayerController";
+import { DropItem } from "db://assets/Script/Item/DropItem";
+import { EnemyInfo } from "db://assets/Script/Entity/Enemy/EnemyInfo";
 
 const { ccclass, property } = _decorator;
 
@@ -10,12 +12,12 @@ const { ccclass, property } = _decorator;
  * 敌人控制器
  */
 @ccclass('EnemyController')
-export class EnemyController extends Component {
+export abstract class EnemyController extends Component {
     /**
      * 攻击间隔（秒）
      */
     @property({ type: CCFloat, tooltip: '攻击间隔（秒）' })
-    public attackInterval: number = 1;
+    attackInterval: number = 1;
 
     /**
      * 动画机
@@ -28,22 +30,28 @@ export class EnemyController extends Component {
     private _healthBar: ProgressBar = null;
 
     /**
+     * 自动攻击Interval ID
+     */
+    private _autoAttackInterval: number;
+
+    /**
+     * 基本信息
+     */
+    private _info: EnemyInfo = null;
+
+    /**
      * 实体组件
      */
     private _entity: EntityComponent = new EntityComponent();
 
     /**
-     * 掉落奖励
+     * 自定义事件处理器
      */
-    private _drop: number = 0;
-
-    /**
-     * 自动攻击Interval ID
-     */
-    private _autoAttackInterval: number;
+    private _eventTarget: EventTarget = null;
 
     start() {
         GlobalState.setState(GlobalStateName.ENEMY, this);
+        this._eventTarget = GlobalState.getState(GlobalStateName.EVENT_TARGET) as EventTarget;
 
         // 获取组件
         this._anim = this.getComponent(Animation);
@@ -56,18 +64,17 @@ export class EnemyController extends Component {
             return;
         }
 
-        this.init();
+        this._eventTarget.emit(EventName.ENEMY_RESTORE_SAVE_DATA);
     }
 
     /**
      * 初始化基础数据
      */
     init() {
-        this._entity.health = 100;
-        this._entity.damage = 10;
-        this._drop = 10;
+        this._entity.health = this._info.health;
+        this._entity.damage = this._info.damage;
+        this.updateHealthBar();
 
-        this._healthBar.progress = 1;
 
         // 自动攻击
         if (this._autoAttackInterval) {
@@ -81,7 +88,7 @@ export class EnemyController extends Component {
      *
      * @param damage 伤害值
      */
-    public hurt(damage: number) {
+    hurt(damage: number) {
         this._entity.health -= damage;
         this.updateHealthBar();
 
@@ -94,21 +101,14 @@ export class EnemyController extends Component {
      * 更新血条显示
      */
     updateHealthBar() {
-        this._healthBar.progress = this._entity.health / 100;
-    }
-
-    /**
-     * 获取掉落奖励
-     */
-    public get drop(): number {
-        return this._drop;
+        this._healthBar.progress = this._entity.health / this._info.health;
     }
 
     /**
      * 死亡
      */
     onDie() {
-        (GlobalState.getState(GlobalStateName.EVENT_TARGET) as EventTarget).emit(EventName.ENEMY_DIE, this);
+        this._eventTarget.emit(EventName.ENEMY_DIE, this);
         this.init();
     }
 
@@ -128,6 +128,28 @@ export class EnemyController extends Component {
         const player = GlobalState.getState(GlobalStateName.PLAYER) as PlayerController;
         player.hurt(this._entity.damage);
     }
+
+    /**
+     * 获取掉落奖励
+     */
+    get dropList(): Array<DropItem> {
+        return this._info.dropList;
+    }
+
+    /**
+     * 获取敌人信息
+     */
+    get info(): EnemyInfo {
+        return this._info;
+    }
+
+    /**
+     * 设置敌人信息
+     *
+     * @param value 敌人信息
+     */
+    set info(value: EnemyInfo) {
+        this._info = value;
+        this.init();
+    }
 }
-
-

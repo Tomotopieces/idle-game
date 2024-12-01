@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "name": "狼斥候",
+    "health": 100,
+    "damage": 10,
+    "dropList": [
+      {
+        "itemId": 1,
+        "dropRate": 1,
+        "max": 1,
+        "min": 1
+      },
+      {
+        "itemId": 2,
+        "dropRate": 0.5,
+        "max": 1,
+        "min": 1
+      }
+    ]
+  }
+]

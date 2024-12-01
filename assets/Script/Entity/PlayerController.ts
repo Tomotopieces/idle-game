@@ -1,8 +1,8 @@
-import { _decorator, Animation, CCFloat, Component, EventTarget, ProgressBar, sys } from 'cc';
+import { _decorator, Animation, CCFloat, Component, EventTarget, ProgressBar } from 'cc';
 import { EntityComponent } from "db://assets/Script/Component/EntityComponent";
-import { GlobalState, GlobalStateName } from "db://assets/Script/Util/GlobalState";
-import { EnemyController } from "db://assets/Script/EnemyController";
-import { EventName } from "db://assets/Script/Util/Constant";
+import { GlobalState } from "db://assets/Script/Util/GlobalState";
+import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
+import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 
 const { ccclass, property } = _decorator;
 
@@ -67,19 +67,13 @@ export class PlayerController extends Component {
         this._eventTarget.on(EventName.ENEMY_DIE, (enemy: EnemyController) => this.onEnemyDie(enemy));
 
         this.init();
+        this._eventTarget.emit(EventName.PLAYER_RESTORE_SAVE_DATA);
     }
 
     /**
      * 初始化基础数据
      */
     init() {
-        const coin = parseInt(sys.localStorage.getItem('coin'));
-        if (coin) {
-            this._coin = coin;
-            this._eventTarget.emit(EventName.GET_COIN, this._coin);
-            console.log(`Load player coin: ${this._coin}`);
-        }
-
         this._entity.health = 200;
         this._entity.damage = 20;
         this.updateHealthBar();
@@ -121,8 +115,7 @@ export class PlayerController extends Component {
      * @param enemy 敌人
      */
     onEnemyDie(enemy: EnemyController) {
-        this._coin += enemy.drop;
-        this._eventTarget.emit(EventName.GET_COIN, this._coin);
+        this._eventTarget.emit(EventName.CALCULATE_DROP_ITEM, enemy.dropList);
     }
 
     /**
@@ -145,6 +138,14 @@ export class PlayerController extends Component {
      */
     public get coin(): number {
         return this._coin;
+    }
+
+    /**
+     * 设置金币数
+     */
+    public set coin(value: number) {
+        this._coin = value;
+        this._eventTarget.emit(EventName.UPDATE_COIN, this._coin);
     }
 }
 

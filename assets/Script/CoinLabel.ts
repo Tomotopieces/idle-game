@@ -1,8 +1,8 @@
 import { _decorator, Component, Label } from 'cc';
-import { GlobalState, GlobalStateName } from "db://assets/Script/Util/GlobalState";
-import { EventName } from "db://assets/Script/Util/Constant";
+import { GlobalState } from "db://assets/Script/Util/GlobalState";
+import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 
-const { ccclass, property } = _decorator;
+const { ccclass } = _decorator;
 
 /**
  * 金币数量Label
@@ -18,7 +18,7 @@ export class CoinLabel extends Component {
         this._label = this.getComponent(Label);
 
         GlobalState.getState(GlobalStateName.EVENT_TARGET)
-            .on(EventName.GET_COIN, (coin: number) => this.onGetCoin(coin));
+            .on(EventName.UPDATE_COIN, (coin: number) => this.onGetCoin(coin));
     }
 
     /**
@@ -27,7 +27,7 @@ export class CoinLabel extends Component {
      * @param coin 金币数
      */
     onGetCoin(coin: number) {
-        this._label.string = `Coin: ${coin}`;
+        this._label.string = `灵韵: ${coin}`;
     }
 }
 
