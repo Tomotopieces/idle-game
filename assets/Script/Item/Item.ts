@@ -8,9 +8,9 @@ export enum ItemType {
     COMMON,
 
     /**
-     * 武器
+     * 装备
      */
-    WEAPON,
+    EQUIPMENT,
 
     /**
      * 消耗品
@@ -20,6 +20,8 @@ export enum ItemType {
 
 /**
  * 物品
+ *
+ * 从文件中读取，readonly
  */
 export class Item {
     /**
@@ -42,12 +44,10 @@ export class Item {
      */
     private readonly _description: string;
 
-    constructor(id: number, name: string, type: ItemType, description: string) {
-        this._id = id;
-        this._name = name;
-        this._type = type;
-        this._description = description;
-    }
+    /**
+     * 图标
+     */
+    private readonly _icon: string;
 
     get id(): number {
         return this._id;
@@ -64,32 +64,9 @@ export class Item {
     get description(): string {
         return this._description;
     }
-}
 
-/**
- * 物品堆叠
- */
-export class ItemStack {
-    /**
-     * 物品ID
-     */
-    itemId: number;
-
-    /**
-     * 数量
-     */
-    count: number;
-
-    constructor(itemId: number, count: number) {
-        this.itemId = itemId;
-        this.count = count;
-    }
-
-    /**
-     * 从对象创建
-     * @param obj
-     */
-    static fromObject(obj: any): ItemStack {
-        return new ItemStack(obj.itemId, obj.count);
+    get icon(): string {
+        return this._icon;
     }
 }
+

@@ -1,12 +1,13 @@
 import { _decorator, CCInteger, Component, director, EventTarget, sys } from 'cc';
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { PlayerController } from "db://assets/Script/Entity/PlayerController";
-import { ItemStack } from "db://assets/Script/Item/Item";
 import { SaveData } from "db://assets/Script/Util/SaveData";
 import { COIN_ID, ConfigName, EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
-import { DropItem, DropItemFactory } from "db://assets/Script/Item/DropItem";
+import { DropItem } from "db://assets/Script/Item/DropItem";
 import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
 import { StoreHouse, StoreHouseUtil } from "db://assets/Script/Util/StoreHouseUtil";
+import { DropItemFactory } from "db://assets/Script/Item/DropItemFactory";
+import { ItemStack } from "db://assets/Script/Item/ItemStack";
 
 const { ccclass, property } = _decorator;
 
@@ -31,7 +32,7 @@ export class GameManager extends Component {
      * 自动保存间隔（秒）
      */
     @property({ type: CCInteger, tooltip: '自动保存间隔（秒）' })
-    autoSaveDuration: number = 5 * 60;
+    autoSaveInterval: number = 5 * 60;
 
     /**
      * 仓库
@@ -48,12 +49,18 @@ export class GameManager extends Component {
      */
     private _eventTarget: EventTarget = null;
 
+    /**
+     * 自动保存计时器
+     */
+    private _autoSaveTimer: number = 0;
+
     onLoad() {
         // 获取自定义事件管理器
         this._eventTarget = GlobalState.getState(GlobalStateName.EVENT_TARGET);
 
         // 读取存档
         this.loadSaveData();
+        GlobalState.setState(GlobalStateName.STORE_HOUSE, this._storeHouse);
 
         // 监听处理事件
         this._eventTarget.on(EventName.PLAYER_RESTORE_SAVE_DATA, () => this.restorePlayerData());
@@ -61,9 +68,13 @@ export class GameManager extends Component {
         this._eventTarget.on(EventName.CALCULATE_DROP_ITEM, (dropList: Array<DropItem>) => this.handleDropItem(dropList));
     }
 
-    start() {
-        // 每隔10秒保存数据
-        setInterval(() => this.saveData(), this.autoSaveDuration * 1000);
+    update(dt: number) {
+        this._autoSaveTimer += dt;
+
+        if (this._autoSaveTimer >= this.autoSaveInterval) {
+            this.saveData();
+            this._autoSaveTimer -= this.autoSaveInterval;
+        }
     }
 
     /**
@@ -79,6 +90,7 @@ export class GameManager extends Component {
                 const itemStack = ItemStack.fromObject(item);
                 return [itemStack.itemId, itemStack];
             }));
+        GlobalState.setState(GlobalStateName.STORE_HOUSE, this._storeHouse);
     }
 
     /**
@@ -119,7 +131,7 @@ export class GameManager extends Component {
      * @param dropList 掉落道具列表
      */
     private handleDropItem(dropList: Array<DropItem>) {
-        StoreHouseUtil.putIn(this._storeHouse, DropItemFactory.produce(dropList));
+        StoreHouseUtil.putIn(DropItemFactory.produce(dropList));
         this.player.coin = this._storeHouse.get(COIN_ID)?.count ?? 0;
     }
 

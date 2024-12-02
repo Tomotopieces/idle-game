@@ -19,6 +19,21 @@ export enum SceneName {
 }
 
 /**
+ * 数据资源路径常量
+ */
+export enum DataPath {
+    /**
+     * 道具配置表
+     */
+    ITEM_TABLE = 'data/item_table',
+
+    /**
+     * 敌人配置表
+     */
+    ENEMY_TABLE = 'data/enemy_table',
+}
+
+/**
  * 配置常量
  */
 export enum ConfigName {
@@ -71,6 +86,11 @@ export enum EventName {
      * 更新玩家攻击力
      */
     UPDATE_PLAYER_DAMAGE = 'UPDATE_PLAYER_DAMAGE',
+
+    /**
+     * 更新仓库
+     */
+    UPDATE_STORE_HOUSE = 'UPDATE_STORE_HOUSE',
 }
 
 /**
@@ -101,4 +121,9 @@ export enum GlobalStateName {
      * 敌人
      */
     ENEMY = 'Enemy',
+
+    /**
+     * 仓库
+     */
+    STORE_HOUSE = 'StoreHouse',
 }

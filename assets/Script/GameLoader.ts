@@ -1,8 +1,8 @@
 import { _decorator, Component, director, EventTarget, JsonAsset, ProgressBar, resources } from 'cc';
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { EventName, GlobalStateName, SceneName } from "db://assets/Script/Util/Constant";
+import { DataPath, EventName, GlobalStateName, SceneName } from "db://assets/Script/Util/Constant";
 import { Item } from "db://assets/Script/Item/Item";
-import { JsonEnemyInfo } from "db://assets/Script/Entity/Enemy/JsonEnemyInfo";
+import { EnemyInfoJson } from "db://assets/Script/Entity/Enemy/EnemyInfoJson";
 import { EnemyInfo } from "db://assets/Script/Entity/Enemy/EnemyInfo";
 
 const { ccclass, property } = _decorator;
@@ -52,7 +52,7 @@ export class GameLoader extends Component {
      * 加载道具表
      */
     loadItemTable() {
-        resources.load('ItemTable', (err: any, data: JsonAsset) => {
+        resources.load(DataPath.ITEM_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             const itemList = data.json! as Array<Item>;
             const itemTable = new Map<number, Item>();
             itemList.forEach(item => itemTable.set(item.id, item));
@@ -70,10 +70,10 @@ export class GameLoader extends Component {
      * 加载敌人表
      */
     loadEnemyTable() {
-        resources.load('EnemyTable', (err: any, data: JsonAsset) => {
-            const rawInfoList = data.json! as Array<JsonEnemyInfo>;
+        resources.load(DataPath.ENEMY_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+            const rawInfoList = data.json! as Array<EnemyInfoJson>;
             const infoTable = new Map<number, EnemyInfo>();
-            rawInfoList.forEach(jsonInfo => infoTable.set(jsonInfo.id, JsonEnemyInfo.toEnemyInfo(jsonInfo)));
+            rawInfoList.forEach(jsonInfo => infoTable.set(jsonInfo.id, EnemyInfoJson.toEnemyInfo(jsonInfo)));
             GlobalState.setState(GlobalStateName.ENEMY_TABLE, infoTable);
 
             this._loadEnemyFinished = true;

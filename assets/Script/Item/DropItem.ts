@@ -1,6 +1,4 @@
-import { Item, ItemStack } from "db://assets/Script/Item/Item";
-import { GlobalStateName } from "db://assets/Script/Util/Constant";
-import { GlobalState } from "db://assets/Script/Util/GlobalState";
+import { Item } from "db://assets/Script/Item/Item";
 
 /**
  * 物品掉落
@@ -66,67 +64,3 @@ export class DropItem {
     }
 }
 
-export class JsonDropItem {
-    /**
-     * 物品ID
-     */
-    private readonly _itemId: number;
-
-    /**
-     * 物品掉落概率
-     */
-    private readonly _dropRate: number = 1;
-
-    /**
-     * 最大数量
-     */
-    private readonly _max: number = 1;
-
-    /**
-     * 最小数量
-     */
-    private readonly _min: number = 1;
-
-    constructor(itemId: number, dropRate: number, max: number, min: number) {
-        this._itemId = itemId;
-        this._dropRate = dropRate;
-        this._max = max;
-        this._min = min;
-    }
-
-    /**
-     * 转换为DropItem
-     */
-    public static toDropItem(jsonDropItem: JsonDropItem): DropItem {
-        jsonDropItem = JsonDropItem.fromObj(jsonDropItem);
-        const item = GlobalState.getState(GlobalStateName.ITEM_TABLE).get(jsonDropItem._itemId);
-        return new DropItem(item, jsonDropItem._dropRate, jsonDropItem._max, jsonDropItem._min);
-    }
-
-    /**
-     * 从Object对象重新创建JsonDropItem
-     */
-    static fromObj(drop: any) {
-        return new JsonDropItem(drop.itemId, drop.dropRate, drop.max, drop.min);
-    }
-}
-
-/**
- * 物品掉落工厂
- */
-export class DropItemFactory {
-    /**
-     * 根据掉落列表生成物品
-     *
-     * @param dropList 掉落列表
-     */
-    public static produce(dropList: Array<DropItem>): Array<ItemStack> {
-        const result = new Array<ItemStack>();
-        dropList.forEach(drop => {
-            if (Math.random() < drop.dropRate) {
-                result.push((new ItemStack(drop.item.id, Math.floor(Math.random() * (drop.max - drop.min + 1) + drop.min))));
-            }
-        });
-        return result;
-    }
-}
