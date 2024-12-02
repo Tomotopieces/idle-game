@@ -49,7 +49,7 @@ export class DropItemJson {
      *
      * @param obj Object
      */
-    static fromObject(obj: any) {
+    static fromObject(obj: any): DropItemJson {
         return new DropItemJson(obj.itemId, obj.dropRate, obj.max, obj.min);
     }
 }

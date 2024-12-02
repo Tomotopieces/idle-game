@@ -30,14 +30,6 @@ export class EnemyInfoJson {
      */
     dropList: Array<DropItemJson>;
 
-    constructor(id: number, name: string, health: number, damage: number, dropList: Array<DropItemJson>) {
-        this.id = id;
-        this.name = name;
-        this.health = health;
-        this.damage = damage;
-        this.dropList = dropList;
-    }
-
     /**
      * 转换为EnemyInfo
      *
@@ -45,6 +37,6 @@ export class EnemyInfoJson {
      */
     static toEnemyInfo(infoJson: EnemyInfoJson): EnemyInfo {
         const dropList = infoJson.dropList.map(jsonDrop => DropItemJson.toDropItem(jsonDrop));
-        return new EnemyInfo(infoJson.id, this.name, infoJson.health, infoJson.damage, dropList);
+        return new EnemyInfo(infoJson.id, infoJson.name, infoJson.health, infoJson.damage, dropList);
     }
 }

@@ -26,7 +26,7 @@
     - [ ] 完成仓库的UI
       - [x] 物品展示
       - [ ] 设计实现交互逻辑
-- [ ] 关卡系统
+- [ ] 关卡系统 **👈进行中**
     - [ ] 多个Level，每个Level有若干个Stage，每个Stage有固定一个Enemy
     - [ ] 切换Level和Stage时自动切换Enemy
     - [ ] 存档记录Level和Stage，而不是Enemy
