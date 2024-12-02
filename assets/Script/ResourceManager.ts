@@ -30,6 +30,9 @@ export class ResourceManager extends Component {
             assetHandler(asset);
         } else {
             resources.load(path, (err: any, data: Asset) => {
+                if (err) {
+                    console.error(err);
+                }
                 this._dynamicAssets.set(path, data);
                 assetHandler(data);
             });

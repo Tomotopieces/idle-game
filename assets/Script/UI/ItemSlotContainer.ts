@@ -119,10 +119,6 @@ export class ItemSlotContainer extends Component {
             const slot = i < this._slotList.length ? this._slotList[i] : instantiate(this.slotPrefab);
             this.node.addChild(slot);
             slot.setPosition(ItemSlotContainer.calculatePosition(i));
-
-            if (i < this._slotList.length) {
-                console.log(JSON.stringify(slot.getComponent(ItemSlot).stack));
-            }
         }
     }
 
