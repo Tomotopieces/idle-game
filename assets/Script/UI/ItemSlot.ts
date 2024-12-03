@@ -3,7 +3,7 @@ import { Item } from "db://assets/Script/Item/Item";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { GlobalStateName } from "db://assets/Script/Util/Constant";
-import { IMAGE_PREFIX, IMAGE_SUFFIX, ResourceManager } from "db://assets/Script/ResourceManager";
+import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 
 const { ccclass, property } = _decorator;
 
@@ -69,7 +69,7 @@ export class ItemSlot extends Component {
     set stack(value: ItemStack) {
         this._stack = value;
         this._item = GlobalState.getState(GlobalStateName.ITEM_TABLE).get(value.itemId);
-        ResourceManager.getAsset(`${IMAGE_PREFIX}${this._item.icon}${IMAGE_SUFFIX}`, (spriteFrame: SpriteFrame) => {
+        ResourceManager.getAsset(ResourceType.SPRITE_FRAME, this._item.icon, (spriteFrame: SpriteFrame) => {
             this.stackNode.getComponent(Sprite).spriteFrame = spriteFrame;
         });
         this.countLabel.string = `${value.count}`;

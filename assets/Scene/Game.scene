@@ -2079,7 +2079,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "cf807ac8-becb-4dd3-96e8-b9c250f27539@f9941",
+      "__uuid__": "ab74a665-05f7-41d4-80cc-eeca1c332ce1@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -3370,8 +3370,8 @@
     "_target": null,
     "_left": 0,
     "_right": 0,
-    "_top": 5.684341886080802e-14,
-    "_bottom": 5.684341886080802e-14,
+    "_top": 0,
+    "_bottom": 0,
     "_horizontalCenter": 0,
     "_verticalCenter": 0,
     "_isAbsLeft": true,

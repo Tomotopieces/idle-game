@@ -29,11 +29,17 @@ export class EnemyInfo {
      */
     dropList: Array<DropItem>;
 
-    constructor(id: number, name: string, health: number, damage: number, dropList: Array<DropItem>) {
+    /**
+     * 图标
+     */
+    icon: string;
+
+    constructor(id: number, name: string, health: number, damage: number, dropList: Array<DropItem>, icon: string) {
         this.id = id;
         this.name = name;
         this.health = health;
         this.damage = damage;
         this.dropList = dropList;
+        this.icon = icon;
     }
 }

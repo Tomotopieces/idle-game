@@ -1,0 +1,49 @@
+[
+  {
+    "id": 1,
+    "name": "黑风山",
+    "stages": [
+      {
+        "id": 1,
+        "name": "苍狼林",
+        "enemyInfoId": 1
+      },
+      {
+        "id": 2,
+        "name": "翠竹林",
+        "enemyInfoId": 1
+      },
+      {
+        "id": 3,
+        "name": "黑风洞",
+        "enemyInfoId": 1
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "黄风岭",
+    "stages": [
+      {
+        "id": 4,
+        "name": "沙门村",
+        "enemyInfoId": 1
+      },
+      {
+        "id": 5,
+        "name": "挟魂崖",
+        "enemyInfoId": 1
+      },
+      {
+        "id": 6,
+        "name": "卧虎寺",
+        "enemyInfoId": 1
+      },
+      {
+        "id": 7,
+        "name": "黄风阵",
+        "enemyInfoId": 1
+      }
+    ]
+  }
+]
