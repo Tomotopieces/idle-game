@@ -16,6 +16,11 @@ export class EnemyInfoJson {
     name: string;
 
     /**
+     * 显示名称
+     */
+    displayName: string;
+
+    /**
      * 生命值
      */
     health: number;
@@ -31,12 +36,17 @@ export class EnemyInfoJson {
     dropList: Array<DropItemJson>;
 
     /**
+     * 图标
+     */
+    icon: string;
+
+    /**
      * 转换为EnemyInfo
      *
      * @param infoJson EnemyInfoJson
      */
     static toEnemyInfo(infoJson: EnemyInfoJson): EnemyInfo {
         const dropList = infoJson.dropList.map(jsonDrop => DropItemJson.toDropItem(jsonDrop));
-        return new EnemyInfo(infoJson.id, infoJson.name, infoJson.health, infoJson.damage, dropList);
+        return new EnemyInfo(infoJson.id, infoJson.name, infoJson.displayName, infoJson.health, infoJson.damage, dropList, infoJson.icon);
     }
 }

@@ -1,7 +1,20 @@
 /**
- * 金币ID
+ * 灵韵名称
  */
-export const COIN_ID = 1;
+export const LING_YUN_NAME = 'ling_yun';
+
+
+export enum DefaultStaffName {
+    /**
+     * 默认区域名称（黑风山）
+     */
+    DEFAULT_AREA_NAME = 'hei_feng_shan',
+
+    /**
+     * 默认舞台名称（苍狼林）
+     */
+    DEFAULT_STAGE_NAME = 'cang_lang_lin',
+}
 
 /**
  * 场景名称常量
@@ -10,7 +23,7 @@ export enum SceneName {
     /**
      * 加载场景
      */
-    Load = 'Load',
+    LOAD = 'Load',
 
     /**
      * 游戏场景
@@ -31,6 +44,16 @@ export enum DataPath {
      * 敌人配置表
      */
     ENEMY_TABLE = 'data/enemy_table',
+
+    /**
+     * 关卡配置表
+     */
+    STAGE_TABLE = 'data/stage_table',
+
+    /**
+     * 区域配置表
+     */
+    AREA_TABLE = 'data/area_table',
 }
 
 /**
@@ -91,6 +114,11 @@ export enum EventName {
      * 更新仓库
      */
     UPDATE_STORE_HOUSE = 'UPDATE_STORE_HOUSE',
+
+    /**
+     * 更新关卡
+     */
+    UPDATE_LEVEL = 'UPDATE_LEVEL',
 }
 
 /**
@@ -106,6 +134,16 @@ export enum GlobalStateName {
      * 敌人表
      */
     ENEMY_TABLE = 'EnemyTable',
+
+    /**
+     * 舞台表
+     */
+    STAGE_TABLE = 'StageTable',
+
+    /**
+     * 区域表
+     */
+    AREA_TABLE = 'AreaTable',
 
     /**
      * 自定义事件管理器

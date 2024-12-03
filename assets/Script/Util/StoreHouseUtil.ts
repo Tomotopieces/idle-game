@@ -6,7 +6,7 @@ import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 /**
  * 仓库类型
  */
-export type StoreHouse = Map<number, ItemStack>;
+export type StoreHouse = Map<string, ItemStack>;
 
 /**
  * 仓库工具
@@ -29,11 +29,11 @@ export class StoreHouseUtil {
      */
     static putIn(stackList: Array<ItemStack>) {
         stackList.forEach(stack => {
-            if (StoreHouseUtil.storeHouse.has(stack.itemId)) {
-                const itemStack = StoreHouseUtil.storeHouse.get(stack.itemId);
+            if (StoreHouseUtil.storeHouse.has(stack.itemName)) {
+                const itemStack = StoreHouseUtil.storeHouse.get(stack.itemName);
                 itemStack.count += stack.count;
             } else {
-                StoreHouseUtil.storeHouse.set(stack.itemId, stack);
+                StoreHouseUtil.storeHouse.set(stack.itemName, stack);
             }
         });
 
@@ -47,8 +47,8 @@ export class StoreHouseUtil {
      */
     static check(stackList: Array<ItemStack>): boolean {
         return stackList.every(stack => {
-            if (StoreHouseUtil.storeHouse.has(stack.itemId)) {
-                const itemStack = StoreHouseUtil.storeHouse.get(stack.itemId);
+            if (StoreHouseUtil.storeHouse.has(stack.itemName)) {
+                const itemStack = StoreHouseUtil.storeHouse.get(stack.itemName);
                 return itemStack.count >= stack.count;
             } else {
                 return false;
@@ -63,11 +63,11 @@ export class StoreHouseUtil {
      */
     static tackOut(stackList: Array<ItemStack>) {
         stackList.forEach(stack => {
-            if (StoreHouseUtil.storeHouse.has(stack.itemId)) {
-                const itemStack = StoreHouseUtil.storeHouse.get(stack.itemId);
+            if (StoreHouseUtil.storeHouse.has(stack.itemName)) {
+                const itemStack = StoreHouseUtil.storeHouse.get(stack.itemName);
                 itemStack.count -= stack.count;
                 if (itemStack.count <= 0) {
-                    StoreHouseUtil.storeHouse.delete(stack.itemId);
+                    StoreHouseUtil.storeHouse.delete(stack.itemName);
                 }
             }
         });
@@ -78,18 +78,18 @@ export class StoreHouseUtil {
     /**
      * 取出一件物品
      *
-     * @param itemId 物品ID
+     * @param itemName 物品名称
      */
-    static tackOutOne(itemId: number) {
-        if (StoreHouseUtil.storeHouse.has(itemId)) {
-            const itemStack = StoreHouseUtil.storeHouse.get(itemId);
+    static tackOutOne(itemName: string) {
+        if (StoreHouseUtil.storeHouse.has(itemName)) {
+            const itemStack = StoreHouseUtil.storeHouse.get(itemName);
             itemStack.count -= 1;
             if (itemStack.count <= 0) {
-                StoreHouseUtil.storeHouse.delete(itemId);
+                StoreHouseUtil.storeHouse.delete(itemName);
             }
         }
 
-        StoreHouseUtil.emitUpdateEvent([{ itemId, count: 1 }]);
+        StoreHouseUtil.emitUpdateEvent([{ itemName: itemName, count: 1 }]);
     }
 
     /**
@@ -98,7 +98,7 @@ export class StoreHouseUtil {
      * @param stackList 更新物品列表
      */
     private static emitUpdateEvent(stackList: Array<ItemStack>) {
-        stackList.forEach(stack => stack.count = StoreHouseUtil.storeHouse.get(stack.itemId)?.count ?? 0);
+        stackList.forEach(stack => stack.count = StoreHouseUtil.storeHouse.get(stack.itemName)?.count ?? 0);
         StoreHouseUtil.eventTarget.emit(EventName.UPDATE_STORE_HOUSE, stackList);
     }
 

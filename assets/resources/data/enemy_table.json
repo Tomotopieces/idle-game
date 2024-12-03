@@ -1,13 +1,13 @@
 [
   {
-    "id": 1,
-    "name": "狼斥候",
+    "name": "lang_chi_hou",
+    "displayName": "狼斥候",
     "health": 100,
     "damage": 10,
     "icon": "enemy/wolf",
     "dropList": [
       {
-        "itemId": 1,
+        "itemName": "ling_yun",
         "dropRate": 1,
         "max": 5,
         "min": 1
@@ -15,20 +15,20 @@
     ]
   },
   {
-    "id": 2,
-    "name": "牯护院",
+    "name": "gu_hu_yuan",
+    "displayName": "牯护院",
     "health": 150,
     "damage": 15,
     "icon": "enemy/cow",
     "dropList": [
       {
-        "id": 1,
+        "itemName": "ling_yun",
         "dropRate": 1,
         "max": 20,
         "min": 20
       },
       {
-        "itemId": 2,
+        "itemName": "mian_sha",
         "dropRate": 0.5,
         "max": 1,
         "min": 1
@@ -36,20 +36,20 @@
     ]
   },
   {
-    "id": 3,
-    "name": "广智",
+    "name": "guang_zhi",
+    "displayName": "广智",
     "health": 200,
     "damage": 20,
     "icon": "enemy/wolf",
     "dropList": [
       {
-        "id": 1,
+        "itemName": "ling_yun",
         "dropRate": 1,
         "max": 100,
         "min": 50
       },
       {
-        "id": 3,
+        "itemName": "chi_chao",
         "dropRate": 1,
         "max": 1,
         "min": 1
@@ -57,59 +57,96 @@
     ]
   },
   {
-    "id": 4,
-    "name": "广谋",
+    "name": "ling_xu_zi",
+    "displayName": "灵虚子",
+    "health": 100,
+    "damage": 10,
+    "icon": "enemy/wolf",
+    "dropList": [
+      {
+        "itemName": "ling_yun",
+        "dropRate": 1,
+        "max": 10,
+        "min": 1
+      },
+      {
+        "itemName": "mian_sha",
+        "dropRate": 0.5,
+        "max": 1,
+        "min": 1
+      }
+    ]
+  },
+  {
+    "name": "guang_mou",
+    "displayName": "广谋",
     "health": 100,
     "damage": 10,
     "icon": "enemy/snake",
     "dropList": []
   },
   {
-    "id": 5,
-    "name": "白衣秀士",
+    "name": "bai_yi_xiu_shi",
+    "displayName": "白衣秀士",
     "health": 100,
     "damage": 10,
     "icon": "enemy/wolf",
     "dropList": []
   },
   {
-    "id": 6,
-    "name": "金池长老",
+    "name": "jin_chi_zhang_lao",
+    "displayName": "金池长老",
     "health": 100,
     "damage": 10,
     "icon": "enemy/baldhead",
     "dropList": []
   },
   {
-    "id": 7,
-    "name": "黑熊精",
+    "name": "hei_xiong_jing",
+    "displayName": "黑熊精",
     "health": 100,
     "damage": 10,
     "icon": "enemy/bear",
     "dropList": []
   },
   {
-    "id": 8,
-    "name": "鼠校卫",
+    "name": "shu_xiao_wei",
+    "displayName": "鼠校卫",
     "health": 100,
     "damage": 10,
     "icon": "enemy/mouse",
     "dropList": []
   },
   {
-    "id": 9,
-    "name": "石先锋",
+    "name": "sha_da_lang",
+    "displayName": "沙大郎",
+    "health": 100,
+    "damage": 10,
+    "icon": "enemy/mouse",
+    "dropList": []
+  },
+  {
+    "name": "shi_xian_feng",
+    "displayName": "石先锋",
     "health": 100,
     "damage": 10,
     "icon": "enemy/tiger",
     "dropList": []
   },
   {
-    "id": 10,
-    "name": "虎先锋",
+    "name": "hu_xian_feng",
+    "displayName": "虎先锋",
     "health": 100,
     "damage": 10,
     "icon": "enemy/stone",
+    "dropList": []
+  },
+  {
+    "name": "huang_feng",
+    "displayName": "黄风",
+    "health": 100,
+    "damage": 10,
+    "icon": "enemy/hamster",
     "dropList": []
   }
 ]

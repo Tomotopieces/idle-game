@@ -17,9 +17,14 @@ export class StageJson {
     name: string;
 
     /**
-     * 敌人信息ID
+     * 显示名称
      */
-    enemyInfoId: number;
+    displayName: string;
+
+    /**
+     * 敌人名称
+     */
+    enemyName: string;
 
     /**
      * 转为Stage
@@ -27,7 +32,7 @@ export class StageJson {
      * @param stageJson StageJson
      */
     static toStage(stageJson: StageJson): Stage {
-        const enemyInfo = GlobalState.getState(GlobalStateName.ENEMY_TABLE).get(stageJson.enemyInfoId);
-        return new Stage(stageJson.id, stageJson.name, enemyInfo);
+        const enemyInfo = GlobalState.getState(GlobalStateName.ENEMY_TABLE).get(stageJson.enemyName);
+        return new Stage(stageJson.id, stageJson.name, stageJson.displayName, enemyInfo);
     }
 }

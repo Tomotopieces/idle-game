@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "ea81985d-8463-4f41-8d0a-04898dd94270",
+  "uuid": "172bfe86-b35b-4eec-8df7-172fb80d7710",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "ea81985d-8463-4f41-8d0a-04898dd94270@6c48a",
-      "displayName": "Snake",
+      "uuid": "172bfe86-b35b-4eec-8df7-172fb80d7710@6c48a",
+      "displayName": "mouse",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "ea81985d-8463-4f41-8d0a-04898dd94270",
+        "imageUuidOrDatabaseUri": "172bfe86-b35b-4eec-8df7-172fb80d7710",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,8 +34,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "ea81985d-8463-4f41-8d0a-04898dd94270@f9941",
-      "displayName": "Snake",
+      "uuid": "172bfe86-b35b-4eec-8df7-172fb80d7710@f9941",
+      "displayName": "mouse",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -114,7 +114,7 @@
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "ea81985d-8463-4f41-8d0a-04898dd94270@6c48a",
+        "imageUuidOrDatabaseUri": "172bfe86-b35b-4eec-8df7-172fb80d7710@6c48a",
         "atlasUuid": ""
       },
       "ver": "1.0.12",
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "hasAlpha": true,
     "fixAlphaTransparencyArtifacts": false,
-    "redirect": "ea81985d-8463-4f41-8d0a-04898dd94270@6c48a"
+    "redirect": "172bfe86-b35b-4eec-8df7-172fb80d7710@6c48a"
   }
 }

@@ -2,12 +2,19 @@ import { _decorator, CCInteger, Component, director, EventTarget, sys } from 'cc
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { PlayerController } from "db://assets/Script/Entity/PlayerController";
 import { SaveData } from "db://assets/Script/Util/SaveData";
-import { COIN_ID, ConfigName, EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
+import {
+    LING_YUN_NAME,
+    ConfigName,
+    EventName,
+    GlobalStateName, DefaultStaffName,
+} from "db://assets/Script/Util/Constant";
 import { DropItem } from "db://assets/Script/Item/DropItem";
 import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
 import { StoreHouse, StoreHouseUtil } from "db://assets/Script/Util/StoreHouseUtil";
 import { DropItemFactory } from "db://assets/Script/Item/DropItemFactory";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
+import { Area } from "db://assets/Script/Level/Area";
+import { Stage } from "db://assets/Script/Level/Stage";
 
 const { ccclass, property } = _decorator;
 
@@ -35,9 +42,19 @@ export class GameManager extends Component {
     autoSaveInterval: number = 5 * 60;
 
     /**
+     * 区域
+     */
+    area: Area = null;
+
+    /**
+     * 舞台
+     */
+    stage: Stage = null;
+
+    /**
      * 仓库
      */
-    private _storeHouse: StoreHouse = new Map<number, ItemStack>();
+    private _storeHouse: StoreHouse = new Map<string, ItemStack>();
 
     /**
      * 最新保存数据
@@ -64,13 +81,13 @@ export class GameManager extends Component {
 
         // 监听处理事件
         this._eventTarget.on(EventName.PLAYER_RESTORE_SAVE_DATA, () => this.restorePlayerData());
-        this._eventTarget.on(EventName.ENEMY_RESTORE_SAVE_DATA, () => this.restoreEnemyData());
+        this._eventTarget.on(EventName.ENEMY_RESTORE_SAVE_DATA, () => this.restoreLevelAndEnemyData());
         this._eventTarget.on(EventName.CALCULATE_DROP_ITEM, (dropList: Array<DropItem>) => this.handleDropItem(dropList));
     }
 
     update(dt: number) {
+        // 自动存档
         this._autoSaveTimer += dt;
-
         if (this._autoSaveTimer >= this.autoSaveInterval) {
             this.saveData();
             this._autoSaveTimer -= this.autoSaveInterval;
@@ -85,23 +102,28 @@ export class GameManager extends Component {
             return;
         }
         this.player.coin = this._latestSaveData.coin;
-        this._storeHouse = new Map<number, ItemStack>((JSON.parse(this._latestSaveData.storeHouse) as Array<Object>)
+        this._storeHouse = new Map<string, ItemStack>((JSON.parse(this._latestSaveData.storeHouse) as Array<Object>)
             .map(item => {
                 const itemStack = ItemStack.fromObject(item);
-                return [itemStack.itemId, itemStack];
+                return [itemStack.itemName, itemStack];
             }));
         GlobalState.setState(GlobalStateName.STORE_HOUSE, this._storeHouse);
     }
 
     /**
-     * 恢复敌人数据
+     * 恢复关卡与敌人数据
      */
-    restoreEnemyData() {
+    restoreLevelAndEnemyData() {
         if (this._latestSaveData) {
-            this.enemy.info = GlobalState.getState(GlobalStateName.ENEMY_TABLE).get(this._latestSaveData.enemyId);
+            this.area = GlobalState.getState(GlobalStateName.AREA_TABLE).get(this._latestSaveData.areaName);
+            this.stage = GlobalState.getState(GlobalStateName.STAGE_TABLE).get(this._latestSaveData.stageName);
+            this.enemy.info = this.stage.enemyInfo;
         } else {
-            this.enemy.info = GlobalState.getState(GlobalStateName.ENEMY_TABLE).get(1);
+            this.area = GlobalState.getState(GlobalStateName.AREA_TABLE).get(DefaultStaffName.DEFAULT_AREA_NAME);
+            this.stage = GlobalState.getState(GlobalStateName.STAGE_TABLE).get(DefaultStaffName.DEFAULT_STAGE_NAME);
+            this.enemy.info = this.stage.enemyInfo;
         }
+        this._eventTarget.emit(EventName.UPDATE_LEVEL, this.area, this.stage);
     }
 
     /**
@@ -120,7 +142,7 @@ export class GameManager extends Component {
      */
     saveData() {
         const storeHouseJson = JSON.stringify(Array.from(this._storeHouse.values()));
-        this._latestSaveData = new SaveData(this.player.coin, storeHouseJson, this.enemy.info.id);
+        this._latestSaveData = new SaveData(this.player.coin, storeHouseJson, this.area.name, this.stage.name);
         sys.localStorage.setItem(ConfigName.SAVE_DATA, JSON.stringify(this._latestSaveData));
         console.log(`Auto Save`);
     }
@@ -132,7 +154,7 @@ export class GameManager extends Component {
      */
     private handleDropItem(dropList: Array<DropItem>) {
         StoreHouseUtil.putIn(DropItemFactory.produce(dropList));
-        this.player.coin = this._storeHouse.get(COIN_ID)?.count ?? 0;
+        this.player.coin = this._storeHouse.get(LING_YUN_NAME)?.count ?? 0;
     }
 
     /**

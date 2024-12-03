@@ -25,7 +25,7 @@ export class Item {
     /**
      * ID
      */
-    private readonly _id: number;
+    id: number;
 
     /**
      * 名称
@@ -34,35 +34,35 @@ export class Item {
      *
      * 英语/拼音小写，下划线分词
      */
-    private readonly _name: string;
+    name: string;
 
     /**
-     * 展示名称
+     * 显示名称
      */
-    private readonly _displayName: string;
+    displayName: string;
 
     /**
      * 类型
      */
-    private readonly _type: ItemType;
+    type: ItemType;
 
     /**
      * 描述
      */
-    private readonly _description: string;
+    description: string;
 
     /**
      * 图标
      */
-    private readonly _icon: string;
+    icon: string;
 
     constructor(id: number, name: string, displayName: string, type: ItemType, description: string, icon: string) {
-        this._id = id;
-        this._name = name;
-        this._displayName = displayName;
-        this._type = type;
-        this._description = description;
-        this._icon = icon;
+        this.id = id;
+        this.name = name;
+        this.displayName = displayName;
+        this.type = type;
+        this.description = description;
+        this.icon = icon;
     }
 
     /**
@@ -73,30 +73,6 @@ export class Item {
      */
     static fromObject(object: any): Item {
         return new Item(object.id, object.name, object.displayName, object.type, object.description, object.icon);
-    }
-
-    get id(): number {
-        return this._id;
-    }
-
-    get name(): string {
-        return this._name;
-    }
-
-    get displayName(): string {
-        return this._displayName;
-    }
-
-    get type(): ItemType {
-        return this._type;
-    }
-
-    get description(): string {
-        return this._description;
-    }
-
-    get icon(): string {
-        return this._icon;
     }
 }
 

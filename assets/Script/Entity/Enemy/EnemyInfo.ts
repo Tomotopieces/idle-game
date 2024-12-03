@@ -15,6 +15,11 @@ export class EnemyInfo {
     name: string;
 
     /**
+     * 显示名称
+     */
+    displayName: string;
+
+    /**
      * 生命值
      */
     health: number;
@@ -34,9 +39,10 @@ export class EnemyInfo {
      */
     icon: string;
 
-    constructor(id: number, name: string, health: number, damage: number, dropList: Array<DropItem>, icon: string) {
+    constructor(id: number, name: string, displayName: string, health: number, damage: number, dropList: Array<DropItem>, icon: string) {
         this.id = id;
         this.name = name;
+        this.displayName = displayName;
         this.health = health;
         this.damage = damage;
         this.dropList = dropList;

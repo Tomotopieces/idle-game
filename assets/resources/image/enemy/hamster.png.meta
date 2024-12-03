@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "25e77408-b6a6-4dd4-af16-1a47d2035190",
+  "uuid": "0cc5efe7-f2a3-4bb7-8035-9bab51aef3aa",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "25e77408-b6a6-4dd4-af16-1a47d2035190@6c48a",
-      "displayName": "Cow",
+      "uuid": "0cc5efe7-f2a3-4bb7-8035-9bab51aef3aa@6c48a",
+      "displayName": "hamster",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "25e77408-b6a6-4dd4-af16-1a47d2035190",
+        "imageUuidOrDatabaseUri": "0cc5efe7-f2a3-4bb7-8035-9bab51aef3aa",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,8 +34,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "25e77408-b6a6-4dd4-af16-1a47d2035190@f9941",
-      "displayName": "Cow",
+      "uuid": "0cc5efe7-f2a3-4bb7-8035-9bab51aef3aa@f9941",
+      "displayName": "hamster",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -114,7 +114,7 @@
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "25e77408-b6a6-4dd4-af16-1a47d2035190@6c48a",
+        "imageUuidOrDatabaseUri": "0cc5efe7-f2a3-4bb7-8035-9bab51aef3aa@6c48a",
         "atlasUuid": ""
       },
       "ver": "1.0.12",
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "hasAlpha": true,
     "fixAlphaTransparencyArtifacts": false,
-    "redirect": "25e77408-b6a6-4dd4-af16-1a47d2035190@6c48a"
+    "redirect": "0cc5efe7-f2a3-4bb7-8035-9bab51aef3aa@6c48a"
   }
 }

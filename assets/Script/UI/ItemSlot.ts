@@ -68,7 +68,7 @@ export class ItemSlot extends Component {
      */
     set stack(value: ItemStack) {
         this._stack = value;
-        this._item = GlobalState.getState(GlobalStateName.ITEM_TABLE).get(value.itemId);
+        this._item = GlobalState.getState(GlobalStateName.ITEM_TABLE).get(value.itemName);
         ResourceManager.getAsset(ResourceType.SPRITE_FRAME, this._item.icon, (spriteFrame: SpriteFrame) => {
             this.stackNode.getComponent(Sprite).spriteFrame = spriteFrame;
         });

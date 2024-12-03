@@ -3,17 +3,17 @@
  */
 export class ItemStack {
     /**
-     * 物品ID
+     * 物品名称
      */
-    itemId: number;
+    itemName: string;
 
     /**
      * 数量
      */
     count: number;
 
-    constructor(itemId: number, count: number) {
-        this.itemId = itemId;
+    constructor(itemName: string, count: number) {
+        this.itemName = itemName;
         this.count = count;
     }
 
@@ -24,6 +24,6 @@ export class ItemStack {
      * @return ItemStack
      */
     static fromObject(obj: any): ItemStack {
-        return new ItemStack(obj.itemId, obj.count);
+        return new ItemStack(obj.itemName, obj.count);
     }
 }

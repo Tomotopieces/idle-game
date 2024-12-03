@@ -14,15 +14,16 @@ export class SaveData {
 
     /**
      * 敌人ID
-     *
-     * TODO 改为关卡进度，从而选择敌人
      */
-    enemyId: number;
+    areaName: string;
 
-    constructor(coin: number, storeHouse: string, enemyId: number) {
+    stageName: string;
+
+    constructor(coin: number, storeHouse: string, areaName: string, stageName: string) {
         this.coin = coin;
         this.storeHouse = storeHouse;
-        this.enemyId = enemyId;
+        this.areaName = areaName;
+        this.stageName = stageName;
     }
 
     /**
@@ -32,6 +33,6 @@ export class SaveData {
      */
     static fromJson(json: string) {
         const obj = JSON.parse(json);
-        return new SaveData(obj.coin, obj.storeHouse, obj.enemyId);
+        return new SaveData(obj.coin, obj.storeHouse, obj.areaName, obj.stageName);
     }
 }

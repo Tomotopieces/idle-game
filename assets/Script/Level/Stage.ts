@@ -15,13 +15,19 @@ export class Stage {
     private readonly _name: string;
 
     /**
+     * 显示名称
+     */
+    private readonly _displayName: string;
+
+    /**
      * 敌人信息
      */
     private readonly _enemyInfo: EnemyInfo;
 
-    constructor(id: number, name: string, enemyInfo: EnemyInfo) {
+    constructor(id: number, name: string, displayName: string, enemyInfo: EnemyInfo) {
         this._id = id;
         this._name = name;
+        this._displayName = displayName;
         this._enemyInfo = enemyInfo;
     }
 
@@ -31,6 +37,10 @@ export class Stage {
 
     get name(): string {
         return this._name;
+    }
+
+    get displayName(): string {
+        return this._displayName;
     }
 
     get enemyInfo(): EnemyInfo {

@@ -1,0 +1,37 @@
+[
+  {
+    "name": "cang_lang_lin",
+    "displayName": "苍狼林",
+    "enemyName": "ling_xu_zi"
+  },
+  {
+    "name": "cui_zhu_lin",
+    "displayName": "翠竹林",
+    "enemyName": "guang_zhi"
+  },
+  {
+    "name": "hei_feng_dong",
+    "displayName": "黑风洞",
+    "enemyName": "hei_xiong_jing"
+  },
+  {
+    "name": "sha_men_cun",
+    "displayName": "沙门村",
+    "enemyName": "sha_da_lang"
+  },
+  {
+    "name": "xie_hun_ya",
+    "displayName": "挟魂崖",
+    "enemyName": "shi_xian_feng"
+  },
+  {
+    "name": "wo_hu_si",
+    "displayName": "卧虎寺",
+    "enemyName": "hu_xian_feng"
+  },
+  {
+    "name": "huang_feng_zhen",
+    "displayName": "黄风阵",
+    "enemyName": "huang_feng"
+  }
+]

@@ -27,9 +27,9 @@
       - [x] 物品展示
       - [ ] 设计实现交互逻辑
 - [ ] 关卡系统 **👈进行中**
-    - [ ] 多个Level，每个Level有若干个Stage，每个Stage有固定一个Enemy
+    - [x] 多个Level，每个Level有若干个Stage，每个Stage有固定一个Enemy
     - [ ] 切换Level和Stage时自动切换Enemy
-    - [ ] 存档记录Level和Stage，而不是Enemy
+    - [x] 存档记录Level和Stage，而不是Enemy
 - [ ] 装备系统
     - [ ] 使得装备类型道具可以装备
         - [ ] 套装效果
@@ -61,4 +61,6 @@
 ### 问题记录
 
 1. Cocos Creator 3.8.4 bug：`assets/resources/`目录下的动态资源文件，在新增或调整位置后，无法读取，须重启编辑器
+   - 好像是Git的文件名大小写不敏感导致的，有待验证
 2. 默认active为false的Node无法自行激活，须通过其他Node来调整，切记切记
+3. Windows Git 对文件名大小写默认不敏感，需要配置Git忽略大小写：`git config core.ignorecase false`

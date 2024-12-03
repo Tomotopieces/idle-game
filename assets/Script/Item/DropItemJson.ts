@@ -7,9 +7,9 @@ import { DropItem } from "db://assets/Script/Item/DropItem";
  */
 export class DropItemJson {
     /**
-     * 物品ID
+     * 物品名称
      */
-    private readonly _itemId: number;
+    private readonly _itemName: string;
 
     /**
      * 物品掉落概率
@@ -26,8 +26,8 @@ export class DropItemJson {
      */
     private readonly _min: number = 1;
 
-    constructor(itemId: number, dropRate: number, max: number, min: number) {
-        this._itemId = itemId;
+    constructor(itemName: string, dropRate: number, max: number, min: number) {
+        this._itemName = itemName;
         this._dropRate = dropRate;
         this._max = max;
         this._min = min;
@@ -40,7 +40,7 @@ export class DropItemJson {
      */
     static toDropItem(jsonDropItem: DropItemJson): DropItem {
         jsonDropItem = DropItemJson.fromObject(jsonDropItem);
-        const item = GlobalState.getState(GlobalStateName.ITEM_TABLE).get(jsonDropItem._itemId);
+        const item = GlobalState.getState(GlobalStateName.ITEM_TABLE).get(jsonDropItem._itemName);
         return new DropItem(item, jsonDropItem._dropRate, jsonDropItem._max, jsonDropItem._min);
     }
 
@@ -51,6 +51,6 @@ export class DropItemJson {
      * @return DropItemJson
      */
     static fromObject(obj: any): DropItemJson {
-        return new DropItemJson(obj.itemId, obj.dropRate, obj.max, obj.min);
+        return new DropItemJson(obj.itemName, obj.dropRate, obj.max, obj.min);
     }
 }

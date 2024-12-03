@@ -84,7 +84,7 @@ export class ItemSlotContainer extends Component {
     private updateSlotList(stackList: Array<ItemStack>) {
         // 更新List数据
         stackList.forEach(updateStack => {
-            const index = this._slotList.findIndex(slot => slot.getComponent(ItemSlot).stack?.itemId === updateStack.itemId ?? false);
+            const index = this._slotList.findIndex(slot => slot.getComponent(ItemSlot).stack?.itemName === updateStack.itemName ?? false);
             if (index == -1 && updateStack.count > 0) {
                 // 新增物品
                 const slot = instantiate(this.slotPrefab);

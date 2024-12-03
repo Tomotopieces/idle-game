@@ -1,10 +1,11 @@
-import { _decorator, Animation, CCFloat, Component, EventTarget, ProgressBar } from 'cc';
+import { _decorator, Animation, CCFloat, Component, EventTarget, ProgressBar, Sprite, SpriteFrame } from 'cc';
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { EntityComponent } from "db://assets/Script/Component/EntityComponent";
 import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 import { PlayerController } from "db://assets/Script/Entity/PlayerController";
 import { DropItem } from "db://assets/Script/Item/DropItem";
 import { EnemyInfo } from "db://assets/Script/Entity/Enemy/EnemyInfo";
+import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 
 const { ccclass, property } = _decorator;
 
@@ -77,6 +78,9 @@ export abstract class EnemyController extends Component {
     init() {
         this._entity.health = this._info.health;
         this._entity.damage = this._info.damage;
+        ResourceManager.getAsset(ResourceType.SPRITE_FRAME, this._info.icon, (spriteFrame: SpriteFrame) => {
+            this.getComponent(Sprite).spriteFrame = spriteFrame;
+        });
         this.updateHealthBar();
     }
 
