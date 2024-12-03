@@ -20,8 +20,6 @@ export enum ItemType {
 
 /**
  * 物品
- *
- * 从文件中读取，readonly
  */
 export class Item {
     /**
@@ -31,8 +29,17 @@ export class Item {
 
     /**
      * 名称
+     *
+     * 数据关联用
+     *
+     * 英语/拼音小写，下划线分词
      */
     private readonly _name: string;
+
+    /**
+     * 展示名称
+     */
+    private readonly _displayName: string;
 
     /**
      * 类型
@@ -49,12 +56,35 @@ export class Item {
      */
     private readonly _icon: string;
 
+    constructor(id: number, name: string, displayName: string, type: ItemType, description: string, icon: string) {
+        this._id = id;
+        this._name = name;
+        this._displayName = displayName;
+        this._type = type;
+        this._description = description;
+        this._icon = icon;
+    }
+
+    /**
+     * 从Object创建
+     *
+     * @param object Object
+     * @return Item
+     */
+    static fromObject(object: any): Item {
+        return new Item(object.id, object.name, object.displayName, object.type, object.description, object.icon);
+    }
+
     get id(): number {
         return this._id;
     }
 
     get name(): string {
         return this._name;
+    }
+
+    get displayName(): string {
+        return this._displayName;
     }
 
     get type(): ItemType {

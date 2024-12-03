@@ -48,6 +48,7 @@ export class DropItemJson {
      * 从Object对象重新创建
      *
      * @param obj Object
+     * @return DropItemJson
      */
     static fromObject(obj: any): DropItemJson {
         return new DropItemJson(obj.itemId, obj.dropRate, obj.max, obj.min);

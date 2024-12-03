@@ -21,6 +21,7 @@ export class ItemStack {
      * 从Object重新创建
      *
      * @param obj Object
+     * @return ItemStack
      */
     static fromObject(obj: any): ItemStack {
         return new ItemStack(obj.itemId, obj.count);

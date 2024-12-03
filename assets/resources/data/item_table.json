@@ -1,22 +1,26 @@
 [
   {
     "id": 1,
-    "name": "灵韵",
+    "name": "ling_yun",
+    "displayName": "灵韵",
     "type": 0,
     "description": "灵韵",
-    "icon": "Fire"
+    "icon": "item/fire"
   },
   {
     "id": 2,
-    "name": "绵纱",
+    "name": "mian_sha",
+    "displayName": "绵纱",
     "type": 0,
     "description": "日巡山，夜纺纱，小妖凭此勤持家。可用于披挂铸造",
-    "icon": "WhiteFlag"
+    "icon": "item/white_flag"
   },
   {
     "id": 3,
-    "name": "赤潮",
+    "name": "chi_chao",
+    "displayName": "赤潮",
     "type": 1,
-    "description": "赤浪三分，灼灼逼人"
+    "description": "赤浪三分，灼灼逼人",
+    "icon": "item/fire"
   }
 ]
