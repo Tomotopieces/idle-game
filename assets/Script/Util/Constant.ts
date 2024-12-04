@@ -3,7 +3,6 @@
  */
 export const LING_YUN_NAME = 'ling_yun';
 
-
 export enum DefaultStaffName {
     /**
      * 默认区域名称（黑风山）
@@ -70,11 +69,6 @@ export enum ConfigName {
  * 事件名称常量
  */
 export enum EventName {
-    /**
-     * 加载进度
-     */
-    LOAD_PROGRESS = 'LOAD_PROGRESS',
-
     /**
      * 玩家恢复存档数据
      */
@@ -146,7 +140,7 @@ export enum GlobalStateName {
     AREA_TABLE = 'AreaTable',
 
     /**
-     * 自定义事件管理器
+     * 事件中心
      */
     EVENT_TARGET = 'EventTarget',
 
@@ -164,4 +158,14 @@ export enum GlobalStateName {
      * 仓库
      */
     STORE_HOUSE = 'StoreHouse',
+
+    /**
+     * 区域
+     */
+    AREA = 'Area',
+
+    /**
+     * 舞台
+     */
+    STAGE = 'Stage',
 }

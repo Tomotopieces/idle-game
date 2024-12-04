@@ -3,10 +3,11 @@ import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { PlayerController } from "db://assets/Script/Entity/PlayerController";
 import { SaveData } from "db://assets/Script/Util/SaveData";
 import {
-    LING_YUN_NAME,
     ConfigName,
+    DefaultStaffName,
     EventName,
-    GlobalStateName, DefaultStaffName,
+    GlobalStateName,
+    LING_YUN_NAME,
 } from "db://assets/Script/Util/Constant";
 import { DropItem } from "db://assets/Script/Item/DropItem";
 import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
@@ -15,6 +16,9 @@ import { DropItemFactory } from "db://assets/Script/Item/DropItemFactory";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { Area } from "db://assets/Script/Level/Area";
 import { Stage } from "db://assets/Script/Level/Stage";
+import { LevelNameBar } from "db://assets/Script/UI/LevelNameBar";
+import { UpdateLevelEvent } from "db://assets/Script/Event/UpdateLevelEvent";
+import { StageLine } from "db://assets/Script/UI/StageLine";
 
 const { ccclass, property } = _decorator;
 
@@ -34,6 +38,18 @@ export class GameManager extends Component {
      */
     @property({ type: EnemyController, tooltip: '敌人' })
     enemy: EnemyController = null;
+
+    /**
+     * 关卡名称条
+     */
+    @property({ type: LevelNameBar, tooltip: '关卡名称条' })
+    levelNameBar: LevelNameBar = null;
+
+    /**
+     * 关卡选择条
+     */
+    @property({ type: StageLine, tooltip: '关卡选择条' })
+    stageLine: StageLine = null;
 
     /**
      * 自动保存间隔（秒）
@@ -62,7 +78,7 @@ export class GameManager extends Component {
     private _latestSaveData: SaveData | null = null;
 
     /**
-     * 自定义事件管理器
+     * 事件中心
      */
     private _eventTarget: EventTarget = null;
 
@@ -72,7 +88,6 @@ export class GameManager extends Component {
     private _autoSaveTimer: number = 0;
 
     onLoad() {
-        // 获取自定义事件管理器
         this._eventTarget = GlobalState.getState(GlobalStateName.EVENT_TARGET);
 
         // 读取存档
@@ -83,6 +98,7 @@ export class GameManager extends Component {
         this._eventTarget.on(EventName.PLAYER_RESTORE_SAVE_DATA, () => this.restorePlayerData());
         this._eventTarget.on(EventName.ENEMY_RESTORE_SAVE_DATA, () => this.restoreLevelAndEnemyData());
         this._eventTarget.on(EventName.CALCULATE_DROP_ITEM, (dropList: Array<DropItem>) => this.handleDropItem(dropList));
+        this._eventTarget.on(EventName.UPDATE_LEVEL, (event: UpdateLevelEvent) => this.updateLevel(event.area, event.stage));
     }
 
     update(dt: number) {
@@ -123,7 +139,32 @@ export class GameManager extends Component {
             this.stage = GlobalState.getState(GlobalStateName.STAGE_TABLE).get(DefaultStaffName.DEFAULT_STAGE_NAME);
             this.enemy.info = this.stage.enemyInfo;
         }
-        this._eventTarget.emit(EventName.UPDATE_LEVEL, this.area, this.stage);
+
+        GlobalState.setState(GlobalStateName.AREA, this.area);
+        GlobalState.setState(GlobalStateName.STAGE, this.stage);
+        this.levelNameBar.updateLevelName(this.area, this.stage);
+        this.stageLine.updateCurrentLevel(this.area, this.stage);
+    }
+
+    /**
+     * 更新关卡
+     *
+     * @param area 区域
+     * @param stage 舞台
+     */
+    private updateLevel(area: Area, stage: Stage) {
+        if (this.area === area && this.stage === stage) {
+            return;
+        }
+
+        this.area = area;
+        this.stage = stage;
+        this.enemy.info = stage.enemyInfo;
+
+        GlobalState.setState(GlobalStateName.AREA, this.area);
+        GlobalState.setState(GlobalStateName.STAGE, this.stage);
+        this.levelNameBar.updateLevelName(this.area, this.stage);
+        this.stageLine.updateCurrentLevel(this.area, this.stage);
     }
 
     /**

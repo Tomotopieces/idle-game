@@ -41,7 +41,7 @@ export class ItemSlotContainer extends Component {
     private _slotList: Array<Node> = [];
 
     /**
-     * 自定义事件管理器
+     * 事件中心
      */
     private _eventTarget: EventTarget;
 

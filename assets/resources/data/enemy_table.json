@@ -130,7 +130,7 @@
     "displayName": "石先锋",
     "health": 100,
     "damage": 10,
-    "icon": "enemy/tiger",
+    "icon": "enemy/stone",
     "dropList": []
   },
   {
@@ -138,7 +138,7 @@
     "displayName": "虎先锋",
     "health": 100,
     "damage": 10,
-    "icon": "enemy/stone",
+    "icon": "enemy/tiger",
     "dropList": []
   },
   {

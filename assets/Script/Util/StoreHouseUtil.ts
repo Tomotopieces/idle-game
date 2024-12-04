@@ -18,7 +18,7 @@ export class StoreHouseUtil {
     private static _storeHouse: StoreHouse = null;
 
     /**
-     * 自定义事件管理器
+     * 事件中心
      */
     private static _eventTarget: EventTarget = null;
 

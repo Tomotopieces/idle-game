@@ -41,7 +41,7 @@ export abstract class EnemyController extends Component {
     private _entity: EntityComponent = new EntityComponent();
 
     /**
-     * 自定义事件处理器
+     * 事件中心
      */
     private _eventTarget: EventTarget = null;
 

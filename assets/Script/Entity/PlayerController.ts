@@ -33,7 +33,7 @@ export class PlayerController extends Component {
     private _entity: EntityComponent = new EntityComponent();
 
     /**
-     * 自定义事件管理器
+     * 事件中心
      */
     private _eventTarget: EventTarget;
 
