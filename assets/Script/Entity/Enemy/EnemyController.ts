@@ -21,14 +21,15 @@ export abstract class EnemyController extends Component {
     attackInterval: number = 1;
 
     /**
+     * 血条
+     */
+    @property({ type: ProgressBar, tooltip: '血条' })
+    healthBar: ProgressBar = null;
+
+    /**
      * 动画机
      */
     private _anim: Animation = null;
-
-    /**
-     * 血条
-     */
-    private _healthBar: ProgressBar = null;
 
     /**
      * 基本信息
@@ -56,11 +57,10 @@ export abstract class EnemyController extends Component {
 
         // 获取组件
         this._anim = this.getComponent(Animation);
-        this._healthBar = this.node.getChildByName('HealthBar').getComponent(ProgressBar);
         if (!this._anim) {
             console.error(`[EnemyController.start] get _anim failed`);
             return;
-        } else if (!this._healthBar) {
+        } else if (!this.healthBar) {
             console.error(`[EnemyController.start] get _healthBar failed`);
             return;
         }
@@ -123,7 +123,7 @@ export abstract class EnemyController extends Component {
      * 更新血条显示
      */
     updateHealthBar() {
-        this._healthBar.progress = this._entity.health / this._info.health;
+        this.healthBar.progress = this._entity.health / this._info.health;
     }
 
     /**

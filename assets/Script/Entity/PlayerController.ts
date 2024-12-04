@@ -18,14 +18,15 @@ export class PlayerController extends Component {
     public attackInterval: number = 1;
 
     /**
+     * 血条
+     */
+    @property({ type: ProgressBar, tooltip: '血条' })
+    healthBar: ProgressBar = null;
+
+    /**
      * 动画机
      */
     private _anim: Animation = null;
-
-    /**
-     * 血条
-     */
-    private _healthBar: ProgressBar = null;
 
     /**
      * 实体数据
@@ -53,12 +54,11 @@ export class PlayerController extends Component {
 
         // 获取组件
         this._anim = this.getComponent(Animation);
-        this._healthBar = this.node.getChildByName('HealthBar').getComponent(ProgressBar);
         this._eventTarget = GlobalState.getState(GlobalStateName.EVENT_TARGET);
         if (!this._anim) {
             console.error(`[PlayerController.start] get _anim failed`);
             return;
-        } else if (!this._healthBar) {
+        } else if (!this.healthBar) {
             console.error(`[PlayerController.start] get _healthBar failed`);
             return;
         }
@@ -119,7 +119,7 @@ export class PlayerController extends Component {
      * 更新血条显示
      */
     updateHealthBar() {
-        this._healthBar.progress = this._entity.health / 200;
+        this.healthBar.progress = this._entity.health / 200;
     }
 
     /**
