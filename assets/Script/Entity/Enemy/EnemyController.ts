@@ -1,11 +1,11 @@
 import { _decorator, Animation, CCFloat, Component, EventTarget, ProgressBar, Sprite, SpriteFrame } from 'cc';
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { Entity } from "db://assets/Script/Entity/Entity";
 import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
-import { PlayerController } from "db://assets/Script/Entity/PlayerController";
 import { DropItem } from "db://assets/Script/Item/DropItem";
 import { EnemyInfo } from "db://assets/Script/Entity/Enemy/EnemyInfo";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
+import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
+import { EnemyCombatComponent } from "db://assets/Script/Entity/Enemy/EnemyCombatComponent";
 
 const { ccclass, property } = _decorator;
 
@@ -39,7 +39,7 @@ export abstract class EnemyController extends Component {
     /**
      * 实体组件
      */
-    private _entity: Entity = new Entity();
+    private combatComponent: EnemyCombatComponent;
 
     /**
      * 事件中心
@@ -76,8 +76,7 @@ export abstract class EnemyController extends Component {
      * 初始化基础数据
      */
     init() {
-        this._entity.health = this._info.health;
-        this._entity.damage = this._info.damage;
+        this.combatComponent = new EnemyCombatComponent(this._info);
         ResourceManager.getAsset(ResourceType.SPRITE_FRAME, this._info.icon, (spriteFrame: SpriteFrame) => {
             this.getComponent(Sprite).spriteFrame = spriteFrame;
         });
@@ -111,10 +110,10 @@ export abstract class EnemyController extends Component {
      * @param damage 伤害值
      */
     hurt(damage: number) {
-        this._entity.health -= damage;
+        this.combatComponent.getHurt(damage);
         this.updateHealthBar();
 
-        if (this._entity.health === 0) {
+        if (this.combatComponent.health === 0) {
             this.onDie();
         }
     }
@@ -123,7 +122,7 @@ export abstract class EnemyController extends Component {
      * 更新血条显示
      */
     updateHealthBar() {
-        this.healthBar.progress = this._entity.health / this._info.health;
+        this.healthBar.progress = this.combatComponent.health / this.combatComponent.maxHealth;
     }
 
     /**
@@ -141,7 +140,7 @@ export abstract class EnemyController extends Component {
      */
     makeDamage() {
         const player = GlobalState.getState(GlobalStateName.PLAYER) as PlayerController;
-        player.hurt(this._entity.damage);
+        player.hurt(this.combatComponent.finalDamage());
     }
 
     /**

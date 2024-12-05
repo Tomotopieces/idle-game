@@ -1,8 +1,9 @@
 import { _decorator, Animation, CCFloat, Component, EventTarget, ProgressBar } from 'cc';
-import { Entity } from "db://assets/Script/Entity/Entity";
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
 import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
+import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
+import { PlayerCombatComponent } from "db://assets/Script/Entity/Player/PlayerCombatComponent";
+import { PlayerLevelComponent } from "db://assets/Script/Entity/Player/PlayerLevelComponent";
 
 const { ccclass, property } = _decorator;
 
@@ -29,14 +30,19 @@ export class PlayerController extends Component {
     private _anim: Animation = null;
 
     /**
-     * 实体数据
-     */
-    private _entity: Entity = new Entity();
-
-    /**
      * 事件中心
      */
     private _eventTarget: EventTarget;
+
+    /**
+     * 战斗数据
+     */
+    private _combatComponent: PlayerCombatComponent;
+
+    /**
+     * 等级数据
+     */
+    private _levelComponent: PlayerLevelComponent;
 
     /**
      * 金币数
@@ -78,9 +84,10 @@ export class PlayerController extends Component {
      * 初始化基础数据
      */
     init() {
-        this._entity.health = 200;
-        this._entity.damage = 20;
-        GlobalState.getState(GlobalStateName.EVENT_TARGET).emit(EventName.UPDATE_PLAYER_DAMAGE, this._entity.damage);
+        this._levelComponent = new PlayerLevelComponent();
+
+        this._combatComponent = new PlayerCombatComponent();
+        GlobalState.getState(GlobalStateName.EVENT_TARGET).emit(EventName.UPDATE_PLAYER_DAMAGE, this._combatComponent.paperFinalDamage());
         this.updateHealthBar();
     }
 
@@ -112,14 +119,14 @@ export class PlayerController extends Component {
      */
     makeDamage() {
         const enemy = GlobalState.getState(GlobalStateName.ENEMY) as EnemyController;
-        enemy.hurt(this._entity.damage);
+        enemy.hurt(this._combatComponent.finalDamage());
     }
 
     /**
      * 更新血条显示
      */
     updateHealthBar() {
-        this.healthBar.progress = this._entity.health / 200;
+        this.healthBar.progress = this._combatComponent.health / this._combatComponent.maxHealth;
     }
 
     /**
@@ -137,13 +144,8 @@ export class PlayerController extends Component {
      * @param damage 伤害值
      */
     hurt(damage: number) {
-        this._entity.health -= damage;
+        this._combatComponent.getHurt(damage);
         this.updateHealthBar();
-
-        if (this._entity.health === 0) {
-            this._eventTarget.emit(EventName.PLAYER_DIE);
-            // TODO 复活
-        }
     }
 
     /**
@@ -161,5 +163,3 @@ export class PlayerController extends Component {
         this._eventTarget.emit(EventName.UPDATE_COIN, this._coin);
     }
 }
-
-

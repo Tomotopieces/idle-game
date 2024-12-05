@@ -2434,7 +2434,7 @@
     "_id": "90t4N6D3RIpIMI21GYMQda"
   },
   {
-    "__type__": "7de68vh/l9DyY3j7jl2agar",
+    "__type__": "cbe4eZTLNpJd6IFUQiWwVFm",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -2443,11 +2443,11 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "attackInterval": 0.4,
+    "attackInterval": 1,
     "healthBar": {
       "__id__": 80
     },
-    "_id": "ac136Xa4RBxJHfYzIfxgfh"
+    "_id": "6cw33tl7FBKZDSrR0KZ5ue"
   },
   {
     "__type__": "cc.Node",

@@ -1,6 +1,5 @@
 import { _decorator, CCInteger, Component, director, EventTarget, sys } from 'cc';
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { PlayerController } from "db://assets/Script/Entity/PlayerController";
 import { SaveData } from "db://assets/Script/Util/SaveData";
 import {
     ConfigName,
@@ -19,6 +18,7 @@ import { Stage } from "db://assets/Script/Level/Stage";
 import { LevelNameBar } from "db://assets/Script/UI/LevelNameBar";
 import { UpdateLevelEvent } from "db://assets/Script/Event/UpdateLevelEvent";
 import { StageLine } from "db://assets/Script/UI/StageLine";
+import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 
 const { ccclass, property } = _decorator;
 

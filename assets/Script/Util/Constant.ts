@@ -113,6 +113,11 @@ export enum EventName {
      * 更新关卡
      */
     UPDATE_LEVEL = 'UPDATE_LEVEL',
+
+    /**
+     * 玩家升级
+     */
+    PLAYER_LEVEL_UP = 'PLAYER_LEVEL_UP',
 }
 
 /**
