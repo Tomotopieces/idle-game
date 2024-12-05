@@ -1,7 +1,7 @@
 /**
- * 实体单位组件
+ * 数据
  */
-export class EntityComponent {
+export class Entity {
     /**
      * 生命值
      */

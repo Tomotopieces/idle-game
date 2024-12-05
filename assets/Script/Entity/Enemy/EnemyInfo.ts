@@ -7,37 +7,37 @@ export class EnemyInfo {
     /**
      * ID
      */
-    id: number;
+    readonly id: number;
 
     /**
      * 名称
      */
-    name: string;
+    readonly name: string;
 
     /**
      * 显示名称
      */
-    displayName: string;
+    readonly displayName: string;
 
     /**
      * 生命值
      */
-    health: number;
+    readonly health: number;
 
     /**
      * 攻击力
      */
-    damage: number;
+    readonly damage: number;
 
     /**
      * 掉落列表
      */
-    dropList: Array<DropItem>;
+    readonly dropList: Array<DropItem>;
 
     /**
      * 图标
      */
-    icon: string;
+    readonly icon: string;
 
     constructor(id: number, name: string, displayName: string, health: number, damage: number, dropList: Array<DropItem>, icon: string) {
         this.id = id;

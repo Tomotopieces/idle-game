@@ -7,32 +7,29 @@ import { GlobalStateName } from "db://assets/Script/Util/Constant";
  */
 export class StageJson {
     /**
-     * ID
-     */
-    id: number;
-
-    /**
      * 名称
      */
-    name: string;
+    readonly name: string;
 
     /**
      * 显示名称
      */
-    displayName: string;
+    readonly displayName: string;
 
     /**
      * 敌人名称
      */
-    enemyName: string;
+    readonly enemyName: string;
 
     /**
      * 转为Stage
      *
+     * @param id ID
      * @param stageJson StageJson
+     * @return Stage
      */
-    static toStage(stageJson: StageJson): Stage {
+    static toStage(id: number, stageJson: StageJson): Stage {
         const enemyInfo = GlobalState.getState(GlobalStateName.ENEMY_TABLE).get(stageJson.enemyName);
-        return new Stage(stageJson.id, stageJson.name, stageJson.displayName, enemyInfo);
+        return new Stage(id, stageJson.name, stageJson.displayName, enemyInfo);
     }
 }

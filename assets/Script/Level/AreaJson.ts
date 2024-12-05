@@ -8,33 +8,30 @@ import { Stage } from "db://assets/Script/Level/Stage";
  */
 export class AreaJson {
     /**
-     * ID
-     */
-    id: number;
-
-    /**
      * 名称
      */
-    name: string;
+    readonly name: string;
 
     /**
      * 显示名称
      */
-    displayName: string;
+    readonly displayName: string;
 
     /**
      * 关卡ID列表
      */
-    stages: Array<string>;
+    readonly stages: Array<string>;
 
     /**
      * 转换为Area
      *
+     * @param id ID
      * @param areaJson AreaJson
+     * @return Area
      */
-    static toArea(areaJson: AreaJson): Area {
+    static toArea(id: number, areaJson: AreaJson): Area {
         const stateTable = GlobalState.getState(GlobalStateName.STAGE_TABLE) as Map<string, Stage>;
         const stages = areaJson.stages.map(stageJson => stateTable.get(stageJson));
-        return new Area(areaJson.id, areaJson.displayName, areaJson.name, stages);
+        return new Area(id, areaJson.displayName, areaJson.name, stages);
     }
 }

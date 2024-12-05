@@ -1,6 +1,6 @@
 import { _decorator, Animation, CCFloat, Component, EventTarget, ProgressBar, Sprite, SpriteFrame } from 'cc';
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { EntityComponent } from "db://assets/Script/Component/EntityComponent";
+import { Entity } from "db://assets/Script/Entity/Entity";
 import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 import { PlayerController } from "db://assets/Script/Entity/PlayerController";
 import { DropItem } from "db://assets/Script/Item/DropItem";
@@ -39,7 +39,7 @@ export abstract class EnemyController extends Component {
     /**
      * 实体组件
      */
-    private _entity: EntityComponent = new EntityComponent();
+    private _entity: Entity = new Entity();
 
     /**
      * 事件中心

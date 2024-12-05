@@ -6,47 +6,44 @@ import { DropItemJson } from "db://assets/Script/Item/DropItemJson";
  */
 export class EnemyInfoJson {
     /**
-     * ID
-     */
-    id: number;
-
-    /**
      * 名称
      */
-    name: string;
+    readonly name: string;
 
     /**
      * 显示名称
      */
-    displayName: string;
+    readonly displayName: string;
 
     /**
      * 生命值
      */
-    health: number;
+    readonly health: number;
 
     /**
      * 攻击力
      */
-    damage: number;
+    readonly damage: number;
 
     /**
      * 掉落列表
      */
-    dropList: Array<DropItemJson>;
+    readonly dropList: Array<DropItemJson>;
 
     /**
      * 图标
      */
-    icon: string;
+    readonly icon: string;
 
     /**
      * 转换为EnemyInfo
      *
+     * @param id ID
      * @param infoJson EnemyInfoJson
+     * @return EnemyInfo
      */
-    static toEnemyInfo(infoJson: EnemyInfoJson): EnemyInfo {
+    static toEnemyInfo(id: number, infoJson: EnemyInfoJson): EnemyInfo {
         const dropList = infoJson.dropList.map(jsonDrop => DropItemJson.toDropItem(jsonDrop));
-        return new EnemyInfo(infoJson.id, infoJson.name, infoJson.displayName, infoJson.health, infoJson.damage, dropList, infoJson.icon);
+        return new EnemyInfo(id, infoJson.name, infoJson.displayName, infoJson.health, infoJson.damage, dropList, infoJson.icon);
     }
 }

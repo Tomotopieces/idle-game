@@ -26,11 +26,17 @@ export class DropItemJson {
      */
     private readonly _min: number = 1;
 
-    constructor(itemName: string, dropRate: number, max: number, min: number) {
+    /**
+     * 一次性掉落
+     */
+    private readonly _once: boolean = false;
+
+    constructor(itemName: string, dropRate: number, max: number, min: number, once: boolean) {
         this._itemName = itemName;
         this._dropRate = dropRate;
         this._max = max;
         this._min = min;
+        this._once = once;
     }
 
     /**
@@ -41,7 +47,7 @@ export class DropItemJson {
     static toDropItem(jsonDropItem: DropItemJson): DropItem {
         jsonDropItem = DropItemJson.fromObject(jsonDropItem);
         const item = GlobalState.getState(GlobalStateName.ITEM_TABLE).get(jsonDropItem._itemName);
-        return new DropItem(item, jsonDropItem._dropRate, jsonDropItem._max, jsonDropItem._min);
+        return new DropItem(item, jsonDropItem._dropRate, jsonDropItem._max, jsonDropItem._min, jsonDropItem._once);
     }
 
     /**
@@ -51,6 +57,6 @@ export class DropItemJson {
      * @return DropItemJson
      */
     static fromObject(obj: any): DropItemJson {
-        return new DropItemJson(obj.itemName, obj.dropRate, obj.max, obj.min);
+        return new DropItemJson(obj.itemName, obj.dropRate, obj.max, obj.min, obj.once);
     }
 }

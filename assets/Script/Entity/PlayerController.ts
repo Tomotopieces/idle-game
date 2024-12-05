@@ -1,5 +1,5 @@
 import { _decorator, Animation, CCFloat, Component, EventTarget, ProgressBar } from 'cc';
-import { EntityComponent } from "db://assets/Script/Component/EntityComponent";
+import { Entity } from "db://assets/Script/Entity/Entity";
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
 import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
@@ -15,7 +15,7 @@ export class PlayerController extends Component {
      * 攻击间隔（秒）
      */
     @property({ type: CCFloat, tooltip: '攻击间隔（秒）' })
-    public attackInterval: number = 1;
+    attackInterval: number = 1;
 
     /**
      * 血条
@@ -31,7 +31,7 @@ export class PlayerController extends Component {
     /**
      * 实体数据
      */
-    private _entity: EntityComponent = new EntityComponent();
+    private _entity: Entity = new Entity();
 
     /**
      * 事件中心
@@ -149,14 +149,14 @@ export class PlayerController extends Component {
     /**
      * 获取金币数
      */
-    public get coin(): number {
+    get coin(): number {
         return this._coin;
     }
 
     /**
      * 设置金币数
      */
-    public set coin(value: number) {
+    set coin(value: number) {
         this._coin = value;
         this._eventTarget.emit(EventName.UPDATE_COIN, this._coin);
     }
