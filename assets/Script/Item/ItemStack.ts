@@ -1,29 +1,21 @@
+import { Item } from "db://assets/Script/Item/Item";
+
 /**
  * 物品堆叠
  */
 export class ItemStack {
     /**
-     * 物品名称
+     * 物品
      */
-    itemName: string;
+    item: Item;
 
     /**
      * 数量
      */
     count: number;
 
-    constructor(itemName: string, count: number) {
-        this.itemName = itemName;
+    constructor(item: Item, count: number) {
+        this.item = item;
         this.count = count;
-    }
-
-    /**
-     * 从Object重新创建
-     *
-     * @param obj Object
-     * @return ItemStack
-     */
-    static fromObject(obj: any): ItemStack {
-        return new ItemStack(obj.itemName, obj.count);
     }
 }

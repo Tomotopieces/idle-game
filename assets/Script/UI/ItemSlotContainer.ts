@@ -1,4 +1,4 @@
-import { _decorator, Component, instantiate, Node, Prefab, EventTarget, Vec3 } from 'cc';
+import { _decorator, Component, EventTarget, instantiate, Node, Prefab, Vec3 } from 'cc';
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 import { StoreHouse } from "db://assets/Script/Util/StoreHouseUtil";
@@ -84,7 +84,7 @@ export class ItemSlotContainer extends Component {
     private updateSlotList(stackList: Array<ItemStack>) {
         // 更新List数据
         stackList.forEach(updateStack => {
-            const index = this._slotList.findIndex(slot => slot.getComponent(ItemSlot).stack?.itemName === updateStack.itemName ?? false);
+            const index = this._slotList.findIndex(slot => slot.getComponent(ItemSlot).stack?.item.name === updateStack.item.name ?? false);
             if (index == -1 && updateStack.count > 0) {
                 // 新增物品
                 const slot = instantiate(this.slotPrefab);

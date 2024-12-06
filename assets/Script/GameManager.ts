@@ -12,13 +12,13 @@ import { DropItem } from "db://assets/Script/Item/DropItem";
 import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
 import { StoreHouse, StoreHouseUtil } from "db://assets/Script/Util/StoreHouseUtil";
 import { DropItemFactory } from "db://assets/Script/Item/DropItemFactory";
-import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { Area } from "db://assets/Script/Level/Area";
 import { Stage } from "db://assets/Script/Level/Stage";
 import { LevelNameBar } from "db://assets/Script/UI/LevelNameBar";
 import { UpdateLevelEvent } from "db://assets/Script/Event/UpdateLevelEvent";
 import { StageLine } from "db://assets/Script/UI/StageLine";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
+import { ItemStack } from "db://assets/Script/Item/ItemStack";
 
 const { ccclass, property } = _decorator;
 
@@ -118,11 +118,7 @@ export class GameManager extends Component {
             return;
         }
         this.player.coin = this._latestSaveData.coin;
-        this._storeHouse = new Map<string, ItemStack>((JSON.parse(this._latestSaveData.storeHouse) as Array<Object>)
-            .map(item => {
-                const itemStack = ItemStack.fromObject(item);
-                return [itemStack.itemName, itemStack];
-            }));
+        this._storeHouse = this._latestSaveData.storeHouse;
         GlobalState.setState(GlobalStateName.STORE_HOUSE, this._storeHouse);
     }
 
@@ -182,9 +178,8 @@ export class GameManager extends Component {
      * 保存存档
      */
     saveData() {
-        const storeHouseJson = JSON.stringify(Array.from(this._storeHouse.values()));
-        this._latestSaveData = new SaveData(this.player.coin, storeHouseJson, this.area.name, this.stage.name);
-        sys.localStorage.setItem(ConfigName.SAVE_DATA, JSON.stringify(this._latestSaveData));
+        this._latestSaveData = new SaveData(this.player.coin, this._storeHouse, this.area.name, this.stage.name);
+        sys.localStorage.setItem(ConfigName.SAVE_DATA, this._latestSaveData.toJson());
         console.log(`Auto Save`);
     }
 

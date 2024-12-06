@@ -14,7 +14,7 @@ export class DropItemFactory {
         const result = new Array<ItemStack>();
         dropList.forEach(drop => {
             if (Math.random() < drop.dropRate) {
-                result.push((new ItemStack(drop.item.name, Math.floor(Math.random() * (drop.max - drop.min + 1) + drop.min))));
+                result.push((new ItemStack(drop.item, Math.floor(Math.random() * (drop.max - drop.min + 1) + drop.min))));
             }
         });
         return result;

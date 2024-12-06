@@ -92,11 +92,11 @@ export class PlayerController extends Component {
     init() {
         this._levelComponent = new PlayerLevelComponent();
 
-        this._equipmentComponent = new PlayerEquipmentComponent(this._combatComponent);
-
         this._combatComponent = new PlayerCombatComponent();
         GlobalState.getState(GlobalStateName.EVENT_TARGET).emit(EventName.UPDATE_PLAYER_DAMAGE, this._combatComponent.paperFinalDamage());
         this.updateHealthBar();
+
+        this._equipmentComponent = new PlayerEquipmentComponent(this._combatComponent);
     }
 
     /**

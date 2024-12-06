@@ -1,9 +1,7 @@
 import { _decorator, Component, Label, Node, Sprite, SpriteFrame } from 'cc';
 import { Item } from "db://assets/Script/Item/Item";
-import { ItemStack } from "db://assets/Script/Item/ItemStack";
-import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { GlobalStateName } from "db://assets/Script/Util/Constant";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
+import { ItemStack } from "db://assets/Script/Item/ItemStack";
 
 const { ccclass, property } = _decorator;
 
@@ -68,7 +66,7 @@ export class ItemSlot extends Component {
      */
     set stack(value: ItemStack) {
         this._stack = value;
-        this._item = GlobalState.getState(GlobalStateName.ITEM_TABLE).get(value.itemName);
+        this._item = value.item;
         ResourceManager.getAsset(ResourceType.SPRITE_FRAME, this._item.icon, (spriteFrame: SpriteFrame) => {
             this.stackNode.getComponent(Sprite).spriteFrame = spriteFrame;
         });
