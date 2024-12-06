@@ -4,6 +4,7 @@ import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
 import { PlayerCombatComponent } from "db://assets/Script/Entity/Player/PlayerCombatComponent";
 import { PlayerLevelComponent } from "db://assets/Script/Entity/Player/PlayerLevelComponent";
+import { PlayerEquipmentComponent } from "db://assets/Script/Entity/Player/PlayerEquipmentComponent";
 
 const { ccclass, property } = _decorator;
 
@@ -35,14 +36,19 @@ export class PlayerController extends Component {
     private _eventTarget: EventTarget;
 
     /**
-     * 战斗数据
+     * 战斗信息
      */
     private _combatComponent: PlayerCombatComponent;
 
     /**
-     * 等级数据
+     * 等级信息
      */
     private _levelComponent: PlayerLevelComponent;
+
+    /**
+     * 装备信息
+     */
+    private _equipmentComponent: PlayerEquipmentComponent;
 
     /**
      * 金币数
@@ -86,6 +92,8 @@ export class PlayerController extends Component {
     init() {
         this._levelComponent = new PlayerLevelComponent();
 
+        this._equipmentComponent = new PlayerEquipmentComponent(this._combatComponent);
+
         this._combatComponent = new PlayerCombatComponent();
         GlobalState.getState(GlobalStateName.EVENT_TARGET).emit(EventName.UPDATE_PLAYER_DAMAGE, this._combatComponent.paperFinalDamage());
         this.updateHealthBar();
@@ -126,7 +134,7 @@ export class PlayerController extends Component {
      * 更新血条显示
      */
     updateHealthBar() {
-        this.healthBar.progress = this._combatComponent.health / this._combatComponent.maxHealth;
+        this.healthBar.progress = this._combatComponent.health / this._combatComponent.finalHealth();
     }
 
     /**

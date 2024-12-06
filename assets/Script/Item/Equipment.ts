@@ -1,11 +1,38 @@
 import { Item } from "db://assets/Script/Item/Item";
 
+/**
+ * 装备类型
+ */
 export enum EquipmentType {
+    /**
+     * 武器
+     */
     WEAPON,
+
+    /**
+     * 头冠
+     */
     HEADGEAR,
+
+    /**
+     * 衣甲
+     */
     CHEST,
+
+    /**
+     * 臂甲
+     */
     ARM,
-    LEG
+
+    /**
+     * 腿甲
+     */
+    LEG,
+
+    /**
+     * 珍玩
+     */
+    CURIOS
 }
 
 /**
@@ -15,45 +42,50 @@ export class Equipment extends Item {
     /**
      * 装备类型
      */
-    private _type: EquipmentType;
+    readonly equipmentType: EquipmentType;
+
+    /**
+     * 生命值
+     */
+    readonly additionalHealth: number;
+
+    /**
+     * 生命值倍率
+     */
+    readonly healthBoost: number;
+
+    /**
+     * 额外生命
+     */
+    readonly extraHealth: number;
 
     /**
      * 攻击力
      */
-    private _damage: number;
+    readonly additionalDamage: number;
 
     /**
      * 攻击力倍率
      */
-    private _damageBoost: number;
+    readonly damageBoost: number;
 
     /**
      * 防御力
      */
-    private _defence: number;
+    readonly additionalDefence: number;
 
     /**
      * 防御力倍率
      */
-    private _defenceBoost: number;
+    readonly defenceBoost: number;
 
     /**
      * 暴击率
      */
-    private _criticalRate: number;
+    readonly criticalRate: number;
 
     /**
      * 暴击伤害倍率
      */
-    private _criticalDamageBoost: number;
-
-    /**
-     * 装备时触发
-     */
-    private _onEquip: Function;
-
-    /**
-     * 解除装备时触发
-     */
-    private _onUnEquip: Function;
+    readonly criticalBoost: number;
 }
