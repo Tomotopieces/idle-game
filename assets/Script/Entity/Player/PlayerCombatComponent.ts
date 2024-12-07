@@ -1,7 +1,7 @@
 import { EventTarget } from 'cc';
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
-import { Equipment } from "db://assets/Script/Item/Equipment";
+import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 
 // 默认生命值
 const DEFAULT_HEALTH = 200;
@@ -81,21 +81,21 @@ export class PlayerCombatComponent {
     /**
      * 基础防御
      */
-    private _baseDefence: number;
+    private _baseDefense: number;
 
     /**
      * 附加防御
      *
      * 装备、丹药、被动效果等
      */
-    private _additionalDefence: number;
+    private _additionalDefense: number;
 
     /**
      * 防御倍率
      *
      * 初始为1.0
      */
-    private _defenceBoost: number;
+    private _defenseBoost: number;
 
     constructor() {
         this._health = this._maxHealth = DEFAULT_HEALTH;
@@ -107,9 +107,9 @@ export class PlayerCombatComponent {
         this._damageBoost = 1;
         this._criticalRate = 0;
         this._criticalBoost = DEFAULT_CRITICAL_BOOST;
-        this._baseDefence = 0;
-        this._additionalDefence = 0;
-        this._defenceBoost = 1;
+        this._baseDefense = 0;
+        this._additionalDefense = 0;
+        this._defenseBoost = 1;
     }
 
     /**
@@ -147,8 +147,8 @@ export class PlayerCombatComponent {
      *
      * （基础防御 + 附加防御) * 防御倍率
      */
-    finalDefence(): number {
-        return (this._baseDefence + this._additionalDefence) * this._defenceBoost;
+    finalDefense(): number {
+        return (this._baseDefense + this._additionalDefense) * this._defenseBoost;
     }
 
     /**
@@ -157,7 +157,7 @@ export class PlayerCombatComponent {
      * @param damage 伤害
      */
     getHurt(damage: number) {
-        this.health -= Math.max(0, damage - this.finalDefence());
+        this.health -= Math.max(0, damage - this.finalDefense());
     }
 
     getAttributeFromEquipment(equipment: Equipment) {
@@ -165,15 +165,15 @@ export class PlayerCombatComponent {
             return;
         }
 
-        this.additionalHealth += equipment.additionalHealth;
-        this.healthBoost += equipment.healthBoost;
-        this.extraHealth += equipment.extraHealth;
-        this.additionalDamage += equipment.additionalDamage;
-        this.damageBoost += equipment.damageBoost;
-        this.criticalRate += equipment.criticalRate;
-        this.criticalBoost += equipment.criticalBoost;
-        this.additionalDefence += equipment.additionalDefence;
-        this.defenceBoost += equipment.defenceBoost;
+        this.additionalHealth += equipment.attributes.additionalHealth;
+        this.healthBoost += equipment.attributes.healthBoost;
+        this.extraHealth += equipment.attributes.extraHealth;
+        this.additionalDamage += equipment.attributes.additionalDamage;
+        this.damageBoost += equipment.attributes.damageBoost;
+        this.criticalRate += equipment.attributes.criticalRate;
+        this.criticalBoost += equipment.attributes.criticalBoost;
+        this.additionalDefense += equipment.attributes.additionalDefense;
+        this.defenseBoost += equipment.attributes.defenseBoost;
     }
 
     dropAttributeFromEquipment(equipment: Equipment) {
@@ -181,15 +181,15 @@ export class PlayerCombatComponent {
             return;
         }
 
-        this.additionalHealth -= equipment.additionalHealth;
-        this.healthBoost -= equipment.healthBoost;
-        this.extraHealth -= equipment.extraHealth;
-        this.additionalDamage -= equipment.additionalDamage;
-        this.damageBoost -= equipment.damageBoost;
-        this.criticalRate -= equipment.criticalRate;
-        this.criticalBoost -= equipment.criticalBoost;
-        this.additionalDefence -= equipment.additionalDefence;
-        this.defenceBoost -= equipment.defenceBoost;
+        this.additionalHealth -= equipment.attributes.additionalHealth;
+        this.healthBoost -= equipment.attributes.healthBoost;
+        this.extraHealth -= equipment.attributes.extraHealth;
+        this.additionalDamage -= equipment.attributes.additionalDamage;
+        this.damageBoost -= equipment.attributes.damageBoost;
+        this.criticalRate -= equipment.attributes.criticalRate;
+        this.criticalBoost -= equipment.attributes.criticalBoost;
+        this.additionalDefense -= equipment.attributes.additionalDefense;
+        this.defenseBoost -= equipment.attributes.defenseBoost;
     }
 
     get health(): number {
@@ -280,27 +280,27 @@ export class PlayerCombatComponent {
         this._criticalBoost = Math.max(1, value); // 暴击伤害不会低于无暴击伤害
     }
 
-    get baseDefence(): number {
-        return this._baseDefence;
+    get baseDefense(): number {
+        return this._baseDefense;
     }
 
-    set baseDefence(value: number) {
-        this._baseDefence = Math.max(0, value);
+    set baseDefense(value: number) {
+        this._baseDefense = Math.max(0, value);
     }
 
-    get additionalDefence(): number {
-        return this._additionalDefence;
+    get additionalDefense(): number {
+        return this._additionalDefense;
     }
 
-    set additionalDefence(value: number) {
-        this._additionalDefence = Math.max(0, value);
+    set additionalDefense(value: number) {
+        this._additionalDefense = Math.max(0, value);
     }
 
-    get defenceBoost(): number {
-        return this._defenceBoost;
+    get defenseBoost(): number {
+        return this._defenseBoost;
     }
 
-    set defenceBoost(value: number) {
-        this._defenceBoost = Math.max(0, value); // 可小于1，不可小于0
+    set defenseBoost(value: number) {
+        this._defenseBoost = Math.max(0, value); // 可小于1，不可小于0
     }
 }

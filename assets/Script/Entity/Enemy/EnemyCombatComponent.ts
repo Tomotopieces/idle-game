@@ -1,6 +1,3 @@
-import { EventTarget } from 'cc';
-import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 import { EnemyInfo } from "db://assets/Script/Entity/Enemy/EnemyInfo";
 
 /**
@@ -44,21 +41,21 @@ export class EnemyCombatComponent {
     /**
      * 基础防御
      */
-    private _baseDefence: number;
+    private _baseDefense: number;
 
     /**
      * 附加防御
      *
      * 装备、丹药、被动效果等
      */
-    private _additionalDefence: number;
+    private _additionalDefense: number;
 
     /**
      * 防御倍率
      *
      * 初始为1.0
      */
-    private _defenceBoost: number;
+    private _defenseBoost: number;
 
     constructor(info: EnemyInfo) {
         this._health = this._maxHealth = info.health;
@@ -66,9 +63,9 @@ export class EnemyCombatComponent {
         this._baseDamage = info.damage;
         this._additionalDamage = 0;
         this._damageBoost = 1;
-        this._baseDefence = 0;
-        this._additionalDefence = 0;
-        this._defenceBoost = 1;
+        this._baseDefense = 0;
+        this._additionalDefense = 0;
+        this._defenseBoost = 1;
     }
 
     /**
@@ -81,12 +78,12 @@ export class EnemyCombatComponent {
     /**
      * 最终防御
      */
-    finalDefence(): number {
-        return (this._baseDefence + this._additionalDefence) * this._defenceBoost;
+    finalDefense(): number {
+        return (this._baseDefense + this._additionalDefense) * this._defenseBoost;
     }
 
     getHurt(damage: number) {
-        this.health -= Math.max(0, damage - this.finalDefence());
+        this.health -= Math.max(0, damage - this.finalDefense());
     }
 
     get health(): number {
@@ -137,27 +134,27 @@ export class EnemyCombatComponent {
         this._damageBoost = Math.max(0, value); // 可小于1，不可小于0
     }
 
-    get baseDefence(): number {
-        return this._baseDefence;
+    get baseDefense(): number {
+        return this._baseDefense;
     }
 
-    set baseDefence(value: number) {
-        this._baseDefence = Math.max(0, value);
+    set baseDefense(value: number) {
+        this._baseDefense = Math.max(0, value);
     }
 
-    get additionalDefence(): number {
-        return this._additionalDefence;
+    get additionalDefense(): number {
+        return this._additionalDefense;
     }
 
-    set additionalDefence(value: number) {
-        this._additionalDefence = Math.max(0, value);
+    set additionalDefense(value: number) {
+        this._additionalDefense = Math.max(0, value);
     }
 
-    get defenceBoost(): number {
-        return this._defenceBoost;
+    get defenseBoost(): number {
+        return this._defenseBoost;
     }
 
-    set defenceBoost(value: number) {
-        this._defenceBoost = Math.max(0, value); // 可小于1，不可小于0
+    set defenseBoost(value: number) {
+        this._defenseBoost = Math.max(0, value); // 可小于1，不可小于0
     }
 }

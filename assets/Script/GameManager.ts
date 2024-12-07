@@ -1,6 +1,6 @@
 import { _decorator, CCInteger, Component, director, EventTarget, sys } from 'cc';
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { SaveData } from "db://assets/Script/Util/SaveData";
+import { SaveData } from "db://assets/Script/SaveData/SaveData";
 import {
     ConfigName,
     DefaultStaffName,
@@ -10,7 +10,7 @@ import {
 } from "db://assets/Script/Util/Constant";
 import { DropItem } from "db://assets/Script/Item/DropItem";
 import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
-import { StoreHouse, StoreHouseUtil } from "db://assets/Script/Util/StoreHouseUtil";
+import { Storehouse, StorehouseUtil } from "db://assets/Script/Util/StorehouseUtil";
 import { DropItemFactory } from "db://assets/Script/Item/DropItemFactory";
 import { Area } from "db://assets/Script/Level/Area";
 import { Stage } from "db://assets/Script/Level/Stage";
@@ -19,6 +19,8 @@ import { UpdateLevelEvent } from "db://assets/Script/Event/UpdateLevelEvent";
 import { StageLine } from "db://assets/Script/UI/StageLine";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
+import { EquipmentChangeEvent } from "db://assets/Script/Event/EquipmentChangeEvent";
+import { EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
 
 const { ccclass, property } = _decorator;
 
@@ -68,9 +70,14 @@ export class GameManager extends Component {
     stage: Stage = null;
 
     /**
+     * 装备栏
+     */
+    private _equipmentSlot: Map<EquipmentType, ItemStack> = new Map<EquipmentType, ItemStack>();
+
+    /**
      * 仓库
      */
-    private _storeHouse: StoreHouse = new Map<string, ItemStack>();
+    private _storehouse: Storehouse = new Map<string, ItemStack>();
 
     /**
      * 最新保存数据
@@ -92,13 +99,14 @@ export class GameManager extends Component {
 
         // 读取存档
         this.loadSaveData();
-        GlobalState.setState(GlobalStateName.STORE_HOUSE, this._storeHouse);
+        GlobalState.setState(GlobalStateName.STOREHOUSE, this._storehouse);
 
         // 监听处理事件
         this._eventTarget.on(EventName.PLAYER_RESTORE_SAVE_DATA, () => this.restorePlayerData());
         this._eventTarget.on(EventName.ENEMY_RESTORE_SAVE_DATA, () => this.restoreLevelAndEnemyData());
         this._eventTarget.on(EventName.CALCULATE_DROP_ITEM, (dropList: Array<DropItem>) => this.handleDropItem(dropList));
         this._eventTarget.on(EventName.UPDATE_LEVEL, (event: UpdateLevelEvent) => this.updateLevel(event.area, event.stage));
+        this._eventTarget.on(EventName.EQUIPMENT_CHANGE, (event: EquipmentChangeEvent) => this.handleEquipmentChange(event));
     }
 
     update(dt: number) {
@@ -118,8 +126,8 @@ export class GameManager extends Component {
             return;
         }
         this.player.coin = this._latestSaveData.coin;
-        this._storeHouse = this._latestSaveData.storeHouse;
-        GlobalState.setState(GlobalStateName.STORE_HOUSE, this._storeHouse);
+        this._storehouse = this._latestSaveData.storehouse;
+        GlobalState.setState(GlobalStateName.STOREHOUSE, this._storehouse);
     }
 
     /**
@@ -178,7 +186,7 @@ export class GameManager extends Component {
      * 保存存档
      */
     saveData() {
-        this._latestSaveData = new SaveData(this.player.coin, this._storeHouse, this.area.name, this.stage.name);
+        this._latestSaveData = new SaveData(this.player.coin, this._equipmentSlot, this._storehouse, this.area.name, this.stage.name);
         sys.localStorage.setItem(ConfigName.SAVE_DATA, this._latestSaveData.toJson());
         console.log(`Auto Save`);
     }
@@ -189,8 +197,18 @@ export class GameManager extends Component {
      * @param dropList 掉落道具列表
      */
     private handleDropItem(dropList: Array<DropItem>) {
-        StoreHouseUtil.putIn(DropItemFactory.produce(dropList));
-        this.player.coin = this._storeHouse.get(LING_YUN_NAME)?.count ?? 0;
+        StorehouseUtil.putIn(DropItemFactory.produce(dropList));
+        this.player.coin = this._storehouse.get(LING_YUN_NAME)?.count ?? 0;
+    }
+
+    /**
+     * 处理装备变更
+     * @param event 事件参数
+     */
+    private handleEquipmentChange(event: EquipmentChangeEvent) {
+        if (StorehouseUtil.check([new ItemStack(event.equipment, 1)])) {
+            // TODO 处理换装事件
+        }
     }
 
     /**

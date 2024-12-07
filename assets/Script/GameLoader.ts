@@ -8,6 +8,7 @@ import { StageJson } from "db://assets/Script/Level/StageJson";
 import { Stage } from "db://assets/Script/Level/Stage";
 import { AreaJson } from "db://assets/Script/Level/AreaJson";
 import { Area } from "db://assets/Script/Level/Area";
+import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 
 const { ccclass, property } = _decorator;
 
@@ -44,7 +45,23 @@ export class GameLoader extends Component {
                 itemTable.set(rawItem.name, Item.fromObject(index, rawItem)));
             GlobalState.setState(GlobalStateName.ITEM_TABLE, itemTable);
 
-            this.loadingBar.progress += 0.25;
+            this.loadingBar.progress += 0.2;
+
+            this.loadEquipmentTable();
+        });
+    }
+
+    /**
+     * 加载装备表
+     */
+    private loadEquipmentTable() {
+        resources.load(DataPath.EQUIPMENT_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+            const rawItemList = data.json! as Array<Equipment>;
+            const itemTable = GlobalState.getState(GlobalStateName.ITEM_TABLE) as Map<string, Item>;
+            rawItemList.forEach((rawItem: Item, index: number) =>
+                itemTable.set(rawItem.name, Equipment.fromObject(index, rawItem)));
+
+            this.loadingBar.progress += 0.2;
 
             this.loadEnemyTable();
         });
@@ -61,7 +78,7 @@ export class GameLoader extends Component {
                 infoTable.set(rawInfo.name, EnemyInfoJson.toEnemyInfo(index, rawInfo)));
             GlobalState.setState(GlobalStateName.ENEMY_TABLE, infoTable);
 
-            this.loadingBar.progress += 0.25;
+            this.loadingBar.progress += 0.2;
 
             this.loadStageTable();
         });
@@ -78,7 +95,7 @@ export class GameLoader extends Component {
                 stageTable.set(rawStage.name, StageJson.toStage(index, rawStage)));
             GlobalState.setState(GlobalStateName.STAGE_TABLE, stageTable);
 
-            this.loadingBar.progress += 0.25;
+            this.loadingBar.progress += 0.2;
 
             this.loadAreaTable();
         })
@@ -95,7 +112,7 @@ export class GameLoader extends Component {
                 areaTable.set(rawArea.name, AreaJson.toArea(index, rawArea)));
             GlobalState.setState(GlobalStateName.AREA_TABLE, areaTable);
 
-            this.loadingBar.progress += 0.25;
+            this.loadingBar.progress += 0.2;
 
             this.onLoadFinished();
         })

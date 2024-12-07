@@ -1,0 +1,111 @@
+[
+  {
+    "name": "liu_mu_gun",
+    "displayName": "柳木棍",
+    "itemType": "equipment",
+    "description": "棍虽榔糠，即不能打死，也能打一个跌。",
+    "icon": "item/liu_mu_gun",
+    "unique": true,
+    "equipmentType": "weapon",
+    "attributes": {
+      "additionalDamage": 30
+    }
+  },
+  {
+    "name": "mian_bu_zha_wan",
+    "displayName": "绵布扎腕",
+    "itemType": "equipment",
+    "description": "这条虎皮裙子，能值几个铜钱？",
+    "icon": "item/mian_bu_zha_wan",
+    "unique": true,
+    "equipmentType": "arm",
+    "attributes": {
+      "additionalDefense": 2
+    }
+  },
+  {
+    "name": "hu_pi_qun",
+    "displayName": "虎皮裙",
+    "itemType": "equipment",
+    "description": "这条虎皮裙子，能值几个铜钱？",
+    "icon": "item/hu_pi_qun",
+    "unique": true,
+    "equipmentType": "chest",
+    "attributes": {
+      "additionalDefense": 5
+    }
+  },
+  {
+    "name": "mian_bu_tui_beng",
+    "displayName": "绵布腿绷",
+    "itemType": "equipment",
+    "description": "这条虎皮裙子，能值几个铜钱？",
+    "icon": "item/mian_bu_tui_beng",
+    "unique": true,
+    "equipmentType": "leg",
+    "attributes": {
+      "additionalDefense": 3
+    }
+  },
+  {
+    "name": "shou_gun_xiong_pi",
+    "displayName": "兽棍·熊罴",
+    "itemType": "equipment",
+    "description": "但行处百兽心慌，若坐下群魔胆战。",
+    "icon": "item/staff",
+    "unique": true,
+    "equipmentType": "weapon",
+    "attributes": {
+      "additionalDamage": 50,
+      "criticalRage": 0.04
+    }
+  },
+  {
+    "name": "xing_zhe_jie_gu",
+    "displayName": "行者戒箍",
+    "itemType": "equipment",
+    "description": "这箍儿若戴了，不用教经，就会念经；\n这衣服若穿了，不用演礼，就会行礼。",
+    "icon": "item/xing_zhe_jie_gu",
+    "unique": true,
+    "equipmentType": "head",
+    "attributes": {
+      "additionalDefense": 8
+    }
+  },
+  {
+    "name": "xing_zhe_zha_wan",
+    "displayName": "行者扎腕",
+    "itemType": "equipment",
+    "description": "这箍儿若戴了，不用教经，就会念经；\n这衣服若穿了，不用演礼，就会行礼。",
+    "icon": "item/xing_zhe_zha_wan",
+    "unique": true,
+    "equipmentType": "arm",
+    "attributes": {
+      "additionalDefense": 6
+    }
+  },
+  {
+    "name": "xing_zhe_zhi_duo",
+    "displayName": "行者直裰",
+    "itemType": "equipment",
+    "description": "这箍儿若戴了，不用教经，就会念经；\n这衣服若穿了，不用演礼，就会行礼。",
+    "icon": "item/xing_zhe_zhi_duo",
+    "unique": true,
+    "equipmentType": "chest",
+    "attributes": {
+      "additionalDefense": 16
+    }
+  },
+  {
+    "name": "xing_zhe_tui_beng",
+    "displayName": "行者腿绷",
+    "itemType": "equipment",
+    "description": "这箍儿若戴了，不用教经，就会念经；\n这衣服若穿了，不用演礼，就会行礼。",
+    "icon": "item/xing_zhe_tui_beng",
+    "unique": true,
+    "equipmentType": "leg",
+    "attributes": {
+      "additionalDefense": 10
+    }
+  }
+]

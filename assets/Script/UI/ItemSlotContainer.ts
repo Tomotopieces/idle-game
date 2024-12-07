@@ -1,7 +1,7 @@
 import { _decorator, Component, EventTarget, instantiate, Node, Prefab, Vec3 } from 'cc';
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
-import { StoreHouse } from "db://assets/Script/Util/StoreHouseUtil";
+import { Storehouse } from "db://assets/Script/Util/StorehouseUtil";
 import { ItemSlot } from "db://assets/Script/UI/ItemSlot";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 
@@ -33,7 +33,7 @@ export class ItemSlotContainer extends Component {
     /**
      * 仓库
      */
-    private _storeHouse: StoreHouse;
+    private _storehouse: Storehouse;
 
     /**
      * 物品槽列表
@@ -47,16 +47,16 @@ export class ItemSlotContainer extends Component {
 
     start() {
         // 获取仓库内容
-        this._storeHouse = GlobalState.getState(GlobalStateName.STORE_HOUSE);
+        this._storehouse = GlobalState.getState(GlobalStateName.STOREHOUSE);
 
         this._eventTarget = GlobalState.getState(GlobalStateName.EVENT_TARGET);
 
         // 计算展示的物品槽数量，确保每行都填满
-        let slotCount = Math.max(this._storeHouse.size, DEFAULT_SLOT_SIZE);
+        let slotCount = Math.max(this._storehouse.size, DEFAULT_SLOT_SIZE);
         slotCount += SLOT_PER_ROW - slotCount % SLOT_PER_ROW;
 
         // 添加物品槽
-        const stackList = Array.from(this._storeHouse.values());
+        const stackList = Array.from(this._storehouse.values());
         for (let i = 0; i < slotCount; i++) {
             const slot = instantiate(this.slotPrefab);
             this.node.addChild(slot);
@@ -72,7 +72,7 @@ export class ItemSlotContainer extends Component {
         }
 
         // 监听仓库变化事件
-        this._eventTarget.on(EventName.UPDATE_STORE_HOUSE, (stackList: Array<ItemStack>) => this.updateSlotList(stackList));
+        this._eventTarget.on(EventName.UPDATE_STOREHOUSE, (stackList: Array<ItemStack>) => this.updateSlotList(stackList));
     }
 
     /**
@@ -112,7 +112,7 @@ export class ItemSlotContainer extends Component {
         this.node.removeAllChildren();
 
         // 重新计算展示的物品槽数量
-        let slotCount = Math.max(this._storeHouse.size, DEFAULT_SLOT_SIZE);
+        let slotCount = Math.max(this._storehouse.size, DEFAULT_SLOT_SIZE);
         slotCount += SLOT_PER_ROW - slotCount % SLOT_PER_ROW;
 
         for (let i = 0; i < slotCount; i++) {

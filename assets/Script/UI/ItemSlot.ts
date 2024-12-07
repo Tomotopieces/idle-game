@@ -1,9 +1,26 @@
-import { _decorator, Component, Label, Node, Sprite, SpriteFrame } from 'cc';
+import { _decorator, Component, Enum, Label, Node, Sprite, SpriteFrame, EventTarget } from 'cc';
 import { Item } from "db://assets/Script/Item/Item";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
+import { GlobalState } from "db://assets/Script/Util/GlobalState";
+import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 
 const { ccclass, property } = _decorator;
+
+/**
+ * 物品槽类型
+ */
+export enum SlotType {
+    /**
+     * 装备槽
+     */
+    EQUIPMENT,
+
+    /**
+     * 仓库槽
+     */
+    STOREHOUSE
+}
 
 /**
  * 物品槽
@@ -23,6 +40,12 @@ export class ItemSlot extends Component {
     countLabel: Label = null;
 
     /**
+     * 物品槽类型
+     */
+    @property({ type: Enum(SlotType), tooltip: '物品槽类型' })
+    slotType: SlotType = SlotType.STOREHOUSE;
+
+    /**
      * 物品
      */
     private _item: Item = null;
@@ -33,12 +56,21 @@ export class ItemSlot extends Component {
     private _stack: ItemStack = null;
 
     /**
+     * 事件中心
+     */
+    private _eventTarget: EventTarget = null;
+
+    start() {
+        this._eventTarget = GlobalState.getState(GlobalStateName.EVENT_TARGET);
+    }
+
+    /**
      * 点击事件
      *
      * 点击触发
      */
     click() {
-        console.log(`click`);
+        this._eventTarget.emit(EventName.CLICK_ITEM_SLOT, this);
     }
 
     /**

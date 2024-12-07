@@ -10,12 +10,12 @@ export class UpdateLevelEvent {
     /**
      * 区域
      */
-    private readonly _area: Area;
+    readonly area: Area;
 
     /**
      * 舞台
      */
-    private readonly _stage: Stage;
+    readonly stage: Stage;
 
     /**
      * 构造函数
@@ -24,15 +24,7 @@ export class UpdateLevelEvent {
      * @param stage 舞台，null则为当前舞台
      */
     constructor(area: Area, stage: Stage) {
-        this._area = area ?? GlobalState.getState(GlobalStateName.AREA);
-        this._stage = stage ?? GlobalState.getState(GlobalStateName.STAGE);
-    }
-
-    get area(): Area {
-        return this._area;
-    }
-
-    get stage(): Stage {
-        return this._stage;
+        this.area = area ?? GlobalState.getState(GlobalStateName.AREA);
+        this.stage = stage ?? GlobalState.getState(GlobalStateName.STAGE);
     }
 }

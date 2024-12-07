@@ -3,6 +3,9 @@
  */
 export const LING_YUN_NAME = 'ling_yun';
 
+/**
+ * 默认舞台和区域名称
+ */
 export enum DefaultStaffName {
     /**
      * 默认区域名称（黑风山）
@@ -38,6 +41,11 @@ export enum DataPath {
      * 道具配置表
      */
     ITEM_TABLE = 'data/item_table',
+
+    /**
+     * 装备配置表
+     */
+    EQUIPMENT_TABLE = 'data/equipment_table',
 
     /**
      * 敌人配置表
@@ -107,7 +115,7 @@ export enum EventName {
     /**
      * 更新仓库
      */
-    UPDATE_STORE_HOUSE = 'UPDATE_STORE_HOUSE',
+    UPDATE_STOREHOUSE = 'UPDATE_STOREHOUSE',
 
     /**
      * 更新关卡
@@ -118,6 +126,16 @@ export enum EventName {
      * 玩家升级
      */
     PLAYER_LEVEL_UP = 'PLAYER_LEVEL_UP',
+
+    /**
+     * 装备变更
+     */
+    EQUIPMENT_CHANGE = 'EQUIPMENT_CHANGE',
+
+    /**
+     * 点击物品槽
+     */
+    CLICK_ITEM_SLOT = 'CLICK_ITEM_SLOT',
 }
 
 /**
@@ -162,7 +180,7 @@ export enum GlobalStateName {
     /**
      * 仓库
      */
-    STORE_HOUSE = 'StoreHouse',
+    STOREHOUSE = 'Storehouse',
 
     /**
      * 区域

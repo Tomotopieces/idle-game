@@ -5,17 +5,17 @@ export enum ItemType {
     /**
      * 常规项
      */
-    COMMON,
+    COMMON = 'common',
 
     /**
      * 装备
      */
-    EQUIPMENT,
+    EQUIPMENT = 'equipment',
 
     /**
      * 消耗品
      */
-    CONSUMABLE,
+    CONSUMABLE = 'consumable',
 }
 
 /**
@@ -44,7 +44,7 @@ export class Item {
     /**
      * 类型
      */
-    readonly type: ItemType;
+    readonly itemType: ItemType;
 
     /**
      * 描述
@@ -61,11 +61,11 @@ export class Item {
      */
     readonly unique: boolean = false;
 
-    constructor(id: number, name: string, displayName: string, type: ItemType, description: string, icon: string, unique: boolean) {
+    constructor(id: number, name: string, displayName: string, itemType: ItemType, description: string, icon: string, unique: boolean) {
         this.id = id;
         this.name = name;
         this.displayName = displayName;
-        this.type = type;
+        this.itemType = itemType;
         this.description = description;
         this.icon = icon;
         this.unique = unique;
@@ -76,10 +76,10 @@ export class Item {
      *
      * @param id ID
      * @param object Object
-     * @return Item
+     * @return Item Item
      */
-    static fromObject(id: number, object: any): Item {
-        return new Item(id, object.name, object.displayName, object.type, object.description, object.icon, object.unique);
+    static fromObject(id: number, object: Item): Item {
+        return new Item(id, object.name, object.displayName, object.itemType, object.description, object.icon, object.unique);
     }
 }
 

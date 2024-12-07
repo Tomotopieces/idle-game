@@ -1,6 +1,7 @@
-import { Equipment, EquipmentType } from "db://assets/Script/Item/Equipment";
+import { Equipment, EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
 import { PlayerCombatComponent } from "db://assets/Script/Entity/Player/PlayerCombatComponent";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
+import { Item } from "db://assets/Script/Item/Item";
 
 /**
  * 玩家装备组件
@@ -9,46 +10,60 @@ export class PlayerEquipmentComponent {
     /**
      * 武器栏
      */
-    private _weapon: ItemStack;
+    private readonly _weapon: ItemStack;
 
     /**
      * 头冠栏
      */
-    private _headgear: ItemStack;
+    private readonly _head: ItemStack;
 
     /**
      * 衣甲栏
      */
-    private _chest: ItemStack;
+    private readonly _chest: ItemStack;
 
     /**
      * 臂甲栏
      */
-    private _arm: ItemStack;
+    private readonly _arm: ItemStack;
 
     /**
      * 腿甲栏
      */
-    private _leg: ItemStack;
+    private readonly _leg: ItemStack;
 
     /**
      * 珍玩栏
      */
-    private _curios: ItemStack;
+    private readonly _curios: ItemStack;
 
     /**
-     * 玩家
+     * 玩家战斗数值组件
      */
-    private _playerCombatComponent: PlayerCombatComponent;
+    private readonly _playerCombatComponent: PlayerCombatComponent;
+
+    /**
+     * 类型 -> 装备 Map
+     */
+    private readonly _typeMap: Map<EquipmentType, ItemStack>;
 
     constructor(combatComponent: PlayerCombatComponent) {
-        this._weapon = null;
-        this._headgear = null;
-        this._chest = null;
-        this._arm = null;
-        this._leg = null;
-        this._curios = null;
+        this._weapon = new ItemStack(null, 1);
+        this._head = new ItemStack(null, 1);
+        this._chest = new ItemStack(null, 1);
+        this._arm = new ItemStack(null, 1);
+        this._leg = new ItemStack(null, 1);
+        this._curios = new ItemStack(null, 1);
         this._playerCombatComponent = combatComponent;
+
+        this._typeMap = new Map<EquipmentType, ItemStack>([
+            [EquipmentType.WEAPON, this._weapon],
+            [EquipmentType.HEAD, this._head],
+            [EquipmentType.CHEST, this._chest],
+            [EquipmentType.ARM, this._arm],
+            [EquipmentType.LEG, this._leg],
+            [EquipmentType.CURIOS, this._curios]
+        ]);
     }
 
     /**
@@ -57,44 +72,39 @@ export class PlayerEquipmentComponent {
      * @param equipment 装备
      * @return 被卸下的装备
      */
-    equip(equipment: Equipment): ItemStack {
-        let unequipped: ItemStack = null;
-        const itemStack = new ItemStack(equipment, 1);
-        switch (equipment.equipmentType) {
-            case EquipmentType.WEAPON:
-                this._playerCombatComponent.dropAttributeFromEquipment(this._weapon.item as Equipment);
-                unequipped = this._weapon;
-                this._weapon = itemStack;
-                break;
-            case EquipmentType.HEADGEAR:
-                this._playerCombatComponent.dropAttributeFromEquipment(this._headgear.item as Equipment);
-                unequipped = this._headgear;
-                this._headgear = itemStack;
-                break;
-            case EquipmentType.CHEST:
-                this._playerCombatComponent.dropAttributeFromEquipment(this._chest.item as Equipment);
-                unequipped = this._chest;
-                this._chest = itemStack;
-                break;
-            case EquipmentType.ARM:
-                this._playerCombatComponent.dropAttributeFromEquipment(this._arm.item as Equipment);
-                unequipped = this._arm;
-                this._arm = itemStack;
-                break;
-            case EquipmentType.LEG:
-                this._playerCombatComponent.dropAttributeFromEquipment(this._leg.item as Equipment);
-                unequipped = this._leg;
-                this._leg = itemStack;
-                break;
-            case EquipmentType.CURIOS:
-                this._playerCombatComponent.dropAttributeFromEquipment(this._curios.item as Equipment);
-                unequipped = this._curios;
-                this._curios = itemStack;
-                break;
-            default:
-                break;
-        }
+    equip(equipment: Equipment): Equipment {
+        const targetStack = this._typeMap.get(equipment.equipmentType);
+        // 卸下旧装备
+        const unequipped: Equipment = targetStack.item as Equipment;
+        this._playerCombatComponent.dropAttributeFromEquipment(unequipped);
+        // 装备新装备
+        targetStack.item = equipment;
         this._playerCombatComponent.getAttributeFromEquipment(equipment);
+
         return unequipped;
+    }
+
+    /**
+     * 卸下装备
+     *
+     * @param equipmentType 装备类型
+     * @return 卸下的装备
+     */
+    unequip(equipmentType: EquipmentType): Equipment {
+        const targetStack = this._typeMap.get(equipmentType);
+        const unequipped: Equipment = targetStack.item as Equipment;
+        this._playerCombatComponent.dropAttributeFromEquipment(unequipped);
+        targetStack.item = null;
+
+        return unequipped;
+    }
+
+    /**
+     * 获取当前装备信息
+     *
+     * @param equipmentType 装备类型
+     */
+    get(equipmentType: EquipmentType): Item {
+        return this._typeMap.get(equipmentType).item;
     }
 }
