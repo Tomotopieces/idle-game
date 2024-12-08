@@ -1,3 +1,6 @@
+/**
+ * 装备属性
+ */
 export class EquipmentAttributes {
     /**
      * 生命值
@@ -45,6 +48,7 @@ export class EquipmentAttributes {
     readonly criticalBoost: number;
 
     constructor(additionalHealth: number, healthBoost: number, extraHealth: number, additionalDamage: number, damageBoost: number, additionalDefense: number, defenseBoost: number, criticalRate: number, criticalBoost: number) {
+        /* 从JSON中读取的Object，字段可能为null */
         this.additionalHealth = additionalHealth ?? 0;
         this.healthBoost = healthBoost ?? 0;
         this.extraHealth = extraHealth ?? 0;

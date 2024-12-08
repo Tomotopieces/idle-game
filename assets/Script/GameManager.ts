@@ -266,4 +266,12 @@ export class GameManager extends Component {
     pause() {
         director.isPaused() ? director.resume() : director.pause();
     }
+
+    /**
+     * 手动保存游戏数据
+     */
+    save() {
+        this._autoSaveTimer = 0;
+        this.saveData();
+    }
 }
