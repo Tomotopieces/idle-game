@@ -57,7 +57,7 @@
     "equipmentType": "weapon",
     "attributes": {
       "additionalDamage": 50,
-      "criticalRage": 0.04
+      "criticalRate": 0.04
     }
   },
   {

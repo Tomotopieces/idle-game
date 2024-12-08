@@ -68,6 +68,7 @@ export class SaveData {
      */
     toJson(): string {
         const equipmentSlotJson = Array.from(this.equipmentSlot.values())
+            .filter(stack => stack.item)
             .map(item => new ItemStackJson(item.item.name, item.count));
         const storehouseJson = Array.from(this.storehouse.values())
             .map(item => new ItemStackJson(item.item.name, item.count));

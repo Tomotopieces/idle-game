@@ -605,6 +605,10 @@
     "countLabel": {
       "__id__": 13
     },
+    "slotType": "STOREHOUSE",
+    "stackSprite": {
+      "__id__": 5
+    },
     "_id": ""
   },
   {

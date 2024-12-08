@@ -1,6 +1,3 @@
-import { EventTarget } from 'cc';
-import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 
 // 默认生命值
@@ -15,101 +12,89 @@ const DEFAULT_CRITICAL_BOOST = 1.5;
 /**
  * 玩家战斗数值组件
  */
-export class PlayerCombatComponent {
+export class PlayerAttributeComponent {
     /**
      * 生命值
      */
-    private _health: number;
+    private _health: number = DEFAULT_HEALTH;
 
     /**
      * 最大生命值
      */
-    private _maxHealth: number;
+    private _maxHealth: number = DEFAULT_HEALTH;
 
     /**
      * 附加生命值
      *
      * 武器装备、丹药、被动效果等
      */
-    private _additionalHealth: number;
+    private _additionalHealth: number = 0;
 
     /**
      * 生命倍率
      *
      * 初始为1.0
      */
-    private _healthBoost: number;
+    private _healthBoost: number = 1;
 
     /**
      * 额外生命值
      *
      * 类似护盾，单独计算
      */
-    private _extraHealth: number;
+    private _extraHealth: number = 0;
 
     /**
      * 基础伤害
      */
-    private _baseDamage: number;
+    private _baseDamage: number = DEFAULT_DAMAGE;
 
     /**
      * 附加伤害
      *
      * 武器装备、丹药、被动效果等
      */
-    private _additionalDamage: number;
+    private _additionalDamage: number = 0;
 
     /**
      * 伤害倍率
      *
      * 初始为1.0
      */
-    private _damageBoost: number;
+    private _damageBoost: number = 1;
 
     /**
      * 暴击率
      */
-    private _criticalRate: number;
+    private _criticalRate: number = 0;
 
     /**
      * 暴击伤害倍率
      *
      * 初始为1.5，不低于1.0
      */
-    private _criticalBoost: number;
+    private _criticalBoost: number = DEFAULT_CRITICAL_BOOST;
 
     /**
      * 基础防御
      */
-    private _baseDefense: number;
+    private _baseDefense: number = 0;
 
     /**
      * 附加防御
      *
      * 装备、丹药、被动效果等
      */
-    private _additionalDefense: number;
+    private _additionalDefense: number = 0;
 
     /**
      * 防御倍率
      *
      * 初始为1.0
      */
-    private _defenseBoost: number;
+    private _defenseBoost: number = 1;
 
     constructor() {
-        this._health = this._maxHealth = DEFAULT_HEALTH;
-        this._additionalHealth = 0;
-        this._healthBoost = 1;
-        this._extraHealth = 0;
-        this._baseDamage = DEFAULT_DAMAGE;
-        this._additionalDamage = 0;
-        this._damageBoost = 1;
-        this._criticalRate = 0;
-        this._criticalBoost = DEFAULT_CRITICAL_BOOST;
-        this._baseDefense = 0;
-        this._additionalDefense = 0;
-        this._defenseBoost = 1;
     }
 
     /**
@@ -160,6 +145,11 @@ export class PlayerCombatComponent {
         this.health -= Math.max(0, damage - this.finalDefense());
     }
 
+    /**
+     * 从装备中获取属性
+     *
+     * @param equipment 装备
+     */
     getAttributeFromEquipment(equipment: Equipment) {
         if (!equipment) {
             return;
@@ -176,6 +166,11 @@ export class PlayerCombatComponent {
         this.defenseBoost += equipment.attributes.defenseBoost;
     }
 
+    /**
+     * 去除装备属性
+     *
+     * @param equipment 装备
+     */
     dropAttributeFromEquipment(equipment: Equipment) {
         if (!equipment) {
             return;
@@ -198,11 +193,6 @@ export class PlayerCombatComponent {
 
     set health(value: number) {
         this._health = Math.min(Math.max(0, value), this._maxHealth); // 生命不超过最大值，不小于0
-
-        if (this._health === 0) {
-            (GlobalState.getState(GlobalStateName.EVENT_TARGET) as EventTarget).emit(EventName.PLAYER_DIE);
-            // TODO 复活操作
-        }
     }
 
     get maxHealth(): number {

@@ -57,8 +57,14 @@ export class Equipment extends Item {
         this.attributes = attributes;
     }
 
-    static override fromObject(id: number, object: any): Equipment {
+    /**
+     * 从Object创建
+     *
+     * @param id     ID
+     * @param object Object
+     */
+    static override fromObject(id: number, object: Equipment): Equipment {
         const item = Item.fromObject(id, object);
-        return new Equipment(item.id, item.name, item.displayName, item.itemType, item.description, item.icon, item.unique, object.equipmentType, object.attributes);
+        return new Equipment(id, item.name, item.displayName, item.itemType, item.description, item.icon, item.unique, object.equipmentType, EquipmentAttributes.fromObject(object.attributes));
     }
 }

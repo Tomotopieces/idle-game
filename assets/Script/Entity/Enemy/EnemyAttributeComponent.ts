@@ -3,7 +3,7 @@ import { EnemyInfo } from "db://assets/Script/Entity/Enemy/EnemyInfo";
 /**
  * 玩家战斗数值组件
  */
-export class EnemyCombatComponent {
+export class EnemyAttributeComponent {
     /**
      * 生命值
      */

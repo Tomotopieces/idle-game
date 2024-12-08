@@ -1,4 +1,4 @@
-import { _decorator, Component, director, EventTarget, JsonAsset, ProgressBar, resources } from 'cc';
+import { _decorator, Component, director, JsonAsset, ProgressBar, resources } from 'cc';
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { DataPath, GlobalStateName, SceneName } from "db://assets/Script/Util/Constant";
 import { Item } from "db://assets/Script/Item/Item";
@@ -9,6 +9,7 @@ import { Stage } from "db://assets/Script/Level/Stage";
 import { AreaJson } from "db://assets/Script/Level/AreaJson";
 import { Area } from "db://assets/Script/Level/Area";
 import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
+import { EventCenter } from "db://assets/Script/Util/EventCenter";
 
 const { ccclass, property } = _decorator;
 
@@ -24,7 +25,7 @@ export class GameLoader extends Component {
     loadingBar: ProgressBar = null;
 
     onLoad() {
-        GlobalState.setState(GlobalStateName.EVENT_TARGET, new EventTarget());
+        EventCenter.init();
 
         // 加载配置文件
         this.loadItemTable();
@@ -58,8 +59,8 @@ export class GameLoader extends Component {
         resources.load(DataPath.EQUIPMENT_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             const rawItemList = data.json! as Array<Equipment>;
             const itemTable = GlobalState.getState(GlobalStateName.ITEM_TABLE) as Map<string, Item>;
-            rawItemList.forEach((rawItem: Item, index: number) =>
-                itemTable.set(rawItem.name, Equipment.fromObject(index, rawItem)));
+            rawItemList.forEach((rawItem: Equipment, index: number) =>
+                itemTable.set(rawItem.name, Equipment.fromObject(index + itemTable.size, rawItem)));
 
             this.loadingBar.progress += 0.2;
 

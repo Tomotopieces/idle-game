@@ -4,18 +4,18 @@
 export const LING_YUN_NAME = 'ling_yun';
 
 /**
- * 默认舞台和区域名称
+ * 默认关卡名称
  */
-export enum DefaultStaffName {
+export enum DefaultLevelName {
     /**
-     * 默认区域名称（黑风山）
+     * 区域（黑风山）
      */
-    DEFAULT_AREA_NAME = 'hei_feng_shan',
+    AREA = 'hei_feng_shan',
 
     /**
-     * 默认舞台名称（苍狼林）
+     * 舞台（苍狼林）
      */
-    DEFAULT_STAGE_NAME = 'cang_lang_lin',
+    STAGE = 'cang_lang_lin',
 }
 
 /**
@@ -78,16 +78,6 @@ export enum ConfigName {
  */
 export enum EventName {
     /**
-     * 玩家恢复存档数据
-     */
-    PLAYER_RESTORE_SAVE_DATA = 'PLAYER_RESTORE_SAVE_DATA',
-
-    /**
-     * 敌人恢复存档数据
-     */
-    ENEMY_RESTORE_SAVE_DATA = 'ENEMY_RESTORE_SAVE_DATA',
-
-    /**
      * 敌人死亡
      */
     ENEMY_DIE = 'ENEMY_DIE',
@@ -101,21 +91,6 @@ export enum EventName {
      * 计算掉落物品
      */
     CALCULATE_DROP_ITEM = 'CALCULATE_DROP_ITEM',
-
-    /**
-     * 更新金币
-     */
-    UPDATE_COIN = 'UPDATE_COIN',
-
-    /**
-     * 更新玩家攻击力
-     */
-    UPDATE_PLAYER_DAMAGE = 'UPDATE_PLAYER_DAMAGE',
-
-    /**
-     * 更新仓库
-     */
-    UPDATE_STOREHOUSE = 'UPDATE_STOREHOUSE',
 
     /**
      * 更新关卡
@@ -133,9 +108,34 @@ export enum EventName {
     EQUIPMENT_CHANGE = 'EQUIPMENT_CHANGE',
 
     /**
-     * 点击物品槽
+     * 造成伤害
      */
-    CLICK_ITEM_SLOT = 'CLICK_ITEM_SLOT',
+    MAKE_DAMAGE = 'MAKE_DAMAGE',
+
+    /**
+     * 更新仓库
+     */
+    UI_UPDATE_STOREHOUSE = 'UI_UPDATE_STOREHOUSE',
+
+    /**
+     * 点击物品槽UI
+     */
+    UI_CLICK_ITEM_SLOT = 'UI_CLICK_ITEM_SLOT',
+
+    /**
+     * 更新金币UI
+     */
+    UI_UPDATE_COIN = 'UI_UPDATE_COIN',
+
+    /**
+     * 更新属性面板UI
+     */
+    UI_UPDATE_ATTRIBUTE_PANEL = 'UI_UPDATE_ATTRIBUTE_PANEL',
+
+    /**
+     * 更新装备栏UI
+     */
+    UI_UPDATE_EQUIPMENT = 'UI_UPDATE_EQUIPMENT',
 }
 
 /**
@@ -161,11 +161,6 @@ export enum GlobalStateName {
      * 区域表
      */
     AREA_TABLE = 'AreaTable',
-
-    /**
-     * 事件中心
-     */
-    EVENT_TARGET = 'EventTarget',
 
     /**
      * 玩家

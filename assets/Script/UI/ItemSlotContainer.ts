@@ -1,9 +1,10 @@
-import { _decorator, Component, EventTarget, instantiate, Node, Prefab, Vec3 } from 'cc';
+import { _decorator, Component, instantiate, Node, Prefab, Vec3 } from 'cc';
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 import { Storehouse } from "db://assets/Script/Util/StorehouseUtil";
 import { ItemSlot } from "db://assets/Script/UI/ItemSlot";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
+import { EventCenter } from "db://assets/Script/Util/EventCenter";
 
 const { ccclass, property } = _decorator;
 
@@ -40,16 +41,9 @@ export class ItemSlotContainer extends Component {
      */
     private _slotList: Array<Node> = [];
 
-    /**
-     * 事件中心
-     */
-    private _eventTarget: EventTarget;
-
     start() {
         // 获取仓库内容
         this._storehouse = GlobalState.getState(GlobalStateName.STOREHOUSE);
-
-        this._eventTarget = GlobalState.getState(GlobalStateName.EVENT_TARGET);
 
         // 计算展示的物品槽数量，确保每行都填满
         let slotCount = Math.max(this._storehouse.size, DEFAULT_SLOT_SIZE);
@@ -72,14 +66,13 @@ export class ItemSlotContainer extends Component {
         }
 
         // 监听仓库变化事件
-        this._eventTarget.on(EventName.UPDATE_STOREHOUSE, (stackList: Array<ItemStack>) => this.updateSlotList(stackList));
+        EventCenter.on(EventName.UI_UPDATE_STOREHOUSE, (stackList: Array<ItemStack>) => this.updateSlotList(stackList));
     }
 
     /**
      * 更新物品槽
      *
      * @param stackList 更新物品列表
-     * @private
      */
     private updateSlotList(stackList: Array<ItemStack>) {
         // 更新List数据

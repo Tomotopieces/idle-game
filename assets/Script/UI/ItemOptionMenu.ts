@@ -60,6 +60,7 @@ export class ItemOptionMenu extends Component {
         if (this._onClick) {
             this._onClick();
         }
+        this.hide();
     }
 }
 

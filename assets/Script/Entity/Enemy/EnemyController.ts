@@ -1,11 +1,11 @@
-import { _decorator, Animation, CCFloat, Component, EventTarget, ProgressBar, Sprite, SpriteFrame } from 'cc';
-import { GlobalState } from "db://assets/Script/Util/GlobalState";
+import { _decorator, Animation, CCFloat, Component, ProgressBar, Sprite, SpriteFrame } from 'cc';
 import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 import { DropItem } from "db://assets/Script/Item/DropItem";
 import { EnemyInfo } from "db://assets/Script/Entity/Enemy/EnemyInfo";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
-import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
-import { EnemyCombatComponent } from "db://assets/Script/Entity/Enemy/EnemyCombatComponent";
+import { EnemyAttributeComponent } from "db://assets/Script/Entity/Enemy/EnemyAttributeComponent";
+import { EventCenter } from "db://assets/Script/Util/EventCenter";
+import { MakeDamageEvent } from "db://assets/Script/Event/MakeDamageEvent";
 
 const { ccclass, property } = _decorator;
 
@@ -39,69 +39,19 @@ export abstract class EnemyController extends Component {
     /**
      * 实体组件
      */
-    private combatComponent: EnemyCombatComponent;
-
-    /**
-     * 事件中心
-     */
-    private _eventTarget: EventTarget = null;
+    private attributes: EnemyAttributeComponent;
 
     /**
      * 自动攻击计时器
      */
     private _autoAttackTimer: number = 0;
 
-    start() {
-        GlobalState.setState(GlobalStateName.ENEMY, this);
-        this._eventTarget = GlobalState.getState(GlobalStateName.EVENT_TARGET) as EventTarget;
-
-        // 获取组件
+    onLoad() {
         this._anim = this.getComponent(Animation);
-        if (!this._anim) {
-            console.error(`[EnemyController.start] get _anim failed`);
-            return;
-        } else if (!this.healthBar) {
-            console.error(`[EnemyController.start] get _healthBar failed`);
-            return;
-        }
-
-        this._eventTarget.emit(EventName.ENEMY_RESTORE_SAVE_DATA);
     }
 
     update(dt: number) {
         this.autoAttack(dt);
-    }
-
-    /**
-     * 初始化基础数据
-     */
-    init() {
-        this.combatComponent = new EnemyCombatComponent(this._info);
-        ResourceManager.getAsset(ResourceType.SPRITE_FRAME, this._info.icon, (spriteFrame: SpriteFrame) => {
-            this.getComponent(Sprite).spriteFrame = spriteFrame;
-        });
-        this.updateHealthBar();
-    }
-
-    /**
-     * 自动攻击
-     *
-     * @param dt 时间间隔
-     */
-    autoAttack(dt: number) {
-        this._autoAttackTimer += dt;
-
-        if (this._autoAttackTimer >= this.attackInterval) {
-            this.attack();
-            this._autoAttackTimer -= this.attackInterval;
-        }
-    }
-
-    /**
-     * 攻击
-     */
-    attack() {
-        this._anim.play('Attack');
     }
 
     /**
@@ -110,27 +60,12 @@ export abstract class EnemyController extends Component {
      * @param damage 伤害值
      */
     hurt(damage: number) {
-        this.combatComponent.getHurt(damage);
+        this.attributes.getHurt(damage);
         this.updateHealthBar();
 
-        if (this.combatComponent.health === 0) {
+        if (this.attributes.health === 0) {
             this.onDie();
         }
-    }
-
-    /**
-     * 更新血条显示
-     */
-    updateHealthBar() {
-        this.healthBar.progress = this.combatComponent.health / this.combatComponent.maxHealth;
-    }
-
-    /**
-     * 死亡
-     */
-    onDie() {
-        this._eventTarget.emit(EventName.ENEMY_DIE, this);
-        this.init();
     }
 
     /**
@@ -139,8 +74,7 @@ export abstract class EnemyController extends Component {
      * 动画帧事件触发
      */
     makeDamage() {
-        const player = GlobalState.getState(GlobalStateName.PLAYER) as PlayerController;
-        player.hurt(this.combatComponent.finalDamage());
+        EventCenter.emit(EventName.MAKE_DAMAGE, new MakeDamageEvent(GlobalStateName.ENEMY, GlobalStateName.PLAYER, this.attributes.finalDamage()));
     }
 
     /**
@@ -165,5 +99,54 @@ export abstract class EnemyController extends Component {
     set info(value: EnemyInfo) {
         this._info = value;
         this.init();
+    }
+
+    /**
+     * 初始化基础数据
+     */
+    private init() {
+        this.attributes = new EnemyAttributeComponent(this._info);
+        ResourceManager.getAsset(ResourceType.SPRITE_FRAME, this._info.icon, (spriteFrame: SpriteFrame) => {
+            this.getComponent(Sprite).spriteFrame = spriteFrame;
+        });
+        this.updateHealthBar();
+    }
+
+    /**
+     * 自动攻击
+     *
+     * @param dt 时间间隔
+     */
+    private autoAttack(dt: number) {
+        this._autoAttackTimer += dt;
+
+        if (this._autoAttackTimer >= this.attackInterval) {
+            this.attack();
+            this._autoAttackTimer -= this.attackInterval;
+        }
+    }
+
+    /**
+     * 攻击
+     */
+    private attack() {
+        this._anim.play('Attack');
+    }
+
+    /**
+     * 更新血条显示
+     */
+    private updateHealthBar() {
+        this.healthBar.progress = this.attributes.health / this.attributes.maxHealth;
+    }
+
+    /**
+     * 死亡
+     */
+    private onDie() {
+        this._anim.play('Die');
+        this._autoAttackTimer = 0;
+        this.init();
+        EventCenter.emit(EventName.ENEMY_DIE, this);
     }
 }

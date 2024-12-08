@@ -65,7 +65,7 @@ export class ResourceManager extends Component {
      *
      * @param type 资源类型
      * @param name 资源名称
-     * @private
+     * @return 资源完整路径
      */
     private static getResourcePath(type: ResourceType, name: string): string {
         switch (type) {

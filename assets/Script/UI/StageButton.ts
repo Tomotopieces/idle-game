@@ -1,8 +1,9 @@
-import { _decorator, Component, EventTarget, Sprite, SpriteFrame } from 'cc';
+import { _decorator, Component, Sprite, SpriteFrame } from 'cc';
 import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { UpdateLevelEvent } from "db://assets/Script/Event/UpdateLevelEvent";
 import { Stage } from "db://assets/Script/Level/Stage";
+import { EventCenter } from "db://assets/Script/Util/EventCenter";
 
 const { ccclass, property } = _decorator;
 
@@ -23,22 +24,13 @@ export class StageButton extends Component {
     stageName: string = null;
 
     /**
-     * 事件中心
-     */
-    private _eventTarget: EventTarget;
-
-    start() {
-        this._eventTarget = GlobalState.getState(GlobalStateName.EVENT_TARGET);
-    }
-
-    /**
      * 点击
      *
      * 按钮触发
      */
     click() {
         const stage = (GlobalState.getState(GlobalStateName.STAGE_TABLE) as Map<string, Stage>).get(this.stageName);
-        this._eventTarget.emit(EventName.UPDATE_LEVEL, new UpdateLevelEvent(null, stage));
+        EventCenter.emit(EventName.UPDATE_LEVEL, new UpdateLevelEvent(null, stage));
     }
 
     /**

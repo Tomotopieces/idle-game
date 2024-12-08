@@ -1,6 +1,5 @@
-import { EventTarget } from 'cc';
-import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
+import { EventName } from "db://assets/Script/Util/Constant";
+import { EventCenter } from "db://assets/Script/Util/EventCenter";
 
 /**
  * 玩家等级组件
@@ -34,7 +33,7 @@ export class PlayerLevelComponent {
         this._level++;
         this._requiredExperience += 50;
         this._currentExperience -= this._requiredExperience;
-        (GlobalState.getState(GlobalStateName.EVENT_TARGET) as EventTarget).emit(EventName.PLAYER_LEVEL_UP, this._level);
+        EventCenter.emit(EventName.PLAYER_LEVEL_UP, this._level);
     }
 
     /**

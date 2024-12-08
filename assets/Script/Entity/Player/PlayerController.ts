@@ -1,10 +1,11 @@
-import { _decorator, Animation, CCFloat, Component, EventTarget, ProgressBar } from 'cc';
-import { GlobalState } from "db://assets/Script/Util/GlobalState";
+import { _decorator, Animation, CCFloat, Component, ProgressBar } from 'cc';
 import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
-import { PlayerCombatComponent } from "db://assets/Script/Entity/Player/PlayerCombatComponent";
+import { PlayerAttributeComponent } from "db://assets/Script/Entity/Player/PlayerAttributeComponent";
 import { PlayerLevelComponent } from "db://assets/Script/Entity/Player/PlayerLevelComponent";
 import { PlayerEquipmentComponent } from "db://assets/Script/Entity/Player/PlayerEquipmentComponent";
+import { EventCenter } from "db://assets/Script/Util/EventCenter";
+import { MakeDamageEvent } from "db://assets/Script/Event/MakeDamageEvent";
 
 const { ccclass, property } = _decorator;
 
@@ -31,24 +32,19 @@ export class PlayerController extends Component {
     private _anim: Animation = null;
 
     /**
-     * 事件中心
+     * 属性信息
      */
-    private _eventTarget: EventTarget;
-
-    /**
-     * 战斗信息
-     */
-    private _combatComponent: PlayerCombatComponent;
+    private _attributes: PlayerAttributeComponent = new PlayerAttributeComponent();
 
     /**
      * 等级信息
      */
-    private _levelComponent: PlayerLevelComponent;
+    private _levelInfo: PlayerLevelComponent = new PlayerLevelComponent();
 
     /**
      * 装备信息
      */
-    private _equipmentComponent: PlayerEquipmentComponent;
+    private _equipments: PlayerEquipmentComponent = new PlayerEquipmentComponent(this._attributes);
 
     /**
      * 金币数
@@ -61,12 +57,8 @@ export class PlayerController extends Component {
     private _autoAttackTimer = 0;
 
     start() {
-        // 玩家对象放入全局状态
-        GlobalState.setState(GlobalStateName.PLAYER, this);
-
         // 获取组件
         this._anim = this.getComponent(Animation);
-        this._eventTarget = GlobalState.getState(GlobalStateName.EVENT_TARGET);
         if (!this._anim) {
             console.error(`[PlayerController.start] get _anim failed`);
             return;
@@ -76,10 +68,7 @@ export class PlayerController extends Component {
         }
 
         // 监听敌人死亡事件
-        this._eventTarget.on(EventName.ENEMY_DIE, (enemy: EnemyController) => this.onEnemyDie(enemy));
-
-        this.init();
-        this._eventTarget.emit(EventName.PLAYER_RESTORE_SAVE_DATA);
+        EventCenter.on(EventName.ENEMY_DIE, (enemy: EnemyController) => this.onEnemyDie(enemy));
     }
 
     update(dt: number) {
@@ -90,13 +79,51 @@ export class PlayerController extends Component {
      * 初始化基础数据
      */
     init() {
-        this._levelComponent = new PlayerLevelComponent();
+        this.updateHealthBar();
+    }
 
-        this._combatComponent = new PlayerCombatComponent();
-        GlobalState.getState(GlobalStateName.EVENT_TARGET).emit(EventName.UPDATE_PLAYER_DAMAGE, this._combatComponent.paperFinalDamage());
+    /**
+     * 造成伤害
+     *
+     * 动画帧事件触发
+     */
+    makeDamage() {
+        EventCenter.emit(EventName.MAKE_DAMAGE, new MakeDamageEvent(GlobalStateName.PLAYER, GlobalStateName.ENEMY, this._attributes.finalDamage()));
+    }
+
+    /**
+     * 受伤
+     *
+     * @param damage 伤害值
+     */
+    hurt(damage: number) {
+        this._attributes.getHurt(damage);
         this.updateHealthBar();
 
-        this._equipmentComponent = new PlayerEquipmentComponent(this._combatComponent);
+        if (this.attributes.health === 0) {
+            EventCenter.emit(EventName.PLAYER_DIE);
+            // TODO 复活
+        }
+    }
+
+    get coin(): number {
+        return this._coin;
+    }
+
+    /**
+     * 设置金币数
+     */
+    set coin(value: number) {
+        this._coin = value;
+        EventCenter.emit(EventName.UI_UPDATE_COIN, this._coin);
+    }
+
+    get attributes(): PlayerAttributeComponent {
+        return this._attributes;
+    }
+
+    get equipments(): PlayerEquipmentComponent {
+        return this._equipments;
     }
 
     /**
@@ -104,7 +131,7 @@ export class PlayerController extends Component {
      *
      * @param dt delta time
      */
-    autoAttack(dt: number) {
+    private autoAttack(dt: number) {
         this._autoAttackTimer += dt;
 
         if (this._autoAttackTimer >= this.attackInterval) {
@@ -116,25 +143,15 @@ export class PlayerController extends Component {
     /**
      * 攻击
      */
-    attack() {
+    private attack() {
         this._anim.play('Attack');
-    }
-
-    /**
-     * 造成伤害
-     *
-     * 动画帧事件触发
-     */
-    makeDamage() {
-        const enemy = GlobalState.getState(GlobalStateName.ENEMY) as EnemyController;
-        enemy.hurt(this._combatComponent.finalDamage());
     }
 
     /**
      * 更新血条显示
      */
-    updateHealthBar() {
-        this.healthBar.progress = this._combatComponent.health / this._combatComponent.finalHealth();
+    private updateHealthBar() {
+        this.healthBar.progress = this._attributes.health / this._attributes.finalHealth();
     }
 
     /**
@@ -142,32 +159,7 @@ export class PlayerController extends Component {
      *
      * @param enemy 敌人
      */
-    onEnemyDie(enemy: EnemyController) {
-        this._eventTarget.emit(EventName.CALCULATE_DROP_ITEM, enemy.dropList);
-    }
-
-    /**
-     * 受伤
-     *
-     * @param damage 伤害值
-     */
-    hurt(damage: number) {
-        this._combatComponent.getHurt(damage);
-        this.updateHealthBar();
-    }
-
-    /**
-     * 获取金币数
-     */
-    get coin(): number {
-        return this._coin;
-    }
-
-    /**
-     * 设置金币数
-     */
-    set coin(value: number) {
-        this._coin = value;
-        this._eventTarget.emit(EventName.UPDATE_COIN, this._coin);
+    private onEnemyDie(enemy: EnemyController) {
+        EventCenter.emit(EventName.CALCULATE_DROP_ITEM, enemy.dropList);
     }
 }

@@ -10,7 +10,7 @@ export class DropItemFactory {
      *
      * @param dropList 掉落列表
      */
-    public static produce(dropList: Array<DropItem>): Array<ItemStack> {
+    static produce(dropList: Array<DropItem>): Array<ItemStack> {
         const result = new Array<ItemStack>();
         dropList.forEach(drop => {
             if (Math.random() < drop.dropRate) {

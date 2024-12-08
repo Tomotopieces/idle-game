@@ -1,4 +1,4 @@
-import { _decorator, Component, instantiate, Prefab, Widget, EventTarget } from 'cc';
+import { _decorator, Component, instantiate, Prefab, Widget } from 'cc';
 import { Stage } from "db://assets/Script/Level/Stage";
 import { Area } from "db://assets/Script/Level/Area";
 import { StageButton } from "db://assets/Script/UI/StageButton";
@@ -6,6 +6,7 @@ import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { LevelUtil } from "db://assets/Script/Util/LevelUtil";
 import { UpdateLevelEvent } from "db://assets/Script/Event/UpdateLevelEvent";
+import { EventCenter } from "db://assets/Script/Util/EventCenter";
 
 const { ccclass, property } = _decorator;
 
@@ -19,15 +20,6 @@ export class StageLine extends Component {
      */
     @property({ type: Prefab, tooltip: '舞台选择按钮Prefab' })
     stageButtonPrefab: Prefab = null;
-
-    /**
-     * 事件中心
-     */
-    private _eventTarget: EventTarget;
-
-    start() {
-        this._eventTarget = GlobalState.getState(GlobalStateName.EVENT_TARGET);
-    }
 
     /**
      * 更新当前关卡
@@ -67,7 +59,7 @@ export class StageLine extends Component {
     clickPreviousAreaButton() {
         const previousArea = LevelUtil.previousArea(GlobalState.getState(GlobalStateName.AREA));
         const stage = LevelUtil.firstStageOf(previousArea);
-        this._eventTarget.emit(EventName.UPDATE_LEVEL, new UpdateLevelEvent(previousArea, stage));
+        EventCenter.emit(EventName.UPDATE_LEVEL, new UpdateLevelEvent(previousArea, stage));
     }
 
     /**
@@ -78,7 +70,7 @@ export class StageLine extends Component {
     clickNextAreaButton() {
         const nextArea = LevelUtil.nextArea(GlobalState.getState(GlobalStateName.AREA));
         const stage = LevelUtil.firstStageOf(nextArea);
-        this._eventTarget.emit(EventName.UPDATE_LEVEL, new UpdateLevelEvent(nextArea, stage));
+        EventCenter.emit(EventName.UPDATE_LEVEL, new UpdateLevelEvent(nextArea, stage));
     }
 }
 
