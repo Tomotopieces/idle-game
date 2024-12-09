@@ -28,6 +28,18 @@ export class AttributePanel extends Component {
     @property({ type: Label, tooltip: '防御Label' })
     defenseLabel: Label;
 
+    /**
+     * 暴击Label
+     */
+    @property({ type: Label, tooltip: '暴击Label' })
+    criticalLabel: Label;
+
+    /**
+     * 暴击伤害倍率Label
+     */
+    @property({ type: Label, tooltip: '暴击伤害倍率Label' })
+    criticalBoostLabel: Label;
+
     onLoad() {
         EventCenter.on(EventName.UI_UPDATE_COIN, (coin: number) => this.coinLabel.string = coin.toString());
         EventCenter.on(EventName.UI_UPDATE_ATTRIBUTE_PANEL, (event: PlayerAttributeComponent) => this.onUpdateAttributePanel(event));
@@ -41,6 +53,8 @@ export class AttributePanel extends Component {
     private onUpdateAttributePanel(event: PlayerAttributeComponent) {
         this.damageLabel.string = event.paperFinalDamage().toString();
         this.defenseLabel.string = event.finalDefense().toString();
+        this.criticalLabel.string = event.criticalRate * 100 + '%';
+        this.criticalBoostLabel.string = event.criticalBoost * 100 + '%';
     }
 }
 
