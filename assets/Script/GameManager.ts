@@ -8,10 +8,8 @@ import {
     GlobalStateName,
     LING_YUN_NAME,
 } from "db://assets/Script/Util/Constant";
-import { DropItem } from "db://assets/Script/Item/DropItem";
 import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
 import { Storehouse, StorehouseUtil } from "db://assets/Script/Util/StorehouseUtil";
-import { DropItemFactory } from "db://assets/Script/Item/DropItemFactory";
 import { Area } from "db://assets/Script/Level/Area";
 import { Stage } from "db://assets/Script/Level/Stage";
 import { LevelNameBar } from "db://assets/Script/UI/LevelNameBar";
@@ -98,7 +96,7 @@ export class GameManager extends Component {
 
         // 监听处理事件
         EventCenter.on(EventName.MAKE_DAMAGE, (event: MakeDamageEvent) => this.handleDamage(event));
-        EventCenter.on(EventName.CALCULATE_DROP_ITEM, (dropList: Array<DropItem>) => this.handleDropItem(dropList));
+        EventCenter.on(EventName.GET_DROPS, (dropStackList: Array<ItemStack>) => this.getDrops(dropStackList));
         EventCenter.on(EventName.UPDATE_LEVEL, (event: UpdateLevelEvent) => this.updateLevel(event.area, event.stage));
         EventCenter.on(EventName.EQUIPMENT_CHANGE, (event: EquipmentChangeEvent) => this.handleEquipmentChange(event));
     }
@@ -126,7 +124,6 @@ export class GameManager extends Component {
 
         this._latestSaveData.equipmentSlot.forEach(stack => {
             this.player.equipments.equip(stack.item as Equipment);
-            EventCenter.emit(EventName.UI_UPDATE_EQUIPMENT, new EquipmentChangeEvent(stack.item as Equipment, true));
         });
         EventCenter.emit(EventName.UI_UPDATE_COIN, this.player.coin);
         EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
@@ -203,7 +200,6 @@ export class GameManager extends Component {
      * @param event 事件参数
      */
     private handleDamage(event: MakeDamageEvent) {
-        console.log(`[GameManager.handleDamage] ${JSON.stringify(event)}`);
         switch (event.source) {
             case GlobalStateName.ENEMY:
                 this.player.hurt(event.damage);
@@ -215,12 +211,12 @@ export class GameManager extends Component {
     }
 
     /**
-     * 处理道具掉落
+     * 获取掉落物
      *
-     * @param dropList 掉落道具列表
+     * @param dropStackList 掉落道具列表
      */
-    private handleDropItem(dropList: Array<DropItem>) {
-        StorehouseUtil.putIn(DropItemFactory.produce(dropList));
+    private getDrops(dropStackList: Array<ItemStack>) {
+        StorehouseUtil.putIn(dropStackList);
         this.player.coin = this._storehouse.get(LING_YUN_NAME)?.count ?? 0;
     }
 
@@ -239,14 +235,12 @@ export class GameManager extends Component {
             if (unequipped) {
                 StorehouseUtil.putIn([new ItemStack(unequipped, 1)]);
             }
-            EventCenter.emit(EventName.UI_UPDATE_EQUIPMENT, new EquipmentChangeEvent(event.equipment, true));
         } else {
             if (!this.player.equipments.unequip(event.equipment.equipmentType)) {
                 return;
             }
             EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
             StorehouseUtil.putIn([new ItemStack(event.equipment, 1)], false);
-            EventCenter.emit(EventName.UI_UPDATE_EQUIPMENT, new EquipmentChangeEvent(event.equipment, false));
         }
     }
 
@@ -274,5 +268,20 @@ export class GameManager extends Component {
     save() {
         this._autoSaveTimer = 0;
         this.saveData();
+    }
+
+    /**
+     * 获取百戏套装与铜云棒
+     */
+    gift() {
+        const itemTable = GlobalState.getState(GlobalStateName.ITEM_TABLE);
+        const stackList: Array<ItemStack> = [
+            new ItemStack(itemTable.get('tong_yun_bang'), 1),
+            new ItemStack(itemTable.get('bai_xi_nuo_mian'), 1),
+            new ItemStack(itemTable.get('bai_xi_chen_qian_yi'), 1),
+            new ItemStack(itemTable.get('bai_xi_hu_shou'), 1),
+            new ItemStack(itemTable.get('bai_xi_diao_tui'), 1)
+        ];
+        StorehouseUtil.putIn(stackList);
     }
 }

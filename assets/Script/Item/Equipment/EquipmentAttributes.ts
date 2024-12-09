@@ -52,7 +52,12 @@ export class EquipmentAttributes {
      */
     readonly effects: Array<string>;
 
-    constructor(additionalHealth: number, healthBoost: number, extraHealth: number, additionalDamage: number, damageBoost: number, additionalDefense: number, defenseBoost: number, criticalRate: number, criticalBoost: number, effects: Array<string>) {
+    /**
+     * 所属套装名称
+     */
+    readonly setName: string;
+
+    constructor(additionalHealth: number, healthBoost: number, extraHealth: number, additionalDamage: number, damageBoost: number, additionalDefense: number, defenseBoost: number, criticalRate: number, criticalBoost: number, effects: Array<string>, set: string) {
         /* 从JSON中读取的Object，字段可能为null */
         this.additionalHealth = additionalHealth ?? 0;
         this.healthBoost = healthBoost ?? 0;
@@ -64,6 +69,7 @@ export class EquipmentAttributes {
         this.criticalRate = criticalRate ?? 0;
         this.criticalBoost = criticalBoost ?? 0;
         this.effects = effects ?? [];
+        this.setName = set ?? '';
     }
 
     /**
@@ -72,6 +78,6 @@ export class EquipmentAttributes {
      * @param object Object
      */
     static fromObject(object: EquipmentAttributes) {
-        return new EquipmentAttributes(object.additionalHealth, object.healthBoost, object.extraHealth, object.additionalDamage, object.damageBoost, object.additionalDefense, object.defenseBoost, object.criticalRate, object.criticalBoost, object.effects);
+        return new EquipmentAttributes(object.additionalHealth, object.healthBoost, object.extraHealth, object.additionalDamage, object.damageBoost, object.additionalDefense, object.defenseBoost, object.criticalRate, object.criticalBoost, object.effects, object.setName);
     }
 }

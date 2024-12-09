@@ -48,34 +48,6 @@
     }
   },
   {
-    "name": "lin_gun_shuang_she",
-    "displayName": "鳞棍·双蛇",
-    "itemType": "equipment",
-    "description": "蛇无头儿不行，鸟无翅儿不飞。",
-    "icon": "item/snake_staff",
-    "unique": true,
-    "equipmentType": "weapon",
-    "attributes": {
-      "additionalDamage": 40,
-      "effects": [
-        "lin_gun_shuang_she"
-      ]
-    }
-  },
-  {
-    "name": "shou_gun_xiong_pi",
-    "displayName": "兽棍·熊罴",
-    "itemType": "equipment",
-    "description": "但行处百兽心慌，若坐下群魔胆战。",
-    "icon": "item/staff",
-    "unique": true,
-    "equipmentType": "weapon",
-    "attributes": {
-      "additionalDamage": 50,
-      "criticalRate": 0.04
-    }
-  },
-  {
     "name": "xing_zhe_jie_gu",
     "displayName": "行者戒箍",
     "itemType": "equipment",
@@ -121,6 +93,99 @@
     "equipmentType": "leg",
     "attributes": {
       "additionalDefense": 10
+    }
+  },
+  {
+    "name": "tong_yun_bang",
+    "displayName": "铜云棒",
+    "itemType": "equipment",
+    "description": "棍虽对棍铁各异，兵纵交兵人不同。",
+    "icon": "item/staff",
+    "unique": true,
+    "equipmentType": "weapon",
+    "attributes": {
+      "additionalDamage": 36,
+      "criticalRate": 0.02
+    }
+  },
+  {
+    "name": "bai_xi_nuo_mian",
+    "displayName": "百戏傩面",
+    "itemType": "equipment",
+    "description": "闹里挣钱，静处安身。",
+    "icon": "item/angry",
+    "unique": true,
+    "equipmentType": "head",
+    "attributes": {
+      "additionalDefense": 7,
+      "setName": "zi_zhu_bi_jiao"
+    }
+  },
+  {
+    "name": "bai_xi_chen_qian_yi",
+    "displayName": "百戏衬钱衣",
+    "itemType": "equipment",
+    "description": "闹里挣钱，静处安身。",
+    "icon": "item/coin",
+    "unique": true,
+    "equipmentType": "chest",
+    "attributes": {
+      "additionalDefense": 14,
+      "setName": "zi_zhu_bi_jiao"
+    }
+  },
+  {
+    "name": "bai_xi_hu_shou",
+    "displayName": "百戏护手",
+    "itemType": "equipment",
+    "description": "闹里挣钱，静处安身。",
+    "icon": "item/glove",
+    "unique": true,
+    "equipmentType": "arm",
+    "attributes": {
+      "additionalDefense": 5,
+      "setName": "zi_zhu_bi_jiao"
+    }
+  },
+  {
+    "name": "bai_xi_diao_tui",
+    "displayName": "百戏吊腿",
+    "itemType": "equipment",
+    "description": "闹里挣钱，静处安身。",
+    "icon": "item/shoe",
+    "unique": true,
+    "equipmentType": "leg",
+    "attributes": {
+      "additionalDefense": 8,
+      "setName": "zi_zhu_bi_jiao"
+    }
+  },
+  {
+    "name": "lin_gun_shuang_she",
+    "displayName": "鳞棍·双蛇",
+    "itemType": "equipment",
+    "description": "蛇无头儿不行，鸟无翅儿不飞。",
+    "icon": "item/snake_staff",
+    "unique": true,
+    "equipmentType": "weapon",
+    "attributes": {
+      "additionalDamage": 40,
+      "effects": [
+        "lin_gun_shuang_she"
+      ]
+    }
+  },
+  {
+    "name": "shou_gun_xiong_pi",
+    "displayName": "兽棍·熊罴",
+    "itemType": "equipment",
+    "description": "但行处百兽心慌，若坐下群魔胆战。",
+    "icon": "item/staff",
+    "unique": true,
+    "equipmentType": "weapon",
+    "attributes": {
+      "additionalDamage": 50,
+      "criticalRate": 0.04
     }
   }
 ]

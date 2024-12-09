@@ -6,6 +6,7 @@ import { PlayerLevelComponent } from "db://assets/Script/Entity/Player/PlayerLev
 import { PlayerEquipmentComponent } from "db://assets/Script/Entity/Player/PlayerEquipmentComponent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { MakeDamageEvent } from "db://assets/Script/Event/MakeDamageEvent";
+import { DropItemFactory } from "db://assets/Script/Item/DropItemFactory";
 
 const { ccclass, property } = _decorator;
 
@@ -160,6 +161,7 @@ export class PlayerController extends Component {
      * @param enemy 敌人
      */
     private onEnemyDie(enemy: EnemyController) {
-        EventCenter.emit(EventName.CALCULATE_DROP_ITEM, enemy.dropList);
+        const dropStackList = DropItemFactory.produce(enemy.dropList);
+        EventCenter.emit(EventName.GET_DROPS, dropStackList);
     }
 }

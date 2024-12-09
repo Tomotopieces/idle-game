@@ -68,6 +68,11 @@ export class EquipmentContainer extends Component {
         EventCenter.on(EventName.UI_UPDATE_EQUIPMENT, (event: EquipmentChangeEvent) => this.updateEquipmentUI(event));
     }
 
+    /**
+     * 更新装备UI
+     *
+     * @param event 事件参数
+     */
     private updateEquipmentUI(event: EquipmentChangeEvent) {
         if (event.equip) {
             this._typeMap.get(event.equipment.equipmentType).stack = new ItemStack(event.equipment, 1);

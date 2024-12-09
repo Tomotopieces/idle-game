@@ -88,9 +88,9 @@ export enum EventName {
     PLAYER_DIE = 'PLAYER_DIE',
 
     /**
-     * 计算掉落物品
+     * 获取掉落物
      */
-    CALCULATE_DROP_ITEM = 'CALCULATE_DROP_ITEM',
+    GET_DROPS = 'GET_DROPS',
 
     /**
      * 更新关卡
