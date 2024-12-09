@@ -6,7 +6,7 @@ import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { LevelUtil } from "db://assets/Script/Util/LevelUtil";
 import { UpdateLevelEvent } from "db://assets/Script/Event/UpdateLevelEvent";
-import { EventCenter } from "db://assets/Script/Util/EventCenter";
+import { EventCenter } from "db://assets/Script/Event/EventCenter";
 
 const { ccclass, property } = _decorator;
 

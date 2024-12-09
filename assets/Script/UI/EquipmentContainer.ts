@@ -4,7 +4,7 @@ import { EventName } from "db://assets/Script/Util/Constant";
 import { EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { EquipmentChangeEvent } from "db://assets/Script/Event/EquipmentChangeEvent";
-import { EventCenter } from "db://assets/Script/Util/EventCenter";
+import { EventCenter } from "db://assets/Script/Event/EventCenter";
 
 const { ccclass } = _decorator;
 

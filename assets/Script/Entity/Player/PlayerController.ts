@@ -4,7 +4,7 @@ import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController
 import { PlayerAttributeComponent } from "db://assets/Script/Entity/Player/PlayerAttributeComponent";
 import { PlayerLevelComponent } from "db://assets/Script/Entity/Player/PlayerLevelComponent";
 import { PlayerEquipmentComponent } from "db://assets/Script/Entity/Player/PlayerEquipmentComponent";
-import { EventCenter } from "db://assets/Script/Util/EventCenter";
+import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { MakeDamageEvent } from "db://assets/Script/Event/MakeDamageEvent";
 
 const { ccclass, property } = _decorator;
@@ -101,7 +101,7 @@ export class PlayerController extends Component {
         this.updateHealthBar();
 
         if (this.attributes.health === 0) {
-            EventCenter.emit(EventName.PLAYER_DIE);
+            EventCenter.emit(EventName.PLAYER_DIE, this);
             // TODO 复活
         }
     }

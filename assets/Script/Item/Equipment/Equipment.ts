@@ -50,8 +50,7 @@ export class Equipment extends Item {
      */
     readonly attributes: EquipmentAttributes;
 
-    constructor(id: number, name: string, displayName: string, type: ItemType, description: string, icon: string, unique: boolean,
-                equipmentType: EquipmentType, attributes: EquipmentAttributes) {
+    constructor(id: number, name: string, displayName: string, type: ItemType, description: string, icon: string, unique: boolean, equipmentType: EquipmentType, attributes: EquipmentAttributes) {
         super(id, name, displayName, type, description, icon, unique);
         this.equipmentType = equipmentType;
         this.attributes = attributes;

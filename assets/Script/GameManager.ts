@@ -21,7 +21,7 @@ import { PlayerController } from "db://assets/Script/Entity/Player/PlayerControl
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { EquipmentChangeEvent } from "db://assets/Script/Event/EquipmentChangeEvent";
 import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
-import { EventCenter } from "db://assets/Script/Util/EventCenter";
+import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { MakeDamageEvent } from "db://assets/Script/Event/MakeDamageEvent";
 
 const { ccclass, property } = _decorator;
@@ -203,6 +203,7 @@ export class GameManager extends Component {
      * @param event 事件参数
      */
     private handleDamage(event: MakeDamageEvent) {
+        console.log(`[GameManager.handleDamage] ${JSON.stringify(event)}`);
         switch (event.source) {
             case GlobalStateName.ENEMY:
                 this.player.hurt(event.damage);

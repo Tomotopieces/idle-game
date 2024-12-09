@@ -1,6 +1,6 @@
 import { _decorator, Animation, Component } from 'cc';
 import { ItemOptionMenu } from "db://assets/Script/UI/ItemOptionMenu";
-import { EventCenter } from "db://assets/Script/Util/EventCenter";
+import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Util/Constant";
 import { ItemSlot, SlotType } from "db://assets/Script/UI/ItemSlot";
 import { ItemType } from "db://assets/Script/Item/Item";

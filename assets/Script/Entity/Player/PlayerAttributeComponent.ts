@@ -155,6 +155,7 @@ export class PlayerAttributeComponent {
             return;
         }
 
+        // 基础属性
         this.additionalHealth += equipment.attributes.additionalHealth;
         this.healthBoost += equipment.attributes.healthBoost;
         this.extraHealth += equipment.attributes.extraHealth;
@@ -176,6 +177,7 @@ export class PlayerAttributeComponent {
             return;
         }
 
+        // 基础属性
         this.additionalHealth -= equipment.attributes.additionalHealth;
         this.healthBoost -= equipment.attributes.healthBoost;
         this.extraHealth -= equipment.attributes.extraHealth;

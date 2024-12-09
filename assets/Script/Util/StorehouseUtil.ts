@@ -4,7 +4,7 @@ import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
 import { Item, ItemType } from "db://assets/Script/Item/Item";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
-import { EventCenter } from "db://assets/Script/Util/EventCenter";
+import { EventCenter } from "db://assets/Script/Event/EventCenter";
 
 /**
  * 仓库类型

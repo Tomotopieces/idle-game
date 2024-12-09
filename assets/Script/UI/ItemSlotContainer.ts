@@ -4,7 +4,7 @@ import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 import { Storehouse } from "db://assets/Script/Util/StorehouseUtil";
 import { ItemSlot } from "db://assets/Script/UI/ItemSlot";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
-import { EventCenter } from "db://assets/Script/Util/EventCenter";
+import { EventCenter } from "db://assets/Script/Event/EventCenter";
 
 const { ccclass, property } = _decorator;
 

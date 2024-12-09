@@ -3,6 +3,8 @@ import { PlayerAttributeComponent } from "db://assets/Script/Entity/Player/Playe
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { Item } from "db://assets/Script/Item/Item";
 
+import { UNIQUE_EFFECT_MAP } from "db://assets/Script/Item/Equipment/UniqueEffect/UniqueEffectMap";
+
 /**
  * 玩家装备组件
  */
@@ -77,9 +79,14 @@ export class PlayerEquipmentComponent {
         // 卸下旧装备
         const unequipped: Equipment = targetStack.item as Equipment;
         this._playerAttributeComponent.dropAttributeFromEquipment(unequipped);
+        // 取消旧装备的独门妙用
+        unequipped?.attributes.effects.forEach(effectName => UNIQUE_EFFECT_MAP.get(effectName).onDeactivate());
+
         // 装备新装备
         targetStack.item = equipment;
         this._playerAttributeComponent.getAttributeFromEquipment(equipment);
+        // 启用新装备的独门妙用
+        equipment.attributes.effects.forEach(effectName => UNIQUE_EFFECT_MAP.get(effectName).onActivate());
 
         return unequipped;
     }
@@ -94,6 +101,7 @@ export class PlayerEquipmentComponent {
         const targetStack = this.equipmentMap.get(equipmentType);
         const unequipped: Equipment = targetStack.item as Equipment;
         this._playerAttributeComponent.dropAttributeFromEquipment(unequipped);
+        unequipped.attributes.effects.forEach(effectName => UNIQUE_EFFECT_MAP.get(effectName).onDeactivate());
         targetStack.item = null;
 
         return unequipped;

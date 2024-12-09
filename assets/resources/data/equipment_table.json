@@ -48,6 +48,21 @@
     }
   },
   {
+    "name": "lin_gun_shuang_she",
+    "displayName": "鳞棍·双蛇",
+    "itemType": "equipment",
+    "description": "蛇无头儿不行，鸟无翅儿不飞。",
+    "icon": "item/snake_staff",
+    "unique": true,
+    "equipmentType": "weapon",
+    "attributes": {
+      "additionalDamage": 40,
+      "effects": [
+        "lin_gun_shuang_she"
+      ]
+    }
+  },
+  {
     "name": "shou_gun_xiong_pi",
     "displayName": "兽棍·熊罴",
     "itemType": "equipment",

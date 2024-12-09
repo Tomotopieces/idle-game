@@ -4,7 +4,7 @@ import { DropItem } from "db://assets/Script/Item/DropItem";
 import { EnemyInfo } from "db://assets/Script/Entity/Enemy/EnemyInfo";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { EnemyAttributeComponent } from "db://assets/Script/Entity/Enemy/EnemyAttributeComponent";
-import { EventCenter } from "db://assets/Script/Util/EventCenter";
+import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { MakeDamageEvent } from "db://assets/Script/Event/MakeDamageEvent";
 
 const { ccclass, property } = _decorator;

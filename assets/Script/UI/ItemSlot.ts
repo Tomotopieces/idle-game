@@ -2,7 +2,7 @@ import { _decorator, Component, Enum, Label, Node, Sprite, SpriteFrame } from 'c
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { EventName } from "db://assets/Script/Util/Constant";
-import { EventCenter } from "db://assets/Script/Util/EventCenter";
+import { EventCenter } from "db://assets/Script/Event/EventCenter";
 
 const { ccclass, property } = _decorator;
 

@@ -9,7 +9,7 @@ import { Stage } from "db://assets/Script/Level/Stage";
 import { AreaJson } from "db://assets/Script/Level/AreaJson";
 import { Area } from "db://assets/Script/Level/Area";
 import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
-import { EventCenter } from "db://assets/Script/Util/EventCenter";
+import { EventCenter } from "db://assets/Script/Event/EventCenter";
 
 const { ccclass, property } = _decorator;
 
