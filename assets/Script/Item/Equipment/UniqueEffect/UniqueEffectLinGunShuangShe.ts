@@ -10,6 +10,7 @@ import { MakeDamageEvent } from "db://assets/Script/Event/MakeDamageEvent";
  */
 export class UniqueEffectLinGunShuangShe extends UniqueEffect {
     static readonly NAME: string = "lin_gun_shuang_she";
+    static readonly DESCRIPTION: string = "玩家角色每第4次攻击，最终伤害翻倍。";
 
     /**
      * 生效的攻击次数
@@ -27,7 +28,7 @@ export class UniqueEffectLinGunShuangShe extends UniqueEffect {
     private _attackCount: number = 0;
 
     constructor() {
-        super(UniqueEffectLinGunShuangShe.NAME);
+        super(UniqueEffectLinGunShuangShe.NAME, UniqueEffectLinGunShuangShe.DESCRIPTION);
     }
 
     onActivate(): void {

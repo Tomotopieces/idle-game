@@ -8,6 +8,11 @@ export abstract class UniqueEffect {
     readonly name: string;
 
     /**
+     * 效果描述
+     */
+    readonly description: string;
+
+    /**
      * 激活
      */
     abstract onActivate(): void;
@@ -17,7 +22,8 @@ export abstract class UniqueEffect {
      */
     abstract onDeactivate(): void;
 
-    protected constructor(name: string) {
+    protected constructor(name: string, description: string) {
         this.name = name;
+        this.description = description;
     }
 }

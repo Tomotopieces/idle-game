@@ -8,6 +8,11 @@ export abstract class SetEffect {
     readonly name: string;
 
     /**
+     * 效果描述
+     */
+    readonly description: string;
+
+    /**
      * 触发效果所需的套装装备数量
      */
     readonly require: number;
@@ -22,8 +27,9 @@ export abstract class SetEffect {
      */
     abstract onDeactivate(): void;
 
-    protected constructor(name: string, require: number) {
+    protected constructor(name: string, description: string, require: number) {
         this.name = name;
+        this.description = description;
         this.require = require;
     }
 }

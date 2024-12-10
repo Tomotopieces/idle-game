@@ -42,6 +42,7 @@ export class ItemSlotContainer extends Component {
     private _slotList: Array<Node> = [];
 
     start() {
+        // TODO 改为使用 Layout 组件进行排版，重新设计排版逻辑
         // 获取仓库内容
         this._storehouse = GlobalState.getState(GlobalStateName.STOREHOUSE);
 
