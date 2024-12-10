@@ -32,6 +32,13 @@ export class EventCenter {
     private static EVENT_TARGET: EventTarget;
 
     /**
+     * 事件处理 Map
+     *
+     * 事件名 -> 监听ID -> 处理函数
+     */
+    private static readonly HANDLER_MAP: Map<EventName, Map<string, Listener>> = new Map<EventName, Map<string, Listener>>();
+
+    /**
      * 事件监听 Map
      *
      * 事件名 -> 监听ID -> 监听函数
@@ -59,10 +66,11 @@ export class EventCenter {
      * 处理事件
      *
      * @param eventName 事件名
-     * @param callback 回调
+     * @param id        监听ID
+     * @param listener  回调
      */
-    static on(eventName: EventName, callback: Listener) {
-        this.EVENT_TARGET.on(eventName, (eventArgs: EventArgument) => {
+    static on(eventName: EventName, id: string, listener: Listener) {
+        const handler = (eventArgs: EventArgument) => {
             let listeners: Array<Listener>;
             if (this.LISTENER_MAP.has(eventName)) {
                 listeners = Array.from(this.LISTENER_MAP.get(eventName).values());
@@ -70,18 +78,27 @@ export class EventCenter {
                 listeners = new Array<Listener>();
             }
             listeners.forEach(listener => listener(eventArgs));
-            callback(eventArgs);
-        });
+            listener(eventArgs);
+        };
+        if (!this.HANDLER_MAP.has(eventName)) {
+            this.HANDLER_MAP.set(eventName, new Map<string, Listener>());
+        }
+
+        this.EVENT_TARGET.on(eventName, handler);
+        this.HANDLER_MAP.get(eventName).set(id, handler);
     }
 
     /**
      * 取消处理
      *
      * @param eventName 事件名
-     * @param callback  回调
+     * @param id        监听ID
      */
-    static off(eventName: EventName, callback: Listener) {
-        this.EVENT_TARGET.off(eventName, callback);
+    static off(eventName: EventName, id: string) {
+        const listener = this.HANDLER_MAP.get(eventName)?.get(id);
+        if (listener) {
+            this.EVENT_TARGET.off(eventName, listener);
+        }
     }
 
     /**

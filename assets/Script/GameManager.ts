@@ -95,10 +95,10 @@ export class GameManager extends Component {
         this.restoreLevelAndEnemyData();
 
         // 监听处理事件
-        EventCenter.on(EventName.MAKE_DAMAGE, (event: MakeDamageEvent) => this.handleDamage(event));
-        EventCenter.on(EventName.GET_DROPS, (dropStackList: Array<ItemStack>) => this.getDrops(dropStackList));
-        EventCenter.on(EventName.UPDATE_LEVEL, (event: UpdateLevelEvent) => this.updateLevel(event.area, event.stage));
-        EventCenter.on(EventName.EQUIPMENT_CHANGE, (event: EquipmentChangeEvent) => this.handleEquipmentChange(event));
+        EventCenter.on(EventName.MAKE_DAMAGE, this.node.name, (event: MakeDamageEvent) => this.handleDamage(event));
+        EventCenter.on(EventName.GET_DROPS, this.node.name, (dropStackList: Array<ItemStack>) => this.getDrops(dropStackList));
+        EventCenter.on(EventName.UPDATE_LEVEL, this.node.name, (event: UpdateLevelEvent) => this.updateLevel(event.area, event.stage));
+        EventCenter.on(EventName.EQUIPMENT_CHANGE, this.node.name, (event: EquipmentChangeEvent) => this.handleEquipmentChange(event));
     }
 
     update(dt: number) {

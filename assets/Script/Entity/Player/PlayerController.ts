@@ -69,7 +69,7 @@ export class PlayerController extends Component {
         }
 
         // 监听敌人死亡事件
-        EventCenter.on(EventName.ENEMY_DIE, (enemy: EnemyController) => this.onEnemyDie(enemy));
+        EventCenter.on(EventName.ENEMY_DIE, this.node.name, (enemy: EnemyController) => this.onEnemyDie(enemy));
     }
 
     update(dt: number) {

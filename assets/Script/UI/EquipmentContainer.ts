@@ -65,7 +65,7 @@ export class EquipmentContainer extends Component {
             [EquipmentType.CURIOS, this._curiosSlot]
         ]);
 
-        EventCenter.on(EventName.UI_UPDATE_EQUIPMENT, (event: EquipmentChangeEvent) => this.updateEquipmentUI(event));
+        EventCenter.on(EventName.UI_UPDATE_EQUIPMENT, this.node.name, (event: EquipmentChangeEvent) => this.updateEquipmentUI(event));
     }
 
     /**

@@ -41,8 +41,8 @@ export class AttributePanel extends Component {
     criticalBoostLabel: Label;
 
     onLoad() {
-        EventCenter.on(EventName.UI_UPDATE_COIN, (coin: number) => this.coinLabel.string = coin.toString());
-        EventCenter.on(EventName.UI_UPDATE_ATTRIBUTE_PANEL, (event: PlayerAttributeComponent) => this.onUpdateAttributePanel(event));
+        EventCenter.on(EventName.UI_UPDATE_COIN, this.node.name, (coin: number) => this.coinLabel.string = coin.toString());
+        EventCenter.on(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.node.name, (event: PlayerAttributeComponent) => this.onUpdateAttributePanel(event));
     }
 
     /**

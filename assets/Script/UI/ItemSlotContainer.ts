@@ -66,7 +66,7 @@ export class ItemSlotContainer extends Component {
         }
 
         // 监听仓库变化事件
-        EventCenter.on(EventName.UI_UPDATE_STOREHOUSE, (stackList: Array<ItemStack>) => this.updateSlotList(stackList));
+        EventCenter.on(EventName.UI_UPDATE_STOREHOUSE, this.node.name, (stackList: Array<ItemStack>) => this.updateSlotList(stackList));
     }
 
     /**
