@@ -2,7 +2,7 @@ import { _decorator, Component, instantiate, Node, Prefab, Vec3 } from 'cc';
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 import { Storehouse } from "db://assets/Script/Util/StorehouseUtil";
-import { ItemSlot } from "db://assets/Script/UI/ItemSlot";
+import { ItemSlot } from "db://assets/Script/UI/Storehouse/ItemSlot";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 

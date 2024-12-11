@@ -1,5 +1,5 @@
 import { _decorator, Component } from 'cc';
-import { ItemSlot } from "db://assets/Script/UI/ItemSlot";
+import { ItemSlot } from "db://assets/Script/UI/Storehouse/ItemSlot";
 import { EventName } from "db://assets/Script/Util/Constant";
 import { EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";

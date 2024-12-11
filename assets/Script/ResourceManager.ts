@@ -34,6 +34,8 @@ const SPRITE_FRAME_SUFFIX = '/spriteFrame';
 export class ResourceManager extends Component {
     /**
      * 动态资源
+     *
+     * FIXME resources 自带缓存， dynamicAssets 没用
      */
     private static _dynamicAssets: Map<string, Asset> = new Map<string, Asset>();
 

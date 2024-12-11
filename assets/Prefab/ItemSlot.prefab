@@ -583,12 +583,12 @@
       "__id__": 1
     },
     "component": "",
-    "_componentId": "29d1a6C6n9NlYJKQHstI/sd",
+    "_componentId": "822fa6ZnX5Ma64RciBGYuTS",
     "handler": "click",
     "customEventData": ""
   },
   {
-    "__type__": "29d1a6C6n9NlYJKQHstI/sd",
+    "__type__": "822fa6ZnX5Ma64RciBGYuTS",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -613,7 +613,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "3bdmj8rxhKS6pNrk/Wa8E6"
+    "fileId": "dfVAK501NL34516DVqtNWG"
   },
   {
     "__type__": "cc.PrefabInfo",

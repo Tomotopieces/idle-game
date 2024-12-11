@@ -18,6 +18,38 @@ export enum ItemType {
     CONSUMABLE = 'consumable',
 }
 
+export enum ItemQuality {
+    /**
+     * 凡品
+     */
+    COMMON = 'common',
+
+    /**
+     * 良品
+     */
+    UNCOMMON = 'uncommon',
+
+    /**
+     * 商品
+     */
+    RARE = 'rare',
+
+    /**
+     * 特品
+     */
+    EPIC = 'epic',
+
+    /**
+     * 仙品
+     */
+    LEGENDARY = 'legendary',
+
+    /**
+     * 神珍
+     */
+    MYTHICAL = 'mythical',
+}
+
 /**
  * 物品
  */
@@ -59,16 +91,22 @@ export class Item {
     /**
      * 是否唯一
      */
-    readonly unique: boolean = false;
+    readonly unique: boolean;
 
-    constructor(id: number, name: string, displayName: string, itemType: ItemType, description: string, icon: string, unique: boolean) {
+    /**
+     * 品质
+     */
+    readonly quality: ItemQuality;
+
+    constructor(id: number, name: string, displayName: string, itemType: ItemType, description: string, icon: string, unique: boolean, quality: ItemQuality) {
         this.id = id;
         this.name = name;
         this.displayName = displayName;
         this.itemType = itemType;
         this.description = description;
         this.icon = icon;
-        this.unique = unique;
+        this.unique = unique ?? false;
+        this.quality = quality ?? ItemQuality.COMMON;
     }
 
     /**
@@ -79,7 +117,7 @@ export class Item {
      * @return Item Item
      */
     static fromObject(id: number, object: Item): Item {
-        return new Item(id, object.name, object.displayName, object.itemType, object.description, object.icon, object.unique);
+        return new Item(id, object.name, object.displayName, object.itemType, object.description, object.icon, object.unique, object.quality);
     }
 }
 
