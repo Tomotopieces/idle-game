@@ -1,8 +1,9 @@
 import { _decorator, Component, Label, Layout, Node, Sprite, SpriteFrame, UITransform, Vec3 } from 'cc';
 import { Runnable } from "db://assets/Script/Util/Constant";
-import { Item, ItemType } from "db://assets/Script/Item/Item";
+import { Item, ITEM_QUALITY_DISPLAY_NAME_MAP, ItemType } from "db://assets/Script/Item/Item";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { Equipment, EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
+import { UNIQUE_EFFECT_MAP } from "db://assets/Script/Item/Equipment/UniqueEffect/UniqueEffectMap";
 
 const { ccclass, executeInEditMode } = _decorator;
 
@@ -26,6 +27,11 @@ export class ItemCard extends Component {
      * 自身 Transform
      */
     private _transform: UITransform;
+
+    /**
+     * 背景 Transform
+     */
+    private _backgroundTransform: UITransform;
 
     /**
      * 物品图标
@@ -73,12 +79,15 @@ export class ItemCard extends Component {
     private _onClick: Runnable;
 
     onLoad() {
+        /* 读取所有组件 */
+
         this._infoLayout = this.node.getChildByName('InfoLayout');
         this._infoLayoutTransform = this._infoLayout.getComponent(UITransform);
         this._transform = this.node.getComponent(UITransform);
+        this._backgroundTransform = this.node.getChildByName('Background').getComponent(UITransform);
 
         this._itemIconSprite = this._infoLayout.getChildByName('Icon').getComponent(Sprite);
-        
+
         const baseInfoNode = this._infoLayout.getChildByName('BaseInfo');
         this._itemNameLabel = baseInfoNode.getChildByName('Name').getComponent(Label);
         this._itemTypeLabel = baseInfoNode.getChildByName('Type').getComponent(Label);
@@ -92,9 +101,17 @@ export class ItemCard extends Component {
         this._buttonSprite = this._infoLayout.getChildByName('Operation').getChildByName('Button').getChildByName('Sprite').getComponent(Sprite);
     }
 
-    update(deltaTime: number) {
-        this._transform.width = this._infoLayoutTransform.width;
-        this._transform.height = this._infoLayoutTransform.height;
+    update(_dt: number) {
+        // 自动调整卡片大小，与信息Layout同步
+        this._backgroundTransform.width = this._transform.width = this._infoLayoutTransform.width;
+        this._backgroundTransform.height = this._transform.height = this._infoLayoutTransform.height;
+    }
+
+    click() {
+        if (this._onClick) {
+            this._onClick();
+        }
+        this.hide();
     }
 
     /**
@@ -111,26 +128,90 @@ export class ItemCard extends Component {
 
         this._itemNameLabel.string = item.displayName;
         this._itemTypeLabel.string = this.getItemTypeLabel(item);
+        this._itemQualityLabel.string = ITEM_QUALITY_DISPLAY_NAME_MAP.get(item.quality);
 
-        // TODO 填充装备属性、独门妙用、套装效果信息
+        this.setAttributes(item);
+        this.setUniqueEffect(item);
+        this.setSetEffect(item);
 
         this._buttonSprite.spriteFrame = buttonImage;
         this._onClick = onClick;
         this.setIcon(item.icon);
     }
 
+    /**
+     * 设置物品属性信息
+     *
+     * @param item 物品
+     */
+    setAttributes(item: Item): void {
+        if (!(item instanceof Equipment)) {
+            this._weaponAttributesLabel.node.active = false;
+            this._weaponAttributesLabel.string = ``;
+            return;
+        }
+
+        const equipment = item as Equipment;
+        let displayResult = ``;
+        displayResult += equipment.attributes.additionalHealth ? `+${equipment.attributes.additionalHealth} 最大生命\n` : ``;
+        displayResult += equipment.attributes.healthBoost ? `+${equipment.attributes.healthBoost * 100}% 生命加成\n` : ``;
+        displayResult += equipment.attributes.extraHealth ? `+${equipment.attributes.extraHealth} 额外生命\n` : ``;
+        displayResult += equipment.attributes.additionalDamage ? `+${equipment.attributes.additionalDamage} 伤害\n` : ``;
+        displayResult += equipment.attributes.damageBoost ? `+${equipment.attributes.damageBoost * 100}% 伤害加成\n` : ``;
+        displayResult += equipment.attributes.additionalDefense ? `+${equipment.attributes.additionalDefense} 防御\n` : ``;
+        displayResult += equipment.attributes.defenseBoost ? `+${equipment.attributes.defenseBoost * 100}% 防御加成\n` : ``;
+        displayResult += equipment.attributes.criticalRate ? `+${equipment.attributes.criticalRate * 100}% 暴击率\n` : ``;
+        displayResult += equipment.attributes.criticalBoost ? `+${equipment.attributes.criticalBoost}% 暴击伤害加成\n` : ``;
+
+        this._weaponAttributesLabel.node.active = !!displayResult;
+        this._weaponAttributesLabel.string = displayResult;
+    }
+
+    /**
+     * 设置独门妙用信息
+     *
+     * @param item 物品
+     */
+    setUniqueEffect(item: Item): void {
+        if (!(item instanceof Equipment)) {
+            this._weaponUniqueEffectLabel.node.active = false;
+            this._weaponUniqueEffectLabel.string = ``;
+            return;
+        }
+
+        const equipment = item as Equipment;
+        const description = UNIQUE_EFFECT_MAP.get(equipment.name)?.description;
+
+        const displayResult =  description ? `独门妙用：${description}` : ``;
+        this._weaponUniqueEffectLabel.node.active = !!displayResult;
+        this._weaponUniqueEffectLabel.string = displayResult;
+    }
+
+    /**
+     * 设置套装效果信息
+     *
+     * @param item 物品
+     */
+    setSetEffect(item: Item): void {
+        if (!(item instanceof Equipment)) {
+            this._weaponSetEffectLabel.node.active = false;
+            this._weaponSetEffectLabel.string = ``;
+            return;
+        }
+
+        // TODO 设置套装信息
+    }
+
+    /**
+     * 设置物品图标
+     *
+     * @param icon 图标
+     */
     setIcon(icon: string) {
         ResourceManager.getAsset(ResourceType.SPRITE_FRAME, icon, (spriteFrame: SpriteFrame) => {
             this._itemIconSprite.spriteFrame = spriteFrame;
             this._infoLayout.getComponent(Layout).updateLayout(true);
         });
-    }
-
-    click() {
-        if (this._onClick) {
-            this._onClick();
-        }
-        this.hide();
     }
 
     /**

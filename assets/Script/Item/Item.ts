@@ -30,7 +30,7 @@ export enum ItemQuality {
     UNCOMMON = 'uncommon',
 
     /**
-     * 商品
+     * 上品
      */
     RARE = 'rare',
 
@@ -49,6 +49,18 @@ export enum ItemQuality {
      */
     MYTHICAL = 'mythical',
 }
+
+/**
+ * 物品品质显示名称 Map
+ */
+export const ITEM_QUALITY_DISPLAY_NAME_MAP = new Map<ItemQuality, string>([
+    [ItemQuality.COMMON, '凡品'],
+    [ItemQuality.UNCOMMON, '良品'],
+    [ItemQuality.RARE, '上品'],
+    [ItemQuality.EPIC, '特品'],
+    [ItemQuality.LEGENDARY, '仙品'],
+    [ItemQuality.MYTHICAL, '神珍'],
+]);
 
 /**
  * 物品
