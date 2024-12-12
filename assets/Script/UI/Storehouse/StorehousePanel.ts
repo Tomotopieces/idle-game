@@ -1,6 +1,6 @@
 import { _decorator, Animation, Component, SpriteFrame } from 'cc';
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { EventName } from "db://assets/Script/Util/Constant";
+import { DO_NOTHING, EventName } from "db://assets/Script/Util/Constant";
 import { ItemSlot, SlotType } from "db://assets/Script/UI/Storehouse/ItemSlot";
 import { ItemType } from "db://assets/Script/Item/Item";
 import { EquipmentChangeEvent } from "db://assets/Script/Event/EquipmentChangeEvent";
@@ -73,9 +73,12 @@ export class StorehousePanel extends Component {
         const position = itemSlot.node.getWorldPosition();
         const equip = itemSlot.slotType === SlotType.STOREHOUSE; // 装备还是卸下
         const buttonImage = equip ? this.confirmImage : this.cancelImage;
+        const operation = itemSlot.stack.item?.itemType === ItemType.EQUIPMENT ?
+            () => EventCenter.emit(EventName.EQUIPMENT_CHANGE, new EquipmentChangeEvent(itemSlot.stack.item as Equipment, equip)) :
+            DO_NOTHING;
         this.itemCard.show(position,
             itemSlot.stack.item,
-            () => EventCenter.emit(EventName.EQUIPMENT_CHANGE, new EquipmentChangeEvent(itemSlot.stack.item as Equipment, equip)),
+            operation,
             buttonImage);
     }
 }

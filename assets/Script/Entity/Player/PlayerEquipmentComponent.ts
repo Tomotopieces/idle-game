@@ -151,42 +151,18 @@ export class PlayerEquipmentComponent {
     }
 
     /**
-     * 获取当前装备信息
-     *
-     * @param equipmentType 装备类型
-     */
-    getEquipment(equipmentType: EquipmentType): Item {
-        return this.equipmentMap.get(equipmentType).item;
-    }
-
-    /**
      * 计算套装效果
      *
      * @param equipment  新装备
      * @param unequipped 卸下的旧装备
      */
     private calculateSetEffect(equipment: Equipment, unequipped: Equipment) {
-        if (equipment?.attributes.setName === unequipped?.attributes.setName) {
-            // 新旧套装相同，无需计算
-            return;
+        if (equipment?.attributes.setName) {
+            SET_EFFECT_MAP.get(equipment.attributes.setName).equip(equipment.name);
         }
 
-        // 计算需要激活的套装效果
-        if (equipment) {
-            const count = this._setCountMap.get(equipment.attributes.setName);
-            const map = SET_EFFECT_MAP.get(equipment.attributes.setName);
-            if (map && map.has(count)) {
-                map.get(count).onActivate();
-            }
-        }
-
-        // 计算需要取消激活的套装效果
-        if (unequipped) {
-            const count = (this._setCountMap.get(unequipped.attributes.setName) ?? 0) + 1;
-            const map = SET_EFFECT_MAP.get(unequipped.attributes.setName);
-            if (map && map.has(count)) {
-                map.get(count).onDeactivate();
-            }
+        if (unequipped?.attributes.setName) {
+            SET_EFFECT_MAP.get(unequipped.attributes.setName).unequip(unequipped.name);
         }
     }
 }

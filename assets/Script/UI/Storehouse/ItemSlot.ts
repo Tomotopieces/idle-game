@@ -76,7 +76,7 @@ export class ItemSlot extends Component {
     set stack(value: ItemStack) {
         if (value) {
             this._stack = value;
-            ResourceManager.getAsset(ResourceType.SPRITE_FRAME, this._stack.item.icon, (spriteFrame: SpriteFrame) => {
+            ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, this._stack.item.icon, (spriteFrame: SpriteFrame) => {
                 this.stackSprite.spriteFrame = spriteFrame;
             });
             this.countLabel.string = `${value.count}`;

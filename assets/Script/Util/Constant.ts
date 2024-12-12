@@ -3,6 +3,8 @@
  */
 export type Runnable = () => void;
 
+export const DO_NOTHING: Runnable = () => {};
+
 /**
  * 灵韵名称
  */

@@ -2,6 +2,8 @@ import { GlobalStateName } from "db://assets/Script/Util/Constant";
 
 /**
  * 全局状态
+ *
+ * FIXME 使用 globalThis 还是类似 SET_EFFECT_MAP 直接声明的模式？区别？优劣？
  */
 export class GlobalState {
     /**

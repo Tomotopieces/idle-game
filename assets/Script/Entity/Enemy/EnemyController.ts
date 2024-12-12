@@ -106,7 +106,7 @@ export abstract class EnemyController extends Component {
      */
     private init() {
         this.attributes = new EnemyAttributeComponent(this._info);
-        ResourceManager.getAsset(ResourceType.SPRITE_FRAME, this._info.icon, (spriteFrame: SpriteFrame) => {
+        ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, this._info.icon, (spriteFrame: SpriteFrame) => {
             this.getComponent(Sprite).spriteFrame = spriteFrame;
         });
         this.updateHealthBar();

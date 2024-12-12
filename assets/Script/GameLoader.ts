@@ -10,6 +10,7 @@ import { AreaJson } from "db://assets/Script/Level/AreaJson";
 import { Area } from "db://assets/Script/Level/Area";
 import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
+import { SET_EFFECT_MAP } from "db://assets/Script/Item/Equipment/SetEffect/SetEffectMap";
 
 const { ccclass, property } = _decorator;
 
@@ -59,8 +60,14 @@ export class GameLoader extends Component {
         resources.load(DataPath.EQUIPMENT_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             const rawItemList = data.json! as Array<Equipment>;
             const itemTable = GlobalState.getState(GlobalStateName.ITEM_TABLE) as Map<string, Item>;
-            rawItemList.forEach((rawItem: Equipment, index: number) =>
-                itemTable.set(rawItem.name, Equipment.fromObject(index + itemTable.size, rawItem)));
+            rawItemList.forEach((rawItem: Equipment, index: number) => {
+                const equipment = Equipment.fromObject(index + itemTable.size, rawItem);
+                itemTable.set(rawItem.name, equipment); // 存入道具表
+                if (equipment.attributes.setName) {
+                    // 登记套装装备
+                    SET_EFFECT_MAP.get(equipment.attributes.setName).record(equipment.name);
+                }
+            });
 
             this.loadingBar.progress += 0.2;
 

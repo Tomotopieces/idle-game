@@ -33,33 +33,33 @@ const SPRITE_FRAME_SUFFIX = '/spriteFrame';
 @ccclass('ResourceManager')
 export class ResourceManager extends Component {
     /**
-     * 动态资源
-     *
-     * FIXME resources 自带缓存， dynamicAssets 没用
-     */
-    private static _dynamicAssets: Map<string, Asset> = new Map<string, Asset>();
-
-    /**
-     * 获取动态资源
+     * 加载动态资源
      *
      * @param type 资源类型
      * @param name 资源名称
      * @param assetHandler 资源处理函数
      */
-    static getAsset(type: ResourceType, name: string, assetHandler: (asset: Asset) => void): void {
+    static loadAsset(type: ResourceType, name: string, assetHandler: (asset: Asset) => void): void {
         const path = ResourceManager.getResourcePath(type, name);
-        const asset = this._dynamicAssets.get(path);
-        if (asset) {
-            assetHandler(asset);
-        } else {
-            resources.load(path, (err: any, data: Asset) => {
-                if (err) {
-                    console.error(err);
-                }
-                this._dynamicAssets.set(path, data);
-                assetHandler(data);
-            });
-        }
+        resources.load(path, (err: any, data: Asset) => {
+            if (err) {
+                console.error(err);
+            }
+            assetHandler(data);
+        });
+    }
+
+    /**
+     * 获取动态资源
+     *
+     * 需要确保资源已经加载，否则返回null
+     *
+     * @param type 资源类型
+     * @param name 资源名称
+     * @return 资源
+     */
+    static getAsset(type: ResourceType, name: string): Asset {
+        return resources.get(ResourceManager.getResourcePath(type, name));
     }
 
     /**

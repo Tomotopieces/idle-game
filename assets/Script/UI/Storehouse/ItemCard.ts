@@ -1,9 +1,10 @@
-import { _decorator, Component, Label, Layout, Node, Sprite, SpriteFrame, UITransform, Vec3 } from 'cc';
-import { Runnable } from "db://assets/Script/Util/Constant";
+import { _decorator, Component, Label, Layout, Node, Sprite, SpriteFrame, UITransform, Vec3, view } from 'cc';
+import { DO_NOTHING, Runnable } from "db://assets/Script/Util/Constant";
 import { Item, ITEM_QUALITY_DISPLAY_NAME_MAP, ItemType } from "db://assets/Script/Item/Item";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { Equipment, EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
 import { UNIQUE_EFFECT_MAP } from "db://assets/Script/Item/Equipment/UniqueEffect/UniqueEffectMap";
+import { SET_EFFECT_MAP } from "db://assets/Script/Item/Equipment/SetEffect/SetEffectMap";
 
 const { ccclass, executeInEditMode } = _decorator;
 
@@ -69,6 +70,11 @@ export class ItemCard extends Component {
     private _weaponSetEffectLabel: Label;
 
     /**
+     * 按钮
+     */
+    private _operationButton: Node;
+
+    /**
      * 按钮图标
      */
     private _buttonSprite: Sprite;
@@ -98,7 +104,8 @@ export class ItemCard extends Component {
         this._weaponUniqueEffectLabel = weaponInfoNode.getChildByName('UniqueEffect').getComponent(Label);
         this._weaponSetEffectLabel = weaponInfoNode.getChildByName('SetEffect').getComponent(Label);
 
-        this._buttonSprite = this._infoLayout.getChildByName('Operation').getChildByName('Button').getChildByName('Sprite').getComponent(Sprite);
+        this._operationButton = this._infoLayout.getChildByName('Operation').getChildByName('Button');
+        this._buttonSprite = this._operationButton.getChildByName('Sprite').getComponent(Sprite);
     }
 
     update(_dt: number) {
@@ -107,7 +114,21 @@ export class ItemCard extends Component {
         this._backgroundTransform.height = this._transform.height = this._infoLayoutTransform.height;
     }
 
-    click() {
+    /**
+     * 点击卡片
+     *
+     * 按钮触发
+     */
+    clickCard() {
+        this.hide();
+    }
+
+    /**
+     * 点击按钮
+     *
+     * 按钮触发
+     */
+    clickButton() {
         if (this._onClick) {
             this._onClick();
         }
@@ -124,19 +145,37 @@ export class ItemCard extends Component {
      */
     show(targetWorldPosition: Vec3, item: Item, onClick: Runnable, buttonImage: SpriteFrame) {
         this.node.active = true;
+
+        // 设置卡片位置与锚点
+        const resolutionSize = view.getDesignResolutionSize();
+        this._backgroundTransform.anchorX =
+            this._infoLayoutTransform.anchorX =
+                this._transform.anchorX =
+                    targetWorldPosition.x + this._transform.width <= resolutionSize.width ? 0 : 1;
+        this._backgroundTransform.anchorY =
+            this._infoLayoutTransform.anchorY =
+                this._transform.anchorY =
+                    targetWorldPosition.y - this._transform.height >= 0 ? 1 : 0;
         this.node.setWorldPosition(targetWorldPosition);
 
+        // 设置基本信息
+        this._itemIconSprite.spriteFrame = ResourceManager.getAsset(ResourceType.SPRITE_FRAME, item.icon) as SpriteFrame;
         this._itemNameLabel.string = item.displayName;
         this._itemTypeLabel.string = this.getItemTypeLabel(item);
         this._itemQualityLabel.string = ITEM_QUALITY_DISPLAY_NAME_MAP.get(item.quality);
 
+        // 设置显示信息
         this.setAttributes(item);
         this.setUniqueEffect(item);
         this.setSetEffect(item);
 
+        // 设置按钮内容
         this._buttonSprite.spriteFrame = buttonImage;
+        this._operationButton.active = onClick !== DO_NOTHING;
         this._onClick = onClick;
-        this.setIcon(item.icon);
+
+        // 更新 Layout
+        this._infoLayout.getComponent(Layout).updateLayout(true);
     }
 
     /**
@@ -162,6 +201,9 @@ export class ItemCard extends Component {
         displayResult += equipment.attributes.defenseBoost ? `+${equipment.attributes.defenseBoost * 100}% 防御加成\n` : ``;
         displayResult += equipment.attributes.criticalRate ? `+${equipment.attributes.criticalRate * 100}% 暴击率\n` : ``;
         displayResult += equipment.attributes.criticalBoost ? `+${equipment.attributes.criticalBoost}% 暴击伤害加成\n` : ``;
+        if (displayResult.endsWith('\n')) {
+            displayResult = displayResult.slice(0, -1);
+        }
 
         this._weaponAttributesLabel.node.active = !!displayResult;
         this._weaponAttributesLabel.string = displayResult;
@@ -182,7 +224,7 @@ export class ItemCard extends Component {
         const equipment = item as Equipment;
         const description = UNIQUE_EFFECT_MAP.get(equipment.name)?.description;
 
-        const displayResult =  description ? `独门妙用：${description}` : ``;
+        const displayResult = description ? `独门妙用：\n\t${description}` : ``;
         this._weaponUniqueEffectLabel.node.active = !!displayResult;
         this._weaponUniqueEffectLabel.string = displayResult;
     }
@@ -193,25 +235,19 @@ export class ItemCard extends Component {
      * @param item 物品
      */
     setSetEffect(item: Item): void {
-        if (!(item instanceof Equipment)) {
+        if (!(item instanceof Equipment) || !(item as Equipment).attributes.setName) {
             this._weaponSetEffectLabel.node.active = false;
             this._weaponSetEffectLabel.string = ``;
             return;
         }
 
-        // TODO 设置套装信息
-    }
-
-    /**
-     * 设置物品图标
-     *
-     * @param icon 图标
-     */
-    setIcon(icon: string) {
-        ResourceManager.getAsset(ResourceType.SPRITE_FRAME, icon, (spriteFrame: SpriteFrame) => {
-            this._itemIconSprite.spriteFrame = spriteFrame;
-            this._infoLayout.getComponent(Layout).updateLayout(true);
-        });
+        const equipment = item as Equipment;
+        const setEffect = SET_EFFECT_MAP.get(equipment.attributes.setName);
+        let displayResult = `套装效果：${setEffect.name}`;
+        setEffect.levelEffectMap.forEach((effect, level) =>
+            displayResult += `\n\t${level}级：${effect.description} ${effect.active ? '✔' : '❌'}`);
+        this._weaponSetEffectLabel.node.active = true;
+        this._weaponSetEffectLabel.string = displayResult;
     }
 
     /**
