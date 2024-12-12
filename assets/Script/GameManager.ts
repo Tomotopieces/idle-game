@@ -22,11 +22,14 @@ import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { MakeDamageEvent } from "db://assets/Script/Event/MakeDamageEvent";
 import { AREA_TABLE, ITEM_TABLE, STAGE_TABLE } from "db://assets/Script/DataTable";
+import { DropItemFactory } from "db://assets/Script/Item/DropItemFactory";
 
 const { ccclass, property } = _decorator;
 
 /**
  * 游戏管理器
+ *
+ * 初始化游戏，读取存档恢复数据，监听处理基本事件，自动存档
  */
 @ccclass('GameManager')
 export class GameManager extends Component {
@@ -78,7 +81,7 @@ export class GameManager extends Component {
     /**
      * 最新保存数据
      */
-    private _latestSaveData: SaveData | null = null;
+    private _latestSaveData: SaveData;
 
     /**
      * 自动保存计时器
@@ -97,9 +100,12 @@ export class GameManager extends Component {
 
         // 监听处理事件
         EventCenter.on(EventName.MAKE_DAMAGE, this.node.name, (event: MakeDamageEvent) => this.handleDamage(event));
-        EventCenter.on(EventName.GET_DROPS, this.node.name, (dropStackList: Array<ItemStack>) => this.getDrops(dropStackList));
         EventCenter.on(EventName.UPDATE_LEVEL, this.node.name, (event: UpdateLevelEvent) => this.updateLevel(event.area, event.stage));
         EventCenter.on(EventName.EQUIPMENT_CHANGE, this.node.name, (event: EquipmentChangeEvent) => this.handleEquipmentChange(event));
+        EventCenter.on(EventName.ENEMY_DIE, this.node.name, (enemy: EnemyController) => this.handleEnemyDie(enemy));
+        EventCenter.on(EventName.GET_DROPS, this.node.name, (dropStackList: Array<ItemStack>) => this.getDrops(dropStackList));
+        EventCenter.on(EventName.GET_EXPERIENCE, this.node.name, (experience: number) => this.getExperience(experience));
+        EventCenter.on(EventName.PLAYER_LEVEL_UP, this.node.name, (level: number) => this.handlePlayerLevelUp(level));
     }
 
     update(dt: number) {
@@ -121,11 +127,13 @@ export class GameManager extends Component {
             return;
         }
 
+        this.player.levelInfo.restore(this._latestSaveData.level, this._latestSaveData.experience);
         this.player.coin = this._latestSaveData.coin;
-
         this._latestSaveData.equipmentSlot.forEach(stack => {
             this.player.equipments.equip(stack.item as Equipment);
         });
+        this.player.attributes.levelUp(this._latestSaveData.level);
+        EventCenter.emit(EventName.UI_UPDATE_PLAYER_LEVEL_INFO, this.player.levelInfo);
         EventCenter.emit(EventName.UI_UPDATE_COIN, this.player.coin);
         EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
         this.player.init();
@@ -190,8 +198,7 @@ export class GameManager extends Component {
      * 保存存档
      */
     private saveData() {
-        this.player.equipments
-        this._latestSaveData = new SaveData(this.player.coin, this.player.equipments.equipmentMap, this._storehouse, this._area.name, this._stage.name);
+        this._latestSaveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.coin, this.player.equipments.equipmentMap, this._storehouse, this._area.name, this._stage.name);
         sys.localStorage.setItem(ConfigName.SAVE_DATA, this._latestSaveData.toJson());
     }
 
@@ -212,6 +219,20 @@ export class GameManager extends Component {
     }
 
     /**
+     * 敌人死亡
+     *
+     * @param enemy 敌人
+     */
+    private handleEnemyDie(enemy: EnemyController) {
+        // 结算掉落物
+        const dropStackList = DropItemFactory.produce(enemy.dropList);
+        EventCenter.emit(EventName.GET_DROPS, dropStackList);
+
+        // 结算经验
+        EventCenter.emit(EventName.GET_EXPERIENCE, enemy.info.experience);
+    }
+
+    /**
      * 获取掉落物
      *
      * @param dropStackList 掉落道具列表
@@ -219,6 +240,15 @@ export class GameManager extends Component {
     private getDrops(dropStackList: Array<ItemStack>) {
         StorehouseUtil.putIn(dropStackList);
         this.player.coin = this._storehouse.get(LING_YUN_NAME)?.count ?? 0;
+    }
+
+    /**
+     * 获取经验值
+     *
+     * @param experience 经验值
+     */
+    private getExperience(experience: number) {
+        this.player.levelInfo.gainExperience(experience);
     }
 
     /**
@@ -246,6 +276,17 @@ export class GameManager extends Component {
     }
 
     /**
+     * 处理玩家升级事件
+     *
+     * @param level 新等级
+     */
+    private handlePlayerLevelUp(level: number) {
+        this.player.attributes.levelUp(level);
+        this.player.updateHealthBar();
+        EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
+    }
+
+    /**
      * 清空存档
      *
      * 按钮触发
@@ -265,6 +306,8 @@ export class GameManager extends Component {
 
     /**
      * 手动保存游戏数据
+     *
+     * 按钮触发
      */
     save() {
         this._autoSaveTimer = 0;
@@ -273,6 +316,8 @@ export class GameManager extends Component {
 
     /**
      * 获取百戏套装与铜云棒
+     *
+     * 按钮触发
      */
     gift() {
         const stackList: Array<ItemStack> = [
@@ -280,7 +325,8 @@ export class GameManager extends Component {
             new ItemStack(ITEM_TABLE.get('bai_xi_nuo_mian'), 1),
             new ItemStack(ITEM_TABLE.get('bai_xi_chen_qian_yi'), 1),
             new ItemStack(ITEM_TABLE.get('bai_xi_hu_shou'), 1),
-            new ItemStack(ITEM_TABLE.get('bai_xi_diao_tui'), 1)
+            new ItemStack(ITEM_TABLE.get('bai_xi_diao_tui'), 1),
+            new ItemStack(ITEM_TABLE.get('ru_yi_jin_gu_bang'), 1)
         ];
         StorehouseUtil.putIn(stackList);
     }

@@ -5,6 +5,16 @@ import { ItemStackJson } from "db://assets/Script/Item/ItemStackJson";
  */
 export class SaveDataJson {
     /**
+     * 等级
+     */
+    level: number;
+
+    /**
+     * 经验
+     */
+    experience: number;
+
+    /**
      * 金币
      */
     coin: number;
@@ -29,7 +39,9 @@ export class SaveDataJson {
      */
     stageName: string;
 
-    constructor(coin: number, equipmentSlot: Array<ItemStackJson>, storehouse: Array<ItemStackJson>, areaName: string, stageName: string) {
+    constructor(level: number, experience: number, coin: number, equipmentSlot: Array<ItemStackJson>, storehouse: Array<ItemStackJson>, areaName: string, stageName: string) {
+        this.level = level;
+        this.experience = experience;
         this.coin = coin;
         this.equipmentSlot = equipmentSlot;
         this.storehouse = storehouse;

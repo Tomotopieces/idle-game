@@ -42,9 +42,9 @@ export class PlayerEquipmentComponent {
     private readonly _curios: ItemStack;
 
     /**
-     * 玩家战斗数值组件
+     * 玩家属性
      */
-    private readonly _playerAttributeComponent: PlayerAttributeComponent;
+    private readonly _attributes: PlayerAttributeComponent;
 
     /**
      * 套装数量 Map
@@ -60,14 +60,14 @@ export class PlayerEquipmentComponent {
      */
     readonly equipmentMap: Map<EquipmentType, ItemStack>;
 
-    constructor(attribute: PlayerAttributeComponent) {
+    constructor(attributes: PlayerAttributeComponent) {
         this._weapon = new ItemStack(null, 1);
         this._head = new ItemStack(null, 1);
         this._chest = new ItemStack(null, 1);
         this._arm = new ItemStack(null, 1);
         this._leg = new ItemStack(null, 1);
         this._curios = new ItemStack(null, 1);
-        this._playerAttributeComponent = attribute;
+        this._attributes = attributes;
         this._setCountMap = new Map<string, number>();
 
         this.equipmentMap = new Map<EquipmentType, ItemStack>([
@@ -91,7 +91,7 @@ export class PlayerEquipmentComponent {
         // 保存当前套装数量
         // 卸下旧装备
         const unequipped: Equipment = targetStack.item as Equipment;
-        this._playerAttributeComponent.dropAttributeFromEquipment(unequipped);
+        this._attributes.dropAttributeFromEquipment(unequipped);
         // 取消旧装备的独门妙用
         unequipped?.attributes.effects.forEach(effectName => UNIQUE_EFFECT_TABLE.get(effectName).onDeactivate());
         // 减去旧装备的套装数
@@ -106,7 +106,7 @@ export class PlayerEquipmentComponent {
 
         // 装备新装备
         targetStack.item = equipment;
-        this._playerAttributeComponent.getAttributeFromEquipment(equipment);
+        this._attributes.getAttributeFromEquipment(equipment);
         // 启用新装备的独门妙用
         equipment.attributes.effects.forEach(effectName => UNIQUE_EFFECT_TABLE.get(effectName).onActivate());
         // 增加新装备的套装数
@@ -130,7 +130,7 @@ export class PlayerEquipmentComponent {
     unequip(equipmentType: EquipmentType): Equipment {
         const targetStack = this.equipmentMap.get(equipmentType);
         const unequipped: Equipment = targetStack.item as Equipment;
-        this._playerAttributeComponent.dropAttributeFromEquipment(unequipped);
+        this._attributes.dropAttributeFromEquipment(unequipped);
         unequipped.attributes.effects.forEach(effectName => UNIQUE_EFFECT_TABLE.get(effectName).onDeactivate());
         targetStack.item = null;
         if (unequipped.attributes.setName) {

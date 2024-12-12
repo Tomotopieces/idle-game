@@ -6,7 +6,8 @@ export type Runnable = () => void;
 /**
  * 空函数
  */
-export const DO_NOTHING: Runnable = () => {};
+export const DO_NOTHING: Runnable = () => {
+};
 
 /**
  * 灵韵名称
@@ -103,6 +104,11 @@ export enum EventName {
     GET_DROPS = 'GET_DROPS',
 
     /**
+     * 获取经验
+     */
+    GET_EXPERIENCE = 'GET_EXPERIENCE',
+
+    /**
      * 更新关卡
      */
     UPDATE_LEVEL = 'UPDATE_LEVEL',
@@ -123,14 +129,19 @@ export enum EventName {
     MAKE_DAMAGE = 'MAKE_DAMAGE',
 
     /**
-     * 更新仓库
+     * 点击物品槽UI
+     */
+    UI_CLICK_ITEM_SLOT = 'UI_CLICK_ITEM_SLOT',
+
+    /**
+     * 更新仓库UI
      */
     UI_UPDATE_STOREHOUSE = 'UI_UPDATE_STOREHOUSE',
 
     /**
-     * 点击物品槽UI
+     * 更新玩家等级UI
      */
-    UI_CLICK_ITEM_SLOT = 'UI_CLICK_ITEM_SLOT',
+    UI_UPDATE_PLAYER_LEVEL_INFO = 'UI_UPDATE_PLAYER_LEVEL_INFO',
 
     /**
      * 更新金币UI

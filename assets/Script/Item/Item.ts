@@ -1,3 +1,5 @@
+import { Color } from "cc";
+
 /**
  * 物品类型
  */
@@ -60,6 +62,18 @@ export const ITEM_QUALITY_DISPLAY_NAME_MAP = new Map<ItemQuality, string>([
     [ItemQuality.EPIC, '特品'],
     [ItemQuality.LEGENDARY, '仙品'],
     [ItemQuality.MYTHICAL, '神珍'],
+]);
+
+/**
+ * 物品品质颜色 Map
+ */
+export const ITEM_QUALITY_COLOR_MAP = new Map<ItemQuality, Color>([
+    [ItemQuality.COMMON, new Color(255, 255, 255)],
+    [ItemQuality.UNCOMMON, new Color(128, 255, 128)],
+    [ItemQuality.RARE, new Color(64, 128, 255)],
+    [ItemQuality.EPIC, new Color(255, 64, 255)],
+    [ItemQuality.LEGENDARY, new Color(255, 255, 128)],
+    [ItemQuality.MYTHICAL, new Color(255, 64, 64)],
 ]);
 
 /**

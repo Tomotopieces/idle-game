@@ -32,7 +32,7 @@ export const AREA_TABLE = new Map<string, Area>();
 /**
  * 独门妙用 Map
  *
- * 效果名 -> 效果对象
+ * 效果名（装备名） -> 效果
  */
 export const UNIQUE_EFFECT_TABLE = new Map<string, UniqueEffect>();
 UNIQUE_EFFECT_TABLE.set(UniqueEffectLinGunShuangShe.NAME, new UniqueEffectLinGunShuangShe());
@@ -41,7 +41,7 @@ UNIQUE_EFFECT_TABLE.set(UniqueEffectLinGunShuangShe.NAME, new UniqueEffectLinGun
 /**
  * 套装效果 Map
  *
- * 效果名（装备名） -> 套装效果
+ * 效果名 -> 套装效果
  */
 export const SET_EFFECT_TABLE = new Map<string, SetEffect>();
 SET_EFFECT_TABLE.set(SetEffectZiZhuBiJiao.NAME, new SetEffectZiZhuBiJiao());

@@ -1,12 +1,10 @@
 import { _decorator, Animation, CCFloat, Component, ProgressBar } from 'cc';
 import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
-import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
 import { PlayerAttributeComponent } from "db://assets/Script/Entity/Player/PlayerAttributeComponent";
 import { PlayerLevelComponent } from "db://assets/Script/Entity/Player/PlayerLevelComponent";
 import { PlayerEquipmentComponent } from "db://assets/Script/Entity/Player/PlayerEquipmentComponent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { MakeDamageEvent } from "db://assets/Script/Event/MakeDamageEvent";
-import { DropItemFactory } from "db://assets/Script/Item/DropItemFactory";
 
 const { ccclass, property } = _decorator;
 
@@ -67,9 +65,6 @@ export class PlayerController extends Component {
             console.error(`[PlayerController.start] get _healthBar failed`);
             return;
         }
-
-        // 监听敌人死亡事件
-        EventCenter.on(EventName.ENEMY_DIE, this.node.name, (enemy: EnemyController) => this.onEnemyDie(enemy));
     }
 
     update(dt: number) {
@@ -123,6 +118,10 @@ export class PlayerController extends Component {
         return this._attributes;
     }
 
+    get levelInfo(): PlayerLevelComponent {
+        return this._levelInfo;
+    }
+
     get equipments(): PlayerEquipmentComponent {
         return this._equipments;
     }
@@ -151,17 +150,7 @@ export class PlayerController extends Component {
     /**
      * 更新血条显示
      */
-    private updateHealthBar() {
+    updateHealthBar() {
         this.healthBar.progress = this._attributes.health / this._attributes.finalHealth();
-    }
-
-    /**
-     * 敌人死亡
-     *
-     * @param enemy 敌人
-     */
-    private onEnemyDie(enemy: EnemyController) {
-        const dropStackList = DropItemFactory.produce(enemy.dropList);
-        EventCenter.emit(EventName.GET_DROPS, dropStackList);
     }
 }

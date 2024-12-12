@@ -31,6 +31,11 @@ export class EnemyInfoJson {
     readonly dropList: Array<DropItemJson>;
 
     /**
+     * 经验值
+     */
+    readonly experience: number;
+
+    /**
      * 图标
      */
     readonly icon: string;
@@ -44,6 +49,6 @@ export class EnemyInfoJson {
      */
     static toEnemyInfo(id: number, infoJson: EnemyInfoJson): EnemyInfo {
         const dropList = infoJson.dropList.map(jsonDrop => DropItemJson.toDropItem(jsonDrop));
-        return new EnemyInfo(id, infoJson.name, infoJson.displayName, infoJson.health, infoJson.damage, dropList, infoJson.icon);
+        return new EnemyInfo(id, infoJson.name, infoJson.displayName, infoJson.health, infoJson.damage, dropList, infoJson.experience, infoJson.icon);
     }
 }

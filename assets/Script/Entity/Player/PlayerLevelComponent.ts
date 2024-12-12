@@ -11,38 +11,25 @@ export class PlayerLevelComponent {
     private _level: number;
 
     /**
-     * 升级所需经验
-     */
-    private _requiredExperience: number;
-
-    /**
      * 当前经验
      */
-    private _currentExperience: number;
+    private _experience: number;
 
     constructor() {
-        this._level = 1;
-        this._requiredExperience = 100;
-        this._currentExperience = 0;
+        this._level = 0;
+        this.requirement();
+        this._experience = 0;
     }
 
     /**
-     * 升级
-     */
-    levelUp(): void {
-        this._level++;
-        this._requiredExperience += 50;
-        this._currentExperience -= this._requiredExperience;
-        EventCenter.emit(EventName.PLAYER_LEVEL_UP, this._level);
-    }
-
-    /**
-     * 计算升级所需经验
+     * 恢复等级
      *
-     * @param level 等级
+     * @param level      等级
+     * @param experience 当前经验
      */
-    calculateRequiredExperience(level: number): number {
-        return (level + 1) * 50;
+    restore(level: number, experience: number) {
+        this._level = level;
+        this._experience = experience;
     }
 
     /**
@@ -51,33 +38,36 @@ export class PlayerLevelComponent {
      * @param experience 经验
      */
     gainExperience(experience: number): void {
-        this._currentExperience += experience;
-        while (this._currentExperience >= this._requiredExperience) {
+        this._experience += experience;
+        while (this._experience >= this.requirement()) {
             this.levelUp();
         }
+        EventCenter.emit(EventName.UI_UPDATE_PLAYER_LEVEL_INFO, this);
+    }
+
+    /**
+     * 当前等级升级所需经验
+     *
+     * 需求经验 = (等级 + 1） * 50
+     */
+    requirement(): number {
+        return (this._level + 1) * 50;
     }
 
     get level(): number {
         return this._level;
     }
 
-    set level(value: number) {
-        this._level = value;
+    get experience(): number {
+        return this._experience;
     }
 
-    get requiredExperience(): number {
-        return this._requiredExperience;
-    }
-
-    set requiredExperience(value: number) {
-        this._requiredExperience = value;
-    }
-
-    get currentExperience(): number {
-        return this._currentExperience;
-    }
-
-    set currentExperience(value: number) {
-        this._currentExperience = value;
+    /**
+     * 升级
+     */
+    private levelUp() {
+        this._experience -= this.requirement();
+        this._level++;
+        EventCenter.emit(EventName.PLAYER_LEVEL_UP, this._level);
     }
 }

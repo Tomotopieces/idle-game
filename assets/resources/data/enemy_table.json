@@ -12,7 +12,8 @@
         "max": 5,
         "min": 1
       }
-    ]
+    ],
+    "experience": 1
   },
   {
     "name": "gu_hu_yuan",
@@ -33,7 +34,8 @@
         "max": 1,
         "min": 1
       }
-    ]
+    ],
+    "experience": 2
   },
   {
     "name": "guang_zhi",
@@ -54,7 +56,8 @@
         "max": 1,
         "min": 1
       }
-    ]
+    ],
+    "experience": 5
   },
   {
     "name": "ling_xu_zi",
@@ -75,7 +78,8 @@
         "max": 1,
         "min": 1
       }
-    ]
+    ],
+    "experience": 5
   },
   {
     "name": "guang_mou",
@@ -98,7 +102,8 @@
         "max": 1,
         "min": 1
       }
-    ]
+    ],
+    "experience": 5
   },
   {
     "name": "jin_chi_zhang_lao",
@@ -106,7 +111,8 @@
     "health": 100,
     "damage": 10,
     "icon": "enemy/baldhead",
-    "dropList": []
+    "dropList": [],
+    "experience": 10
   },
   {
     "name": "hei_xiong_jing",
@@ -127,7 +133,8 @@
         "max": 1,
         "min": 1
       }
-    ]
+    ],
+    "experience": 15
   },
   {
     "name": "shu_xiao_wei",
@@ -135,7 +142,8 @@
     "health": 100,
     "damage": 10,
     "icon": "enemy/mouse",
-    "dropList": []
+    "dropList": [],
+    "experience": 10
   },
   {
     "name": "sha_da_lang",
@@ -143,7 +151,8 @@
     "health": 100,
     "damage": 10,
     "icon": "enemy/mouse",
-    "dropList": []
+    "dropList": [],
+    "experience": 15
   },
   {
     "name": "shi_xian_feng",
@@ -151,7 +160,8 @@
     "health": 100,
     "damage": 10,
     "icon": "enemy/stone",
-    "dropList": []
+    "dropList": [],
+    "experience": 20
   },
   {
     "name": "hu_xian_feng",
@@ -159,7 +169,8 @@
     "health": 100,
     "damage": 10,
     "icon": "enemy/tiger",
-    "dropList": []
+    "dropList": [],
+    "experience": 20
   },
   {
     "name": "huang_feng",
@@ -167,6 +178,7 @@
     "health": 100,
     "damage": 10,
     "icon": "enemy/hamster",
-    "dropList": []
+    "dropList": [],
+    "experience": 25
   }
 ]

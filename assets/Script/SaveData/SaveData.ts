@@ -5,11 +5,22 @@ import { Equipment, EquipmentType } from "db://assets/Script/Item/Equipment/Equi
 import { SaveDataJson } from "db://assets/Script/SaveData/SaveDataJson";
 
 import { ITEM_TABLE } from "db://assets/Script/DataTable";
+import { DefaultLevelName } from "db://assets/Script/Util/Constant";
 
 /**
  * 存档数据
  */
 export class SaveData {
+    /**
+     * 等级
+     */
+    level: number;
+
+    /**
+     * 经验
+     */
+    experience: number;
+
     /**
      * 金币
      */
@@ -35,12 +46,14 @@ export class SaveData {
      */
     stageName: string;
 
-    constructor(coin: number, equipmentSlot: Map<EquipmentType, ItemStack>, storehouse: Storehouse, areaName: string, stageName: string) {
-        this.coin = coin;
-        this.equipmentSlot = equipmentSlot;
-        this.storehouse = storehouse;
-        this.areaName = areaName;
-        this.stageName = stageName;
+    constructor(level: number, experience: number, coin: number, equipmentSlot: Map<EquipmentType, ItemStack>, storehouse: Storehouse, areaName: string, stageName: string) {
+        this.level = level ?? 0;
+        this.experience = experience ?? 0;
+        this.coin = coin ?? 0;
+        this.equipmentSlot = equipmentSlot ?? new Map<EquipmentType, ItemStack>();
+        this.storehouse = storehouse ?? new Map<string, ItemStack>();
+        this.areaName = areaName ?? DefaultLevelName.AREA;
+        this.stageName = stageName ?? DefaultLevelName.STAGE;
     }
 
     /**
@@ -58,7 +71,7 @@ export class SaveData {
             }));
         const storehouse = new Map<string, ItemStack>(dataJson.storehouse
             .map(itemStackJson => [itemStackJson.itemName, ItemStackJson.toItemStack(itemStackJson)]));
-        return new SaveData(dataJson.coin, equipmentSlot, storehouse, dataJson.areaName, dataJson.stageName);
+        return new SaveData(dataJson.level, dataJson.experience, dataJson.coin, equipmentSlot, storehouse, dataJson.areaName, dataJson.stageName);
     }
 
     /**
@@ -70,7 +83,7 @@ export class SaveData {
             .map(item => new ItemStackJson(item.item.name, item.count));
         const storehouseJson = Array.from(this.storehouse.values())
             .map(item => new ItemStackJson(item.item.name, item.count));
-        return new SaveDataJson(this.coin, equipmentSlotJson, storehouseJson, this.areaName, this.stageName).toJson();
+        return new SaveDataJson(this.level, this.experience, this.coin, equipmentSlotJson, storehouseJson, this.areaName, this.stageName).toJson();
     }
 }
 

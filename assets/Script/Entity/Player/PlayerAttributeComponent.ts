@@ -1,6 +1,6 @@
 import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 
-// 默认生命值
+// 默认基础生命值
 const DEFAULT_HEALTH = 200;
 
 // 默认伤害
@@ -19,9 +19,9 @@ export class PlayerAttributeComponent {
     private _health: number = DEFAULT_HEALTH;
 
     /**
-     * 最大生命值
+     * 基础最大生命值
      */
-    private _maxHealth: number = DEFAULT_HEALTH;
+    private _baseHealth: number = DEFAULT_HEALTH;
 
     /**
      * 附加生命值
@@ -94,16 +94,24 @@ export class PlayerAttributeComponent {
      */
     private _defenseBoost: number = 1;
 
-    constructor() {
+    /**
+     * 根据等级提升属性
+     *
+     * @param level 新等级
+     */
+    levelUp(level: number) {
+        this._baseHealth = DEFAULT_HEALTH + 5 * level;
+        this._baseDamage = DEFAULT_DAMAGE + level;
+        this._health = this.finalHealth();
     }
 
     /**
      * 最终生命上限
      *
-     * (生命值 + 附加生命值) * 生命倍率 + 额外生命值
+     * (基础生命值 + 附加生命值) * 生命倍率 + 额外生命值
      */
     finalHealth(): number {
-        return (this._maxHealth + this._additionalHealth) * this._healthBoost + this._extraHealth;
+        return (this._baseHealth + this._additionalHealth) * this._healthBoost + this._extraHealth;
     }
 
     /**
@@ -194,18 +202,18 @@ export class PlayerAttributeComponent {
     }
 
     set health(value: number) {
-        this._health = Math.min(Math.max(0, value), this._maxHealth); // 生命不超过最大值，不小于0
+        this._health = Math.min(Math.max(0, value), this.finalHealth()); // 生命不超过最终最大值，不小于0
     }
 
-    get maxHealth(): number {
-        return this._maxHealth;
+    get baseHealth(): number {
+        return this._baseHealth;
     }
 
-    set maxHealth(value: number) {
-        const syncHealth = this._health === this._maxHealth; // 在生命值满的情况下，提升上限后生命值与上限同步
-        this._maxHealth = Math.max(0, value);
+    set baseHealth(value: number) {
+        const syncHealth = this._health === this._baseHealth; // 在生命值满的情况下，提升上限后生命值与上限同步
+        this._baseHealth = Math.max(0, value);
 
-        this._health = syncHealth ? this._maxHealth : Math.min(this._maxHealth, this._health);
+        this._health = syncHealth ? this._baseHealth : Math.min(this._baseHealth, this._health);
     }
 
     get additionalHealth(): number {

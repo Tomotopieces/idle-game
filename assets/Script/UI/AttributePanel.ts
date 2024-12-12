@@ -2,6 +2,7 @@ import { _decorator, Component, Label } from 'cc';
 import { EventName } from "db://assets/Script/Util/Constant";
 import { PlayerAttributeComponent } from "db://assets/Script/Entity/Player/PlayerAttributeComponent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
+import { PlayerLevelComponent } from "db://assets/Script/Entity/Player/PlayerLevelComponent";
 
 const { ccclass, property } = _decorator;
 
@@ -10,6 +11,12 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('AttributePanel')
 export class AttributePanel extends Component {
+    /**
+     * 等级Label
+     */
+    @property({ type: Label, tooltip: '等级Label' })
+    levelLabel: Label;
+
     /**
      * 金币Label
      */
@@ -41,8 +48,18 @@ export class AttributePanel extends Component {
     criticalBoostLabel: Label;
 
     onLoad() {
+        EventCenter.on(EventName.UI_UPDATE_PLAYER_LEVEL_INFO, this.node.name, (event: PlayerLevelComponent) => this.onUpdateLevel(event));
         EventCenter.on(EventName.UI_UPDATE_COIN, this.node.name, (coin: number) => this.coinLabel.string = coin.toString());
         EventCenter.on(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.node.name, (event: PlayerAttributeComponent) => this.onUpdateAttributePanel(event));
+    }
+
+    /**
+     * 更新等级数据
+     *
+     * @param event 事件参数
+     */
+    private onUpdateLevel(event: PlayerLevelComponent) {
+        this.levelLabel.string = `Lv.${event.level} [ ${event.experience} / ${event.requirement()} ]`
     }
 
     /**

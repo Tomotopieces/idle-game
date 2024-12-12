@@ -12,12 +12,5 @@
     "itemType": "common",
     "description": "日巡山，夜纺纱，小妖凭此勤持家。可用于披挂铸造",
     "icon": "item/white_flag"
-  },
-  {
-    "name": "chi_chao",
-    "displayName": "赤潮",
-    "itemType": "common",
-    "description": "赤浪三分，灼灼逼人",
-    "icon": "item/fire"
   }
 ]

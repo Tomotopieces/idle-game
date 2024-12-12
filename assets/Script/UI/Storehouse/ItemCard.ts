@@ -1,6 +1,6 @@
 import { _decorator, Component, Label, Layout, Node, Sprite, SpriteFrame, UITransform, Vec3, view } from 'cc';
 import { DO_NOTHING, Runnable } from "db://assets/Script/Util/Constant";
-import { Item, ITEM_QUALITY_DISPLAY_NAME_MAP, ItemType } from "db://assets/Script/Item/Item";
+import { Item, ITEM_QUALITY_COLOR_MAP, ITEM_QUALITY_DISPLAY_NAME_MAP, ItemType } from "db://assets/Script/Item/Item";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { Equipment, EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
 import { SET_EFFECT_TABLE, UNIQUE_EFFECT_TABLE } from "db://assets/Script/DataTable";
@@ -91,9 +91,9 @@ export class ItemCard extends Component {
         this._transform = this.node.getComponent(UITransform);
         this._backgroundTransform = this.node.getChildByName('Background').getComponent(UITransform);
 
-        this._itemIconSprite = this._infoLayout.getChildByName('Icon').getComponent(Sprite);
 
         const baseInfoNode = this._infoLayout.getChildByName('BaseInfo');
+        this._itemIconSprite = baseInfoNode.getChildByName('Icon').getComponent(Sprite);
         this._itemNameLabel = baseInfoNode.getChildByName('Name').getComponent(Label);
         this._itemTypeLabel = baseInfoNode.getChildByName('Type').getComponent(Label);
         this._itemQualityLabel = baseInfoNode.getChildByName('Quality').getComponent(Label);
@@ -162,6 +162,7 @@ export class ItemCard extends Component {
         this._itemNameLabel.string = item.displayName;
         this._itemTypeLabel.string = this.getItemTypeLabel(item);
         this._itemQualityLabel.string = ITEM_QUALITY_DISPLAY_NAME_MAP.get(item.quality);
+        this._itemNameLabel.color = this._itemTypeLabel.color = this._itemQualityLabel.color = ITEM_QUALITY_COLOR_MAP.get(item.quality);
 
         // 设置显示信息
         this.setAttributes(item);
@@ -223,7 +224,7 @@ export class ItemCard extends Component {
         const equipment = item as Equipment;
         const description = UNIQUE_EFFECT_TABLE.get(equipment.name)?.description;
 
-        const displayResult = description ? `独门妙用：\n\t${description}` : ``;
+        const displayResult = description ? `独门妙用：\n${description}` : ``;
         this._weaponUniqueEffectLabel.node.active = !!displayResult;
         this._weaponUniqueEffectLabel.string = displayResult;
     }
@@ -242,9 +243,9 @@ export class ItemCard extends Component {
 
         const equipment = item as Equipment;
         const setEffect = SET_EFFECT_TABLE.get(equipment.attributes.setName);
-        let displayResult = `套装效果：${setEffect.name}`;
+        let displayResult = `套装效果：`;
         setEffect.levelEffectMap.forEach((effect, level) =>
-            displayResult += `\n\t${level}级：${effect.description} ${effect.active ? '✔' : '❌'}`);
+            displayResult += `\n${level}级：${effect.description} ${effect.active ? '✔' : '❌'}`);
         this._weaponSetEffectLabel.node.active = true;
         this._weaponSetEffectLabel.string = displayResult;
     }
@@ -288,5 +289,3 @@ export class ItemCard extends Component {
         }
     }
 }
-
-
