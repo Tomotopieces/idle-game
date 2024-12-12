@@ -3,8 +3,7 @@ import { DO_NOTHING, Runnable } from "db://assets/Script/Util/Constant";
 import { Item, ITEM_QUALITY_DISPLAY_NAME_MAP, ItemType } from "db://assets/Script/Item/Item";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { Equipment, EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
-import { UNIQUE_EFFECT_MAP } from "db://assets/Script/Item/Equipment/UniqueEffect/UniqueEffectMap";
-import { SET_EFFECT_MAP } from "db://assets/Script/Item/Equipment/SetEffect/SetEffectMap";
+import { SET_EFFECT_TABLE, UNIQUE_EFFECT_TABLE } from "db://assets/Script/DataTable";
 
 const { ccclass, executeInEditMode } = _decorator;
 
@@ -222,7 +221,7 @@ export class ItemCard extends Component {
         }
 
         const equipment = item as Equipment;
-        const description = UNIQUE_EFFECT_MAP.get(equipment.name)?.description;
+        const description = UNIQUE_EFFECT_TABLE.get(equipment.name)?.description;
 
         const displayResult = description ? `独门妙用：\n\t${description}` : ``;
         this._weaponUniqueEffectLabel.node.active = !!displayResult;
@@ -242,7 +241,7 @@ export class ItemCard extends Component {
         }
 
         const equipment = item as Equipment;
-        const setEffect = SET_EFFECT_MAP.get(equipment.attributes.setName);
+        const setEffect = SET_EFFECT_TABLE.get(equipment.attributes.setName);
         let displayResult = `套装效果：${setEffect.name}`;
         setEffect.levelEffectMap.forEach((effect, level) =>
             displayResult += `\n\t${level}级：${effect.description} ${effect.active ? '✔' : '❌'}`);

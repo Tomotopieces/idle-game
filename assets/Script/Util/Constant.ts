@@ -3,6 +3,9 @@
  */
 export type Runnable = () => void;
 
+/**
+ * 空函数
+ */
 export const DO_NOTHING: Runnable = () => {};
 
 /**
@@ -149,26 +152,6 @@ export enum EventName {
  * 全局状态名称常量
  */
 export enum GlobalStateName {
-    /**
-     * 物品表
-     */
-    ITEM_TABLE = 'ItemTable',
-
-    /**
-     * 敌人表
-     */
-    ENEMY_TABLE = 'EnemyTable',
-
-    /**
-     * 舞台表
-     */
-    STAGE_TABLE = 'StageTable',
-
-    /**
-     * 区域表
-     */
-    AREA_TABLE = 'AreaTable',
-
     /**
      * 玩家
      */

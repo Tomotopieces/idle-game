@@ -1,4 +1,4 @@
-import { Item, ItemType } from "db://assets/Script/Item/Item";
+import { Item, ItemQuality, ItemType } from "db://assets/Script/Item/Item";
 import { EquipmentAttributes } from "db://assets/Script/Item/Equipment/EquipmentAttributes";
 
 /**
@@ -50,8 +50,8 @@ export class Equipment extends Item {
      */
     readonly attributes: EquipmentAttributes;
 
-    constructor(id: number, name: string, displayName: string, type: ItemType, description: string, icon: string, unique: boolean, equipmentType: EquipmentType, attributes: EquipmentAttributes) {
-        super(id, name, displayName, type, description, icon, unique);
+    constructor(id: number, name: string, displayName: string, type: ItemType, description: string, icon: string, unique: boolean, equipmentType: EquipmentType, attributes: EquipmentAttributes, quality: ItemQuality) {
+        super(id, name, displayName, type, description, icon, unique, quality);
         this.equipmentType = equipmentType;
         this.attributes = attributes;
     }
@@ -64,6 +64,6 @@ export class Equipment extends Item {
      */
     static override fromObject(id: number, object: Equipment): Equipment {
         const item = Item.fromObject(id, object);
-        return new Equipment(id, item.name, item.displayName, item.itemType, item.description, item.icon, item.unique, object.equipmentType, EquipmentAttributes.fromObject(object.attributes));
+        return new Equipment(id, item.name, item.displayName, item.itemType, item.description, item.icon, item.unique, object.equipmentType, EquipmentAttributes.fromObject(object.attributes), object.quality);
     }
 }

@@ -1,16 +1,12 @@
 import { _decorator, Component, director, JsonAsset, ProgressBar, resources } from 'cc';
-import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { DataPath, GlobalStateName, SceneName } from "db://assets/Script/Util/Constant";
+import { DataPath, SceneName } from "db://assets/Script/Util/Constant";
 import { Item } from "db://assets/Script/Item/Item";
 import { EnemyInfoJson } from "db://assets/Script/Entity/Enemy/EnemyInfoJson";
-import { EnemyInfo } from "db://assets/Script/Entity/Enemy/EnemyInfo";
 import { StageJson } from "db://assets/Script/Level/StageJson";
-import { Stage } from "db://assets/Script/Level/Stage";
 import { AreaJson } from "db://assets/Script/Level/AreaJson";
-import { Area } from "db://assets/Script/Level/Area";
 import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { SET_EFFECT_MAP } from "db://assets/Script/Item/Equipment/SetEffect/SetEffectMap";
+import { AREA_TABLE, ENEMY_TABLE, ITEM_TABLE, SET_EFFECT_TABLE, STAGE_TABLE } from "db://assets/Script/DataTable";
 
 const { ccclass, property } = _decorator;
 
@@ -42,10 +38,8 @@ export class GameLoader extends Component {
     private loadItemTable() {
         resources.load(DataPath.ITEM_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             const rawItemList = data.json! as Array<Item>;
-            const itemTable = new Map<string, Item>();
             rawItemList.forEach((rawItem: Item, index: number) =>
-                itemTable.set(rawItem.name, Item.fromObject(index, rawItem)));
-            GlobalState.setState(GlobalStateName.ITEM_TABLE, itemTable);
+                ITEM_TABLE.set(rawItem.name, Item.fromObject(index, rawItem)));
 
             this.loadingBar.progress += 0.2;
 
@@ -59,13 +53,13 @@ export class GameLoader extends Component {
     private loadEquipmentTable() {
         resources.load(DataPath.EQUIPMENT_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             const rawItemList = data.json! as Array<Equipment>;
-            const itemTable = GlobalState.getState(GlobalStateName.ITEM_TABLE) as Map<string, Item>;
+            const indexOffset = ITEM_TABLE.size;
             rawItemList.forEach((rawItem: Equipment, index: number) => {
-                const equipment = Equipment.fromObject(index + itemTable.size, rawItem);
-                itemTable.set(rawItem.name, equipment); // 存入道具表
+                const equipment = Equipment.fromObject(index + indexOffset, rawItem);
+                ITEM_TABLE.set(rawItem.name, equipment); // 存入道具表
                 if (equipment.attributes.setName) {
                     // 登记套装装备
-                    SET_EFFECT_MAP.get(equipment.attributes.setName).record(equipment.name);
+                    SET_EFFECT_TABLE.get(equipment.attributes.setName).record(equipment.name);
                 }
             });
 
@@ -81,10 +75,8 @@ export class GameLoader extends Component {
     private loadEnemyTable() {
         resources.load(DataPath.ENEMY_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             const rawInfoList = data.json! as Array<EnemyInfoJson>;
-            const infoTable = new Map<string, EnemyInfo>();
             rawInfoList.forEach((rawInfo: EnemyInfoJson, index: number) =>
-                infoTable.set(rawInfo.name, EnemyInfoJson.toEnemyInfo(index, rawInfo)));
-            GlobalState.setState(GlobalStateName.ENEMY_TABLE, infoTable);
+                ENEMY_TABLE.set(rawInfo.name, EnemyInfoJson.toEnemyInfo(index, rawInfo)));
 
             this.loadingBar.progress += 0.2;
 
@@ -98,10 +90,8 @@ export class GameLoader extends Component {
     private loadStageTable() {
         resources.load(DataPath.STAGE_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             const rawStageList = data.json! as Array<StageJson>;
-            const stageTable = new Map<string, Stage>();
             rawStageList.forEach((rawStage: StageJson, index: number) =>
-                stageTable.set(rawStage.name, StageJson.toStage(index, rawStage)));
-            GlobalState.setState(GlobalStateName.STAGE_TABLE, stageTable);
+                STAGE_TABLE.set(rawStage.name, StageJson.toStage(index, rawStage)));
 
             this.loadingBar.progress += 0.2;
 
@@ -115,10 +105,8 @@ export class GameLoader extends Component {
     private loadAreaTable() {
         resources.load(DataPath.AREA_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             const rawAreaList = data.json! as Array<AreaJson>;
-            const areaTable = new Map<string, Area>();
             rawAreaList.forEach((rawArea: AreaJson, index: number) =>
-                areaTable.set(rawArea.name, AreaJson.toArea(index, rawArea)));
-            GlobalState.setState(GlobalStateName.AREA_TABLE, areaTable);
+                AREA_TABLE.set(rawArea.name, AreaJson.toArea(index, rawArea)));
 
             this.loadingBar.progress += 0.2;
 

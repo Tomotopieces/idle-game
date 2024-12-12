@@ -2,10 +2,9 @@ import { Storehouse } from "db://assets/Script/Util/StorehouseUtil";
 import { ItemStackJson } from "db://assets/Script/Item/ItemStackJson";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { Equipment, EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
-import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { GlobalStateName } from "db://assets/Script/Util/Constant";
-import { Item } from "db://assets/Script/Item/Item";
 import { SaveDataJson } from "db://assets/Script/SaveData/SaveDataJson";
+
+import { ITEM_TABLE } from "db://assets/Script/DataTable";
 
 /**
  * 存档数据
@@ -54,8 +53,7 @@ export class SaveData {
         const dataJson = JSON.parse(json) as SaveDataJson;
         const equipmentSlot = new Map<EquipmentType, ItemStack>(dataJson.equipmentSlot
             .map(stackJson => {
-                const itemTable = GlobalState.getState(GlobalStateName.ITEM_TABLE) as Map<string, Item>;
-                const equipment = itemTable.get(stackJson.itemName) as Equipment;
+                const equipment = ITEM_TABLE.get(stackJson.itemName) as Equipment;
                 return [equipment.equipmentType, new ItemStack(equipment, 1)];
             }));
         const storehouse = new Map<string, ItemStack>(dataJson.storehouse

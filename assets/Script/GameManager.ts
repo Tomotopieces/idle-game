@@ -21,6 +21,7 @@ import { EquipmentChangeEvent } from "db://assets/Script/Event/EquipmentChangeEv
 import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { MakeDamageEvent } from "db://assets/Script/Event/MakeDamageEvent";
+import { AREA_TABLE, ITEM_TABLE, STAGE_TABLE } from "db://assets/Script/DataTable";
 
 const { ccclass, property } = _decorator;
 
@@ -138,12 +139,12 @@ export class GameManager extends Component {
      */
     private restoreLevelAndEnemyData() {
         if (this._latestSaveData) {
-            this._area = GlobalState.getState(GlobalStateName.AREA_TABLE).get(this._latestSaveData.areaName);
-            this._stage = GlobalState.getState(GlobalStateName.STAGE_TABLE).get(this._latestSaveData.stageName);
+            this._area = AREA_TABLE.get(this._latestSaveData.areaName);
+            this._stage = STAGE_TABLE.get(this._latestSaveData.stageName);
             this.enemy.info = this._stage.enemyInfo;
         } else {
-            this._area = GlobalState.getState(GlobalStateName.AREA_TABLE).get(DefaultLevelName.AREA);
-            this._stage = GlobalState.getState(GlobalStateName.STAGE_TABLE).get(DefaultLevelName.STAGE);
+            this._area = AREA_TABLE.get(DefaultLevelName.AREA);
+            this._stage = STAGE_TABLE.get(DefaultLevelName.STAGE);
             this.enemy.info = this._stage.enemyInfo;
         }
 
@@ -274,13 +275,12 @@ export class GameManager extends Component {
      * 获取百戏套装与铜云棒
      */
     gift() {
-        const itemTable = GlobalState.getState(GlobalStateName.ITEM_TABLE);
         const stackList: Array<ItemStack> = [
-            new ItemStack(itemTable.get('tong_yun_bang'), 1),
-            new ItemStack(itemTable.get('bai_xi_nuo_mian'), 1),
-            new ItemStack(itemTable.get('bai_xi_chen_qian_yi'), 1),
-            new ItemStack(itemTable.get('bai_xi_hu_shou'), 1),
-            new ItemStack(itemTable.get('bai_xi_diao_tui'), 1)
+            new ItemStack(ITEM_TABLE.get('tong_yun_bang'), 1),
+            new ItemStack(ITEM_TABLE.get('bai_xi_nuo_mian'), 1),
+            new ItemStack(ITEM_TABLE.get('bai_xi_chen_qian_yi'), 1),
+            new ItemStack(ITEM_TABLE.get('bai_xi_hu_shou'), 1),
+            new ItemStack(ITEM_TABLE.get('bai_xi_diao_tui'), 1)
         ];
         StorehouseUtil.putIn(stackList);
     }

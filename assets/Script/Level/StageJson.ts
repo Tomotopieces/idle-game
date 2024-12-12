@@ -1,6 +1,6 @@
 import { Stage } from "db://assets/Script/Level/Stage";
-import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { GlobalStateName } from "db://assets/Script/Util/Constant";
+
+import { ENEMY_TABLE } from "db://assets/Script/DataTable";
 
 /**
  * 关卡舞台JSON
@@ -29,7 +29,7 @@ export class StageJson {
      * @return Stage
      */
     static toStage(id: number, stageJson: StageJson): Stage {
-        const enemyInfo = GlobalState.getState(GlobalStateName.ENEMY_TABLE).get(stageJson.enemyName);
+        const enemyInfo = ENEMY_TABLE.get(stageJson.enemyName);
         return new Stage(id, stageJson.name, stageJson.displayName, enemyInfo);
     }
 }

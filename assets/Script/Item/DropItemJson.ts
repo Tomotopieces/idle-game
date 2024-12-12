@@ -1,6 +1,6 @@
-import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { GlobalStateName } from "db://assets/Script/Util/Constant";
 import { DropItem } from "db://assets/Script/Item/DropItem";
+
+import { ITEM_TABLE } from "db://assets/Script/DataTable";
 
 /**
  * 掉落物品JSON
@@ -46,7 +46,7 @@ export class DropItemJson {
      */
     static toDropItem(jsonDropItem: DropItemJson): DropItem {
         jsonDropItem = DropItemJson.fromObject(jsonDropItem);
-        const item = GlobalState.getState(GlobalStateName.ITEM_TABLE).get(jsonDropItem._itemName);
+        const item = ITEM_TABLE.get(jsonDropItem._itemName);
         return new DropItem(item, jsonDropItem._dropRate, jsonDropItem._max, jsonDropItem._min, jsonDropItem._once);
     }
 

@@ -1,13 +1,11 @@
 import { Equipment, EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
 import { PlayerAttributeComponent } from "db://assets/Script/Entity/Player/PlayerAttributeComponent";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
-import { Item } from "db://assets/Script/Item/Item";
 
-import { UNIQUE_EFFECT_MAP } from "db://assets/Script/Item/Equipment/UniqueEffect/UniqueEffectMap";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Util/Constant";
 import { EquipmentChangeEvent } from "db://assets/Script/Event/EquipmentChangeEvent";
-import { SET_EFFECT_MAP } from "db://assets/Script/Item/Equipment/SetEffect/SetEffectMap";
+import { SET_EFFECT_TABLE, UNIQUE_EFFECT_TABLE } from "db://assets/Script/DataTable";
 
 /**
  * 玩家装备组件
@@ -95,7 +93,7 @@ export class PlayerEquipmentComponent {
         const unequipped: Equipment = targetStack.item as Equipment;
         this._playerAttributeComponent.dropAttributeFromEquipment(unequipped);
         // 取消旧装备的独门妙用
-        unequipped?.attributes.effects.forEach(effectName => UNIQUE_EFFECT_MAP.get(effectName).onDeactivate());
+        unequipped?.attributes.effects.forEach(effectName => UNIQUE_EFFECT_TABLE.get(effectName).onDeactivate());
         // 减去旧装备的套装数
         if (unequipped?.attributes.setName) {
             const setCount = this._setCountMap.get(unequipped.attributes.setName);
@@ -110,7 +108,7 @@ export class PlayerEquipmentComponent {
         targetStack.item = equipment;
         this._playerAttributeComponent.getAttributeFromEquipment(equipment);
         // 启用新装备的独门妙用
-        equipment.attributes.effects.forEach(effectName => UNIQUE_EFFECT_MAP.get(effectName).onActivate());
+        equipment.attributes.effects.forEach(effectName => UNIQUE_EFFECT_TABLE.get(effectName).onActivate());
         // 增加新装备的套装数
         if (equipment.attributes.setName) {
             this._setCountMap.set(equipment.attributes.setName, (this._setCountMap.get(equipment.attributes.setName) ?? 0) + 1);
@@ -133,7 +131,7 @@ export class PlayerEquipmentComponent {
         const targetStack = this.equipmentMap.get(equipmentType);
         const unequipped: Equipment = targetStack.item as Equipment;
         this._playerAttributeComponent.dropAttributeFromEquipment(unequipped);
-        unequipped.attributes.effects.forEach(effectName => UNIQUE_EFFECT_MAP.get(effectName).onDeactivate());
+        unequipped.attributes.effects.forEach(effectName => UNIQUE_EFFECT_TABLE.get(effectName).onDeactivate());
         targetStack.item = null;
         if (unequipped.attributes.setName) {
             const setCount = this._setCountMap.get(unequipped.attributes.setName);
@@ -158,11 +156,11 @@ export class PlayerEquipmentComponent {
      */
     private calculateSetEffect(equipment: Equipment, unequipped: Equipment) {
         if (equipment?.attributes.setName) {
-            SET_EFFECT_MAP.get(equipment.attributes.setName).equip(equipment.name);
+            SET_EFFECT_TABLE.get(equipment.attributes.setName).equip(equipment.name);
         }
 
         if (unequipped?.attributes.setName) {
-            SET_EFFECT_MAP.get(unequipped.attributes.setName).unequip(unequipped.name);
+            SET_EFFECT_TABLE.get(unequipped.attributes.setName).unequip(unequipped.name);
         }
     }
 }

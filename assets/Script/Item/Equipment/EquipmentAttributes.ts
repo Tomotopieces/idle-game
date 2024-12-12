@@ -58,7 +58,7 @@ export class EquipmentAttributes {
     readonly setName: string;
 
     constructor(additionalHealth: number, healthBoost: number, extraHealth: number, additionalDamage: number, damageBoost: number, additionalDefense: number, defenseBoost: number, criticalRate: number, criticalBoost: number, effects: Array<string>, set: string) {
-        /* 从JSON中读取的Object，字段可能为null */
+        // 从JSON中读取的Object，字段可能为null
         this.additionalHealth = additionalHealth ?? 0;
         this.healthBoost = healthBoost ?? 0;
         this.extraHealth = extraHealth ?? 0;

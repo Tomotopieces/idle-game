@@ -1,7 +1,6 @@
 import { Area } from "db://assets/Script/Level/Area";
-import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { GlobalStateName } from "db://assets/Script/Util/Constant";
-import { Stage } from "db://assets/Script/Level/Stage";
+
+import { STAGE_TABLE } from "db://assets/Script/DataTable";
 
 /**
  * 关卡区域JSON
@@ -30,8 +29,7 @@ export class AreaJson {
      * @return Area
      */
     static toArea(id: number, areaJson: AreaJson): Area {
-        const stateTable = GlobalState.getState(GlobalStateName.STAGE_TABLE) as Map<string, Stage>;
-        const stages = areaJson.stages.map(stageJson => stateTable.get(stageJson));
+        const stages = areaJson.stages.map(stageJson => STAGE_TABLE.get(stageJson));
         return new Area(id, areaJson.displayName, areaJson.name, stages);
     }
 }
