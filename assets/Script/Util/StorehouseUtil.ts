@@ -28,10 +28,11 @@ export class StorehouseUtil {
     /**
      * 放入物品
      *
-     * @param stackList 存放物品列表
+     * @param stackList          存放物品列表
      * @param checkEquipmentSlot 是否检查装备栏
+     * @param showMessage        是否进行消息提示
      */
-    static putIn(stackList: Array<ItemStack>, checkEquipmentSlot: boolean = true) {
+    static putIn(stackList: Array<ItemStack>, checkEquipmentSlot: boolean = true, showMessage: boolean = true) {
         const failedList = new Array<ItemStack>();
         stackList.forEach(stack => {
             if (StorehouseUtil.storehouse.has(stack.item.name) || (checkEquipmentSlot && this.inEquipmentSlot(stack.item))) {
@@ -52,6 +53,10 @@ export class StorehouseUtil {
             return;
         }
 
+        if (showMessage) {
+            updateList.forEach(stack =>
+                EventCenter.emit(EventName.UI_POST_MESSAGE, `获得：${stack.item.displayName} * ${stack.count}`));
+        }
         StorehouseUtil.emitUpdateEvent(updateList);
     }
 

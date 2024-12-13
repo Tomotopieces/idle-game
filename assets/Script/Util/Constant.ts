@@ -157,6 +157,11 @@ export enum EventName {
      * 更新装备栏UI
      */
     UI_UPDATE_EQUIPMENT = 'UI_UPDATE_EQUIPMENT',
+
+    /**
+     * 发送消息UI
+     */
+    UI_POST_MESSAGE = 'UI_POST_MESSAGE',
 }
 
 /**

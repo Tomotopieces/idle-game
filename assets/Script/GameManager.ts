@@ -200,6 +200,7 @@ export class GameManager extends Component {
     private saveData() {
         this._latestSaveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.coin, this.player.equipments.equipmentMap, this._storehouse, this._area.name, this._stage.name);
         sys.localStorage.setItem(ConfigName.SAVE_DATA, this._latestSaveData.toJson());
+        EventCenter.emit(EventName.UI_POST_MESSAGE, `保存成功`);
     }
 
     /**
@@ -264,14 +265,14 @@ export class GameManager extends Component {
             const unequipped = this.player.equipments.equip(event.equipment);
             EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
             if (unequipped) {
-                StorehouseUtil.putIn([new ItemStack(unequipped, 1)]);
+                StorehouseUtil.putIn([new ItemStack(unequipped, 1)], false, false);
             }
         } else {
             if (!this.player.equipments.unequip(event.equipment.equipmentType)) {
                 return;
             }
             EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
-            StorehouseUtil.putIn([new ItemStack(event.equipment, 1)], false);
+            StorehouseUtil.putIn([new ItemStack(event.equipment, 1)], false, false);
         }
     }
 
@@ -284,6 +285,7 @@ export class GameManager extends Component {
         this.player.attributes.levelUp(level);
         this.player.updateHealthBar();
         EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
+        EventCenter.emit(EventName.UI_POST_MESSAGE, `等级提升：${level - 1} → ${level}`);
     }
 
     /**
