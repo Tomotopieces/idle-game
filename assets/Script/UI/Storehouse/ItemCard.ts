@@ -1,9 +1,9 @@
 import { _decorator, Component, Label, Layout, Node, Sprite, SpriteFrame, UITransform, Vec3, view } from 'cc';
-import { DO_NOTHING, Runnable } from "db://assets/Script/Util/Constant";
 import { Item, ITEM_QUALITY_COLOR_MAP, ITEM_QUALITY_DISPLAY_NAME_MAP, ItemType } from "db://assets/Script/Item/Item";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { Equipment, EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
 import { SET_EFFECT_TABLE, UNIQUE_EFFECT_TABLE } from "db://assets/Script/DataTable";
+import { EMPTY_FUNCTION, Runnable } from "db://assets/Script/Util/Functions";
 
 const { ccclass, executeInEditMode } = _decorator;
 
@@ -171,7 +171,7 @@ export class ItemCard extends Component {
 
         // 设置按钮内容
         this._buttonSprite.spriteFrame = buttonImage;
-        this._operationButton.active = onClick !== DO_NOTHING;
+        this._operationButton.active = onClick !== EMPTY_FUNCTION;
         this._onClick = onClick;
 
         // 更新 Layout

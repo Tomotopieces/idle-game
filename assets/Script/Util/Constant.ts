@@ -1,15 +1,4 @@
 /**
- * Runnable
- */
-export type Runnable = () => void;
-
-/**
- * 空函数
- */
-export const DO_NOTHING: Runnable = () => {
-};
-
-/**
  * 灵韵名称
  */
 export const LING_YUN_NAME = 'ling_yun';

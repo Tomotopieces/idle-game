@@ -1,11 +1,12 @@
 import { _decorator, Animation, Component, SpriteFrame } from 'cc';
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { DO_NOTHING, EventName } from "db://assets/Script/Util/Constant";
+import { EventName } from "db://assets/Script/Util/Constant";
 import { ItemSlot, SlotType } from "db://assets/Script/UI/Storehouse/ItemSlot";
 import { ItemType } from "db://assets/Script/Item/Item";
 import { EquipmentChangeEvent } from "db://assets/Script/Event/EquipmentChangeEvent";
 import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 import { ItemCard } from "db://assets/Script/UI/Storehouse/ItemCard";
+import { EMPTY_FUNCTION } from "db://assets/Script/Util/Functions";
 
 const { ccclass, property } = _decorator;
 
@@ -75,7 +76,7 @@ export class StorehousePanel extends Component {
         const buttonImage = equip ? this.confirmImage : this.cancelImage;
         const operation = itemSlot.stack.item?.itemType === ItemType.EQUIPMENT ?
             () => EventCenter.emit(EventName.EQUIPMENT_CHANGE, new EquipmentChangeEvent(itemSlot.stack.item as Equipment, equip)) :
-            DO_NOTHING;
+            EMPTY_FUNCTION;
         this.itemCard.show(position,
             itemSlot.stack.item,
             operation,
