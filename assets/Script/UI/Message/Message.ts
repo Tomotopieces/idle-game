@@ -141,6 +141,9 @@ export class Message extends Component {
     }
 
     fadeOut() {
+        if (!this.isValid) {
+            return;
+        }
         this._state = MessageState.FADE_OUT;
         this._anim.play('FadeOut');
     }

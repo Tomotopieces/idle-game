@@ -1,11 +1,7 @@
-import { Predicate } from "db://assets/Script/Util/Functions";
-
 /**
  * 天赋
  *
- * 根基、棍法、奇术、身法、毫毛
- *
- * 满足前置条件后解锁，解锁后通过灵光点数提升激活等级
+ * 根基、棍法、奇术、身法、毫毛、变化
  */
 export abstract class Talent {
     /**
@@ -24,11 +20,6 @@ export abstract class Talent {
     readonly requirement: number;
 
     /**
-     * 是否满足前置条件后自动激活
-     */
-    readonly autoActivate: boolean;
-
-    /**
      * 最大等级
      *
      * 自动激活的天赋，最大等级为1级
@@ -36,46 +27,49 @@ export abstract class Talent {
     readonly maxLevel: number;
 
     /**
-     * 前置天赋或解锁条件
+     * 激活当前等级效果
      */
-    readonly prerequisites: Array<string> | Predicate<any>;
+    protected abstract activateEffect(): void;
 
     /**
-     * 提高激活等级
+     * 取消激活当前效果
      */
-    abstract levelUp(): void;
-
-    /**
-     * 降低激活等级
-     */
-    abstract levelDown(): void;
-
-    /**
-     * 是否锁定
-     */
-    private _locked: boolean;
+    protected abstract deactivateEffect(): void;
 
     /**
      * 激活等级
      */
     private _level: number;
 
-    constructor(name: string, displayName: string, requirement: number, autoActivate: boolean, maxLevel: number, prerequisites: Array<string> | Predicate<any>) {
+    protected constructor(name: string, displayName: string, requirement: number, maxLevel: number) {
         this.name = name;
         this.displayName = displayName;
         this.requirement = requirement;
-        this.autoActivate = autoActivate;
-        this.maxLevel = autoActivate ? 1 : maxLevel;
-        this.prerequisites = prerequisites;
-        this._locked = true;
+        this.maxLevel = maxLevel;
         this._level = 0;
     }
 
     /**
-     * 取消激活
+     * 激活
+     *
+     * @param level 激活等级
+     * @return 是否激活成功
      */
-    deactivate(): void {
-        this._level = 0;
-        this.levelDown();
+    activate(level: number): boolean {
+        // TODO 添加处理灵光点逻辑
+
+        if (this._level || !level) {
+            this.deactivateEffect();
+        }
+
+        this._level = Math.max(0, Math.min(this.maxLevel, level));
+        if (this._level) {
+            this.activateEffect();
+        }
+        return true;
+    }
+
+    get level(): number {
+        return this._level;
     }
 }

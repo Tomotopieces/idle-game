@@ -19,6 +19,11 @@ export type Supplier<T> = () => T;
 export type Runnable = () => void;
 
 /**
+ * 始终返回 true 的 Predicate
+ */
+export const ALWAYS_TRUE: Predicate<void> = () => true;
+
+/**
  * 空函数
  */
 export const EMPTY_FUNCTION: Runnable = () => {};
