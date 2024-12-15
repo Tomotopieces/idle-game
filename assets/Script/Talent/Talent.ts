@@ -1,3 +1,7 @@
+import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
+import { GlobalState } from "db://assets/Script/Util/GlobalState";
+import { GlobalStateName } from "db://assets/Script/Util/Constant";
+
 /**
  * 天赋
  *
@@ -41,12 +45,18 @@ export abstract class Talent {
      */
     private _level: number;
 
+    /**
+     * 玩家角色
+     */
+    protected readonly player: PlayerController;
+
     protected constructor(name: string, displayName: string, requirement: number, maxLevel: number) {
         this.name = name;
         this.displayName = displayName;
         this.requirement = requirement;
         this.maxLevel = maxLevel;
         this._level = 0;
+        this.player = GlobalState.getState(GlobalStateName.PLAYER);
     }
 
     /**

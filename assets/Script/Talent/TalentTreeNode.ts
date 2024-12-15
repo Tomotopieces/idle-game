@@ -1,10 +1,6 @@
 import { ALWAYS_TRUE, Predicate } from "db://assets/Script/Util/Functions";
 import { Talent } from "db://assets/Script/Talent/Talent";
-
-/**
- * 天赋树
- */
-export const TALENT_TREE = new Map<string, TalentTreeNode>();
+import { TALENT_TREE } from "db://assets/Script/DataTable";
 
 /**
  * 天赋树节点
@@ -42,17 +38,21 @@ export class TalentTreeNode {
      */
     private _locked: boolean;
 
-    constructor(talent: Talent, prerequisite: Predicate<void>, autoActivate: boolean) {
+    /**
+     * 构造函数
+     *
+     * @param talent       天赋
+     * @param prerequisite 前置条件
+     * @param autoActivate 自动激活
+     * @param autoUnlock   自动解锁
+     */
+    constructor(talent: Talent, prerequisite: Predicate<void>, autoActivate: boolean, autoUnlock: boolean) {
         this.talent = talent;
         this.parents = new Array<string>();
         this.prerequisite = prerequisite ?? ALWAYS_TRUE;
         this.children = new Array<string>();
         this.autoActivate = autoActivate;
-        this._locked = true;
-    }
-
-    get locked(): boolean {
-        return this._locked;
+        this._locked = !autoUnlock;
     }
 
     /**
@@ -85,6 +85,7 @@ export class TalentTreeNode {
      * @param level 激活等级
      */
     activate(level: number): void {
+        level = Math.min(level, this.talent.maxLevel);
         if (this._locked || this.talent.level === level) {
             return;
         }
@@ -130,5 +131,9 @@ export class TalentTreeNode {
      */
     private hasChildActivated(): boolean {
         return this.children.some(child => TALENT_TREE.get(child).activated());
+    }
+
+    get locked(): boolean {
+        return this._locked;
     }
 }

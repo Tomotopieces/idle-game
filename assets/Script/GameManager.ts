@@ -100,6 +100,7 @@ export class GameManager extends Component {
         EventCenter.on(EventName.GET_DROPS, this.node.name, (dropStackList: Array<ItemStack>) => this.getDrops(dropStackList));
         EventCenter.on(EventName.GET_EXPERIENCE, this.node.name, (experience: number) => this.getExperience(experience));
         EventCenter.on(EventName.PLAYER_LEVEL_UP, this.node.name, (level: number) => this.handlePlayerLevelUp(level));
+        EventCenter.on(EventName.GAIN_STANCE, this.node.name, (stance: number) => this.handleGainStance(stance));
     }
 
     update(dt: number) {
@@ -277,6 +278,15 @@ export class GameManager extends Component {
         this.player.updateHealthBar();
         EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
         EventCenter.emit(EventName.UI_POST_MESSAGE, `等级提升：${level - 1} → ${level}`);
+    }
+
+    /**
+     * 处理获得棍势事件
+     *
+     * @param stance 棍势值
+     */
+    private handleGainStance(stance: number) {
+        this.player.skills.resources.stance += stance;
     }
 
     /**

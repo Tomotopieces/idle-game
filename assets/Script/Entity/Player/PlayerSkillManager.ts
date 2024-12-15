@@ -1,4 +1,5 @@
 import { Skill } from "db://assets/Script/Skill/Skill";
+import { PlayerSkillResources } from "db://assets/Script/Entity/Player/PlayerSkillResources";
 
 /**
  * 玩家技能管理器
@@ -9,7 +10,12 @@ export class PlayerSkillManager {
      *
      * 技能名 -> 技能
      */
-    private readonly _skillMap: Map<string, Skill> = new Map<string, Skill>();
+    private readonly _skillMap = new Map<string, Skill>();
+
+    /**
+     * 技能资源
+     */
+    readonly resources = new PlayerSkillResources();
 
     /**
      * 更新技能时间
@@ -40,4 +46,15 @@ export class PlayerSkillManager {
     addSkill(skill: Skill) {
         this._skillMap.set(skill.name, skill);
     }
+
+    /**
+     * 获取技能
+     *
+     * @param skillName 技能名
+     */
+    getSkill(skillName: string): Skill {
+        return this._skillMap.get(skillName);
+    }
+
 }
+

@@ -67,7 +67,7 @@ export class EventCenter {
      *
      * @param eventName 事件名
      * @param id        监听ID
-     * @param listener  回调
+     * @param listener  监听器
      */
     static on(eventName: EventName, id: string, listener: Listener) {
         const handler = (eventArgs: EventArgument) => {
@@ -85,6 +85,33 @@ export class EventCenter {
         }
 
         this.EVENT_TARGET.on(eventName, handler);
+        this.HANDLER_MAP.get(eventName).set(id, handler);
+    }
+
+    /**
+     * 一次性处理事件
+     *
+     * @param eventName 事件名
+     * @param id        ID
+     * @param listener  监听器
+     */
+    static once(eventName: EventName, id: string, listener: Listener) {
+        const handler = (eventArgs: EventArgument) => {
+            let listeners: Array<Listener>;
+            if (this.LISTENER_MAP.has(eventName)) {
+                listeners = Array.from(this.LISTENER_MAP.get(eventName).values());
+            } else {
+                listeners = new Array<Listener>();
+            }
+            listeners.forEach(listener => listener(eventArgs));
+            listener(eventArgs);
+            this.HANDLER_MAP.get(eventName).delete(id);
+        }
+        if (!this.HANDLER_MAP.has(eventName)) {
+            this.HANDLER_MAP.set(eventName, new Map<string, Listener>());
+        }
+
+        this.EVENT_TARGET.once(eventName, handler);
         this.HANDLER_MAP.get(eventName).set(id, handler);
     }
 

@@ -13,7 +13,20 @@ export class SkillLightAttack extends Skill {
     static readonly DESCRIPTION: string = '轻棍';
     static readonly COOLDOWN: number = 1;
 
+    /**
+     * 动画名称
+     */
     static readonly ANIMATION_NAME: string = 'LightAttack';
+
+    /**
+     * 攻击获得的棍势
+     */
+    static readonly GAIN_STANCE: number = 100;
+
+    /**
+     * 攻击速度倍率
+     */
+    private _attackSpeedBoost: number = 1;
 
     /**
      * 玩家动画机
@@ -24,6 +37,15 @@ export class SkillLightAttack extends Skill {
         super(SkillLightAttack.NAME, SkillLightAttack.DISPLAY_NAME, SkillLightAttack.DESCRIPTION, SkillLightAttack.COOLDOWN);
         this._playerAnim = this.player.getComponent(Animation);
         this.events.push(() => this.attackFrameEvent());
+    }
+
+    override update(deltaTime: number) {
+        if (this.timer < this.cooldown / this._attackSpeedBoost) {
+            this.timer += deltaTime;
+        } else if (this.cost()) {
+            this.timer = 0;
+            this.trigger();
+        }
     }
 
     protected override trigger(): void {
@@ -39,5 +61,11 @@ export class SkillLightAttack extends Skill {
      */
     attackFrameEvent() {
         EventCenter.emit(EventName.MAKE_DAMAGE, new MakeDamageEvent(GlobalStateName.PLAYER, GlobalStateName.ENEMY, this.player.attributes.finalDamage()));
+        EventCenter.emit(EventName.GAIN_STANCE, SkillLightAttack.GAIN_STANCE);
+    }
+
+    set attackSpeedBoost(value: number) {
+        this._attackSpeedBoost = value;
+        this._playerAnim.getState(SkillLightAttack.ANIMATION_NAME).speed = this._attackSpeedBoost;
     }
 }

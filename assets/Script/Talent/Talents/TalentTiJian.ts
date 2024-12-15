@@ -1,4 +1,5 @@
 import { Talent } from "db://assets/Script/Talent/Talent";
+import { SkillLightAttack } from "db://assets/Script/Skill/Skills/SkillLightAttack";
 
 /**
  * 天赋.本事.根基.体健
@@ -11,15 +12,27 @@ export class TalentTiJian extends Talent {
     static readonly REQUIREMENT = 1;
     static readonly MAX_LEVEL = 2;
 
+    /**
+     * 攻击速度加成 Map
+     *
+     * 天赋等级 -> 攻速加成
+     */
+    private static readonly LIGHT_ATTACK_SPEED_BOOST_MAP = new Map<number, number>([
+        [1, 0.3],
+        [2, 0.5]
+    ]);
+
     constructor() {
         super(TalentTiJian.NAME, TalentTiJian.DISPLAY_NAME, TalentTiJian.REQUIREMENT, TalentTiJian.MAX_LEVEL);
     }
 
     protected activateEffect(): void {
-        // TODO 实现效果
+        const skill = this.player.skills.getSkill(SkillLightAttack.NAME) as SkillLightAttack;
+        skill.attackSpeedBoost += TalentTiJian.LIGHT_ATTACK_SPEED_BOOST_MAP.get(this.level);
     }
 
     protected deactivateEffect(): void {
-        // TODO 实现效果
+        const skill = this.player.skills.getSkill(SkillLightAttack.NAME) as SkillLightAttack;
+        skill.attackSpeedBoost -= TalentTiJian.LIGHT_ATTACK_SPEED_BOOST_MAP.get(this.level);
     }
 }

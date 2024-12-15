@@ -146,6 +146,11 @@ export enum EventName {
      * 发送消息UI
      */
     UI_POST_MESSAGE = 'UI_POST_MESSAGE',
+
+    /**
+     * 获得棍势
+     */
+    GAIN_STANCE = 'GAIN_STANCE',
 }
 
 /**

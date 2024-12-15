@@ -8,6 +8,8 @@ import {
 } from "db://assets/Script/Item/Equipment/UniqueEffect/UniqueEffectLinGunShuangShe";
 import { SetEffect } from "db://assets/Script/Item/Equipment/SetEffect/SetEffect";
 import { SetEffectZiZhuBiJiao } from "db://assets/Script/Item/Equipment/SetEffect/SetEffectZiZhuBiJiao";
+import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
+import { TalentTiJian } from "db://assets/Script/Talent/Talents/TalentTiJian";
 
 /**
  * 道具表
@@ -45,3 +47,11 @@ UNIQUE_EFFECT_TABLE.set(UniqueEffectLinGunShuangShe.NAME, new UniqueEffectLinGun
  */
 export const SET_EFFECT_TABLE = new Map<string, SetEffect>();
 SET_EFFECT_TABLE.set(SetEffectZiZhuBiJiao.NAME, new SetEffectZiZhuBiJiao());
+
+/**
+ * 天赋 Map
+ *
+ * 天赋名 -> 天赋节点
+ */
+export const TALENT_TREE = new Map<string, TalentTreeNode>();
+TALENT_TREE.set(TalentTiJian.NAME, new TalentTreeNode(new TalentTiJian(), null, false, true));
