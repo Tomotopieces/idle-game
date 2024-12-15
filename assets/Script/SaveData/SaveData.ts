@@ -22,11 +22,6 @@ export class SaveData {
     experience: number;
 
     /**
-     * 金币
-     */
-    coin: number;
-
-    /**
      * 装备槽
      */
     equipmentSlot: Map<EquipmentType, ItemStack>;
@@ -46,10 +41,9 @@ export class SaveData {
      */
     stageName: string;
 
-    constructor(level: number, experience: number, coin: number, equipmentSlot: Map<EquipmentType, ItemStack>, storehouse: Storehouse, areaName: string, stageName: string) {
+    constructor(level: number, experience: number, equipmentSlot: Map<EquipmentType, ItemStack>, storehouse: Storehouse, areaName: string, stageName: string) {
         this.level = level ?? 0;
         this.experience = experience ?? 0;
-        this.coin = coin ?? 0;
         this.equipmentSlot = equipmentSlot ?? new Map<EquipmentType, ItemStack>();
         this.storehouse = storehouse ?? new Map<string, ItemStack>();
         this.areaName = areaName ?? DefaultLevelName.AREA;
@@ -71,7 +65,7 @@ export class SaveData {
             }));
         const storehouse = new Map<string, ItemStack>(dataJson.storehouse
             .map(itemStackJson => [itemStackJson.itemName, ItemStackJson.toItemStack(itemStackJson)]));
-        return new SaveData(dataJson.level, dataJson.experience, dataJson.coin, equipmentSlot, storehouse, dataJson.areaName, dataJson.stageName);
+        return new SaveData(dataJson.level, dataJson.experience, equipmentSlot, storehouse, dataJson.areaName, dataJson.stageName);
     }
 
     /**
@@ -83,7 +77,7 @@ export class SaveData {
             .map(item => new ItemStackJson(item.item.name, item.count));
         const storehouseJson = Array.from(this.storehouse.values())
             .map(item => new ItemStackJson(item.item.name, item.count));
-        return new SaveDataJson(this.level, this.experience, this.coin, equipmentSlotJson, storehouseJson, this.areaName, this.stageName).toJson();
+        return new SaveDataJson(this.level, this.experience, equipmentSlotJson, storehouseJson, this.areaName, this.stageName).toJson();
     }
 }
 

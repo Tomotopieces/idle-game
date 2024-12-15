@@ -133,11 +133,6 @@ export enum EventName {
     UI_UPDATE_PLAYER_LEVEL_INFO = 'UI_UPDATE_PLAYER_LEVEL_INFO',
 
     /**
-     * 更新金币UI
-     */
-    UI_UPDATE_COIN = 'UI_UPDATE_COIN',
-
-    /**
      * 更新属性面板UI
      */
     UI_UPDATE_ATTRIBUTE_PANEL = 'UI_UPDATE_ATTRIBUTE_PANEL',

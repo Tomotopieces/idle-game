@@ -1,10 +1,11 @@
-import { _decorator, Animation, CCFloat, Component, ProgressBar } from 'cc';
-import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
+import { _decorator, Component, ProgressBar } from 'cc';
+import { EventName } from "db://assets/Script/Util/Constant";
 import { PlayerAttributeComponent } from "db://assets/Script/Entity/Player/PlayerAttributeComponent";
 import { PlayerLevelComponent } from "db://assets/Script/Entity/Player/PlayerLevelComponent";
 import { PlayerEquipmentComponent } from "db://assets/Script/Entity/Player/PlayerEquipmentComponent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { MakeDamageEvent } from "db://assets/Script/Event/MakeDamageEvent";
+import { PlayerSkillManager } from "db://assets/Script/Entity/Player/PlayerSkillManager";
+import { SkillLightAttack } from "db://assets/Script/Skill/Skills/SkillLightAttack";
 
 const { ccclass, property } = _decorator;
 
@@ -14,61 +15,33 @@ const { ccclass, property } = _decorator;
 @ccclass('PlayerController')
 export class PlayerController extends Component {
     /**
-     * 攻击间隔（秒）
-     */
-    @property({ type: CCFloat, tooltip: '攻击间隔（秒）' })
-    attackInterval: number = 1;
-
-    /**
      * 血条
      */
     @property({ type: ProgressBar, tooltip: '血条' })
-    healthBar: ProgressBar = null;
-
-    /**
-     * 动画机
-     */
-    private _anim: Animation = null;
+    healthBar!: ProgressBar;
 
     /**
      * 属性信息
      */
-    private _attributes: PlayerAttributeComponent = new PlayerAttributeComponent();
+    readonly attributes: PlayerAttributeComponent = new PlayerAttributeComponent();
 
     /**
      * 等级信息
      */
-    private _levelInfo: PlayerLevelComponent = new PlayerLevelComponent();
+    readonly levelInfo: PlayerLevelComponent = new PlayerLevelComponent();
 
     /**
      * 装备信息
      */
-    private _equipments: PlayerEquipmentComponent = new PlayerEquipmentComponent(this._attributes);
+    readonly equipments: PlayerEquipmentComponent = new PlayerEquipmentComponent(this.attributes);
 
     /**
-     * 金币数
+     * 技能管理器
      */
-    private _coin: number = 0;
-
-    /**
-     * 自动攻击计时器
-     */
-    private _autoAttackTimer = 0;
-
-    start() {
-        // 获取组件
-        this._anim = this.getComponent(Animation);
-        if (!this._anim) {
-            console.error(`[PlayerController.start] get _anim failed`);
-            return;
-        } else if (!this.healthBar) {
-            console.error(`[PlayerController.start] get _healthBar failed`);
-            return;
-        }
-    }
+    readonly skills: PlayerSkillManager = new PlayerSkillManager();
 
     update(dt: number) {
-        this.autoAttack(dt);
+        this.skills.update(dt);
     }
 
     /**
@@ -76,15 +49,7 @@ export class PlayerController extends Component {
      */
     init() {
         this.updateHealthBar();
-    }
-
-    /**
-     * 造成伤害
-     *
-     * 动画帧事件触发
-     */
-    makeDamage() {
-        EventCenter.emit(EventName.MAKE_DAMAGE, new MakeDamageEvent(GlobalStateName.PLAYER, GlobalStateName.ENEMY, this._attributes.finalDamage()));
+        this.skills.addSkill(new SkillLightAttack());
     }
 
     /**
@@ -93,7 +58,7 @@ export class PlayerController extends Component {
      * @param damage 伤害值
      */
     hurt(damage: number) {
-        this._attributes.getHurt(damage);
+        this.attributes.getHurt(damage);
         this.updateHealthBar();
 
         if (this.attributes.health === 0) {
@@ -102,55 +67,22 @@ export class PlayerController extends Component {
         }
     }
 
-    get coin(): number {
-        return this._coin;
-    }
-
-    /**
-     * 设置金币数
-     */
-    set coin(value: number) {
-        this._coin = value;
-        EventCenter.emit(EventName.UI_UPDATE_COIN, this._coin);
-    }
-
-    get attributes(): PlayerAttributeComponent {
-        return this._attributes;
-    }
-
-    get levelInfo(): PlayerLevelComponent {
-        return this._levelInfo;
-    }
-
-    get equipments(): PlayerEquipmentComponent {
-        return this._equipments;
-    }
-
-    /**
-     * 自动攻击
-     *
-     * @param dt delta time
-     */
-    private autoAttack(dt: number) {
-        this._autoAttackTimer += dt;
-
-        if (this._autoAttackTimer >= this.attackInterval) {
-            this.attack();
-            this._autoAttackTimer -= this.attackInterval;
-        }
-    }
-
-    /**
-     * 攻击
-     */
-    private attack() {
-        this._anim.play('Attack');
-    }
-
     /**
      * 更新血条显示
      */
     updateHealthBar() {
-        this.healthBar.progress = this._attributes.health / this._attributes.finalHealth();
+        this.healthBar.progress = this.attributes.health / this.attributes.finalHealth();
+    }
+
+    /**
+     * 技能动画事件
+     *
+     * 动画帧触发
+     *
+     * @param skillName  技能名称名称
+     * @param eventIndex 事件索引
+     */
+    skillAnimEvent(skillName: string, eventIndex: number) {
+        this.skills.triggerEvent(skillName, eventIndex);
     }
 }

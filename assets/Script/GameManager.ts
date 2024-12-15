@@ -1,13 +1,7 @@
 import { _decorator, CCInteger, Component, director, sys } from 'cc';
 import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { SaveData } from "db://assets/Script/SaveData/SaveData";
-import {
-    ConfigName,
-    DefaultLevelName,
-    EventName,
-    GlobalStateName,
-    LING_YUN_NAME,
-} from "db://assets/Script/Util/Constant";
+import { ConfigName, DefaultLevelName, EventName, GlobalStateName, } from "db://assets/Script/Util/Constant";
 import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
 import { Storehouse, StorehouseUtil } from "db://assets/Script/Util/StorehouseUtil";
 import { Area } from "db://assets/Script/Level/Area";
@@ -128,13 +122,11 @@ export class GameManager extends Component {
         }
 
         this.player.levelInfo.restore(this._latestSaveData.level, this._latestSaveData.experience);
-        this.player.coin = this._latestSaveData.coin;
         this._latestSaveData.equipmentSlot.forEach(stack => {
             this.player.equipments.equip(stack.item as Equipment);
         });
         this.player.attributes.levelUp(this._latestSaveData.level);
         EventCenter.emit(EventName.UI_UPDATE_PLAYER_LEVEL_INFO, this.player.levelInfo);
-        EventCenter.emit(EventName.UI_UPDATE_COIN, this.player.coin);
         EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
         this.player.init();
 
@@ -198,7 +190,7 @@ export class GameManager extends Component {
      * 保存存档
      */
     private saveData() {
-        this._latestSaveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.coin, this.player.equipments.equipmentMap, this._storehouse, this._area.name, this._stage.name);
+        this._latestSaveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.equipments.equipmentMap, this._storehouse, this._area.name, this._stage.name);
         sys.localStorage.setItem(ConfigName.SAVE_DATA, this._latestSaveData.toJson());
         EventCenter.emit(EventName.UI_POST_MESSAGE, `保存成功`);
     }
@@ -240,7 +232,6 @@ export class GameManager extends Component {
      */
     private getDrops(dropStackList: Array<ItemStack>) {
         StorehouseUtil.putIn(dropStackList);
-        this.player.coin = this._storehouse.get(LING_YUN_NAME)?.count ?? 0;
     }
 
     /**

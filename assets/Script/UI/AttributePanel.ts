@@ -18,12 +18,6 @@ export class AttributePanel extends Component {
     levelLabel: Label;
 
     /**
-     * 金币Label
-     */
-    @property({ type: Label, tooltip: '金币Label' })
-    coinLabel: Label;
-
-    /**
      * 伤害Label
      */
     @property({ type: Label, tooltip: '伤害Label' })
@@ -49,7 +43,6 @@ export class AttributePanel extends Component {
 
     onLoad() {
         EventCenter.on(EventName.UI_UPDATE_PLAYER_LEVEL_INFO, this.node.name, (event: PlayerLevelComponent) => this.onUpdateLevel(event));
-        EventCenter.on(EventName.UI_UPDATE_COIN, this.node.name, (coin: number) => this.coinLabel.string = coin.toString());
         EventCenter.on(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.node.name, (event: PlayerAttributeComponent) => this.onUpdateAttributePanel(event));
     }
 

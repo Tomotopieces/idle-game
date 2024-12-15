@@ -31,7 +31,7 @@ export class UniqueEffectLinGunShuangShe extends UniqueEffect {
         super(UniqueEffectLinGunShuangShe.NAME, UniqueEffectLinGunShuangShe.DESCRIPTION);
     }
 
-    onActivate(): void {
+    override onActivate(): void {
         this._attackCount = 0;
         EventCenter.register(EventName.MAKE_DAMAGE, UniqueEffectLinGunShuangShe.NAME,
             (event: MakeDamageEvent) => {
@@ -48,7 +48,7 @@ export class UniqueEffectLinGunShuangShe extends UniqueEffect {
         );
     }
 
-    onDeactivate(): void {
+    override onDeactivate(): void {
         EventCenter.unregister(EventName.MAKE_DAMAGE, UniqueEffectLinGunShuangShe.NAME);
     }
 }

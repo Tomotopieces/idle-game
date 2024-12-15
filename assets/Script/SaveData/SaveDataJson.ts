@@ -15,11 +15,6 @@ export class SaveDataJson {
     experience: number;
 
     /**
-     * 金币
-     */
-    coin: number;
-
-    /**
      * 装备槽
      */
     equipmentSlot: Array<ItemStackJson>;
@@ -39,10 +34,9 @@ export class SaveDataJson {
      */
     stageName: string;
 
-    constructor(level: number, experience: number, coin: number, equipmentSlot: Array<ItemStackJson>, storehouse: Array<ItemStackJson>, areaName: string, stageName: string) {
+    constructor(level: number, experience: number, equipmentSlot: Array<ItemStackJson>, storehouse: Array<ItemStackJson>, areaName: string, stageName: string) {
         this.level = level;
         this.experience = experience;
-        this.coin = coin;
         this.equipmentSlot = equipmentSlot;
         this.storehouse = storehouse;
         this.areaName = areaName;

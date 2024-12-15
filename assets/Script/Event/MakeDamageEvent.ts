@@ -1,6 +1,8 @@
 import { GlobalStateName } from "db://assets/Script/Util/Constant";
 import { EventArgument } from "db://assets/Script/Event/EventArgument";
 
+export type DamageSource = GlobalStateName.PLAYER | GlobalStateName.ENEMY;
+
 /**
  * 伤害事件
  */
@@ -20,7 +22,7 @@ export class MakeDamageEvent extends EventArgument {
      */
     damage: number;
 
-    constructor(source: GlobalStateName.PLAYER | GlobalStateName.ENEMY, target: GlobalStateName.PLAYER | GlobalStateName.ENEMY, damage: number) {
+    constructor(source: DamageSource, target: DamageSource, damage: number) {
         super();
         this.source = source;
         this.target = target;
