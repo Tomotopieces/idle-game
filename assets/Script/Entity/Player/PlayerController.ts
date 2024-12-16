@@ -6,6 +6,7 @@ import { PlayerEquipmentComponent } from "db://assets/Script/Entity/Player/Playe
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { PlayerSkillManager } from "db://assets/Script/Entity/Player/PlayerSkillManager";
 import { SkillLightAttack } from "db://assets/Script/Skill/Skills/SkillLightAttack";
+import { PlayerTalentManager } from "db://assets/Script/Entity/Player/PlayerTalentManager";
 
 const { ccclass, property } = _decorator;
 
@@ -39,6 +40,11 @@ export class PlayerController extends Component {
      * 技能管理器
      */
     readonly skills: PlayerSkillManager = new PlayerSkillManager();
+
+    /**
+     * 天赋管理器
+     */
+    readonly talents: PlayerTalentManager = new PlayerTalentManager();
 
     update(dt: number) {
         this.skills.update(dt);

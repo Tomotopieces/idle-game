@@ -91,7 +91,6 @@ export class ItemCard extends Component {
         this._transform = this.node.getComponent(UITransform);
         this._backgroundTransform = this.node.getChildByName('Background').getComponent(UITransform);
 
-
         const baseInfoNode = this._infoLayout.getChildByName('BaseInfo');
         this._itemIconSprite = baseInfoNode.getChildByName('Icon').getComponent(Sprite);
         this._itemNameLabel = baseInfoNode.getChildByName('Name').getComponent(Label);

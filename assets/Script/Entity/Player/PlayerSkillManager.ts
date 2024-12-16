@@ -55,6 +55,4 @@ export class PlayerSkillManager {
     getSkill(skillName: string): Skill {
         return this._skillMap.get(skillName);
     }
-
 }
-

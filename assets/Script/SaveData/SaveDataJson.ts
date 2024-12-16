@@ -34,13 +34,19 @@ export class SaveDataJson {
      */
     stageName: string;
 
-    constructor(level: number, experience: number, equipmentSlot: Array<ItemStackJson>, storehouse: Array<ItemStackJson>, areaName: string, stageName: string) {
+    /**
+     * 天赋 Map JSON
+     */
+    talents: string;
+
+    constructor(level: number, experience: number, equipmentSlot: Array<ItemStackJson>, storehouse: Array<ItemStackJson>, areaName: string, stageName: string, talents: string) {
         this.level = level;
         this.experience = experience;
         this.equipmentSlot = equipmentSlot;
         this.storehouse = storehouse;
         this.areaName = areaName;
         this.stageName = stageName;
+        this.talents = talents;
     }
 
     /**

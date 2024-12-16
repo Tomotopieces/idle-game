@@ -1,5 +1,1 @@
-{
-  "image": {
-    "type": "sprite-frame"
-  }
-}
+{"image":{"type":"sprite-frame","flipVertical":false}}

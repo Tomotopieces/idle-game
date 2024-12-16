@@ -56,7 +56,7 @@ export class ItemSlot extends Component {
     private _stack: ItemStack = null;
 
     /**
-     * 点击事件
+     * 点击展示物品信息卡片
      *
      * 点击触发
      */

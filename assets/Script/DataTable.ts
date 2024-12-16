@@ -39,7 +39,6 @@ export const AREA_TABLE = new Map<string, Area>();
 export const UNIQUE_EFFECT_TABLE = new Map<string, UniqueEffect>();
 UNIQUE_EFFECT_TABLE.set(UniqueEffectLinGunShuangShe.NAME, new UniqueEffectLinGunShuangShe());
 
-
 /**
  * 套装效果 Map
  *

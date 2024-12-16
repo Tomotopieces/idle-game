@@ -9,6 +9,7 @@ import { SkillLightAttack } from "db://assets/Script/Skill/Skills/SkillLightAtta
 export class TalentTiJian extends Talent {
     static readonly NAME = 'ti_jian';
     static readonly DISPLAY_NAME = '体健';
+    static readonly DESCRIPTION = '每级少许增加普通攻击的攻击速度';
     static readonly REQUIREMENT = 1;
     static readonly MAX_LEVEL = 2;
 
@@ -23,7 +24,7 @@ export class TalentTiJian extends Talent {
     ]);
 
     constructor() {
-        super(TalentTiJian.NAME, TalentTiJian.DISPLAY_NAME, TalentTiJian.REQUIREMENT, TalentTiJian.MAX_LEVEL);
+        super(TalentTiJian.NAME, TalentTiJian.DISPLAY_NAME, TalentTiJian.DESCRIPTION, TalentTiJian.REQUIREMENT, TalentTiJian.MAX_LEVEL);
     }
 
     protected activateEffect(): void {

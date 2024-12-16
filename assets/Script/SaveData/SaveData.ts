@@ -6,6 +6,7 @@ import { SaveDataJson } from "db://assets/Script/SaveData/SaveDataJson";
 
 import { ITEM_TABLE } from "db://assets/Script/DataTable";
 import { DefaultLevelName } from "db://assets/Script/Util/Constant";
+import { MapUtil } from "db://assets/Script/Util/MapUtil";
 
 /**
  * 存档数据
@@ -41,13 +42,19 @@ export class SaveData {
      */
     stageName: string;
 
-    constructor(level: number, experience: number, equipmentSlot: Map<EquipmentType, ItemStack>, storehouse: Storehouse, areaName: string, stageName: string) {
+    /**
+     * 天赋
+     */
+    talents: Map<string, number>;
+
+    constructor(level: number, experience: number, equipmentSlot: Map<EquipmentType, ItemStack>, storehouse: Storehouse, areaName: string, stageName: string, talents: Map<string, number>) {
         this.level = level ?? 0;
         this.experience = experience ?? 0;
         this.equipmentSlot = equipmentSlot ?? new Map<EquipmentType, ItemStack>();
         this.storehouse = storehouse ?? new Map<string, ItemStack>();
         this.areaName = areaName ?? DefaultLevelName.AREA;
         this.stageName = stageName ?? DefaultLevelName.STAGE;
+        this.talents = talents ?? new Map<string, number>();
     }
 
     /**
@@ -65,7 +72,8 @@ export class SaveData {
             }));
         const storehouse = new Map<string, ItemStack>(dataJson.storehouse
             .map(itemStackJson => [itemStackJson.itemName, ItemStackJson.toItemStack(itemStackJson)]));
-        return new SaveData(dataJson.level, dataJson.experience, equipmentSlot, storehouse, dataJson.areaName, dataJson.stageName);
+        const talents = dataJson.talents ? MapUtil.parse(dataJson.talents) as Map<string, number> : null;
+        return new SaveData(dataJson.level, dataJson.experience, equipmentSlot, storehouse, dataJson.areaName, dataJson.stageName, talents);
     }
 
     /**
@@ -77,7 +85,8 @@ export class SaveData {
             .map(item => new ItemStackJson(item.item.name, item.count));
         const storehouseJson = Array.from(this.storehouse.values())
             .map(item => new ItemStackJson(item.item.name, item.count));
-        return new SaveDataJson(this.level, this.experience, equipmentSlotJson, storehouseJson, this.areaName, this.stageName).toJson();
+        const talentsJson = MapUtil.stringify(this.talents);
+        return new SaveDataJson(this.level, this.experience, equipmentSlotJson, storehouseJson, this.areaName, this.stageName, talentsJson).toJson();
     }
 }
 

@@ -143,6 +143,11 @@ export enum EventName {
     UI_UPDATE_EQUIPMENT = 'UI_UPDATE_EQUIPMENT',
 
     /**
+     * 点击天赋槽UI
+     */
+    UI_CLICK_TALENT_SLOT = 'UI_CLICK_TALENT_SLOT',
+
+    /**
      * 发送消息UI
      */
     UI_POST_MESSAGE = 'UI_POST_MESSAGE',

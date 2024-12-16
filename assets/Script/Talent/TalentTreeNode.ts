@@ -9,19 +9,19 @@ import { TALENT_TREE } from "db://assets/Script/DataTable";
  */
 export class TalentTreeNode {
     /**
-     * 天赋名称
+     * 天赋
      */
     readonly talent: Talent;
-
-    /**
-     * 前置天赋
-     */
-    readonly parents: Array<string>;
 
     /**
      * 前置条件
      */
     readonly prerequisite: Predicate<void>;
+
+    /**
+     * 前置天赋
+     */
+    readonly parents: Array<string>;
 
     /**
      * 后置天赋
@@ -48,8 +48,8 @@ export class TalentTreeNode {
      */
     constructor(talent: Talent, prerequisite: Predicate<void>, autoActivate: boolean, autoUnlock: boolean) {
         this.talent = talent;
-        this.parents = new Array<string>();
         this.prerequisite = prerequisite ?? ALWAYS_TRUE;
+        this.parents = new Array<string>();
         this.children = new Array<string>();
         this.autoActivate = autoActivate;
         this._locked = !autoUnlock;
@@ -113,6 +113,13 @@ export class TalentTreeNode {
      */
     activated(): boolean {
         return this.talent.level > 0;
+    }
+
+    /**
+     * 是否已达到最大激活等级
+     */
+    maxActivated(): boolean {
+        return this.talent.level === this.talent.maxLevel;
     }
 
     /**

@@ -130,6 +130,7 @@ export class GameManager extends Component {
         EventCenter.emit(EventName.UI_UPDATE_PLAYER_LEVEL_INFO, this.player.levelInfo);
         EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
         this.player.init();
+        // TODO 恢复玩家天赋加点，计算剩余灵光点数
 
         this._storehouse = this._latestSaveData.storehouse;
         GlobalState.setState(GlobalStateName.STOREHOUSE, this._storehouse);
@@ -191,7 +192,7 @@ export class GameManager extends Component {
      * 保存存档
      */
     private saveData() {
-        this._latestSaveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.equipments.equipmentMap, this._storehouse, this._area.name, this._stage.name);
+        this._latestSaveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.equipments.equipmentMap, this._storehouse, this._area.name, this._stage.name, this.player.talents.talents);
         sys.localStorage.setItem(ConfigName.SAVE_DATA, this._latestSaveData.toJson());
         EventCenter.emit(EventName.UI_POST_MESSAGE, `保存成功`);
     }

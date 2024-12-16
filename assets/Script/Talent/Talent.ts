@@ -19,6 +19,11 @@ export abstract class Talent {
     readonly displayName: string;
 
     /**
+     * 描述
+     */
+    readonly description: string;
+
+    /**
      * 需要的灵光点数
      */
     readonly requirement: number;
@@ -50,9 +55,10 @@ export abstract class Talent {
      */
     protected readonly player: PlayerController;
 
-    protected constructor(name: string, displayName: string, requirement: number, maxLevel: number) {
+    protected constructor(name: string, displayName: string, description: string, requirement: number, maxLevel: number) {
         this.name = name;
         this.displayName = displayName;
+        this.description = description;
         this.requirement = requirement;
         this.maxLevel = maxLevel;
         this._level = 0;
