@@ -1,10 +1,9 @@
 import { _decorator, Component, instantiate, Node, Prefab, Vec3 } from 'cc';
-import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
-import { Storehouse } from "db://assets/Script/Util/StorehouseUtil";
+import { Storehouse } from "db://assets/Script/Storehouse/Storehouse";
 import { ItemSlot } from "db://assets/Script/UI/Storehouse/ItemSlot";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 const { ccclass, property } = _decorator;
 
@@ -32,11 +31,6 @@ export class ItemSlotContainer extends Component {
     slotPrefab: Prefab = null;
 
     /**
-     * 仓库
-     */
-    private _storehouse: Storehouse;
-
-    /**
      * 物品槽列表
      */
     private _slotList: Array<Node> = [];
@@ -44,14 +38,14 @@ export class ItemSlotContainer extends Component {
     start() {
         // TODO 改为使用 Layout 组件进行排版，重新设计排版逻辑
         // 获取仓库内容
-        this._storehouse = GlobalState.getState(GlobalStateName.STOREHOUSE);
+        const storehouse = Storehouse.STOREHOUSE;
 
         // 计算展示的物品槽数量，确保每行都填满
-        let slotCount = Math.max(this._storehouse.size, DEFAULT_SLOT_SIZE);
+        let slotCount = Math.max(storehouse.size, DEFAULT_SLOT_SIZE);
         slotCount += SLOT_PER_ROW - slotCount % SLOT_PER_ROW;
 
         // 添加物品槽
-        const stackList = Array.from(this._storehouse.values());
+        const stackList = Array.from(storehouse.values());
         for (let i = 0; i < slotCount; i++) {
             const slot = instantiate(this.slotPrefab);
             this.node.addChild(slot);
@@ -106,7 +100,7 @@ export class ItemSlotContainer extends Component {
         this.node.removeAllChildren();
 
         // 重新计算展示的物品槽数量
-        let slotCount = Math.max(this._storehouse.size, DEFAULT_SLOT_SIZE);
+        let slotCount = Math.max(Storehouse.STOREHOUSE.size, DEFAULT_SLOT_SIZE);
         slotCount += SLOT_PER_ROW - slotCount % SLOT_PER_ROW;
 
         for (let i = 0; i < slotCount; i++) {

@@ -1,8 +1,9 @@
-import { _decorator, Component, Label, Sprite, SpriteFrame, Node } from 'cc';
+import { _decorator, Component, Label, Node, Sprite, SpriteFrame } from 'cc';
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 import { TALENT_TREE } from "db://assets/Script/DataTable";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { EventName } from "db://assets/Script/Util/Constant";
+
+import { EventName } from "db://assets/Script/Event/EventName";
 
 const { ccclass, property, executeInEditMode } = _decorator;
 

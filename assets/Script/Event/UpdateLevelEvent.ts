@@ -1,8 +1,7 @@
 import { Area } from "db://assets/Script/Level/Area";
 import { Stage } from "db://assets/Script/Level/Stage";
-import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { GlobalStateName } from "db://assets/Script/Util/Constant";
 import { EventArgument } from "db://assets/Script/Event/EventArgument";
+import { Level } from "db://assets/Script/Level/Level";
 
 /**
  * 更新关卡事件参数
@@ -26,7 +25,7 @@ export class UpdateLevelEvent extends EventArgument {
      */
     constructor(area: Area, stage: Stage) {
         super();
-        this.area = area ?? GlobalState.getState(GlobalStateName.AREA);
-        this.stage = stage ?? GlobalState.getState(GlobalStateName.STAGE);
+        this.area = area ?? Level.AREA;
+        this.stage = stage ?? Level.STAGE;
     }
 }

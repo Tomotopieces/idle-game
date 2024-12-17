@@ -1,5 +1,5 @@
-import { EventName } from "db://assets/Script/Util/Constant";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 /**
  * 玩家等级组件

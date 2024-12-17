@@ -1,8 +1,8 @@
 import { _decorator, Component, Label } from 'cc';
-import { EventName } from "db://assets/Script/Util/Constant";
 import { PlayerAttributeComponent } from "db://assets/Script/Entity/Player/PlayerAttributeComponent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { PlayerLevelComponent } from "db://assets/Script/Entity/Player/PlayerLevelComponent";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 const { ccclass, property } = _decorator;
 

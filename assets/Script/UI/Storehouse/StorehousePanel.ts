@@ -1,12 +1,12 @@
 import { _decorator, Animation, Component, SpriteFrame } from 'cc';
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { EventName } from "db://assets/Script/Util/Constant";
 import { ItemSlot, SlotType } from "db://assets/Script/UI/Storehouse/ItemSlot";
 import { ItemType } from "db://assets/Script/Item/Item";
 import { EquipmentChangeEvent } from "db://assets/Script/Event/EquipmentChangeEvent";
 import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 import { ItemCard } from "db://assets/Script/UI/Storehouse/ItemCard";
 import { EMPTY_FUNCTION } from "db://assets/Script/Util/Functions";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 const { ccclass, property } = _decorator;
 

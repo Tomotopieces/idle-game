@@ -1,5 +1,4 @@
 import { _decorator, Component, ProgressBar } from 'cc';
-import { EventName } from "db://assets/Script/Util/Constant";
 import { PlayerAttributeComponent } from "db://assets/Script/Entity/Player/PlayerAttributeComponent";
 import { PlayerLevelComponent } from "db://assets/Script/Entity/Player/PlayerLevelComponent";
 import { PlayerEquipmentComponent } from "db://assets/Script/Entity/Player/PlayerEquipmentComponent";
@@ -7,6 +6,7 @@ import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { PlayerSkillManager } from "db://assets/Script/Entity/Player/PlayerSkillManager";
 import { SkillLightAttack } from "db://assets/Script/Skill/Skills/SkillLightAttack";
 import { PlayerTalentManager } from "db://assets/Script/Entity/Player/PlayerTalentManager";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 const { ccclass, property } = _decorator;
 
@@ -15,6 +15,8 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('PlayerController')
 export class PlayerController extends Component {
+    static PLAYER: PlayerController;
+
     /**
      * 血条
      */
@@ -45,6 +47,10 @@ export class PlayerController extends Component {
      * 天赋管理器
      */
     readonly talents: PlayerTalentManager = new PlayerTalentManager();
+
+    onLoad() {
+        PlayerController.PLAYER = this;
+    }
 
     update(dt: number) {
         this.skills.update(dt);

@@ -1,7 +1,8 @@
 import { _decorator, Component, instantiate, Prefab } from 'cc';
 import { Message } from "db://assets/Script/UI/Message/Message";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { EventName } from "db://assets/Script/Util/Constant";
+
+import { EventName } from "db://assets/Script/Event/EventName";
 
 const { ccclass, property } = _decorator;
 

@@ -1,12 +1,19 @@
 import { _decorator, Component, director, JsonAsset, ProgressBar, resources } from 'cc';
-import { DataPath, SceneName } from "db://assets/Script/Util/Constant";
+import { SceneName } from "db://assets/Script/Util/Constant";
 import { Item } from "db://assets/Script/Item/Item";
 import { EnemyInfoJson } from "db://assets/Script/Entity/Enemy/EnemyInfoJson";
 import { StageJson } from "db://assets/Script/Level/StageJson";
 import { AreaJson } from "db://assets/Script/Level/AreaJson";
 import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { AREA_TABLE, ENEMY_TABLE, ITEM_TABLE, SET_EFFECT_TABLE, STAGE_TABLE } from "db://assets/Script/DataTable";
+import {
+    AREA_TABLE,
+    DataPath,
+    ENEMY_TABLE,
+    ITEM_TABLE,
+    SET_EFFECT_TABLE,
+    STAGE_TABLE
+} from "db://assets/Script/DataTable";
 
 const { ccclass, property } = _decorator;
 

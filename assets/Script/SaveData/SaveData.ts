@@ -1,12 +1,12 @@
-import { Storehouse } from "db://assets/Script/Util/StorehouseUtil";
+import { StorehouseType } from "db://assets/Script/Storehouse/Storehouse";
 import { ItemStackJson } from "db://assets/Script/Item/ItemStackJson";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { Equipment, EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
 import { SaveDataJson } from "db://assets/Script/SaveData/SaveDataJson";
 
 import { ITEM_TABLE } from "db://assets/Script/DataTable";
-import { DefaultLevelName } from "db://assets/Script/Util/Constant";
 import { MapUtil } from "db://assets/Script/Util/MapUtil";
+import { DefaultLevelName } from "db://assets/Script/Level/Level";
 
 /**
  * 存档数据
@@ -30,7 +30,7 @@ export class SaveData {
     /**
      * 仓库
      */
-    storehouse: Storehouse;
+    storehouse: StorehouseType;
 
     /**
      * 区域名称
@@ -47,7 +47,7 @@ export class SaveData {
      */
     talents: Map<string, number>;
 
-    constructor(level: number, experience: number, equipmentSlot: Map<EquipmentType, ItemStack>, storehouse: Storehouse, areaName: string, stageName: string, talents: Map<string, number>) {
+    constructor(level: number, experience: number, equipmentSlot: Map<EquipmentType, ItemStack>, storehouse: StorehouseType, areaName: string, stageName: string, talents: Map<string, number>) {
         this.level = level ?? 0;
         this.experience = experience ?? 0;
         this.equipmentSlot = equipmentSlot ?? new Map<EquipmentType, ItemStack>();

@@ -1,9 +1,9 @@
 import { _decorator, Animation, Component } from 'cc';
 import { TalentCard } from "db://assets/Script/UI/Talent/TalentCard";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { EventName } from "db://assets/Script/Util/Constant";
 import { TalentSlot } from "db://assets/Script/UI/Talent/TalentSlot";
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 const { ccclass, property } = _decorator;
 

@@ -1,8 +1,8 @@
 import { _decorator, Component, Enum, Label, Node, Sprite, SpriteFrame } from 'cc';
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
-import { EventName } from "db://assets/Script/Util/Constant";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 const { ccclass, property } = _decorator;
 

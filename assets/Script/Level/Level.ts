@@ -3,9 +3,27 @@ import { Stage } from "db://assets/Script/Level/Stage";
 import { AREA_TABLE, STAGE_TABLE } from "db://assets/Script/DataTable";
 
 /**
- * 关卡工具
+ * 默认关卡名称
  */
-export class LevelUtil {
+export enum DefaultLevelName {
+    /**
+     * 区域（黑风山）
+     */
+    AREA = 'hei_feng_shan',
+
+    /**
+     * 舞台（苍狼林）
+     */
+    STAGE = 'cang_lang_lin',
+}
+
+/**
+ * 关卡
+ */
+export class Level {
+    static AREA: Area;
+    static STAGE: Stage;
+
     /**
      * 获取区域的第一个舞台
      *

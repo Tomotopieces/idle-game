@@ -1,8 +1,8 @@
 import { Animation } from 'cc';
 import { Skill } from "db://assets/Script/Skill/Skill";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
-import { MakeDamageEvent } from "db://assets/Script/Event/MakeDamageEvent";
+import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/DealDamageEvent";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 /**
  * 技能 轻棍
@@ -60,7 +60,7 @@ export class SkillLightAttack extends Skill {
      * 攻击帧事件
      */
     attackFrameEvent() {
-        EventCenter.emit(EventName.MAKE_DAMAGE, new MakeDamageEvent(GlobalStateName.PLAYER, GlobalStateName.ENEMY, this.player.attributes.finalDamage()));
+        EventCenter.emit(EventName.DEAL_DAMAGE, new DealDamageEvent(DamageUnit.PLAYER, DamageUnit.ENEMY, this.player.attributes.finalDamage()));
         EventCenter.emit(EventName.GAIN_STANCE, SkillLightAttack.GAIN_STANCE);
     }
 

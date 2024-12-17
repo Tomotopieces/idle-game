@@ -1,6 +1,4 @@
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
-import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { GlobalStateName } from "db://assets/Script/Util/Constant";
 import { Runnable } from "db://assets/Script/Util/Functions";
 
 /**
@@ -53,7 +51,7 @@ export abstract class Skill {
     protected events: Array<Runnable>;
 
     protected constructor(name: string, displayName: string, description: string, cooldown: number) {
-        this.player = GlobalState.getState(GlobalStateName.PLAYER) as PlayerController;
+        this.player = PlayerController.PLAYER;
         this.name = name;
         this.displayName = displayName;
         this.description = description;

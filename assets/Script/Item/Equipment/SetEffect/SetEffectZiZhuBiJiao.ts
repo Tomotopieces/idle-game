@@ -1,7 +1,8 @@
 import { SetEffect, SetLevelEffect } from "db://assets/Script/Item/Equipment/SetEffect/SetEffect";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { EventName, LING_YUN_NAME } from "db://assets/Script/Util/Constant";
+import { LING_YUN_NAME } from "db://assets/Script/Util/Constant";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 /**
  * 套装效果 锱铢必较

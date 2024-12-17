@@ -1,5 +1,6 @@
 import { Talent } from "db://assets/Script/Talent/Talent";
 import { SkillLightAttack } from "db://assets/Script/Skill/Skills/SkillLightAttack";
+import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 
 /**
  * 天赋.本事.根基.体健
@@ -28,12 +29,12 @@ export class TalentTiJian extends Talent {
     }
 
     protected activateEffect(): void {
-        const skill = this.player.skills.getSkill(SkillLightAttack.NAME) as SkillLightAttack;
+        const skill = PlayerController.PLAYER.skills.getSkill(SkillLightAttack.NAME) as SkillLightAttack;
         skill.attackSpeedBoost += TalentTiJian.LIGHT_ATTACK_SPEED_BOOST_MAP.get(this.level);
     }
 
     protected deactivateEffect(): void {
-        const skill = this.player.skills.getSkill(SkillLightAttack.NAME) as SkillLightAttack;
+        const skill = PlayerController.PLAYER.skills.getSkill(SkillLightAttack.NAME) as SkillLightAttack;
         skill.attackSpeedBoost -= TalentTiJian.LIGHT_ATTACK_SPEED_BOOST_MAP.get(this.level);
     }
 }

@@ -1,9 +1,8 @@
 import { _decorator, CCInteger, Component, director, sys } from 'cc';
-import { GlobalState } from "db://assets/Script/Util/GlobalState";
 import { SaveData } from "db://assets/Script/SaveData/SaveData";
-import { ConfigName, DefaultLevelName, EventName, GlobalStateName, } from "db://assets/Script/Util/Constant";
+import { LocalStorageDataName, } from "db://assets/Script/Util/Constant";
 import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
-import { Storehouse, StorehouseUtil } from "db://assets/Script/Util/StorehouseUtil";
+import { Storehouse } from "db://assets/Script/Storehouse/Storehouse";
 import { Area } from "db://assets/Script/Level/Area";
 import { Stage } from "db://assets/Script/Level/Stage";
 import { LevelNameBar } from "db://assets/Script/UI/LevelNameBar";
@@ -14,10 +13,12 @@ import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { EquipmentChangeEvent } from "db://assets/Script/Event/EquipmentChangeEvent";
 import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { MakeDamageEvent } from "db://assets/Script/Event/MakeDamageEvent";
+import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/DealDamageEvent";
 import { AREA_TABLE, ITEM_TABLE, STAGE_TABLE } from "db://assets/Script/DataTable";
 import { DropItemFactory } from "db://assets/Script/Item/DropItemFactory";
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
+import { DefaultLevelName, Level } from "db://assets/Script/Level/Level";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 const { ccclass, property } = _decorator;
 
@@ -59,21 +60,6 @@ export class GameManager extends Component {
     autoSaveInterval: number = 5 * 60;
 
     /**
-     * 区域
-     */
-    private _area: Area = null;
-
-    /**
-     * 舞台
-     */
-    private _stage: Stage = null;
-
-    /**
-     * 仓库
-     */
-    private _storehouse: Storehouse = new Map<string, ItemStack>();
-
-    /**
      * 最新保存数据
      */
     private _latestSaveData: SaveData;
@@ -84,17 +70,13 @@ export class GameManager extends Component {
     private _autoSaveTimer: number = 0;
 
     onLoad() {
-        // 玩家对象放入全局状态
-        GlobalState.setState(GlobalStateName.PLAYER, this.player);
-        GlobalState.setState(GlobalStateName.ENEMY, this.enemy);
-
         // 读取存档
         this.loadSaveData();
         this.restorePlayerAndStorehouseData();
         this.restoreLevelAndEnemyData();
 
         // 监听处理事件
-        EventCenter.on(EventName.MAKE_DAMAGE, this.node.name, (event: MakeDamageEvent) => this.handleDamage(event));
+        EventCenter.on(EventName.DEAL_DAMAGE, this.node.name, (event: DealDamageEvent) => this.handleDamage(event));
         EventCenter.on(EventName.UPDATE_LEVEL, this.node.name, (event: UpdateLevelEvent) => this.updateLevel(event.area, event.stage));
         EventCenter.on(EventName.EQUIPMENT_CHANGE, this.node.name, (event: EquipmentChangeEvent) => this.handleEquipmentChange(event));
         EventCenter.on(EventName.ENEMY_DIE, this.node.name, (enemy: EnemyController) => this.handleEnemyDie(enemy));
@@ -120,7 +102,7 @@ export class GameManager extends Component {
     private restorePlayerAndStorehouseData() {
         if (!this._latestSaveData) {
             this.player.init();
-            GlobalState.setState(GlobalStateName.STOREHOUSE, this._storehouse);
+            Storehouse.STOREHOUSE = new Map<string, ItemStack>();
             return;
         }
 
@@ -129,13 +111,14 @@ export class GameManager extends Component {
             this.player.equipments.equip(stack.item as Equipment);
         });
         this.player.attributes.levelUp(this._latestSaveData.level);
+        this.player.talents.restore(this._latestSaveData.talents);
+
         EventCenter.emit(EventName.UI_UPDATE_PLAYER_LEVEL_INFO, this.player.levelInfo);
         EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
-        this.player.init();
-        // TODO 恢复玩家天赋加点，计算剩余灵光点数
 
-        this._storehouse = this._latestSaveData.storehouse;
-        GlobalState.setState(GlobalStateName.STOREHOUSE, this._storehouse);
+        this.player.init();
+
+        Storehouse.STOREHOUSE = this._latestSaveData.storehouse;
     }
 
     /**
@@ -143,19 +126,17 @@ export class GameManager extends Component {
      */
     private restoreLevelAndEnemyData() {
         if (this._latestSaveData) {
-            this._area = AREA_TABLE.get(this._latestSaveData.areaName);
-            this._stage = STAGE_TABLE.get(this._latestSaveData.stageName);
-            this.enemy.info = this._stage.enemyInfo;
+            Level.AREA = AREA_TABLE.get(this._latestSaveData.areaName);
+            Level.STAGE = STAGE_TABLE.get(this._latestSaveData.stageName);
+            this.enemy.info = Level.STAGE.enemyInfo;
         } else {
-            this._area = AREA_TABLE.get(DefaultLevelName.AREA);
-            this._stage = STAGE_TABLE.get(DefaultLevelName.STAGE);
-            this.enemy.info = this._stage.enemyInfo;
+            Level.AREA = AREA_TABLE.get(DefaultLevelName.AREA);
+            Level.STAGE = STAGE_TABLE.get(DefaultLevelName.STAGE);
+            this.enemy.info = Level.STAGE.enemyInfo;
         }
 
-        GlobalState.setState(GlobalStateName.AREA, this._area);
-        GlobalState.setState(GlobalStateName.STAGE, this._stage);
-        this.levelNameBar.updateLevelName(this._area, this._stage);
-        this.stageLine.updateCurrentLevel(this._area, this._stage);
+        this.levelNameBar.updateLevelName(Level.AREA, Level.STAGE);
+        this.stageLine.updateCurrentLevel(Level.AREA, Level.STAGE);
     }
 
     /**
@@ -165,25 +146,23 @@ export class GameManager extends Component {
      * @param stage 舞台
      */
     private updateLevel(area: Area, stage: Stage) {
-        if (this._area === area && this._stage === stage) {
+        if (Level.AREA === area && Level.STAGE === stage) {
             return;
         }
 
-        this._area = area;
-        this._stage = stage;
+        Level.AREA = area;
+        Level.STAGE = stage;
         this.enemy.info = stage.enemyInfo;
 
-        GlobalState.setState(GlobalStateName.AREA, this._area);
-        GlobalState.setState(GlobalStateName.STAGE, this._stage);
-        this.levelNameBar.updateLevelName(this._area, this._stage);
-        this.stageLine.updateCurrentLevel(this._area, this._stage);
+        this.levelNameBar.updateLevelName(Level.AREA, Level.STAGE);
+        this.stageLine.updateCurrentLevel(Level.AREA, Level.STAGE);
     }
 
     /**
      * 加载存档数据
      */
     private loadSaveData() {
-        const rawData = sys.localStorage.getItem(ConfigName.SAVE_DATA);
+        const rawData = sys.localStorage.getItem(LocalStorageDataName.SAVE_DATA);
         if (!rawData) {
             return;
         }
@@ -194,8 +173,8 @@ export class GameManager extends Component {
      * 保存存档
      */
     private saveData() {
-        this._latestSaveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.equipments.equipmentMap, this._storehouse, this._area.name, this._stage.name, this.player.talents.talents);
-        sys.localStorage.setItem(ConfigName.SAVE_DATA, this._latestSaveData.toJson());
+        this._latestSaveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.equipments.equipmentMap, Storehouse.STOREHOUSE, Level.AREA.name, Level.STAGE.name, this.player.talents.talents);
+        sys.localStorage.setItem(LocalStorageDataName.SAVE_DATA, this._latestSaveData.toJson());
         EventCenter.emit(EventName.UI_POST_MESSAGE, `保存成功`);
     }
 
@@ -204,12 +183,12 @@ export class GameManager extends Component {
      *
      * @param event 事件参数
      */
-    private handleDamage(event: MakeDamageEvent) {
+    private handleDamage(event: DealDamageEvent) {
         switch (event.source) {
-            case GlobalStateName.ENEMY:
+            case DamageUnit.ENEMY:
                 this.player.hurt(event.damage);
                 break;
-            case GlobalStateName.PLAYER:
+            case DamageUnit.PLAYER:
                 this.enemy.hurt(event.damage);
                 break;
         }
@@ -235,7 +214,7 @@ export class GameManager extends Component {
      * @param dropStackList 掉落道具列表
      */
     private getDrops(dropStackList: Array<ItemStack>) {
-        StorehouseUtil.putIn(dropStackList);
+        Storehouse.putIn(dropStackList);
     }
 
     /**
@@ -254,20 +233,20 @@ export class GameManager extends Component {
      */
     private handleEquipmentChange(event: EquipmentChangeEvent) {
         if (event.equip) {
-            if (!StorehouseUtil.tackOutOne(event.equipment.name)) {
+            if (!Storehouse.tackOutOne(event.equipment.name)) {
                 return;
             }
             const unequipped = this.player.equipments.equip(event.equipment);
             EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
             if (unequipped) {
-                StorehouseUtil.putIn([new ItemStack(unequipped, 1)], false, false);
+                Storehouse.putIn([new ItemStack(unequipped, 1)], false, false);
             }
         } else {
             if (!this.player.equipments.unequip(event.equipment.equipmentType)) {
                 return;
             }
             EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
-            StorehouseUtil.putIn([new ItemStack(event.equipment, 1)], false, false);
+            Storehouse.putIn([new ItemStack(event.equipment, 1)], false, false);
         }
     }
 
@@ -343,6 +322,6 @@ export class GameManager extends Component {
             new ItemStack(ITEM_TABLE.get('bai_xi_diao_tui'), 1),
             new ItemStack(ITEM_TABLE.get('ru_yi_jin_gu_bang'), 1)
         ];
-        StorehouseUtil.putIn(stackList);
+        Storehouse.putIn(stackList);
     }
 }

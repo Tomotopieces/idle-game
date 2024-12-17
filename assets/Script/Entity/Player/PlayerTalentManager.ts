@@ -1,4 +1,5 @@
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
+import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 
 /**
  * 玩家天赋管理器
@@ -61,5 +62,11 @@ export class PlayerTalentManager {
 
     get sparks(): number {
         return this._sparks;
+    }
+
+    restore(talents: Map<string, number>) {
+        this._sparks = PlayerController.PLAYER.levelInfo.level - Array.from(talents.values()).reduce((a, b) => a + b);
+
+        // TODO 天赋恢复
     }
 }

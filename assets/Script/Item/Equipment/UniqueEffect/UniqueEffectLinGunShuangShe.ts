@@ -1,7 +1,7 @@
 import { UniqueEffect } from "db://assets/Script/Item/Equipment/UniqueEffect/UniqueEffect";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
-import { MakeDamageEvent } from "db://assets/Script/Event/MakeDamageEvent";
+import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/DealDamageEvent";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 /**
  * 独门妙用 鳞棍·双蛇
@@ -33,9 +33,9 @@ export class UniqueEffectLinGunShuangShe extends UniqueEffect {
 
     override onActivate(): void {
         this._attackCount = 0;
-        EventCenter.register(EventName.MAKE_DAMAGE, UniqueEffectLinGunShuangShe.NAME,
-            (event: MakeDamageEvent) => {
-                if (event.source !== GlobalStateName.PLAYER) {
+        EventCenter.register(EventName.DEAL_DAMAGE, UniqueEffectLinGunShuangShe.NAME,
+            (event: DealDamageEvent) => {
+                if (event.source !== DamageUnit.PLAYER) {
                     return;
                 }
 
@@ -49,6 +49,6 @@ export class UniqueEffectLinGunShuangShe extends UniqueEffect {
     }
 
     override onDeactivate(): void {
-        EventCenter.unregister(EventName.MAKE_DAMAGE, UniqueEffectLinGunShuangShe.NAME);
+        EventCenter.unregister(EventName.DEAL_DAMAGE, UniqueEffectLinGunShuangShe.NAME);
     }
 }

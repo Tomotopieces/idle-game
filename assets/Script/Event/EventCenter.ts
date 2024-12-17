@@ -1,6 +1,6 @@
 import { EventTarget } from 'cc';
-import { EventName } from "db://assets/Script/Util/Constant";
 import { EventArgument } from "db://assets/Script/Event/EventArgument";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 /**
  * 事件监听处理函数类型

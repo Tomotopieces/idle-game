@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, UITransform, Animation } from 'cc';
+import { _decorator, Animation, Component, Label, UITransform } from 'cc';
 
 const { ccclass, property, executeInEditMode } = _decorator;
 

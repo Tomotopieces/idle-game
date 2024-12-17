@@ -1,9 +1,9 @@
 import { _decorator, Component, Sprite, SpriteFrame } from 'cc';
-import { EventName } from "db://assets/Script/Util/Constant";
 import { UpdateLevelEvent } from "db://assets/Script/Event/UpdateLevelEvent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 
 import { STAGE_TABLE } from "db://assets/Script/DataTable";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 const { ccclass, property } = _decorator;
 

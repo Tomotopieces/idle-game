@@ -1,24 +1,20 @@
-import { GlobalState } from "db://assets/Script/Util/GlobalState";
-import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
 import { Item, ItemType } from "db://assets/Script/Item/Item";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 /**
  * 仓库类型
  */
-export type Storehouse = Map<string, ItemStack>;
+export type StorehouseType = Map<string, ItemStack>;
 
 /**
- * 仓库工具
+ * 仓库
  */
-export class StorehouseUtil {
-    /**
-     * 仓库
-     */
-    private static _storehouse: Storehouse = null;
+export class Storehouse {
+    static STOREHOUSE: StorehouseType;
 
     /**
      * 装备栏
@@ -35,15 +31,15 @@ export class StorehouseUtil {
     static putIn(stackList: Array<ItemStack>, checkEquipmentSlot: boolean = true, showMessage: boolean = true) {
         const failedList = new Array<ItemStack>();
         stackList.forEach(stack => {
-            if (StorehouseUtil.storehouse.has(stack.item.name) || (checkEquipmentSlot && this.inEquipmentSlot(stack.item))) {
+            if (this.STOREHOUSE.has(stack.item.name) || (checkEquipmentSlot && this.inEquipmentSlot(stack.item))) {
                 if (stack.item.unique) {
                     // 排除独特物品
                     failedList.push(stack);
                     return;
                 }
-                StorehouseUtil.storehouse.get(stack.item.name).count += stack.count;
+                this.STOREHOUSE.get(stack.item.name).count += stack.count;
             } else {
-                StorehouseUtil.storehouse.set(stack.item.name, stack);
+                this.STOREHOUSE.set(stack.item.name, stack);
             }
         });
 
@@ -57,7 +53,7 @@ export class StorehouseUtil {
             updateList.forEach(stack =>
                 EventCenter.emit(EventName.UI_POST_MESSAGE, `获得：${stack.item.displayName} * ${stack.count}`));
         }
-        StorehouseUtil.emitUpdateEvent(updateList);
+        Storehouse.emitUpdateEvent(updateList);
     }
 
     /**
@@ -67,8 +63,8 @@ export class StorehouseUtil {
      */
     static check(stackList: Array<ItemStack>): boolean {
         return stackList.every(stack => {
-            if (StorehouseUtil.storehouse.has(stack.item.name)) {
-                const itemStack = StorehouseUtil.storehouse.get(stack.item.name);
+            if (this.STOREHOUSE.has(stack.item.name)) {
+                const itemStack = this.STOREHOUSE.get(stack.item.name);
                 return itemStack.count >= stack.count;
             } else {
                 return false;
@@ -82,7 +78,7 @@ export class StorehouseUtil {
      * @param itemName 物品名称
      */
     static checkOne(itemName: string): boolean {
-        return StorehouseUtil.storehouse.has(itemName);
+        return this.STOREHOUSE.has(itemName);
     }
 
     /**
@@ -93,21 +89,21 @@ export class StorehouseUtil {
      */
     static tackOut(requireList: Array<ItemStack>): boolean {
         for (const require of requireList) {
-            if (StorehouseUtil.storehouse.has(require.item.name)) {
-                const store = StorehouseUtil.storehouse.get(require.item.name);
+            if (this.STOREHOUSE.has(require.item.name)) {
+                const store = this.STOREHOUSE.get(require.item.name);
                 if (store.count < require.count) {
                     return false;
                 }
                 store.count -= require.count;
                 if (store.count <= 0) {
-                    StorehouseUtil.storehouse.delete(require.item.name);
+                    this.STOREHOUSE.delete(require.item.name);
                 }
             } else {
                 return false;
             }
         }
 
-        StorehouseUtil.emitUpdateEvent(requireList);
+        Storehouse.emitUpdateEvent(requireList);
         return true;
     }
 
@@ -121,7 +117,7 @@ export class StorehouseUtil {
             return false;
         }
 
-        return Array.from(StorehouseUtil.equipmentMap.values()).some(stack => stack.item?.name === item.name)
+        return Array.from(Storehouse.equipmentMap.values()).some(stack => stack.item?.name === item.name)
     }
 
     /**
@@ -131,15 +127,15 @@ export class StorehouseUtil {
      * @return 是否成功
      */
     static tackOutOne(itemName: string): boolean {
-        const itemStack = StorehouseUtil.storehouse.get(itemName);
+        const itemStack = this.STOREHOUSE.get(itemName);
         if (!itemStack) {
             return false;
         }
         itemStack.count -= 1;
         if (itemStack.count <= 0) {
-            StorehouseUtil.storehouse.delete(itemName);
+            this.STOREHOUSE.delete(itemName);
         }
-        StorehouseUtil.emitUpdateEvent([{ item: itemStack.item, count: 1 }]);
+        Storehouse.emitUpdateEvent([{ item: itemStack.item, count: 1 }]);
         return true;
     }
 
@@ -155,21 +151,17 @@ export class StorehouseUtil {
 
         // 发送被更新的物品的现有库存情况，避免修改stackList数据
         const updateArray = new Array<ItemStack>();
-        stackList.forEach(stack => updateArray.push(new ItemStack(stack.item, StorehouseUtil.storehouse.get(stack.item.name)?.count ?? 0)));
+        stackList.forEach(stack => updateArray.push(new ItemStack(stack.item, this.STOREHOUSE.get(stack.item.name)?.count ?? 0)));
         EventCenter.emit(EventName.UI_UPDATE_STOREHOUSE, updateArray);
     }
 
-    private static get storehouse(): Storehouse {
-        if (!StorehouseUtil._storehouse) {
-            StorehouseUtil._storehouse = GlobalState.getState(GlobalStateName.STOREHOUSE);
-        }
-        return StorehouseUtil._storehouse;
-    }
-
+    /**
+     * 获取装备栏
+     */
     private static get equipmentMap(): Map<EquipmentType, ItemStack> {
-        if (!StorehouseUtil._equipmentSlot) {
-            StorehouseUtil._equipmentSlot = (GlobalState.getState(GlobalStateName.PLAYER) as PlayerController).equipments.equipmentMap;
+        if (!Storehouse._equipmentSlot) {
+            Storehouse._equipmentSlot = PlayerController.PLAYER.equipments.equipmentMap;
         }
-        return StorehouseUtil._equipmentSlot;
+        return Storehouse._equipmentSlot;
     }
 }

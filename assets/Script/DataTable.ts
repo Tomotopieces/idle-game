@@ -12,6 +12,36 @@ import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 import { TalentTiJian } from "db://assets/Script/Talent/Talents/TalentTiJian";
 
 /**
+ * 数据资源路径常量
+ */
+export enum DataPath {
+    /**
+     * 道具配置表
+     */
+    ITEM_TABLE = 'data/item_table',
+
+    /**
+     * 装备配置表
+     */
+    EQUIPMENT_TABLE = 'data/equipment_table',
+
+    /**
+     * 敌人配置表
+     */
+    ENEMY_TABLE = 'data/enemy_table',
+
+    /**
+     * 关卡配置表
+     */
+    STAGE_TABLE = 'data/stage_table',
+
+    /**
+     * 区域配置表
+     */
+    AREA_TABLE = 'data/area_table',
+}
+
+/**
  * 道具表
  */
 export const ITEM_TABLE = new Map<string, Item>();

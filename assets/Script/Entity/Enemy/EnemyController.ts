@@ -1,11 +1,11 @@
 import { _decorator, Animation, CCFloat, Component, ProgressBar, Sprite, SpriteFrame } from 'cc';
-import { EventName, GlobalStateName } from "db://assets/Script/Util/Constant";
 import { DropItem } from "db://assets/Script/Item/DropItem";
 import { EnemyInfo } from "db://assets/Script/Entity/Enemy/EnemyInfo";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { EnemyAttributeComponent } from "db://assets/Script/Entity/Enemy/EnemyAttributeComponent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { MakeDamageEvent } from "db://assets/Script/Event/MakeDamageEvent";
+import { DealDamageEvent } from "db://assets/Script/Event/DealDamageEvent";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 const { ccclass, property } = _decorator;
 
@@ -14,6 +14,8 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('EnemyController')
 export abstract class EnemyController extends Component {
+    static ENEMY: EnemyController;
+
     /**
      * 攻击间隔（秒）
      */
@@ -47,6 +49,7 @@ export abstract class EnemyController extends Component {
     private _autoAttackTimer: number = 0;
 
     onLoad() {
+        EnemyController.ENEMY = this;
         this._anim = this.getComponent(Animation);
     }
 
@@ -74,7 +77,7 @@ export abstract class EnemyController extends Component {
      * 动画帧事件触发
      */
     makeDamage() {
-        EventCenter.emit(EventName.MAKE_DAMAGE, new MakeDamageEvent(GlobalStateName.ENEMY, GlobalStateName.PLAYER, this.attributes.finalDamage()));
+        EventCenter.emit(EventName.DEAL_DAMAGE, new DealDamageEvent('Enemy', 'Player', this.attributes.finalDamage()));
     }
 
     /**

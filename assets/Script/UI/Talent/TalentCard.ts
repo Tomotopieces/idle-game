@@ -1,7 +1,8 @@
 import { _decorator, Component, Label, Layout, Node, UITransform, Vec3, view } from 'cc';
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { EventName } from "db://assets/Script/Util/Constant";
+
+import { EventName } from "db://assets/Script/Event/EventName";
 
 const { ccclass, executeInEditMode } = _decorator;
 
@@ -97,6 +98,7 @@ export class TalentCard extends Component {
         this.node.setWorldPosition(targetWorldPosition);
 
         // 设置卡片内容
+        this._talentTreeNode = talentTreeNode;
         this._nameLabel.string = talentTreeNode.talent.displayName;
         this._levelNode.active = !talentTreeNode.locked; // 只在解锁后显示等级
         this._levelLabel.string = `Lv.${talentTreeNode.talent.level}`;
@@ -113,6 +115,8 @@ export class TalentCard extends Component {
 
     clickbutton() {
         EventCenter.emit(EventName.TALENT_UPGRADE, this._talentTreeNode);
+
+        this._levelLabel.string = `Lv.${this._talentTreeNode.talent.level}`;
 
         if (this._talentTreeNode.maxActivated()) {
             this._operationNode.active = false;

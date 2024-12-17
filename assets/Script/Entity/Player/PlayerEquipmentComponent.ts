@@ -3,9 +3,9 @@ import { PlayerAttributeComponent } from "db://assets/Script/Entity/Player/Playe
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { EventName } from "db://assets/Script/Util/Constant";
 import { EquipmentChangeEvent } from "db://assets/Script/Event/EquipmentChangeEvent";
 import { SET_EFFECT_TABLE, UNIQUE_EFFECT_TABLE } from "db://assets/Script/DataTable";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 /**
  * 玩家装备组件
