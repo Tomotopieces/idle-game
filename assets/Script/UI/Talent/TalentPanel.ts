@@ -3,6 +3,7 @@ import { TalentCard } from "db://assets/Script/UI/Talent/TalentCard";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Util/Constant";
 import { TalentSlot } from "db://assets/Script/UI/Talent/TalentSlot";
+import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 
 const { ccclass, property } = _decorator;
 
@@ -27,6 +28,7 @@ export class TalentPanel extends Component {
     onLoad() {
         this._anim = this.node.getComponent(Animation);
         EventCenter.on(EventName.UI_CLICK_TALENT_SLOT, this.node.name, (talentSlot: TalentSlot) => this.onClickTalentSlot(talentSlot))
+        EventCenter.on(EventName.UI_UPDATE_TALENT_SLOT, this.node.name, (talentTreeNode: TalentTreeNode) => this.onUpdateTalent(talentTreeNode));
     }
 
     /**
@@ -42,9 +44,26 @@ export class TalentPanel extends Component {
         }
     }
 
+    /**
+     * 处理点击天赋槽事件
+     *
+     * @param talentSlot 天赋槽
+     */
     private onClickTalentSlot(talentSlot: TalentSlot) {
         const position = talentSlot.node.getWorldPosition();
         this.talentCard.show(position, talentSlot.talentTreeNode);
+    }
+
+    /**
+     * 处理更新天赋事件
+     *
+     * @param talentTreeNode 天赋树节点
+     */
+    private onUpdateTalent(talentTreeNode: TalentTreeNode) {
+        const talentSlot = this.node.getChildByName('TalentSlot').getComponent(TalentSlot);
+        if (talentSlot.talentName === talentTreeNode.talent.name) {
+            talentSlot.updateBottomSprite();
+        }
     }
 }
 

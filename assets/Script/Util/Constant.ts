@@ -156,6 +156,16 @@ export enum EventName {
      * 获得棍势
      */
     GAIN_STANCE = 'GAIN_STANCE',
+
+    /**
+     * 天赋升级
+     */
+    TALENT_UPGRADE = 'TALENT_UPGRADE',
+
+    /**
+     * 更新天赋槽UI
+     */
+    UI_UPDATE_TALENT_SLOT = 'UI_UPDATE_TALENT_SLOT',
 }
 
 /**

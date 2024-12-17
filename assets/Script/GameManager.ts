@@ -17,6 +17,7 @@ import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { MakeDamageEvent } from "db://assets/Script/Event/MakeDamageEvent";
 import { AREA_TABLE, ITEM_TABLE, STAGE_TABLE } from "db://assets/Script/DataTable";
 import { DropItemFactory } from "db://assets/Script/Item/DropItemFactory";
+import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 
 const { ccclass, property } = _decorator;
 
@@ -101,6 +102,7 @@ export class GameManager extends Component {
         EventCenter.on(EventName.GET_EXPERIENCE, this.node.name, (experience: number) => this.getExperience(experience));
         EventCenter.on(EventName.PLAYER_LEVEL_UP, this.node.name, (level: number) => this.handlePlayerLevelUp(level));
         EventCenter.on(EventName.GAIN_STANCE, this.node.name, (stance: number) => this.handleGainStance(stance));
+        EventCenter.on(EventName.TALENT_UPGRADE, this.node.name, (talentTreeNode: TalentTreeNode) => this.handleTalentUpgrade(talentTreeNode));
     }
 
     update(dt: number) {
@@ -288,6 +290,15 @@ export class GameManager extends Component {
      */
     private handleGainStance(stance: number) {
         this.player.skills.resources.stance += stance;
+    }
+
+    /**
+     * 处理天赋升级事件
+     *
+     * @param talentTreeNode 天赋树节点
+     */
+    private handleTalentUpgrade(talentTreeNode: TalentTreeNode) {
+        this.player.talents.upgradeTalent(talentTreeNode);
     }
 
     /**

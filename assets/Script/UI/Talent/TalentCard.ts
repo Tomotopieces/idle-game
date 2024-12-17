@@ -1,5 +1,7 @@
 import { _decorator, Component, Label, Layout, Node, UITransform, Vec3, view } from 'cc';
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
+import { EventCenter } from "db://assets/Script/Event/EventCenter";
+import { EventName } from "db://assets/Script/Util/Constant";
 
 const { ccclass, executeInEditMode } = _decorator;
 
@@ -9,6 +11,11 @@ const { ccclass, executeInEditMode } = _decorator;
 @ccclass('TalentCard')
 @executeInEditMode(true)
 export class TalentCard extends Component {
+    /**
+     * 天赋树节点
+     */
+    private _talentTreeNode: TalentTreeNode;
+
     /**
      * 信息 Layout
      */
@@ -105,7 +112,14 @@ export class TalentCard extends Component {
     }
 
     clickbutton() {
-        // TODO 触发 UI_CLICK_TALENT_SLOT 事件
+        EventCenter.emit(EventName.TALENT_UPGRADE, this._talentTreeNode);
+
+        if (this._talentTreeNode.maxActivated()) {
+            this._operationNode.active = false;
+            this._infoLayout.getComponent(Layout).updateLayout(true);
+        }
+
+        EventCenter.emit(EventName.UI_UPDATE_TALENT_SLOT, this._talentTreeNode);
     }
 
     /**
