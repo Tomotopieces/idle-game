@@ -40,7 +40,7 @@ export class SkillLightAttack extends Skill {
     }
 
     override update(deltaTime: number) {
-        if (this.timer < this.cooldown / this._attackSpeedBoost) {
+        if (this.timer < (this.cooldown / this._attackSpeedBoost)) {
             this.timer += deltaTime;
         } else if (this.cost()) {
             this.timer = 0;
@@ -62,6 +62,10 @@ export class SkillLightAttack extends Skill {
     attackFrameEvent() {
         EventCenter.emit(EventName.DEAL_DAMAGE, new DealDamageEvent(DamageUnit.PLAYER, DamageUnit.ENEMY, this.player.attributes.finalDamage()));
         EventCenter.emit(EventName.GAIN_STANCE, SkillLightAttack.GAIN_STANCE);
+    }
+
+    get attackSpeedBoost(): number {
+        return this._attackSpeedBoost;
     }
 
     set attackSpeedBoost(value: number) {

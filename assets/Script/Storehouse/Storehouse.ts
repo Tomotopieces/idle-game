@@ -14,7 +14,7 @@ export type StorehouseType = Map<string, ItemStack>;
  * 仓库
  */
 export class Storehouse {
-    static STOREHOUSE: StorehouseType;
+    static STOREHOUSE: StorehouseType = new Map<string, ItemStack>();
 
     /**
      * 装备栏

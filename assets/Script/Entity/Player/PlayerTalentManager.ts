@@ -1,5 +1,8 @@
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
+import { TALENT_TREE } from "db://assets/Script/DataTable";
+import { EventCenter } from "db://assets/Script/Event/EventCenter";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 /**
  * 玩家天赋管理器
@@ -16,6 +19,11 @@ export class PlayerTalentManager {
     private _sparks: number;
 
     /**
+     * 记录等级，用于计算灵光点数
+     */
+    private _recordLevel: number;
+
+    /**
      * 消耗灵光点数
      *
      * @param cost 消耗数量
@@ -25,8 +33,18 @@ export class PlayerTalentManager {
             return false;
         }
 
-        this._sparks -= cost;
+        this.sparks -= cost;
         return true;
+    }
+
+    /**
+     * 升级获得灵光点数
+     *
+     * @param level 新等级
+     */
+    levelUp(level: number) {
+        this.sparks += (level - this._recordLevel);
+        this._recordLevel = level;
     }
 
     /**
@@ -38,7 +56,7 @@ export class PlayerTalentManager {
         if (talentTreeNode.locked || talentTreeNode.maxActivated()) {
             // 未解锁或已满级
             return;
-        } else if (!this.costSparks(talentTreeNode.talent.requirement)) {
+        } else if (this._sparks < talentTreeNode.talent.requirement) {
             // 灵光点不足
             return;
         }
@@ -51,9 +69,14 @@ export class PlayerTalentManager {
      * 天赋重修
      */
     rebuild() {
-        // TODO 天赋重修
-
         this._talents = new Map<string, number>();
+        this._sparks = PlayerController.PLAYER.levelInfo.level;
+
+        Array.from(TALENT_TREE.values()).reverse().forEach(node => {
+            node.forceLock();
+            EventCenter.emit(EventName.UI_UPDATE_TALENT_SLOT, node);
+        });
+        EventCenter.emit(EventName.UI_UPDATE_SPARKS, this._sparks);
     }
 
     get talents(): Map<string, number> {
@@ -64,9 +87,27 @@ export class PlayerTalentManager {
         return this._sparks;
     }
 
-    restore(talents: Map<string, number>) {
-        this._sparks = PlayerController.PLAYER.levelInfo.level - Array.from(talents.values()).reduce((a, b) => a + b);
+    set sparks(value: number) {
+        this._sparks = value;
+        EventCenter.emit(EventName.UI_UPDATE_SPARKS, this._sparks);
+    }
 
-        // TODO 天赋恢复
+    /**
+     * 恢复天赋加点
+     *
+     * @param talents 天赋加点
+     */
+    restore(talents: Map<string, number>) {
+        this.sparks = this._recordLevel = PlayerController.PLAYER.levelInfo.level;
+        if (!talents.size) {
+            return;
+        }
+        this._talents = talents;
+
+        talents.forEach((level, name) => {
+            const talentTreeNode = TALENT_TREE.get(name);
+            talentTreeNode.activate(level);
+            EventCenter.emit(EventName.UI_UPDATE_TALENT_SLOT, talentTreeNode);
+        });
     }
 }

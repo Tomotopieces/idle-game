@@ -29,6 +29,11 @@ export class TalentTreeNode {
     readonly children: Array<string>;
 
     /**
+     * 是否自动解锁
+     */
+    readonly autoUnlock: boolean;
+
+    /**
      * 是否自动激活
      */
     readonly autoActivate: boolean;
@@ -43,15 +48,17 @@ export class TalentTreeNode {
      *
      * @param talent       天赋
      * @param prerequisite 前置条件
+     * @param parents      前置天赋
      * @param autoActivate 自动激活
      * @param autoUnlock   自动解锁
      */
-    constructor(talent: Talent, prerequisite: Predicate<void>, autoActivate: boolean, autoUnlock: boolean) {
+    constructor(talent: Talent, prerequisite: Predicate<void>, parents: Array<string>, autoActivate: boolean, autoUnlock: boolean) {
         this.talent = talent;
         this.prerequisite = prerequisite ?? ALWAYS_TRUE;
-        this.parents = new Array<string>();
+        this.parents = parents ?? [];
         this.children = new Array<string>();
         this.autoActivate = autoActivate;
+        this.autoUnlock = autoUnlock;
         this._locked = !autoUnlock;
     }
 
@@ -120,6 +127,16 @@ export class TalentTreeNode {
      */
     maxActivated(): boolean {
         return this.talent.level === this.talent.maxLevel;
+    }
+
+    /**
+     * 强制锁定天赋
+     *
+     * 天赋重修用
+     */
+    forceLock(): void {
+        this.talent.activate(0);
+        this._locked = !this.autoUnlock;
     }
 
     /**

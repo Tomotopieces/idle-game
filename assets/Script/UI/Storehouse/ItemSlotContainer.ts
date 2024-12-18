@@ -37,27 +37,14 @@ export class ItemSlotContainer extends Component {
 
     start() {
         // TODO 改为使用 Layout 组件进行排版，重新设计排版逻辑
-        // 获取仓库内容
-        const storehouse = Storehouse.STOREHOUSE;
-
-        // 计算展示的物品槽数量，确保每行都填满
-        let slotCount = Math.max(storehouse.size, DEFAULT_SLOT_SIZE);
-        slotCount += SLOT_PER_ROW - slotCount % SLOT_PER_ROW;
 
         // 添加物品槽
-        const stackList = Array.from(storehouse.values());
-        for (let i = 0; i < slotCount; i++) {
+        for (let i = 0; i < DEFAULT_SLOT_SIZE; i++) {
             const slot = instantiate(this.slotPrefab);
             this.node.addChild(slot);
 
             // 设置slot位置
             slot.setPosition(ItemSlotContainer.calculatePosition(i));
-
-            // 设置slot内容
-            if (i < stackList.length) {
-                slot.getComponent(ItemSlot).stack = stackList[i];
-                this._slotList.push(slot);
-            }
         }
 
         // 监听仓库变化事件

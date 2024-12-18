@@ -83,4 +83,4 @@ SET_EFFECT_TABLE.set(SetEffectZiZhuBiJiao.NAME, new SetEffectZiZhuBiJiao());
  * 天赋名 -> 天赋节点
  */
 export const TALENT_TREE = new Map<string, TalentTreeNode>();
-TALENT_TREE.set(TalentTiJian.NAME, new TalentTreeNode(new TalentTiJian(), null, false, true));
+TALENT_TREE.set(TalentTiJian.NAME, new TalentTreeNode(new TalentTiJian(), null, [], false, true));

@@ -1,14 +1,24 @@
-import { _decorator, Animation, Component } from 'cc';
+import { _decorator, Animation, Component, Label } from 'cc';
 import { TalentCard } from "db://assets/Script/UI/Talent/TalentCard";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { TalentSlot } from "db://assets/Script/UI/Talent/TalentSlot";
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 import { EventName } from "db://assets/Script/Event/EventName";
+import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 
 const { ccclass, property } = _decorator;
 
+/**
+ * 天赋面板
+ */
 @ccclass('TalentPanel')
 export class TalentPanel extends Component {
+    /**
+     * 灵光点标签
+     */
+    @property({ type: Label, tooltip: '灵光点标签' })
+    sparksLabel: Label;
+
     /**
      * 天赋信息卡片
      */
@@ -27,8 +37,15 @@ export class TalentPanel extends Component {
 
     onLoad() {
         this._anim = this.node.getComponent(Animation);
-        EventCenter.on(EventName.UI_CLICK_TALENT_SLOT, this.node.name, (talentSlot: TalentSlot) => this.onClickTalentSlot(talentSlot))
+        EventCenter.on(EventName.UI_CLICK_TALENT_SLOT, this.node.name, (talentSlot: TalentSlot) => this.onClickTalentSlot(talentSlot));
         EventCenter.on(EventName.UI_UPDATE_TALENT_SLOT, this.node.name, (talentTreeNode: TalentTreeNode) => this.onUpdateTalent(talentTreeNode));
+        EventCenter.on(EventName.UI_UPDATE_SPARKS, this.node.name, (sparks: number) => this.sparksLabel.string = `${sparks}`);
+    }
+
+    onDestroy() {
+        EventCenter.off(EventName.UI_CLICK_TALENT_SLOT, this.node.name);
+        EventCenter.off(EventName.UI_UPDATE_TALENT_SLOT, this.node.name);
+        EventCenter.off(EventName.UI_UPDATE_SPARKS, this.node.name);
     }
 
     /**
@@ -42,6 +59,16 @@ export class TalentPanel extends Component {
         if (!this._show) {
             this.talentCard.hide();
         }
+    }
+
+    /**
+     * 点击天赋重修俺牛
+     *
+     * 按钮触发
+     */
+    rebuild() {
+        PlayerController.PLAYER.talents.rebuild();
+        this.talentCard.hide();
     }
 
     /**
@@ -60,6 +87,7 @@ export class TalentPanel extends Component {
      * @param talentTreeNode 天赋树节点
      */
     private onUpdateTalent(talentTreeNode: TalentTreeNode) {
+        // TODO 通过参数进行匹配
         const talentSlot = this.node.getChildByName('TalentSlot').getComponent(TalentSlot);
         if (talentSlot.talentName === talentTreeNode.talent.name) {
             talentSlot.updateBottomSprite();

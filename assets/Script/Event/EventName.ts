@@ -78,6 +78,11 @@ export enum EventName {
     UI_POST_MESSAGE = 'UI_POST_MESSAGE',
 
     /**
+     * 更新灵光点UI
+     */
+    UI_UPDATE_SPARKS = 'UI_UPDATE_SPARKS',
+
+    /**
      * 获得棍势
      */
     GAIN_STANCE = 'GAIN_STANCE',

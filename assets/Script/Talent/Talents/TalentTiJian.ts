@@ -21,7 +21,7 @@ export class TalentTiJian extends Talent {
      */
     private static readonly LIGHT_ATTACK_SPEED_BOOST_MAP = new Map<number, number>([
         [1, 0.3],
-        [2, 0.5]
+        [2, 0.8]
     ]);
 
     constructor() {

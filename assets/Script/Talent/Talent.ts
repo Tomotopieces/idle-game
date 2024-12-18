@@ -1,3 +1,5 @@
+import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
+
 /**
  * 天赋
  *
@@ -62,7 +64,10 @@ export abstract class Talent {
      * @return 是否激活成功
      */
     activate(level: number): boolean {
-        // TODO 添加处理灵光点逻辑
+        if (level > this._level && !PlayerController.PLAYER.talents.costSparks(this.requirement * (level - this._level))) {
+            // 灵光点不足
+            return false;
+        }
 
         if (this._level || !level) {
             this.deactivateEffect();
