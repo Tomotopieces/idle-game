@@ -24,6 +24,13 @@ export class PlayerTalentManager {
     private _recordLevel: number;
 
     /**
+     * 初始化
+     */
+    init() {
+        this._recordLevel = this._sparks = PlayerController.PLAYER.levelInfo.level;
+    }
+
+    /**
      * 消耗灵光点数
      *
      * @param cost 消耗数量
@@ -98,7 +105,6 @@ export class PlayerTalentManager {
      * @param talents 天赋加点
      */
     restore(talents: Map<string, number>) {
-        this.sparks = this._recordLevel = PlayerController.PLAYER.levelInfo.level;
         if (!talents.size) {
             return;
         }

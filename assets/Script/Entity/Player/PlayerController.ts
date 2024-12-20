@@ -64,6 +64,7 @@ export class PlayerController extends Component {
         this.updateHealthBar();
         this.skills.addSkill(new SkillLightAttack());
         this.skills.addSkill(new SkillHeavyAttack());
+        this.talents.init();
     }
 
     /**
