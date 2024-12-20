@@ -20,12 +20,12 @@ export class SkillLightAttack extends Skill {
     /**
      * 攻击获得的棍势
      */
-    static readonly GAIN_STANCE: number = 100;
+    static readonly GAIN_STANCE: number = 20;
 
     /**
      * 攻击速度倍率
      */
-    private _attackSpeedBoost: number = 1;
+    private _attackSpeedBoost: number = 5;
 
     constructor() {
         super(SkillLightAttack.NAME, SkillLightAttack.DISPLAY_NAME, SkillLightAttack.DESCRIPTION, SkillLightAttack.COOLDOWN);
@@ -35,9 +35,9 @@ export class SkillLightAttack extends Skill {
     override update(deltaTime: number) {
         if (this.timer < (this.cooldown / this._attackSpeedBoost)) {
             this.timer += deltaTime;
-        } else if (this.cost()) {
-            this.timer = 0;
-            this.trigger();
+        } else if (this.cost() && !this.queuing) {
+            this.player.skills.queue(this);
+            this.queuing = true;
         }
     }
 

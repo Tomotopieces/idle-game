@@ -51,6 +51,7 @@ export class PlayerSkillManager {
         this._autoSkillMap.forEach(skill => skill.update(deltaTime));
         if (this._skillQueue.length && this._state === SkillState.IDLE) {
             this._skillQueue.shift().trigger();
+            this._state = SkillState.CASTING;
         }
     }
 
@@ -90,7 +91,12 @@ export class PlayerSkillManager {
      * @param skill 技能
      */
     queue(skill: Skill) {
+        console.log(skill.name);
         this._skillQueue.push(skill);
+    }
+
+    cast() {
+        this._state = SkillState.CASTING;
     }
 
     idle() {

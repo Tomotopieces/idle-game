@@ -872,9 +872,16 @@
       {
         "__uuid__": "399a0707-3a9d-47b0-8f03-c2301abf8d30",
         "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "891147f0-974a-4ba6-a228-bcc98a0d6d70",
+        "__expectedType__": "cc.AnimationClip"
       }
     ],
-    "_defaultClip": null,
+    "_defaultClip": {
+      "__uuid__": "399a0707-3a9d-47b0-8f03-c2301abf8d30",
+      "__expectedType__": "cc.AnimationClip"
+    },
     "_id": "396vIA/YBJ57ASRek3h2rL"
   },
   {

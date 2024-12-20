@@ -1,4 +1,4 @@
-import { Animation } from 'cc';
+import { Animation, AnimationState } from 'cc';
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 import { Runnable } from "db://assets/Script/Util/Functions";
 
@@ -46,6 +46,11 @@ export abstract class Skill {
      */
     protected events: Array<Runnable>;
 
+    /**
+     * 是否正在排队
+     */
+    protected queuing: boolean;
+
     protected constructor(name: string, displayName: string, description: string, cooldown: number) {
         this.player = PlayerController.PLAYER;
         this.playerAnim = this.player.getComponent(Animation);
@@ -56,7 +61,8 @@ export abstract class Skill {
         this.timer = 0;
         this.events = new Array<Runnable>();
 
-        this.playerAnim.on(Animation.EventType.FINISHED, () => this.handleAnimationFinished(), this.playerAnim);
+        this.playerAnim.on(Animation.EventType.FINISHED, (type: Animation.EventType, state: AnimationState) => this.handleAnimationFinished(type, state), this.playerAnim);
+        // this.playerAnim.on(Animation.EventType.PLAY, (type: Animation.EventType, state: AnimationState) => this.handleAnimationStarted(type, state), this.playerAnim);
     }
 
     /**
@@ -72,8 +78,9 @@ export abstract class Skill {
     update(deltaTime: number) {
         if (this.timer < this.cooldown) {
             this.timer += deltaTime;
-        } else if (this.cost()) {
+        } else if (this.cost() && !this.queuing) {
             this.player.skills.queue(this);
+            this.queuing = true;
         }
     }
 
@@ -96,7 +103,8 @@ export abstract class Skill {
     /**
      * 处理动画结束事件
      */
-    protected handleAnimationFinished() {
+    protected handleAnimationFinished(_type: Animation.EventType, _state: AnimationState) {
         this.player.skills.idle();
+        this.queuing = false;
     }
 }

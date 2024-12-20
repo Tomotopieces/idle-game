@@ -23,6 +23,7 @@ export class SkillHeavyAttack extends Skill {
     }
 
     override trigger(): void {
+        super.trigger();
         this.playerAnim.play(SkillHeavyAttack.ANIMATION_NAME);
     }
 
