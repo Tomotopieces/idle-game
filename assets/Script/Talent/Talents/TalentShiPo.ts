@@ -1,11 +1,16 @@
 import { Talent } from "db://assets/Script/Talent/Talent";
+import { EventCenter } from "db://assets/Script/Event/EventCenter";
+import { EventName } from "db://assets/Script/Event/EventName";
+import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/DealDamageEvent";
+import { SkillState } from "db://assets/Script/Entity/Player/PlayerSkillManager";
+import { SkillHeavyAttack } from "db://assets/Script/Skill/Skills/SkillHeavyAttack";
+import { SkillLightAttack } from "db://assets/Script/Skill/Skills/SkillLightAttack";
+import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 
 /**
  * 天赋.本事.棍法.识破
  *
- * 若敌人攻击命中时，玩家正在进行轻棍攻击，且重棍已就绪，则打出重棍。识破后，本次重棍期间玩家无敌。
- *
- * TODO 完善
+ * 若敌人攻击命中时，玩家正在进行轻棍攻击，且重棍已就绪，则取消当前的轻棍，立刻打出重棍。识破触发后，本次敌人攻击无效。
  */
 export class TalentShiPo extends Talent {
     static readonly NAME = "shi_po";
@@ -19,11 +24,20 @@ export class TalentShiPo extends Talent {
     }
 
     protected activateEffect(): void {
-        throw new Error("Method not implemented.");
+        const player = PlayerController.PLAYER;
+        EventCenter.register(EventName.DEAL_DAMAGE, this.name, (event: DealDamageEvent) => {
+            if (event.source === DamageUnit.ENEMY && // 敌人攻击命中时
+                player.skills.state === SkillState.CASTING && // 玩家正在进行
+                player.skills.currentSkill.name === SkillLightAttack.NAME && // 轻棍攻击
+                player.skills.inQueue(SkillHeavyAttack.NAME) !== -1 // 重棍已就绪
+            ) {
+                player.skills.forceTrigger(SkillHeavyAttack.NAME); // 触发重棍
+                event.damage = 0; // 敌人伤害无效
+            }
+        });
     }
 
     protected deactivateEffect(): void {
-        throw new Error("Method not implemented.");
+        EventCenter.unregister(EventName.DEAL_DAMAGE, this.name);
     }
-
 }

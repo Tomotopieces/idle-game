@@ -42,6 +42,8 @@ export class PlayerSkillManager {
      */
     private _state: SkillState = SkillState.IDLE;
 
+    private _currentSkill: Skill;
+
     /**
      * 更新技能时间
      *
@@ -50,7 +52,8 @@ export class PlayerSkillManager {
     update(deltaTime: number) {
         this._autoSkillMap.forEach(skill => skill.update(deltaTime));
         if (this._skillQueue.length && this._state === SkillState.IDLE) {
-            this._skillQueue.shift().trigger();
+            this._currentSkill = this._skillQueue.shift();
+            this._currentSkill.trigger();
             this._state = SkillState.CASTING;
         }
     }
@@ -95,15 +98,49 @@ export class PlayerSkillManager {
         this._skillQueue.push(skill);
     }
 
-    cast() {
+    idle() {
+        this._state = SkillState.IDLE;
+        this._currentSkill = null;
+    }
+
+    /**
+     * 检查技能是否在队列中
+     *
+     * @param skillName 技能名
+     * @return 在队列中的索引，否则返回 -1
+     */
+    inQueue(skillName: string): number {
+        return this._skillQueue.findIndex(skill => skill.name === skillName);
+    }
+
+    /**
+     * 强制触发技能
+     *
+     * @param skillName 技能名
+     */
+    forceTrigger(skillName: string) {
+        const index = this._skillQueue.findIndex(skill => skill.name === skillName);
+        if (index === -1) {
+            return;
+        }
+        this.cancel(); // 取消当前技能
+        this._skillQueue[index].trigger();
+        this._skillQueue.splice(index, 1);
         this._state = SkillState.CASTING;
     }
 
-    idle() {
-        this._state = SkillState.IDLE;
+    /**
+     * 觉醒前世记忆
+     */
+    cancel() {
+        this._currentSkill.cancel();
     }
 
     get state(): SkillState {
         return this._state;
+    }
+
+    get currentSkill(): Skill {
+        return this._currentSkill;
     }
 }

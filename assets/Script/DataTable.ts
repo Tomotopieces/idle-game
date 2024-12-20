@@ -10,6 +10,7 @@ import { SetEffect } from "db://assets/Script/Item/Equipment/SetEffect/SetEffect
 import { SetEffectZiZhuBiJiao } from "db://assets/Script/Item/Equipment/SetEffect/SetEffectZiZhuBiJiao";
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 import { TalentTiJian } from "db://assets/Script/Talent/Talents/TalentTiJian";
+import { TalentShiPo } from "db://assets/Script/Talent/Talents/TalentShiPo";
 
 /**
  * 数据资源路径常量
@@ -84,3 +85,4 @@ SET_EFFECT_TABLE.set(SetEffectZiZhuBiJiao.NAME, new SetEffectZiZhuBiJiao());
  */
 export const TALENT_TREE = new Map<string, TalentTreeNode>();
 TALENT_TREE.set(TalentTiJian.NAME, new TalentTreeNode(new TalentTiJian(), null, [], false, true));
+TALENT_TREE.set(TalentShiPo.NAME, new TalentTreeNode(new TalentShiPo(), null, [], false, true));

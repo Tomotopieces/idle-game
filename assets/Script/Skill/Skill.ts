@@ -61,8 +61,7 @@ export abstract class Skill {
         this.timer = 0;
         this.events = new Array<Runnable>();
 
-        this.playerAnim.on(Animation.EventType.FINISHED, (type: Animation.EventType, state: AnimationState) => this.handleAnimationFinished(type, state), this.playerAnim);
-        // this.playerAnim.on(Animation.EventType.PLAY, (type: Animation.EventType, state: AnimationState) => this.handleAnimationStarted(type, state), this.playerAnim);
+        this.playerAnim.on(Animation.EventType.STOP, (type: Animation.EventType, state: AnimationState) => this.handleAnimationStop(type, state), this.playerAnim);
     }
 
     /**
@@ -101,9 +100,16 @@ export abstract class Skill {
     }
 
     /**
+     * 觉醒前世记忆
+     */
+    cancel() {
+        this.playerAnim.stop();
+    }
+
+    /**
      * 处理动画结束事件
      */
-    protected handleAnimationFinished(_type: Animation.EventType, _state: AnimationState) {
+    protected handleAnimationStop(_type: Animation.EventType, _state: AnimationState) {
         this.player.skills.idle();
         this.queuing = false;
     }

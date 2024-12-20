@@ -20,12 +20,12 @@ export class SkillLightAttack extends Skill {
     /**
      * 攻击获得的棍势
      */
-    static readonly GAIN_STANCE: number = 20;
+    static readonly GAIN_STANCE: number = 5;
 
     /**
      * 攻击速度倍率
      */
-    private _attackSpeedBoost: number = 5;
+    private _attackSpeedBoost: number = 1;
 
     constructor() {
         super(SkillLightAttack.NAME, SkillLightAttack.DISPLAY_NAME, SkillLightAttack.DESCRIPTION, SkillLightAttack.COOLDOWN);

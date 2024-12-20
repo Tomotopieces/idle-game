@@ -31,12 +31,22 @@ export class TalentPanel extends Component {
     private _anim: Animation;
 
     /**
+     * 天赋槽列表
+     */
+    private _talentSlotMap: Map<string, TalentSlot>;
+
+    /**
      * 是否显示
      */
     private _show: boolean = false;
 
     onLoad() {
         this._anim = this.node.getComponent(Animation);
+        this._talentSlotMap = new Map<string, TalentSlot>(
+            this.node.getChildByName('TalentContainer').children.map(slotNode => {
+                const slot = slotNode.getComponent(TalentSlot);
+                return [slot.talentName, slot];
+            }));
         EventCenter.on(EventName.UI_CLICK_TALENT_SLOT, this.node.name, (talentSlot: TalentSlot) => this.onClickTalentSlot(talentSlot));
         EventCenter.on(EventName.UI_UPDATE_TALENT_SLOT, this.node.name, (talentTreeNode: TalentTreeNode) => this.onUpdateTalent(talentTreeNode));
         EventCenter.on(EventName.UI_UPDATE_SPARKS, this.node.name, (sparks: number) => this.sparksLabel.string = `${sparks}`);
@@ -87,11 +97,8 @@ export class TalentPanel extends Component {
      * @param talentTreeNode 天赋树节点
      */
     private onUpdateTalent(talentTreeNode: TalentTreeNode) {
-        // TODO 通过参数进行匹配
-        const talentSlot = this.node.getChildByName('TalentSlot').getComponent(TalentSlot);
-        if (talentSlot.talentName === talentTreeNode.talent.name) {
-            talentSlot.updateBottomSprite();
-        }
+        const talentSlot = this._talentSlotMap.get(talentTreeNode.talent.name);
+        talentSlot?.updateBottomSprite();
     }
 }
 
