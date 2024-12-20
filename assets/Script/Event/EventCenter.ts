@@ -125,6 +125,7 @@ export class EventCenter {
         const listener = this.HANDLER_MAP.get(eventName)?.get(id);
         if (listener) {
             this.EVENT_TARGET.off(eventName, listener);
+            this.HANDLER_MAP.get(eventName).delete(id);
         }
     }
 

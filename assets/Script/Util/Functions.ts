@@ -19,6 +19,11 @@ export type Supplier<T> = () => T;
 export type Runnable = () => void;
 
 /**
+ * 任意函数类型
+ */
+export type AnyFunction = (...args: any) => any;
+
+/**
  * 始终返回 true 的 Predicate
  */
 export const ALWAYS_TRUE: Predicate<void> = () => true;

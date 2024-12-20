@@ -1,3 +1,4 @@
+import { Animation } from 'cc';
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 import { Runnable } from "db://assets/Script/Util/Functions";
 
@@ -26,19 +27,14 @@ export abstract class Skill {
     readonly cooldown: number;
 
     /**
-     * 触发
-     */
-    protected abstract trigger(): void;
-
-    /**
-     * 消耗
-     */
-    protected abstract cost(): boolean;
-
-    /**
      * 玩家角色
      */
     protected readonly player: PlayerController;
+
+    /**
+     * 玩家动画机
+     */
+    protected readonly playerAnim: Animation;
 
     /**
      * 计时器
@@ -52,13 +48,21 @@ export abstract class Skill {
 
     protected constructor(name: string, displayName: string, description: string, cooldown: number) {
         this.player = PlayerController.PLAYER;
+        this.playerAnim = this.player.getComponent(Animation);
         this.name = name;
         this.displayName = displayName;
         this.description = description;
         this.cooldown = cooldown;
         this.timer = 0;
         this.events = new Array<Runnable>();
+
+        this.playerAnim.on(Animation.EventType.FINISHED, () => this.handleAnimationFinished(), this.playerAnim);
     }
+
+    /**
+     * 消耗
+     */
+    protected abstract cost(): boolean;
 
     /**
      * 更新
@@ -69,10 +73,16 @@ export abstract class Skill {
         if (this.timer < this.cooldown) {
             this.timer += deltaTime;
         } else if (this.cost()) {
-            this.timer = 0;
-            this.trigger();
+            this.player.skills.queue(this);
         }
     }
+
+    /**
+     * 触发
+     */
+    trigger(): void {
+        this.timer = 0; // 在释放技能后再开始冷却
+    };
 
     /**
      * 触发事件
@@ -81,5 +91,12 @@ export abstract class Skill {
      */
     triggerEvent(eventIndex: number) {
         this.events[eventIndex]();
+    }
+
+    /**
+     * 处理动画结束事件
+     */
+    protected handleAnimationFinished() {
+        this.player.skills.idle();
     }
 }

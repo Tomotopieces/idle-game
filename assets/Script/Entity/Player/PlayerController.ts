@@ -7,6 +7,7 @@ import { PlayerSkillManager } from "db://assets/Script/Entity/Player/PlayerSkill
 import { SkillLightAttack } from "db://assets/Script/Skill/Skills/SkillLightAttack";
 import { PlayerTalentManager } from "db://assets/Script/Entity/Player/PlayerTalentManager";
 import { EventName } from "db://assets/Script/Event/EventName";
+import { SkillHeavyAttack } from "db://assets/Script/Skill/Skills/SkillHeavyAttack";
 
 const { ccclass, property } = _decorator;
 
@@ -62,6 +63,7 @@ export class PlayerController extends Component {
     init() {
         this.updateHealthBar();
         this.skills.addSkill(new SkillLightAttack());
+        this.skills.addSkill(new SkillHeavyAttack());
     }
 
     /**

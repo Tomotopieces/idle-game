@@ -1,4 +1,3 @@
-import { Animation } from 'cc';
 import { Skill } from "db://assets/Script/Skill/Skill";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/DealDamageEvent";
@@ -28,14 +27,8 @@ export class SkillLightAttack extends Skill {
      */
     private _attackSpeedBoost: number = 1;
 
-    /**
-     * 玩家动画机
-     */
-    private _playerAnim: Animation;
-
     constructor() {
         super(SkillLightAttack.NAME, SkillLightAttack.DISPLAY_NAME, SkillLightAttack.DESCRIPTION, SkillLightAttack.COOLDOWN);
-        this._playerAnim = this.player.getComponent(Animation);
         this.events.push(() => this.attackFrameEvent());
     }
 
@@ -48,8 +41,9 @@ export class SkillLightAttack extends Skill {
         }
     }
 
-    protected override trigger(): void {
-        this._playerAnim.play(SkillLightAttack.ANIMATION_NAME);
+    override trigger(): void {
+        super.trigger();
+        this.playerAnim.play(SkillLightAttack.ANIMATION_NAME);
     }
 
     protected override cost(): boolean {
@@ -59,7 +53,7 @@ export class SkillLightAttack extends Skill {
     /**
      * 攻击帧事件
      */
-    attackFrameEvent() {
+    private attackFrameEvent() {
         EventCenter.emit(EventName.DEAL_DAMAGE, new DealDamageEvent(DamageUnit.PLAYER, DamageUnit.ENEMY, this.player.attributes.finalDamage()));
         EventCenter.emit(EventName.GAIN_STANCE, SkillLightAttack.GAIN_STANCE);
     }
@@ -70,6 +64,6 @@ export class SkillLightAttack extends Skill {
 
     set attackSpeedBoost(value: number) {
         this._attackSpeedBoost = value;
-        this._playerAnim.getState(SkillLightAttack.ANIMATION_NAME).speed = this._attackSpeedBoost;
+        this.playerAnim.getState(SkillLightAttack.ANIMATION_NAME).speed = this._attackSpeedBoost;
     }
 }
