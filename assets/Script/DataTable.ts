@@ -12,6 +12,7 @@ import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 import { TalentTiJian } from "db://assets/Script/Talent/Talents/TalentTiJian";
 import { TalentShiPo } from "db://assets/Script/Talent/Talents/TalentShiPo";
 import { Chapter } from "db://assets/Script/Level/Chapter";
+import { CraftRecipe } from "db://assets/Script/Recipe/CraftRecipe";
 
 /**
  * 数据资源路径常量
@@ -57,6 +58,11 @@ export enum DataPath {
  * 道具表
  */
 export const ITEM_TABLE = new Map<string, Item>();
+
+/**
+ * 配方表
+ */
+export const RECIPE_TABLE = new Map<string, CraftRecipe>();
 
 /**
  * 敌人表

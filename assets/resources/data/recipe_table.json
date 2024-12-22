@@ -1,0 +1,75 @@
+[
+  {
+    "productName": "xing_zhe_jie_gu",
+    "requirements": [
+      {
+        "itemName": "mian_sha",
+        "itemCount": 4
+      },
+      {
+        "itemName": "ling_yun",
+        "itemCount": 1000
+      }
+    ]
+  },
+  {
+    "productName": "xing_zhe_zha_wan",
+    "requirements": [
+      {
+        "itemName": "mian_sha",
+        "itemCount": 1
+      },
+      {
+        "itemName": "ling_yun",
+        "itemCount": 500
+      }
+    ]
+  },
+  {
+    "productName": "xing_zhe_zhi_duo",
+    "requirements": [
+      {
+        "itemName": "mian_sha",
+        "itemCount": 5
+      },
+      {
+        "itemName": "ling_yun",
+        "itemCount": 1200
+      }
+    ]
+  },
+  {
+    "productName": "xing_zhe_tui_beng",
+    "requirements": [
+      {
+        "itemName": "mian_sha",
+        "itemCount": 2
+      },
+      {
+        "itemName": "ling_yun",
+        "itemCount": 640
+      }
+    ]
+  },
+  {
+    "productName": "lin_gun_shuang_she",
+    "requirements": [
+      {
+        "itemName": "liu_mu_gun",
+        "consume": false
+      },
+      {
+        "itemName": "yu_chui_ya",
+        "consume": false
+      },
+      {
+        "itemName": "jing_shi",
+        "itemCount": 8
+      },
+      {
+        "itemName": "ling_yun",
+        "itemCount": 360
+      }
+    ]
+  }
+]

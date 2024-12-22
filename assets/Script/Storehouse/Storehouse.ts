@@ -73,6 +73,15 @@ export class Storehouse {
     }
 
     /**
+     * 统计物品数量
+     *
+     * @param targets 目标物品列表
+     */
+    static count(targets: Array<Item>): Array<ItemStack> {
+        return Array.from(this.STOREHOUSE.values()).filter(stack => targets.some(target => target.name === stack.item.name));
+    }
+
+    /**
      * 检查物品是否存在
      *
      * @param itemName 物品名称

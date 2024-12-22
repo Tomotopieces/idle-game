@@ -51,6 +51,7 @@ export class PlayerController extends Component {
 
     onLoad() {
         PlayerController.PLAYER = this;
+        this.init();
     }
 
     update(dt: number) {

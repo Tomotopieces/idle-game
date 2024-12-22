@@ -1,0 +1,34 @@
+import { RecipeItemJson } from "db://assets/Script/Recipe/RecipeItemJson";
+import { CraftRecipe } from "db://assets/Script/Recipe/CraftRecipe";
+import { ITEM_TABLE } from "db://assets/Script/DataTable";
+
+/**
+ * 配方JSON
+ */
+export class CraftRecipeJson {
+    /**
+     * 产物名称
+     */
+    readonly productName: string;
+
+    /**
+     * 需求
+     */
+    readonly requirements: Array<RecipeItemJson>;
+
+    constructor(productName: string, requirements: Array<RecipeItemJson>) {
+        this.productName = productName;
+        this.requirements = requirements;
+    }
+
+    /**
+     * 转换为CraftRecipe
+     *
+     * @param id         ID
+     * @param recipeJson CraftRecipeJson
+     * @return CraftRecipe
+     */
+    static toCraftRecipe(id: number, recipeJson: CraftRecipeJson): CraftRecipe {
+        return new CraftRecipe(id, ITEM_TABLE.get(recipeJson.productName), recipeJson.requirements.map(requirement => RecipeItemJson.toRecipeItem(requirement)));
+    }
+}

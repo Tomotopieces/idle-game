@@ -97,7 +97,6 @@ export class GameManager extends Component {
      * 恢复玩家与仓库数据
      */
     private restorePlayerAndStorehouseData(saveData: SaveData) {
-        this.player.init();
         if (!saveData) {
             this.equipStarterSet();
             return;
