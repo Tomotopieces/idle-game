@@ -26,6 +26,8 @@ export class DropItem {
 
     /**
      * 一次性掉落
+     *
+     * 无视概率，必定掉落
      */
     readonly once: boolean = false;
 

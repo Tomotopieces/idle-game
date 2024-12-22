@@ -130,6 +130,20 @@ export class EventCenter {
     }
 
     /**
+     * 取消指定ID的所有监听
+     *
+     * @param id 监听ID
+     */
+    static idOff(id: string) {
+        this.HANDLER_MAP.forEach((handlerMap, eventName) => {
+            if (handlerMap.has(id)) {
+                this.EVENT_TARGET.off(eventName, handlerMap.get(id));
+                handlerMap.delete(id);
+            }
+        });
+    }
+
+    /**
      * 注册事件监听函数
      *
      * @param eventName 事件名

@@ -19,6 +19,7 @@ import { DropItemFactory } from "db://assets/Script/Item/DropItemFactory";
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 import { DefaultLevelName, Level } from "db://assets/Script/Level/Level";
 import { EventName } from "db://assets/Script/Event/EventName";
+import { ENEMY_RECORD } from "db://assets/Script/EnemyRecord/EnemyRecord";
 
 const { ccclass, property } = _decorator;
 
@@ -88,15 +89,7 @@ export class GameManager extends Component {
     }
 
     onDestroy() {
-        EventCenter.off(EventName.DEAL_DAMAGE, this.node.name);
-        EventCenter.off(EventName.UPDATE_LEVEL, this.node.name);
-        EventCenter.off(EventName.EQUIPMENT_CHANGE, this.node.name);
-        EventCenter.off(EventName.ENEMY_DIE, this.node.name);
-        EventCenter.off(EventName.GET_DROPS, this.node.name);
-        EventCenter.off(EventName.GET_EXPERIENCE, this.node.name);
-        EventCenter.off(EventName.PLAYER_LEVEL_UP, this.node.name);
-        EventCenter.off(EventName.GAIN_STANCE, this.node.name);
-        EventCenter.off(EventName.TALENT_UPGRADE, this.node.name);
+        EventCenter.idOff(this.node.name);
         this.unschedule(this._autoSaveCallback);
     }
 
@@ -138,6 +131,7 @@ export class GameManager extends Component {
             Level.STAGE = STAGE_TABLE.get(DefaultLevelName.STAGE);
         }
         this.enemy.info = Level.STAGE.enemyInfo;
+        saveData.enemyRecord.forEach((value, key) => ENEMY_RECORD.set(key, value));
 
         this.levelNameBar.updateLevelName(Level.CHAPTER, Level.AREA, Level.STAGE);
         this.stageLine.updateCurrentLevel(Level.AREA, Level.STAGE);
@@ -177,7 +171,7 @@ export class GameManager extends Component {
      * 保存存档
      */
     private saveData() {
-        const saveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.equipments.equipmentMap, Storehouse.STOREHOUSE, Level.CHAPTER.name, Level.AREA.name, Level.STAGE.name, this.player.talents.talents);
+        const saveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.equipments.equipmentMap, Storehouse.STOREHOUSE, Level.CHAPTER.name, Level.AREA.name, Level.STAGE.name, this.player.talents.talents, ENEMY_RECORD);
         sys.localStorage.setItem(LocalStorageDataName.SAVE_DATA, saveData.toJson());
         EventCenter.emit(EventName.UI_POST_MESSAGE, `保存成功`);
     }
@@ -205,11 +199,20 @@ export class GameManager extends Component {
      */
     private handleEnemyDie(enemy: EnemyController) {
         // 结算掉落物
-        const dropStackList = DropItemFactory.produce(enemy.dropList);
-        EventCenter.emit(EventName.GET_DROPS, dropStackList);
+        let dropList = enemy.dropList;
+        if (ENEMY_RECORD.get(enemy.info.name)) {
+            // 排除只掉落一次的掉落物
+            dropList = dropList.filter(drop => !drop.once);
+        }
+        console.log(`drop list: ${JSON.stringify(dropList.map(drop => drop.item.name))}`);
+        const productions = DropItemFactory.produce(dropList);
+        EventCenter.emit(EventName.GET_DROPS, productions);
 
         // 结算经验
         EventCenter.emit(EventName.GET_EXPERIENCE, enemy.info.experience);
+
+        // 增加击杀次数
+        ENEMY_RECORD.set(enemy.info.name, (ENEMY_RECORD.get(enemy.info.name) ?? 0) + 1);
     }
 
     /**

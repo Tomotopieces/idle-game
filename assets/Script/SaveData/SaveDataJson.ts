@@ -44,7 +44,12 @@ export class SaveDataJson {
      */
     talents: string;
 
-    constructor(level: number, experience: number, equipmentSlot: Array<ItemStackJson>, storehouse: Array<ItemStackJson>, chapterName: string, areaName: string, stageName: string, talents: string) {
+    /**
+     * 敌人击杀记录 Map JSON
+     */
+    enemyRecord: string;
+
+    constructor(level: number, experience: number, equipmentSlot: Array<ItemStackJson>, storehouse: Array<ItemStackJson>, chapterName: string, areaName: string, stageName: string, talents: string, enemyRecord: string) {
         this.level = level;
         this.experience = experience;
         this.equipmentSlot = equipmentSlot;
@@ -53,6 +58,7 @@ export class SaveDataJson {
         this.areaName = areaName;
         this.stageName = stageName;
         this.talents = talents;
+        this.enemyRecord = enemyRecord;
     }
 
     /**

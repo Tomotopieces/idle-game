@@ -1,4 +1,4 @@
-import { _decorator, Component, director, JsonAsset, ProgressBar, resources } from 'cc';
+import { _decorator, assetManager, Component, director, JsonAsset, ProgressBar, resources } from 'cc';
 import { SceneName } from "db://assets/Script/Util/Constant";
 import { Item } from "db://assets/Script/Item/Item";
 import { EnemyInfoJson } from "db://assets/Script/Entity/Enemy/EnemyInfoJson";
@@ -39,7 +39,8 @@ export class GameLoader extends Component {
     /**
      * 加载函数
      */
-    private _loadProcess: Array<AnyFunction> = [
+    private readonly _loadProcess: Array<AnyFunction> = [
+        () => this.loadResources(),
         () => this.loadItemTable(),
         () => this.loadEquipmentTable(),
         () => this.loadEnemyTable(),
@@ -58,6 +59,13 @@ export class GameLoader extends Component {
 
     start() {
         this.loadingBar.progress = 0;
+    }
+
+    private loadResources() {
+        assetManager.loadBundle('resources', (err: any, _bundle: any) => {
+            err && console.error(err);
+            this.loadStep++;
+        });
     }
 
     /**

@@ -4,7 +4,7 @@ import { EnemyInfo } from "db://assets/Script/Entity/Enemy/EnemyInfo";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { EnemyAttributeComponent } from "db://assets/Script/Entity/Enemy/EnemyAttributeComponent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { DealDamageEvent } from "db://assets/Script/Event/DealDamageEvent";
+import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/DealDamageEvent";
 import { EventName } from "db://assets/Script/Event/EventName";
 
 const { ccclass, property } = _decorator;
@@ -77,7 +77,7 @@ export abstract class EnemyController extends Component {
      * 动画帧事件触发
      */
     makeDamage() {
-        EventCenter.emit(EventName.DEAL_DAMAGE, new DealDamageEvent('Enemy', 'Player', this.attributes.finalDamage()));
+        EventCenter.emit(EventName.DEAL_DAMAGE, new DealDamageEvent(DamageUnit.ENEMY, DamageUnit.PLAYER, this.attributes.finalDamage()));
     }
 
     /**

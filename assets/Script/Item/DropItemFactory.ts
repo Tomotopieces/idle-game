@@ -13,8 +13,8 @@ export class DropItemFactory {
     static produce(dropList: Array<DropItem>): Array<ItemStack> {
         const result = new Array<ItemStack>();
         dropList.forEach(drop => {
-            if (Math.random() < drop.dropRate) {
-                result.push((new ItemStack(drop.item, Math.floor(Math.random() * (drop.max - drop.min + 1) + drop.min))));
+            if (Math.random() < drop.dropRate || drop.once) {
+                result.push(new ItemStack(drop.item, Math.floor(Math.random() * (drop.max - drop.min + 1) + drop.min)));
             }
         });
         return result;
