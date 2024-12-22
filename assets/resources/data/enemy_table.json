@@ -166,6 +166,42 @@
     "experience": 15
   },
   {
+    "name": "hu_xian_feng",
+    "displayName": "虎先锋",
+    "health": 100,
+    "damage": 10,
+    "icon": "enemy/tiger",
+    "dropList": [],
+    "experience": 20
+  },
+  {
+    "name": "li_shi_zhang",
+    "displayName": "狸侍长",
+    "health": 100,
+    "damage": 10,
+    "icon": "enemy/beaver",
+    "dropList": [],
+    "experience": 15
+  },
+  {
+    "name": "shi_lin_lin",
+    "displayName": "石磷磷",
+    "health": 100,
+    "damage": 10,
+    "icon": "enemy/stone",
+    "dropList": [],
+    "experience": 15
+  },
+  {
+    "name": "gu_song_ran",
+    "displayName": "骨悚然",
+    "health": 100,
+    "damage": 10,
+    "icon": "enemy/skull",
+    "dropList": [],
+    "experience": 20
+  },
+  {
     "name": "shi_xian_feng",
     "displayName": "石先锋",
     "health": 100,
@@ -175,13 +211,22 @@
     "experience": 20
   },
   {
-    "name": "hu_xian_feng",
-    "displayName": "虎先锋",
+    "name": "shu_jin_wei",
+    "displayName": "鼠禁卫",
     "health": 100,
     "damage": 10,
-    "icon": "enemy/tiger",
+    "icon": "enemy/mouse",
     "dropList": [],
-    "experience": 20
+    "experience": 10
+  },
+  {
+    "name": "hu_chang",
+    "displayName": "虎伥",
+    "health": 100,
+    "damage": 10,
+    "icon": "enemy/hu_chang",
+    "dropList": [],
+    "experience": 15
   },
   {
     "name": "huang_feng",

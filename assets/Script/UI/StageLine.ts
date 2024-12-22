@@ -75,7 +75,15 @@ export class StageLine extends Component {
      * 按钮触发
      */
     clickNextAreaButton() {
-        const nextArea = Level.nextAreaOf(Level.AREA);
+        let nextArea = Level.nextAreaOf(Level.AREA);
+        if (nextArea.name === Level.AREA.name) {
+            // 若为本章节的最后一个区域，则进入下一章节的第一个区域
+            const nextChapter = Level.nextChapterOf(Level.CHAPTER);
+            if (nextChapter.name === Level.CHAPTER.name) {
+                return;
+            }
+            nextArea = Level.firstAreaOf(nextChapter);
+        }
         const stage = Level.firstStageOf(nextArea);
         EventCenter.emit(EventName.UPDATE_LEVEL, new UpdateLevelEvent(nextArea, stage));
     }

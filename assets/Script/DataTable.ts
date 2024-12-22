@@ -28,6 +28,11 @@ export enum DataPath {
     EQUIPMENT_TABLE = 'data/equipment_table',
 
     /**
+     * 配方配置表
+     */
+    RECIPE_TABLE = 'data/recipe_table',
+
+    /**
      * 敌人配置表
      */
     ENEMY_TABLE = 'data/enemy_table',

@@ -16,10 +16,9 @@ import {
     STAGE_TABLE
 } from "db://assets/Script/DataTable";
 import { ChapterJson } from "db://assets/Script/Level/ChapterJson";
+import { AnyFunction } from "db://assets/Script/Util/Functions";
 
 const { ccclass, property } = _decorator;
-
-const STEPS = 6;
 
 /**
  * 游戏加载器
@@ -32,11 +31,29 @@ export class GameLoader extends Component {
     @property({ type: ProgressBar, tooltip: '加载进度条' })
     loadingBar: ProgressBar = null;
 
+    /**
+     * 加载步骤
+     */
+    private _loadStep = 0;
+
+    /**
+     * 加载函数
+     */
+    private _loadProcess: Array<AnyFunction> = [
+        () => this.loadItemTable(),
+        () => this.loadEquipmentTable(),
+        () => this.loadEnemyTable(),
+        () => this.loadStageTable(),
+        () => this.loadAreaTable(),
+        () => this.loadChapterTable(),
+        () => this.onLoadFinished()
+    ];
+
     onLoad() {
         EventCenter.init();
 
         // 加载配置文件
-        this.loadItemTable();
+        this.loadStep = 0;
     }
 
     start() {
@@ -52,10 +69,7 @@ export class GameLoader extends Component {
             const rawItemList = data.json! as Array<Item>;
             rawItemList.forEach((rawItem: Item, index: number) =>
                 ITEM_TABLE.set(rawItem.name, Item.fromObject(index, rawItem)));
-
-            this.loadingBar.progress += 1 / STEPS;
-
-            this.loadEquipmentTable();
+            this.loadStep++;
         });
     }
 
@@ -75,10 +89,7 @@ export class GameLoader extends Component {
                     SET_EFFECT_TABLE.get(equipment.attributes.setName).record(equipment.name);
                 }
             });
-
-            this.loadingBar.progress += 1 / STEPS;
-
-            this.loadEnemyTable();
+            this.loadStep++;
         });
     }
 
@@ -91,10 +102,7 @@ export class GameLoader extends Component {
             const rawInfoList = data.json! as Array<EnemyInfoJson>;
             rawInfoList.forEach((rawInfo: EnemyInfoJson, index: number) =>
                 ENEMY_TABLE.set(rawInfo.name, EnemyInfoJson.toEnemyInfo(index, rawInfo)));
-
-            this.loadingBar.progress += 1 / STEPS;
-
-            this.loadStageTable();
+            this.loadStep++;
         });
     }
 
@@ -107,10 +115,7 @@ export class GameLoader extends Component {
             const rawStageList = data.json! as Array<StageJson>;
             rawStageList.forEach((rawStage: StageJson, index: number) =>
                 STAGE_TABLE.set(rawStage.name, StageJson.toStage(index, rawStage)));
-
-            this.loadingBar.progress += 1 / STEPS;
-
-            this.loadAreaTable();
+            this.loadStep++;
         })
     }
 
@@ -123,10 +128,7 @@ export class GameLoader extends Component {
             const rawAreaList = data.json! as Array<AreaJson>;
             rawAreaList.forEach((rawArea: AreaJson, index: number) =>
                 AREA_TABLE.set(rawArea.name, AreaJson.toArea(index, rawArea)));
-
-            this.loadingBar.progress += 1 / STEPS;
-
-            this.loadChapterTable();
+            this.loadStep++;
         })
     }
 
@@ -139,10 +141,7 @@ export class GameLoader extends Component {
             const rawChapterList = data.json! as Array<ChapterJson>;
             rawChapterList.forEach((rawChapter: ChapterJson, index: number) =>
                 CHAPTER_TABLE.set(rawChapter.name, ChapterJson.toChapter(index, rawChapter)));
-
-            this.loadingBar.progress += 1 / STEPS;
-
-            this.onLoadFinished();
+            this.loadStep++;
         })
     }
 
@@ -151,6 +150,16 @@ export class GameLoader extends Component {
      */
     private onLoadFinished() {
         director.loadScene(SceneName.GAME);
+    }
+
+    private get loadStep(): number {
+        return this._loadStep;
+    }
+
+    private set loadStep(value: number) {
+        this._loadStep = value;
+        this.loadingBar.progress = this._loadStep / this._loadProcess.length;
+        this._loadProcess[this._loadStep]();
     }
 }
 
