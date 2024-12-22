@@ -90,7 +90,7 @@ export class PlayerEquipmentComponent {
         const targetStack = this.equipmentMap.get(equipment.equipmentType);
         // 保存当前套装数量
         // 卸下旧装备
-        const unequipped: Equipment = targetStack.item as Equipment;
+        const unequipped: Equipment = targetStack?.item as Equipment;
         this._attributes.dropAttributeFromEquipment(unequipped);
         // 取消旧装备的独门妙用
         unequipped?.attributes.effects.forEach(effectName => UNIQUE_EFFECT_TABLE.get(effectName).onDeactivate());

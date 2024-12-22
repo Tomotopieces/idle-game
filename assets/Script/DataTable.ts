@@ -11,6 +11,7 @@ import { SetEffectZiZhuBiJiao } from "db://assets/Script/Item/Equipment/SetEffec
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 import { TalentTiJian } from "db://assets/Script/Talent/Talents/TalentTiJian";
 import { TalentShiPo } from "db://assets/Script/Talent/Talents/TalentShiPo";
+import { Chapter } from "db://assets/Script/Level/Chapter";
 
 /**
  * 数据资源路径常量
@@ -40,6 +41,11 @@ export enum DataPath {
      * 区域配置表
      */
     AREA_TABLE = 'data/area_table',
+
+    /**
+     * 章节配置表
+     */
+    CHAPTER_TABLE = 'data/chapter_table',
 }
 
 /**
@@ -63,6 +69,11 @@ export const STAGE_TABLE = new Map<string, Stage>();
 export const AREA_TABLE = new Map<string, Area>();
 
 /**
+ * 章节表
+ */
+export const CHAPTER_TABLE = new Map<string, Chapter>();
+
+/**
  * 独门妙用 Map
  *
  * 效果名（装备名） -> 效果
@@ -79,9 +90,7 @@ export const SET_EFFECT_TABLE = new Map<string, SetEffect>();
 SET_EFFECT_TABLE.set(SetEffectZiZhuBiJiao.NAME, new SetEffectZiZhuBiJiao());
 
 /**
- * 天赋 Map
- *
- * 天赋名 -> 天赋节点
+ * 天赋树
  */
 export const TALENT_TREE = new Map<string, TalentTreeNode>();
 TALENT_TREE.set(TalentTiJian.NAME, new TalentTreeNode(new TalentTiJian(), null, [], false, true));

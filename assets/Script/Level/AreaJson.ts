@@ -17,7 +17,7 @@ export class AreaJson {
     readonly displayName: string;
 
     /**
-     * 关卡ID列表
+     * 舞台名称列表
      */
     readonly stages: Array<string>;
 
@@ -29,7 +29,7 @@ export class AreaJson {
      * @return Area
      */
     static toArea(id: number, areaJson: AreaJson): Area {
-        const stages = areaJson.stages.map(stageJson => STAGE_TABLE.get(stageJson));
+        const stages = areaJson.stages.map(stageName => STAGE_TABLE.get(stageName));
         return new Area(id, areaJson.displayName, areaJson.name, stages);
     }
 }

@@ -14,29 +14,29 @@ export class DropItemJson {
     /**
      * 物品掉落概率
      */
-    private readonly _dropRate: number = 1;
+    private readonly _dropRate: number;
 
     /**
      * 最大数量
      */
-    private readonly _max: number = 1;
+    private readonly _max: number;
 
     /**
      * 最小数量
      */
-    private readonly _min: number = 1;
+    private readonly _min: number;
 
     /**
      * 一次性掉落
      */
-    private readonly _once: boolean = false;
+    private readonly _once: boolean;
 
     constructor(itemName: string, dropRate: number, max: number, min: number, once: boolean) {
         this._itemName = itemName;
-        this._dropRate = dropRate;
-        this._max = max;
-        this._min = min;
-        this._once = once;
+        this._dropRate = dropRate ?? 1;
+        this._max = max ?? 1;
+        this._min = min ?? 1;
+        this._once = once ?? false;
     }
 
     /**

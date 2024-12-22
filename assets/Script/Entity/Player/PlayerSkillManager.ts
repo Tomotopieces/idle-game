@@ -94,7 +94,6 @@ export class PlayerSkillManager {
      * @param skill 技能
      */
     queue(skill: Skill) {
-        console.log(skill.name);
         this._skillQueue.push(skill);
     }
 

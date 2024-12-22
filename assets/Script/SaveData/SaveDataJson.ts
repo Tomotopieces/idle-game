@@ -25,6 +25,11 @@ export class SaveDataJson {
     storehouse: Array<ItemStackJson>;
 
     /**
+     * 章节名称
+     */
+    chapterName: string;
+
+    /**
      * 区域名称
      */
     areaName: string;
@@ -39,11 +44,12 @@ export class SaveDataJson {
      */
     talents: string;
 
-    constructor(level: number, experience: number, equipmentSlot: Array<ItemStackJson>, storehouse: Array<ItemStackJson>, areaName: string, stageName: string, talents: string) {
+    constructor(level: number, experience: number, equipmentSlot: Array<ItemStackJson>, storehouse: Array<ItemStackJson>, chapterName: string, areaName: string, stageName: string, talents: string) {
         this.level = level;
         this.experience = experience;
         this.equipmentSlot = equipmentSlot;
         this.storehouse = storehouse;
+        this.chapterName = chapterName;
         this.areaName = areaName;
         this.stageName = stageName;
         this.talents = talents;

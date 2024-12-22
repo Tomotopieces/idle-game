@@ -4,7 +4,7 @@
     "displayName": "柳木棍",
     "itemType": "equipment",
     "description": "棍虽榔糠，即不能打死，也能打一个跌。",
-    "icon": "item/liu_mu_gun",
+    "icon": "item/staff",
     "unique": true,
     "equipmentType": "weapon",
     "attributes": {
@@ -16,7 +16,7 @@
     "displayName": "绵布扎腕",
     "itemType": "equipment",
     "description": "这条虎皮裙子，能值几个铜钱？",
-    "icon": "item/mian_bu_zha_wan",
+    "icon": "item/toilet_paper",
     "unique": true,
     "equipmentType": "arm",
     "attributes": {
@@ -28,7 +28,7 @@
     "displayName": "虎皮裙",
     "itemType": "equipment",
     "description": "这条虎皮裙子，能值几个铜钱？",
-    "icon": "item/hu_pi_qun",
+    "icon": "item/t_shirt",
     "unique": true,
     "equipmentType": "chest",
     "attributes": {
@@ -40,7 +40,7 @@
     "displayName": "绵布腿绷",
     "itemType": "equipment",
     "description": "这条虎皮裙子，能值几个铜钱？",
-    "icon": "item/mian_bu_tui_beng",
+    "icon": "item/jeans",
     "unique": true,
     "equipmentType": "leg",
     "attributes": {

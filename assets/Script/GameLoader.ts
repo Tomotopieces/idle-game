@@ -8,14 +8,18 @@ import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import {
     AREA_TABLE,
+    CHAPTER_TABLE,
     DataPath,
     ENEMY_TABLE,
     ITEM_TABLE,
     SET_EFFECT_TABLE,
     STAGE_TABLE
 } from "db://assets/Script/DataTable";
+import { ChapterJson } from "db://assets/Script/Level/ChapterJson";
 
 const { ccclass, property } = _decorator;
+
+const STEPS = 6;
 
 /**
  * 游戏加载器
@@ -44,11 +48,12 @@ export class GameLoader extends Component {
      */
     private loadItemTable() {
         resources.load(DataPath.ITEM_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+            err && console.error(err);
             const rawItemList = data.json! as Array<Item>;
             rawItemList.forEach((rawItem: Item, index: number) =>
                 ITEM_TABLE.set(rawItem.name, Item.fromObject(index, rawItem)));
 
-            this.loadingBar.progress += 0.2;
+            this.loadingBar.progress += 1 / STEPS;
 
             this.loadEquipmentTable();
         });
@@ -59,6 +64,7 @@ export class GameLoader extends Component {
      */
     private loadEquipmentTable() {
         resources.load(DataPath.EQUIPMENT_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+            err && console.error(err);
             const rawItemList = data.json! as Array<Equipment>;
             const indexOffset = ITEM_TABLE.size;
             rawItemList.forEach((rawItem: Equipment, index: number) => {
@@ -70,7 +76,7 @@ export class GameLoader extends Component {
                 }
             });
 
-            this.loadingBar.progress += 0.2;
+            this.loadingBar.progress += 1 / STEPS;
 
             this.loadEnemyTable();
         });
@@ -81,11 +87,12 @@ export class GameLoader extends Component {
      */
     private loadEnemyTable() {
         resources.load(DataPath.ENEMY_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+            err && console.error(err);
             const rawInfoList = data.json! as Array<EnemyInfoJson>;
             rawInfoList.forEach((rawInfo: EnemyInfoJson, index: number) =>
                 ENEMY_TABLE.set(rawInfo.name, EnemyInfoJson.toEnemyInfo(index, rawInfo)));
 
-            this.loadingBar.progress += 0.2;
+            this.loadingBar.progress += 1 / STEPS;
 
             this.loadStageTable();
         });
@@ -96,11 +103,12 @@ export class GameLoader extends Component {
      */
     private loadStageTable() {
         resources.load(DataPath.STAGE_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+            err && console.error(err);
             const rawStageList = data.json! as Array<StageJson>;
             rawStageList.forEach((rawStage: StageJson, index: number) =>
                 STAGE_TABLE.set(rawStage.name, StageJson.toStage(index, rawStage)));
 
-            this.loadingBar.progress += 0.2;
+            this.loadingBar.progress += 1 / STEPS;
 
             this.loadAreaTable();
         })
@@ -111,11 +119,28 @@ export class GameLoader extends Component {
      */
     private loadAreaTable() {
         resources.load(DataPath.AREA_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+            err && console.error(err);
             const rawAreaList = data.json! as Array<AreaJson>;
             rawAreaList.forEach((rawArea: AreaJson, index: number) =>
                 AREA_TABLE.set(rawArea.name, AreaJson.toArea(index, rawArea)));
 
-            this.loadingBar.progress += 0.2;
+            this.loadingBar.progress += 1 / STEPS;
+
+            this.loadChapterTable();
+        })
+    }
+
+    /**
+     * 加载章节表
+     */
+    private loadChapterTable() {
+        resources.load(DataPath.CHAPTER_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+            err && console.error(err);
+            const rawChapterList = data.json! as Array<ChapterJson>;
+            rawChapterList.forEach((rawChapter: ChapterJson, index: number) =>
+                CHAPTER_TABLE.set(rawChapter.name, ChapterJson.toChapter(index, rawChapter)));
+
+            this.loadingBar.progress += 1 / STEPS;
 
             this.onLoadFinished();
         })

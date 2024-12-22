@@ -27,12 +27,6 @@
         "dropRate": 1,
         "max": 20,
         "min": 20
-      },
-      {
-        "itemName": "mian_sha",
-        "dropRate": 0.5,
-        "max": 1,
-        "min": 1
       }
     ],
     "experience": 2
@@ -49,12 +43,6 @@
         "dropRate": 1,
         "max": 100,
         "min": 50
-      },
-      {
-        "itemName": "chi_chao",
-        "dropRate": 1,
-        "max": 1,
-        "min": 1
       }
     ],
     "experience": 5
@@ -71,15 +59,18 @@
         "dropRate": 1,
         "max": 10,
         "min": 1
-      },
-      {
-        "itemName": "mian_sha",
-        "dropRate": 0.5,
-        "max": 1,
-        "min": 1
       }
     ],
     "experience": 5
+  },
+  {
+    "name": "bo_li_ge_lang",
+    "displayName": "波里个浪",
+    "health": 100,
+    "damage": 10,
+    "icon": "enemy/frog",
+    "dropList": [],
+    "experience": 10
   },
   {
     "name": "guang_mou",
@@ -87,7 +78,8 @@
     "health": 100,
     "damage": 10,
     "icon": "enemy/snake",
-    "dropList": []
+    "dropList": [],
+    "experience": 10
   },
   {
     "name": "bai_yi_xiu_shi",
@@ -97,10 +89,13 @@
     "icon": "enemy/snake",
     "dropList": [
       {
-        "itemName": "lin_gun_shuang_she",
-        "dropRate": 1,
-        "max": 1,
-        "min": 1
+        "itemName": "ling_yun",
+        "max": 200,
+        "min": 200
+      },
+      {
+        "itemName": "yu_chui_ya",
+        "once": true
       }
     ],
     "experience": 5
@@ -111,6 +106,15 @@
     "health": 100,
     "damage": 10,
     "icon": "enemy/baldhead",
+    "dropList": [],
+    "experience": 10
+  },
+  {
+    "name": "lang_ci_ke",
+    "displayName": "狼刺客",
+    "health": 100,
+    "damage": 10,
+    "icon": "enemy/wolf",
     "dropList": [],
     "experience": 10
   },
@@ -128,10 +132,8 @@
         "min": 1
       },
       {
-        "itemName": "shou_gun_xiong_pi",
-        "dropRate": 1,
-        "max": 1,
-        "min": 1
+        "itemName": "lie_huo_wu_jin",
+        "once": true
       }
     ],
     "experience": 15
@@ -144,6 +146,15 @@
     "icon": "enemy/mouse",
     "dropList": [],
     "experience": 10
+  },
+  {
+    "name": "di_lang",
+    "displayName": "地狼",
+    "health": 100,
+    "damage": 10,
+    "icon": "enemy/dog",
+    "dropList": [],
+    "experience": 15
   },
   {
     "name": "sha_da_lang",

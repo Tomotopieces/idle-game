@@ -1,7 +1,7 @@
 import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 
 // 默认基础生命值
-const DEFAULT_HEALTH = 200;
+const DEFAULT_HEALTH = 300;
 
 // 默认伤害
 const DEFAULT_DAMAGE = 20;

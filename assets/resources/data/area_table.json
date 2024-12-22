@@ -1,21 +1,65 @@
 [
   {
-    "name": "hei_feng_shan",
-    "displayName": "黑风山",
+    "name": "cang_lang_lin",
+    "displayName": "苍狼林",
     "stages": [
-      "cang_lang_lin",
-      "cui_zhu_lin",
-      "hei_feng_dong"
+      "tao_er_po",
+      "qian_shan",
+      "lin_wai",
+      "guan_yin_chan_yuan"
     ]
   },
   {
-    "name": "huang_feng_ling",
-    "displayName": "黄风岭",
+    "name": "cui_zhu_lin",
+    "displayName": "翠竹林",
     "stages": [
-      "sha_men_cun",
-      "xie_hun_ya",
-      "wo_hu_si",
-      "huang_feng_zhen"
+      "hou_shan",
+      "she_jing",
+      "bai_wu_ze"
+    ]
+  },
+  {
+    "name": "hei_feng_dong",
+    "displayName": "黑风洞",
+    "stages": [
+      "dong_nei",
+      "dong_wai",
+      "jian_di_feng"
+    ]
+  },
+  {
+    "name": "sha_men_cun",
+    "displayName": "沙门村",
+    "stages": [
+      "cun_kou",
+      "jing_di",
+      "bu_ji_gu"
+    ]
+  },
+  {
+    "name": "wo_hu_si",
+    "displayName": "卧虎寺",
+    "stages": [
+      "si_men",
+      "di_jiao"
+    ]
+  },
+  {
+    "name": "xie_hun_ya",
+    "displayName": "挟魂崖",
+    "stages": [
+      "cang_feng_shan_ao",
+      "zhen_shi_ping",
+      "sui_shi_tai"
+    ]
+  },
+  {
+    "name": "huang_feng_zhen",
+    "displayName": "黄风阵",
+    "stages": [
+      "ding_feng_qiao",
+      "ding_feng_zhuang",
+      "zhen_feng_men"
     ]
   }
 ]

@@ -1,6 +1,7 @@
 import { _decorator, Component, Label } from 'cc';
 import { Stage } from "db://assets/Script/Level/Stage";
 import { Area } from "db://assets/Script/Level/Area";
+import { Chapter } from "db://assets/Script/Level/Chapter";
 
 const { ccclass, property } = _decorator;
 
@@ -18,11 +19,12 @@ export class LevelNameBar extends Component {
     /**
      * 更新关卡名称
      *
-     * @param area 区域
-     * @param stage 舞台
+     * @param chapter 章节
+     * @param area    区域
+     * @param stage   舞台
      */
-    updateLevelName(area: Area, stage: Stage) {
-        this.label.string = `${area.displayName} - ${stage.displayName}`;
+    updateLevelName(chapter: Chapter, area: Area, stage: Stage) {
+        this.label.string = `${chapter.displayName} - ${area.displayName} - ${stage.displayName}`;
     }
 }
 

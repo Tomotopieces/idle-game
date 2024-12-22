@@ -33,6 +33,11 @@ export class SaveData {
     storehouse: StorehouseType;
 
     /**
+     * 章节名称
+     */
+    chapterName: string;
+
+    /**
      * 区域名称
      */
     areaName: string;
@@ -47,11 +52,12 @@ export class SaveData {
      */
     talents: Map<string, number>;
 
-    constructor(level: number, experience: number, equipmentSlot: Map<EquipmentType, ItemStack>, storehouse: StorehouseType, areaName: string, stageName: string, talents: Map<string, number>) {
+    constructor(level: number, experience: number, equipmentSlot: Map<EquipmentType, ItemStack>, storehouse: StorehouseType, chapterName: string, areaName: string, stageName: string, talents: Map<string, number>) {
         this.level = level ?? 0;
         this.experience = experience ?? 0;
         this.equipmentSlot = equipmentSlot ?? new Map<EquipmentType, ItemStack>();
         this.storehouse = storehouse ?? new Map<string, ItemStack>();
+        this.chapterName = chapterName ?? DefaultLevelName.CHAPTER;
         this.areaName = areaName ?? DefaultLevelName.AREA;
         this.stageName = stageName ?? DefaultLevelName.STAGE;
         this.talents = talents ?? new Map<string, number>();
@@ -73,7 +79,7 @@ export class SaveData {
         const storehouse = new Map<string, ItemStack>(dataJson.storehouse
             .map(itemStackJson => [itemStackJson.itemName, ItemStackJson.toItemStack(itemStackJson)]));
         const talents = dataJson.talents ? MapUtil.parse(dataJson.talents) as Map<string, number> : null;
-        return new SaveData(dataJson.level, dataJson.experience, equipmentSlot, storehouse, dataJson.areaName, dataJson.stageName, talents);
+        return new SaveData(dataJson.level, dataJson.experience, equipmentSlot, storehouse, dataJson.chapterName, dataJson.areaName, dataJson.stageName, talents);
     }
 
     /**
@@ -86,7 +92,7 @@ export class SaveData {
         const storehouseJson = Array.from(this.storehouse.values())
             .map(item => new ItemStackJson(item.item.name, item.count));
         const talentsJson = MapUtil.stringify(this.talents);
-        return new SaveDataJson(this.level, this.experience, equipmentSlotJson, storehouseJson, this.areaName, this.stageName, talentsJson).toJson();
+        return new SaveDataJson(this.level, this.experience, equipmentSlotJson, storehouseJson, this.chapterName, this.areaName, this.stageName, talentsJson).toJson();
     }
 }
 

@@ -14,7 +14,7 @@ import { EquipmentChangeEvent } from "db://assets/Script/Event/EquipmentChangeEv
 import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/DealDamageEvent";
-import { AREA_TABLE, ITEM_TABLE, STAGE_TABLE } from "db://assets/Script/DataTable";
+import { AREA_TABLE, CHAPTER_TABLE, ITEM_TABLE, STAGE_TABLE } from "db://assets/Script/DataTable";
 import { DropItemFactory } from "db://assets/Script/Item/DropItemFactory";
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 import { DefaultLevelName, Level } from "db://assets/Script/Level/Level";
@@ -106,6 +106,7 @@ export class GameManager extends Component {
     private restorePlayerAndStorehouseData(saveData: SaveData) {
         this.player.init();
         if (!saveData) {
+            this.equipStarterSet();
             return;
         }
 
@@ -130,14 +131,15 @@ export class GameManager extends Component {
         if (saveData) {
             Level.AREA = AREA_TABLE.get(saveData.areaName);
             Level.STAGE = STAGE_TABLE.get(saveData.stageName);
-            this.enemy.info = Level.STAGE.enemyInfo;
+            Level.CHAPTER = CHAPTER_TABLE.get(saveData.chapterName);
         } else {
+            Level.CHAPTER = CHAPTER_TABLE.get(DefaultLevelName.CHAPTER);
             Level.AREA = AREA_TABLE.get(DefaultLevelName.AREA);
             Level.STAGE = STAGE_TABLE.get(DefaultLevelName.STAGE);
-            this.enemy.info = Level.STAGE.enemyInfo;
         }
+        this.enemy.info = Level.STAGE.enemyInfo;
 
-        this.levelNameBar.updateLevelName(Level.AREA, Level.STAGE);
+        this.levelNameBar.updateLevelName(Level.CHAPTER, Level.AREA, Level.STAGE);
         this.stageLine.updateCurrentLevel(Level.AREA, Level.STAGE);
     }
 
@@ -156,7 +158,7 @@ export class GameManager extends Component {
         Level.STAGE = stage;
         this.enemy.info = stage.enemyInfo;
 
-        this.levelNameBar.updateLevelName(Level.AREA, Level.STAGE);
+        this.levelNameBar.updateLevelName(Level.CHAPTER, Level.AREA, Level.STAGE);
         this.stageLine.updateCurrentLevel(Level.AREA, Level.STAGE);
     }
 
@@ -175,7 +177,7 @@ export class GameManager extends Component {
      * 保存存档
      */
     private saveData() {
-        const saveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.equipments.equipmentMap, Storehouse.STOREHOUSE, Level.AREA.name, Level.STAGE.name, this.player.talents.talents);
+        const saveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.equipments.equipmentMap, Storehouse.STOREHOUSE, Level.CHAPTER.name, Level.AREA.name, Level.STAGE.name, this.player.talents.talents);
         sys.localStorage.setItem(LocalStorageDataName.SAVE_DATA, saveData.toJson());
         EventCenter.emit(EventName.UI_POST_MESSAGE, `保存成功`);
     }
@@ -281,6 +283,16 @@ export class GameManager extends Component {
      */
     private handleTalentUpgrade(talentTreeNode: TalentTreeNode) {
         this.player.talents.upgradeTalent(talentTreeNode);
+    }
+
+    /**
+     * 装备初始套装
+     */
+    private equipStarterSet() {
+        this.player.equipments.equip(ITEM_TABLE.get('liu_mu_gun') as Equipment);
+        this.player.equipments.equip(ITEM_TABLE.get('mian_bu_zha_wan') as Equipment);
+        this.player.equipments.equip(ITEM_TABLE.get('hu_pi_qun') as Equipment);
+        this.player.equipments.equip(ITEM_TABLE.get('mian_bu_tui_beng') as Equipment);
     }
 
     /**

@@ -1,0 +1,21 @@
+[
+  {
+    "name": "hei_feng_shan",
+    "displayName": "黑风山",
+    "areas": [
+      "cang_lang_lin",
+      "cui_zhu_lin",
+      "hei_feng_dong"
+    ]
+  },
+  {
+    "name": "huang_feng_ling",
+    "displayName": "黄风岭",
+    "areas": [
+      "sha_men_cun",
+      "xie_hun_ya",
+      "wo_hu_si",
+      "huang_feng_zhen"
+    ]
+  }
+]

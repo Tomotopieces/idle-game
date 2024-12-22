@@ -1,37 +1,102 @@
 [
   {
-    "name": "cang_lang_lin",
-    "displayName": "苍狼林",
+    "name": "tao_er_po",
+    "displayName": "桃儿坡",
+    "enemyName": "lang_chi_hou"
+  },
+  {
+    "name": "qian_shan",
+    "displayName": "前山",
+    "enemyName": "gu_hu_yuan"
+  },
+  {
+    "name": "lin_wai",
+    "displayName": "林外",
+    "enemyName": "guang_zhi"
+  },
+  {
+    "name": "guan_yin_chan_yuan",
+    "displayName": "观音禅院",
     "enemyName": "ling_xu_zi"
   },
   {
-    "name": "cui_zhu_lin",
-    "displayName": "翠竹林",
+    "name": "hou_shan",
+    "displayName": "后山",
+    "enemyName": "bo_li_ge_lang"
+  },
+  {
+    "name": "she_jing",
+    "displayName": "蛇径",
+    "enemyName": "guang_mou"
+  },
+  {
+    "name": "bai_wu_ze",
+    "displayName": "白雾泽",
     "enemyName": "bai_yi_xiu_shi"
   },
   {
-    "name": "hei_feng_dong",
-    "displayName": "黑风洞",
+    "name": "dong_nei",
+    "displayName": "洞内",
+    "enemyName": "lang_ci_ke"
+  },
+  {
+    "name": "dong_wai",
+    "displayName": "洞外",
+    "enemyName": "gu_hu_yuan"
+  },
+  {
+    "name": "jian_di_feng",
+    "displayName": "见谛峰",
     "enemyName": "hei_xiong_jing"
   },
   {
-    "name": "sha_men_cun",
-    "displayName": "沙门村",
+    "name": "cun_kou",
+    "displayName": "村口",
+    "enemyName": "di_lang"
+  },
+  {
+    "name": "bu_ji_gu",
+    "displayName": "不济谷",
     "enemyName": "sha_da_lang"
   },
   {
-    "name": "xie_hun_ya",
-    "displayName": "挟魂崖",
-    "enemyName": "shi_xian_feng"
-  },
-  {
-    "name": "wo_hu_si",
-    "displayName": "卧虎寺",
+    "name": "si_men",
+    "displayName": "寺门",
     "enemyName": "hu_xian_feng"
   },
   {
-    "name": "huang_feng_zhen",
-    "displayName": "黄风阵",
+    "name": "di_jiao",
+    "displayName": "地窖",
+    "enemyName": "li_shi_zhang"
+  },
+  {
+    "name": "cang_feng_shan_ao",
+    "displayName": "藏风山凹",
+    "enemyName": "shi_lin_lin"
+  },
+  {
+    "name": "zhen_shi_ping",
+    "displayName": "枕石坪",
+    "enemyName": "gu_song_ran"
+  },
+  {
+    "name": "sui_shi_tai",
+    "displayName": "碎石台",
+    "enemyName": "shi_xian_feng"
+  },
+  {
+    "name": "ding_feng_qiao",
+    "displayName": "定风桥",
+    "enemyName": "shu_jin_wei"
+  },
+  {
+    "name": "ding_feng_zhuang",
+    "displayName": "定风庄",
+    "enemyName": "hu_chang"
+  },
+  {
+    "name": "zhen_feng_men",
+    "displayName": "镇风门",
     "enemyName": "huang_feng"
   }
 ]
