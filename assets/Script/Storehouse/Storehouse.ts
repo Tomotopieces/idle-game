@@ -1,5 +1,5 @@
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
-import { EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
+import { Equipment, EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
 import { Item, ItemType } from "db://assets/Script/Item/Item";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
@@ -75,10 +75,41 @@ export class Storehouse {
     /**
      * 统计物品数量
      *
-     * @param targets 目标物品列表
+     * @param targets            目标物品列表
+     * @param checkEquipmentSlot 是否检查装备栏
      */
-    static count(targets: Array<Item>): Array<ItemStack> {
-        return Array.from(this.STOREHOUSE.values()).filter(stack => targets.some(target => target.name === stack.item.name));
+    static count(targets: Array<Item>, checkEquipmentSlot: boolean = true): Array<ItemStack> {
+        const itemStacks = Array.from(this.STOREHOUSE.values()).filter(stack => targets.some(target => target.name === stack.item.name));
+        if (checkEquipmentSlot) {
+            targets.forEach(target => {
+                const stack = this.equipmentMap.get((target as Equipment).equipmentType);
+                if (stack) {
+                    const index = itemStacks.findIndex(stack => stack.item.name === target.name);
+                    if (index !== -1) {
+                        itemStacks[index].count += stack.count;
+                    } else {
+                        itemStacks.push(stack);
+                    }
+                }
+            });
+        }
+        return itemStacks;
+    }
+
+    /**
+     * 统计物品数量
+     *
+     * @param target             目标物品
+     * @param checkEquipmentSlot 是否检查装备栏
+     */
+    static countOne(target: Item, checkEquipmentSlot: boolean = true): number {
+        let count = this.STOREHOUSE.get(target.name)?.count ?? 0;
+        if (checkEquipmentSlot) {
+            if (Array.from(this.equipmentMap.values()).some(stack => stack.item?.name === target.name)) {
+                count += 1;
+            }
+        }
+        return count;
     }
 
     /**
@@ -154,10 +185,6 @@ export class Storehouse {
      * @param stackList 更新物品列表
      */
     private static emitUpdateEvent(stackList: Array<ItemStack>) {
-        /*
-         * FIXME 只取stackList中的item数据，可能将参数类型改为Array<Item>更好？
-         */
-
         // 发送被更新的物品的现有库存情况，避免修改stackList数据
         const updateArray = new Array<ItemStack>();
         stackList.forEach(stack => updateArray.push(new ItemStack(stack.item, this.STOREHOUSE.get(stack.item.name)?.count ?? 0)));

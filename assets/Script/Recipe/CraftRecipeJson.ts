@@ -1,4 +1,4 @@
-import { RecipeItemJson } from "db://assets/Script/Recipe/RecipeItemJson";
+import { RecipeRequirementJson } from "db://assets/Script/Recipe/RecipeRequirementJson";
 import { CraftRecipe } from "db://assets/Script/Recipe/CraftRecipe";
 import { ITEM_TABLE } from "db://assets/Script/DataTable";
 
@@ -14,9 +14,9 @@ export class CraftRecipeJson {
     /**
      * 需求
      */
-    readonly requirements: Array<RecipeItemJson>;
+    readonly requirements: Array<RecipeRequirementJson>;
 
-    constructor(productName: string, requirements: Array<RecipeItemJson>) {
+    constructor(productName: string, requirements: Array<RecipeRequirementJson>) {
         this.productName = productName;
         this.requirements = requirements;
     }
@@ -29,6 +29,6 @@ export class CraftRecipeJson {
      * @return CraftRecipe
      */
     static toCraftRecipe(id: number, recipeJson: CraftRecipeJson): CraftRecipe {
-        return new CraftRecipe(id, ITEM_TABLE.get(recipeJson.productName), recipeJson.requirements.map(requirement => RecipeItemJson.toRecipeItem(requirement)));
+        return new CraftRecipe(id, ITEM_TABLE.get(recipeJson.productName), recipeJson.requirements.map(requirement => RecipeRequirementJson.toRecipeItem(requirement)));
     }
 }

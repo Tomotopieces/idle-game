@@ -96,4 +96,9 @@ export enum EventName {
      * 更新天赋槽UI
      */
     UI_UPDATE_TALENT_SLOT = 'UI_UPDATE_TALENT_SLOT',
+
+    /**
+     * 点击配方槽UI
+     */
+    UI_CLICK_RECIPE_SLOT = "UI_CLICK_RECIPE_SLOT",
 }

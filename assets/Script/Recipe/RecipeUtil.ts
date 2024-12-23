@@ -1,7 +1,7 @@
 import { CraftRecipe } from "db://assets/Script/Recipe/CraftRecipe";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { Storehouse } from "db://assets/Script/Storehouse/Storehouse";
-import { RecipeItem } from "db://assets/Script/Recipe/RecipeItem";
+import { RecipeRequirement } from "db://assets/Script/Recipe/RecipeRequirement";
 
 /**
  * 配方工具
@@ -12,18 +12,18 @@ export class RecipeUtil {
      *
      * @param recipe 配方
      */
-    static check(recipe: CraftRecipe): boolean {
+    static checkRequirements(recipe: CraftRecipe): boolean {
         return Storehouse.check(this.requirementsToStacks(recipe.requirements));
     }
 
     /**
-     * 统计仓库中物品数量
+     * 检查产物是否还能继续制作
      *
      * @param recipe 配方
-     * @return 物品堆叠列表
+     * @return 是否还能继续制作
      */
-    static countStorehouse(recipe: CraftRecipe): Array<ItemStack> {
-        return Storehouse.count(recipe.requirements.map(requirement => requirement.item));
+    static checkProduct(recipe: CraftRecipe): boolean {
+        return !recipe.product.unique || !Storehouse.countOne(recipe.product); // 非唯一，或不存在
     }
 
     /**
@@ -32,8 +32,11 @@ export class RecipeUtil {
      * @param recipe 配方
      * @returns 产物
      */
-    static craft(recipe: CraftRecipe): ItemStack {
-        return Storehouse.tackOut(this.requirementsToStacks(recipe.requirements)) ? new ItemStack(recipe.product, 1) : null;
+    static craft(recipe: CraftRecipe): void {
+        const requirements = recipe.requirements.filter(requirement => requirement.consume);
+        if (Storehouse.tackOut(this.requirementsToStacks(requirements))) {
+            Storehouse.putIn([new ItemStack(recipe.product, 1)]);
+        }
     }
 
     /**
@@ -42,7 +45,7 @@ export class RecipeUtil {
      * @param requirements 配方需求列表
      * @return 物品堆叠列表
      */
-    private static requirementsToStacks(requirements: Array<RecipeItem>): Array<ItemStack> {
+    private static requirementsToStacks(requirements: Array<RecipeRequirement>): Array<ItemStack> {
         return requirements.map(requirement => new ItemStack(requirement.item, requirement.count));
     }
 }

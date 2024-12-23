@@ -124,13 +124,13 @@ export class GameManager extends Component {
             Level.AREA = AREA_TABLE.get(saveData.areaName);
             Level.STAGE = STAGE_TABLE.get(saveData.stageName);
             Level.CHAPTER = CHAPTER_TABLE.get(saveData.chapterName);
+            saveData.enemyRecord.forEach((value, key) => ENEMY_RECORD.set(key, value));
         } else {
             Level.CHAPTER = CHAPTER_TABLE.get(DefaultLevelName.CHAPTER);
             Level.AREA = AREA_TABLE.get(DefaultLevelName.AREA);
             Level.STAGE = STAGE_TABLE.get(DefaultLevelName.STAGE);
         }
         this.enemy.info = Level.STAGE.enemyInfo;
-        saveData.enemyRecord.forEach((value, key) => ENEMY_RECORD.set(key, value));
 
         this.levelNameBar.updateLevelName(Level.CHAPTER, Level.AREA, Level.STAGE);
         this.stageLine.updateCurrentLevel(Level.AREA, Level.STAGE);
@@ -203,7 +203,6 @@ export class GameManager extends Component {
             // 排除只掉落一次的掉落物
             dropList = dropList.filter(drop => !drop.once);
         }
-        console.log(`drop list: ${JSON.stringify(dropList.map(drop => drop.item.name))}`);
         const productions = DropItemFactory.produce(dropList);
         EventCenter.emit(EventName.GET_DROPS, productions);
 

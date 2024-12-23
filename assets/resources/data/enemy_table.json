@@ -8,9 +8,12 @@
     "dropList": [
       {
         "itemName": "ling_yun",
-        "dropRate": 1,
         "max": 5,
         "min": 1
+      },
+      {
+        "itemName": "mian_sha",
+        "dropRate": 0.01
       }
     ],
     "experience": 1
@@ -43,6 +46,11 @@
         "dropRate": 1,
         "max": 100,
         "min": 50
+      },
+      {
+        "itemName": "mian_sha",
+        "dropRate": 0.1,
+        "max": 2
       }
     ],
     "experience": 5

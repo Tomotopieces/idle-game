@@ -1,10 +1,10 @@
-import { RecipeItem } from "db://assets/Script/Recipe/RecipeItem";
+import { RecipeRequirement } from "db://assets/Script/Recipe/RecipeRequirement";
 import { ITEM_TABLE } from "db://assets/Script/DataTable";
 
 /**
  * 配方材料JSON
  */
-export class RecipeItemJson {
+export class RecipeRequirementJson {
     /**
      * 物品名称
      */
@@ -24,9 +24,9 @@ export class RecipeItemJson {
      * 转换为RecipeItem
      *
      * @param requirementJson RecipeItemJson
-     * @return RecipeItem
+     * @return RecipeRequirement
      */
-    static toRecipeItem(requirementJson: RecipeItemJson): RecipeItem {
-        return new RecipeItem(ITEM_TABLE.get(requirementJson.itemName), requirementJson.count, requirementJson.consume);
+    static toRecipeItem(requirementJson: RecipeRequirementJson): RecipeRequirement {
+        return new RecipeRequirement(ITEM_TABLE.get(requirementJson.itemName), requirementJson.count, requirementJson.consume);
     }
 }

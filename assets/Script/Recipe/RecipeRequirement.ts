@@ -3,7 +3,7 @@ import { Item } from "db://assets/Script/Item/Item";
 /**
  * 配方材料
  */
-export class RecipeItem {
+export class RecipeRequirement {
     /**
      * 物品名称
      */

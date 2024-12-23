@@ -1,4 +1,4 @@
-import { RecipeItem } from "db://assets/Script/Recipe/RecipeItem";
+import { RecipeRequirement } from "db://assets/Script/Recipe/RecipeRequirement";
 import { Item } from "db://assets/Script/Item/Item";
 
 /**
@@ -15,9 +15,9 @@ export class CraftRecipe {
     /**
      * 需求
      */
-    readonly requirements: Array<RecipeItem>;
+    readonly requirements: Array<RecipeRequirement>;
 
-    constructor(id: number, product: Item, requirements: Array<RecipeItem>) {
+    constructor(id: number, product: Item, requirements: Array<RecipeRequirement>) {
         this.id = id;
         this.product = product;
         this.requirements = requirements;
