@@ -1,6 +1,6 @@
 import { _decorator, Color, Component, Label, Sprite, SpriteFrame } from 'cc';
 import { RecipeRequirement } from "db://assets/Script/Recipe/RecipeRequirement";
-import { ITEM_QUALITY_COLOR_MAP } from "db://assets/Script/Item/Item";
+import { ITEM_RARITY_COLOR_MAP } from "db://assets/Script/Item/Item";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { Storehouse } from "db://assets/Script/Storehouse/Storehouse";
 
@@ -52,7 +52,7 @@ export class RecipeRequirementUI extends Component {
         this._requirement = requirement;
 
         // 背景颜色
-        const color = ITEM_QUALITY_COLOR_MAP.get(requirement.item.quality);
+        const color = ITEM_RARITY_COLOR_MAP.get(requirement.item.rarity);
         this._background.color = new Color(color.r, color.g, color.b, 51);
         ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, requirement.item.icon,
             (spriteFrame: SpriteFrame) => this._icon.spriteFrame = spriteFrame);

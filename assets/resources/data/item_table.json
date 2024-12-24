@@ -5,7 +5,7 @@
     "itemType": "common",
     "description": "灵韵",
     "icon": "item/green_heart",
-    "quality": "common"
+    "rarity": "common"
   },
   {
     "name": "mian_sha",
@@ -13,7 +13,7 @@
     "itemType": "common",
     "description": "日巡山，夜纺纱，小妖凭此勤持家。可用于披挂铸造",
     "icon": "item/tornado",
-    "quality": "uncommon"
+    "rarity": "uncommon"
   },
   {
     "name": "jing_shi",
@@ -21,7 +21,7 @@
     "itemType": "common",
     "description": "此乃山之骨，石之精。可用于兵器铸造",
     "icon": "item/octagonal_star",
-    "quality": "uncommon"
+    "rarity": "uncommon"
   },
   {
     "name": "yu_chui_ya",
@@ -30,7 +30,15 @@
     "description": "秀士吮血，以牙还牙。可用于兵器铸造",
     "icon": "item/tooth",
     "unique": true,
-    "quality": "uncommon"
+    "rarity": "uncommon"
+  },
+  {
+    "name": "can_si",
+    "displayName": "蚕丝",
+    "itemType": "common",
+    "description": "此乃老蚕口吐之丝。可用于披挂铸造",
+    "icon": "item/tornado",
+    "rarity": "rare"
   },
   {
     "name": "lie_huo_wu_jin",
@@ -39,7 +47,7 @@
     "description": "运去金成铁，时来铁似金。可用于兵器铸造",
     "icon": "item/black_diamond",
     "unique": true,
-    "quality": "rare"
+    "rarity": "rare"
   },
   {
     "name": "yao_he",
@@ -47,6 +55,6 @@
     "itemType": "common",
     "description": "心有凶狂，小妖们只结得未熟之丹。可用于兵器铸造",
     "icon": "item/blue_rhombus",
-    "quality": "rare"
+    "rarity": "rare"
   }
 ]

@@ -6289,7 +6289,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Quality",
+    "_name": "Rarity",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -12928,7 +12928,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Quality",
+    "_name": "Rarity",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {

@@ -54,7 +54,7 @@
     "description": "这箍儿若戴了，不用教经，就会念经；\n这衣服若穿了，不用演礼，就会行礼。",
     "icon": "item/headband",
     "unique": true,
-    "quality": "uncommon",
+    "rarity": "uncommon",
     "equipmentType": "head",
     "attributes": {
       "additionalDefense": 8
@@ -67,7 +67,7 @@
     "description": "这箍儿若戴了，不用教经，就会念经；\n这衣服若穿了，不用演礼，就会行礼。",
     "icon": "item/glove",
     "unique": true,
-    "quality": "uncommon",
+    "rarity": "uncommon",
     "equipmentType": "arm",
     "attributes": {
       "additionalDefense": 6
@@ -80,7 +80,7 @@
     "description": "这箍儿若戴了，不用教经，就会念经；\n这衣服若穿了，不用演礼，就会行礼。",
     "icon": "item/t_shirt",
     "unique": true,
-    "quality": "uncommon",
+    "rarity": "uncommon",
     "equipmentType": "chest",
     "attributes": {
       "additionalDefense": 16
@@ -93,7 +93,7 @@
     "description": "这箍儿若戴了，不用教经，就会念经；\n这衣服若穿了，不用演礼，就会行礼。",
     "icon": "item/jeans",
     "unique": true,
-    "quality": "uncommon",
+    "rarity": "uncommon",
     "equipmentType": "leg",
     "attributes": {
       "additionalDefense": 10
@@ -106,7 +106,7 @@
     "description": "棍虽对棍铁各异，兵纵交兵人不同。",
     "icon": "item/staff",
     "unique": true,
-    "quality": "uncommon",
+    "rarity": "uncommon",
     "equipmentType": "weapon",
     "attributes": {
       "additionalDamage": 36,
@@ -120,7 +120,7 @@
     "description": "闹里挣钱，静处安身。",
     "icon": "item/angry",
     "unique": true,
-    "quality": "uncommon",
+    "rarity": "uncommon",
     "equipmentType": "head",
     "attributes": {
       "additionalDefense": 7,
@@ -134,7 +134,7 @@
     "description": "闹里挣钱，静处安身。",
     "icon": "item/coin",
     "unique": true,
-    "quality": "uncommon",
+    "rarity": "uncommon",
     "equipmentType": "chest",
     "attributes": {
       "additionalDefense": 14,
@@ -148,7 +148,7 @@
     "description": "闹里挣钱，静处安身。",
     "icon": "item/glove",
     "unique": true,
-    "quality": "uncommon",
+    "rarity": "uncommon",
     "equipmentType": "arm",
     "attributes": {
       "additionalDefense": 5,
@@ -162,7 +162,7 @@
     "description": "闹里挣钱，静处安身。",
     "icon": "item/shoe",
     "unique": true,
-    "quality": "uncommon",
+    "rarity": "uncommon",
     "equipmentType": "leg",
     "attributes": {
       "additionalDefense": 8,
@@ -176,7 +176,7 @@
     "description": "蛇无头儿不行，鸟无翅儿不飞。",
     "icon": "item/snake_staff",
     "unique": true,
-    "quality": "uncommon",
+    "rarity": "uncommon",
     "equipmentType": "weapon",
     "attributes": {
       "additionalDamage": 40,
@@ -192,7 +192,7 @@
     "description": "但行处百兽心慌，若坐下群魔胆战。",
     "icon": "item/staff",
     "unique": true,
-    "quality": "rare",
+    "rarity": "rare",
     "equipmentType": "weapon",
     "attributes": {
       "additionalDamage": 50,
@@ -206,7 +206,7 @@
     "description": "那块铁，挽着些儿就死，磕着些儿就亡，挨挨儿皮破，擦擦儿筋伤！",
     "icon": "item/magic_wand",
     "unique": true,
-    "quality": "mythical",
+    "rarity": "mythical",
     "equipmentType": "weapon",
     "attributes": {
       "additionalDamage": 135,

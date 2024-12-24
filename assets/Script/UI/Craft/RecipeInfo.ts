@@ -1,7 +1,7 @@
 import { _decorator, Component, instantiate, Label, Node, Prefab, Sprite, SpriteFrame, Widget } from 'cc';
 import { CraftRecipe } from "db://assets/Script/Recipe/CraftRecipe";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
-import { ITEM_QUALITY_COLOR_MAP, ITEM_QUALITY_DISPLAY_NAME_MAP } from "db://assets/Script/Item/Item";
+import { ITEM_RARITY_COLOR_MAP, ITEM_RARITY_DISPLAY_NAME_MAP } from "db://assets/Script/Item/Item";
 import { EquipmentInfoUIUtil } from "db://assets/Script/Util/EquipmentInfoUIUtil";
 import { RecipeRequirementUI } from "db://assets/Script/UI/Craft/RecipeRequirementUI";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
@@ -39,7 +39,7 @@ export class RecipeInfo extends Component {
     /**
      * 物品品质
      */
-    private _itemQualityLabel: Label;
+    private _itemRarityLabel: Label;
 
     /**
      * 武器属性
@@ -78,7 +78,7 @@ export class RecipeInfo extends Component {
         this._itemIconSprite = baseInfoNode.getChildByName('Icon').getComponent(Sprite);
         this._itemNameLabel = baseInfoNode.getChildByName('Name').getComponent(Label);
         this._itemTypeLabel = baseInfoNode.getChildByName('Type').getComponent(Label);
-        this._itemQualityLabel = baseInfoNode.getChildByName('Quality').getComponent(Label);
+        this._itemRarityLabel = baseInfoNode.getChildByName('Rarity').getComponent(Label);
 
         const weaponInfoNode = this.node.getChildByName('WeaponInfo');
         this._weaponAttributesLabel = weaponInfoNode.getChildByName('Attributes').getComponent(Label);
@@ -107,12 +107,12 @@ export class RecipeInfo extends Component {
         this._itemIconSprite.spriteFrame = ResourceManager.getAsset(ResourceType.SPRITE_FRAME, recipe.product.icon) as SpriteFrame;
         this._itemNameLabel.string = recipe.product.displayName;
         this._itemTypeLabel.string = EquipmentInfoUIUtil.getItemTypeLabel(recipe.product);
-        this._itemQualityLabel.string = ITEM_QUALITY_DISPLAY_NAME_MAP.get(recipe.product.quality);
-        this._itemNameLabel.color = this._itemTypeLabel.color = this._itemQualityLabel.color = ITEM_QUALITY_COLOR_MAP.get(recipe.product.quality);
+        this._itemRarityLabel.string = ITEM_RARITY_DISPLAY_NAME_MAP.get(recipe.product.rarity);
+        this._itemNameLabel.color = this._itemTypeLabel.color = this._itemRarityLabel.color = ITEM_RARITY_COLOR_MAP.get(recipe.product.rarity);
 
         // 装备属性
         const item = recipe.product;
-        this._weaponAttributesLabel.string = EquipmentInfoUIUtil.setAttributes(item);
+        this._weaponAttributesLabel.string = EquipmentInfoUIUtil.setAttributes(item, true);
         this._weaponAttributesLabel.node.active = !!this._weaponAttributesLabel.string;
         this._weaponUniqueEffectLabel.string = EquipmentInfoUIUtil.setUniqueEffect(item);
         this._weaponUniqueEffectLabel.node.active = !!this._weaponUniqueEffectLabel.string;

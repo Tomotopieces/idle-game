@@ -1,8 +1,9 @@
 import { _decorator, Component, Label, Layout, Node, Sprite, SpriteFrame, UITransform, Vec3, view } from 'cc';
-import { Item, ITEM_QUALITY_COLOR_MAP, ITEM_QUALITY_DISPLAY_NAME_MAP } from "db://assets/Script/Item/Item";
+import { Item, ITEM_RARITY_COLOR_MAP, ITEM_RARITY_DISPLAY_NAME_MAP } from "db://assets/Script/Item/Item";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { EMPTY_FUNCTION, Runnable } from "db://assets/Script/Util/Functions";
 import { EquipmentInfoUIUtil } from "db://assets/Script/Util/EquipmentInfoUIUtil";
+import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 
 const { ccclass, executeInEditMode } = _decorator;
 
@@ -50,7 +51,7 @@ export class ItemCard extends Component {
     /**
      * 物品品质
      */
-    private _itemQualityLabel: Label;
+    private _itemRarityLabel: Label;
 
     /**
      * 武器属性
@@ -94,7 +95,7 @@ export class ItemCard extends Component {
         this._itemIconSprite = baseInfoNode.getChildByName('Icon').getComponent(Sprite);
         this._itemNameLabel = baseInfoNode.getChildByName('Name').getComponent(Label);
         this._itemTypeLabel = baseInfoNode.getChildByName('Type').getComponent(Label);
-        this._itemQualityLabel = baseInfoNode.getChildByName('Quality').getComponent(Label);
+        this._itemRarityLabel = baseInfoNode.getChildByName('Rarity').getComponent(Label);
 
         const weaponInfoNode = this._infoLayout.getChildByName('WeaponInfo');
         this._weaponAttributesLabel = weaponInfoNode.getChildByName('Attributes').getComponent(Label);
@@ -159,8 +160,9 @@ export class ItemCard extends Component {
         this._itemIconSprite.spriteFrame = ResourceManager.getAsset(ResourceType.SPRITE_FRAME, item.icon) as SpriteFrame;
         this._itemNameLabel.string = item.displayName;
         this._itemTypeLabel.string = EquipmentInfoUIUtil.getItemTypeLabel(item);
-        this._itemQualityLabel.string = ITEM_QUALITY_DISPLAY_NAME_MAP.get(item.quality);
-        this._itemNameLabel.color = this._itemTypeLabel.color = this._itemQualityLabel.color = ITEM_QUALITY_COLOR_MAP.get(item.quality);
+        const rarity = item instanceof Equipment ? item.attributes.rarity : item.rarity;
+        this._itemRarityLabel.string = ITEM_RARITY_DISPLAY_NAME_MAP.get(rarity);
+        this._itemNameLabel.color = this._itemTypeLabel.color = this._itemRarityLabel.color = ITEM_RARITY_COLOR_MAP.get(rarity);
 
         // 设置显示信息
         this._weaponAttributesLabel.string = EquipmentInfoUIUtil.setAttributes(item);

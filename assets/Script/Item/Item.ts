@@ -20,7 +20,10 @@ export enum ItemType {
     CONSUMABLE = 'consumable',
 }
 
-export enum ItemQuality {
+/**
+ * 物品品质
+ */
+export enum ItemRarity {
     /**
      * 凡品
      */
@@ -53,27 +56,32 @@ export enum ItemQuality {
 }
 
 /**
+ * 物品品质顺序表
+ */
+export const RARITIES = [ItemRarity.COMMON, ItemRarity.UNCOMMON, ItemRarity.RARE, ItemRarity.EPIC, ItemRarity.LEGENDARY, ItemRarity.MYTHICAL];
+
+/**
  * 物品品质显示名称 Map
  */
-export const ITEM_QUALITY_DISPLAY_NAME_MAP = new Map<ItemQuality, string>([
-    [ItemQuality.COMMON, '凡品'],
-    [ItemQuality.UNCOMMON, '良品'],
-    [ItemQuality.RARE, '上品'],
-    [ItemQuality.EPIC, '特品'],
-    [ItemQuality.LEGENDARY, '仙品'],
-    [ItemQuality.MYTHICAL, '神珍'],
+export const ITEM_RARITY_DISPLAY_NAME_MAP = new Map<ItemRarity, string>([
+    [ItemRarity.COMMON, '凡品'],
+    [ItemRarity.UNCOMMON, '良品'],
+    [ItemRarity.RARE, '上品'],
+    [ItemRarity.EPIC, '特品'],
+    [ItemRarity.LEGENDARY, '仙品'],
+    [ItemRarity.MYTHICAL, '神珍'],
 ]);
 
 /**
  * 物品品质颜色 Map
  */
-export const ITEM_QUALITY_COLOR_MAP = new Map<ItemQuality, Color>([
-    [ItemQuality.COMMON, new Color(255, 255, 255)],
-    [ItemQuality.UNCOMMON, new Color(128, 255, 128)],
-    [ItemQuality.RARE, new Color(64, 128, 255)],
-    [ItemQuality.EPIC, new Color(255, 64, 255)],
-    [ItemQuality.LEGENDARY, new Color(255, 255, 128)],
-    [ItemQuality.MYTHICAL, new Color(255, 64, 64)],
+export const ITEM_RARITY_COLOR_MAP = new Map<ItemRarity, Color>([
+    [ItemRarity.COMMON, new Color(255, 255, 255)],
+    [ItemRarity.UNCOMMON, new Color(128, 255, 128)],
+    [ItemRarity.RARE, new Color(64, 128, 255)],
+    [ItemRarity.EPIC, new Color(255, 64, 255)],
+    [ItemRarity.LEGENDARY, new Color(255, 255, 128)],
+    [ItemRarity.MYTHICAL, new Color(255, 64, 64)],
 ]);
 
 /**
@@ -122,9 +130,9 @@ export class Item {
     /**
      * 品质
      */
-    readonly quality: ItemQuality;
+    readonly rarity: ItemRarity;
 
-    constructor(id: number, name: string, displayName: string, itemType: ItemType, description: string, icon: string, unique: boolean, quality: ItemQuality) {
+    constructor(id: number, name: string, displayName: string, itemType: ItemType, description: string, icon: string, unique: boolean, rarity: ItemRarity) {
         this.id = id;
         this.name = name;
         this.displayName = displayName;
@@ -132,7 +140,7 @@ export class Item {
         this.description = description;
         this.icon = icon;
         this.unique = unique ?? false;
-        this.quality = quality ?? ItemQuality.COMMON;
+        this.rarity = rarity ?? ItemRarity.COMMON;
     }
 
     /**
@@ -140,10 +148,10 @@ export class Item {
      *
      * @param id ID
      * @param object Object
-     * @return Item Item
+     * @return Item
      */
     static fromObject(id: number, object: Item): Item {
-        return new Item(id, object.name, object.displayName, object.itemType, object.description, object.icon, object.unique, object.quality);
+        return new Item(id, object.name, object.displayName, object.itemType, object.description, object.icon, object.unique, object.rarity);
     }
 }
 

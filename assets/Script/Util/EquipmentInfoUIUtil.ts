@@ -7,8 +7,9 @@ export class EquipmentInfoUIUtil {
      * 设置物品属性信息
      *
      * @param item 物品
+     * @param defaultValue 是否显示默认值（装备升阶前的属性）
      */
-    static setAttributes(item: Item): string {
+    static setAttributes(item: Item, defaultValue: boolean = false): string {
         if (!(item instanceof Equipment)) {
             return ``;
         }
@@ -20,7 +21,9 @@ export class EquipmentInfoUIUtil {
         displayResult += equipment.attributes.extraHealth ? `+${equipment.attributes.extraHealth} 额外生命\n` : ``;
         displayResult += equipment.attributes.additionalDamage ? `+${equipment.attributes.additionalDamage} 伤害\n` : ``;
         displayResult += equipment.attributes.damageBoost ? `+${equipment.attributes.damageBoost * 100}% 伤害加成\n` : ``;
-        displayResult += equipment.attributes.additionalDefense ? `+${equipment.attributes.additionalDefense} 防御\n` : ``;
+        displayResult += equipment.attributes.additionalDefense ? `+${
+            defaultValue ? equipment.attributes.defaultAdditionalDefense : equipment.attributes.rankAdditionalDefense
+        } 防御\n` : ``;
         displayResult += equipment.attributes.defenseBoost ? `+${equipment.attributes.defenseBoost * 100}% 防御加成\n` : ``;
         displayResult += equipment.attributes.criticalRate ? `+${equipment.attributes.criticalRate * 100}% 暴击率\n` : ``;
         displayResult += equipment.attributes.criticalBoost ? `+${equipment.attributes.criticalBoost}% 暴击伤害加成\n` : ``;

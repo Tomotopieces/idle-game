@@ -171,7 +171,7 @@ export class PlayerAttributeComponent {
         this.damageBoost += equipment.attributes.damageBoost;
         this.criticalRate += equipment.attributes.criticalRate;
         this.criticalBoost += equipment.attributes.criticalBoost;
-        this.additionalDefense += equipment.attributes.additionalDefense;
+        this.additionalDefense += equipment.attributes.rankAdditionalDefense;
         this.defenseBoost += equipment.attributes.defenseBoost;
     }
 
@@ -193,7 +193,7 @@ export class PlayerAttributeComponent {
         this.damageBoost -= equipment.attributes.damageBoost;
         this.criticalRate -= equipment.attributes.criticalRate;
         this.criticalBoost -= equipment.attributes.criticalBoost;
-        this.additionalDefense -= equipment.attributes.additionalDefense;
+        this.additionalDefense -= equipment.attributes.rankAdditionalDefense;
         this.defenseBoost -= equipment.attributes.defenseBoost;
     }
 
