@@ -13,6 +13,7 @@ import { TalentTiJian } from "db://assets/Script/Talent/Talents/TalentTiJian";
 import { TalentShiPo } from "db://assets/Script/Talent/Talents/TalentShiPo";
 import { Chapter } from "db://assets/Script/Level/Chapter";
 import { CraftRecipe } from "db://assets/Script/Recipe/CraftRecipe";
+import { UpgradeRecipe } from "db://assets/Script/Recipe/UpgradeRecipe";
 
 /**
  * 数据资源路径常量
@@ -29,9 +30,14 @@ export enum DataPath {
     EQUIPMENT_TABLE = 'data/equipment_table',
 
     /**
-     * 配方配置表
+     * 铸造配方配置表
      */
-    RECIPE_TABLE = 'data/recipe_table',
+    CRAFT_RECIPE_TABLE = 'data/craft_recipe_table',
+
+    /**
+     * 升阶配方配置表
+     */
+    UPGRADE_RECIPE_TABLE = 'data/upgrade_recipe_table',
 
     /**
      * 敌人配置表
@@ -60,9 +66,14 @@ export enum DataPath {
 export const ITEM_TABLE = new Map<string, Item>();
 
 /**
- * 配方表
+ * 铸造配方表
  */
-export const RECIPE_TABLE = new Map<string, CraftRecipe>();
+export const CRAFT_RECIPE_TABLE = new Map<string, CraftRecipe>();
+
+/**
+ * 升阶配方表
+ */
+export const UPGRADE_RECIPE_TABLE = new Map<string, UpgradeRecipe>();
 
 /**
  * 敌人表

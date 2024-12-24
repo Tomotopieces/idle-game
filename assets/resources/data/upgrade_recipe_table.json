@@ -1,0 +1,16 @@
+[
+  {
+    "equipmentName": "xing_zhe_jie_gu",
+    "targetRarity": "rare",
+    "requirements": [
+      {
+        "itemName": "can_si",
+        "count": 2
+      },
+      {
+        "itemName": "ling_yun",
+        "count": 600
+      }
+    ]
+  }
+]

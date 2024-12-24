@@ -16,11 +16,6 @@ export class CraftRecipeJson {
      */
     readonly requirements: Array<RecipeRequirementJson>;
 
-    constructor(productName: string, requirements: Array<RecipeRequirementJson>) {
-        this.productName = productName;
-        this.requirements = requirements;
-    }
-
     /**
      * 转换为CraftRecipe
      *

@@ -3,7 +3,7 @@ import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
 import { CraftRecipe } from "db://assets/Script/Recipe/CraftRecipe";
 import { RecipeInfo } from "db://assets/Script/UI/Craft/RecipeInfo";
-import { RECIPE_TABLE } from "db://assets/Script/DataTable";
+import { CRAFT_RECIPE_TABLE } from "db://assets/Script/DataTable";
 import { RecipeSlot } from "db://assets/Script/UI/Craft/RecipeSlot";
 import { RecipeUtil } from "db://assets/Script/Recipe/RecipeUtil";
 
@@ -60,7 +60,7 @@ export class CraftPanel extends Component {
     }
 
     start() {
-        RECIPE_TABLE.forEach((recipe: CraftRecipe) => {
+        CRAFT_RECIPE_TABLE.forEach((recipe: CraftRecipe) => {
             const node = instantiate(this.recipeSlotPrefab);
             this.recipeListNode.addChild(node);
             node.getComponent(RecipeSlot).init(recipe);

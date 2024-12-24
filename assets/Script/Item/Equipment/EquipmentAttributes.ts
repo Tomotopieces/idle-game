@@ -84,7 +84,7 @@ export class EquipmentAttributes {
         this.criticalBoost = criticalBoost ?? 0;
         this.effects = effects ?? [];
         this.setName = set ?? '';
-        this._rarity = rarity;
+        this._rarity = rarity ?? ItemRarity.COMMON;
     }
 
     /**

@@ -76,7 +76,7 @@ export const ITEM_RARITY_DISPLAY_NAME_MAP = new Map<ItemRarity, string>([
  * 物品品质颜色 Map
  */
 export const ITEM_RARITY_COLOR_MAP = new Map<ItemRarity, Color>([
-    [ItemRarity.COMMON, new Color(255, 255, 255)],
+    [ItemRarity.COMMON, Color.WHITE],
     [ItemRarity.UNCOMMON, new Color(128, 255, 128)],
     [ItemRarity.RARE, new Color(64, 128, 255)],
     [ItemRarity.EPIC, new Color(255, 64, 255)],

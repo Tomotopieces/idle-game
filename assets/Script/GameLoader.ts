@@ -12,13 +12,14 @@ import {
     DataPath,
     ENEMY_TABLE,
     ITEM_TABLE,
-    RECIPE_TABLE,
+    CRAFT_RECIPE_TABLE,
     SET_EFFECT_TABLE,
-    STAGE_TABLE
+    STAGE_TABLE, UPGRADE_RECIPE_TABLE
 } from "db://assets/Script/DataTable";
 import { ChapterJson } from "db://assets/Script/Level/ChapterJson";
 import { AnyFunction } from "db://assets/Script/Util/Functions";
 import { CraftRecipeJson } from "db://assets/Script/Recipe/CraftRecipeJson";
+import { UpgradeRecipeJson } from "db://assets/Script/Recipe/UpgradeRecipeJson";
 
 const { ccclass, property } = _decorator;
 
@@ -44,7 +45,8 @@ export class GameLoader extends Component {
     private readonly _loadProcess: Array<AnyFunction> = [
         () => this.loadItemTable(),
         () => this.loadEquipmentTable(),
-        () => this.loadRecipeTable(),
+        () => this.loadCraftRecipeTable(),
+        () => this.loadUpgradeRecipeTable(),
         () => this.loadEnemyTable(),
         () => this.loadStageTable(),
         () => this.loadAreaTable(),
@@ -97,16 +99,29 @@ export class GameLoader extends Component {
     }
 
     /**
-     * 加载配方表
+     * 加载铸造配方表
      */
-    private loadRecipeTable() {
-        resources.load(DataPath.RECIPE_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+    private loadCraftRecipeTable() {
+        resources.load(DataPath.CRAFT_RECIPE_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
             const rawRecipes = data.json! as Array<CraftRecipeJson>;
             rawRecipes.forEach((rawRecipe: CraftRecipeJson, index: number) =>
-                RECIPE_TABLE.set(rawRecipe.productName, CraftRecipeJson.toCraftRecipe(index, rawRecipe)));
+                CRAFT_RECIPE_TABLE.set(rawRecipe.productName, CraftRecipeJson.toCraftRecipe(index, rawRecipe)));
             this.loadStep++;
         })
+    }
+
+    /**
+     * 加载升阶配方表
+     */
+    private loadUpgradeRecipeTable() {
+        resources.load(DataPath.UPGRADE_RECIPE_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+            err && console.error(err);
+            const rawRecipes = data.json! as Array<UpgradeRecipeJson>;
+            rawRecipes.forEach((rawRecipe: UpgradeRecipeJson, index: number) =>
+                UPGRADE_RECIPE_TABLE.set(rawRecipe.equipmentName, UpgradeRecipeJson.toUpgradeRecipe(index, rawRecipe)));
+            this.loadStep++;
+        });
     }
 
     /**

@@ -5,6 +5,9 @@ import { Item } from "db://assets/Script/Item/Item";
  * 铸造配方
  */
 export class CraftRecipe {
+    /**
+     * ID
+     */
     readonly id: number;
 
     /**
