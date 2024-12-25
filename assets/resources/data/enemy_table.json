@@ -39,7 +39,7 @@
     "displayName": "广智",
     "health": 200,
     "damage": 20,
-    "icon": "enemy/wolf",
+    "icon": "enemy/guang_zhi",
     "dropList": [
       {
         "itemName": "ling_yun",

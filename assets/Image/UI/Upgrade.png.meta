@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "d554c781-28b3-4174-83a3-92e05b598d01",
+  "uuid": "88233f09-4ed5-49b4-b3ca-6ecc8ecf87df",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "d554c781-28b3-4174-83a3-92e05b598d01@6c48a",
-      "displayName": "Hammer",
+      "uuid": "88233f09-4ed5-49b4-b3ca-6ecc8ecf87df@6c48a",
+      "displayName": "Upgrade",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "d554c781-28b3-4174-83a3-92e05b598d01",
+        "imageUuidOrDatabaseUri": "88233f09-4ed5-49b4-b3ca-6ecc8ecf87df",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,20 +34,20 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "d554c781-28b3-4174-83a3-92e05b598d01@f9941",
-      "displayName": "Hammer",
+      "uuid": "88233f09-4ed5-49b4-b3ca-6ecc8ecf87df@f9941",
+      "displayName": "Upgrade",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
-        "trimType": "auto",
+        "trimType": "none",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
         "offsetY": 0,
-        "trimX": 3,
-        "trimY": 4,
-        "width": 114,
-        "height": 112,
+        "trimX": 0,
+        "trimY": 0,
+        "width": 120,
+        "height": 120,
         "rawWidth": 120,
         "rawHeight": 120,
         "borderTop": 0,
@@ -61,17 +61,17 @@
         "meshType": 0,
         "vertices": {
           "rawPosition": [
-            -57,
-            -56,
+            -60,
+            -60,
             0,
-            57,
-            -56,
+            60,
+            -60,
             0,
-            -57,
-            56,
+            -60,
+            60,
             0,
-            57,
-            56,
+            60,
+            60,
             0
           ],
           "indexes": [
@@ -83,38 +83,38 @@
             3
           ],
           "uv": [
-            3,
-            116,
-            117,
-            116,
-            3,
-            4,
-            117,
-            4
+            0,
+            120,
+            120,
+            120,
+            0,
+            0,
+            120,
+            0
           ],
           "nuv": [
-            0.025,
-            0.03333333333333333,
-            0.975,
-            0.03333333333333333,
-            0.025,
-            0.9666666666666667,
-            0.975,
-            0.9666666666666667
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            1,
+            1
           ],
           "minPos": [
-            -57,
-            -56,
+            -60,
+            -60,
             0
           ],
           "maxPos": [
-            57,
-            56,
+            60,
+            60,
             0
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "d554c781-28b3-4174-83a3-92e05b598d01@6c48a",
+        "imageUuidOrDatabaseUri": "88233f09-4ed5-49b4-b3ca-6ecc8ecf87df@6c48a",
         "atlasUuid": ""
       },
       "ver": "1.0.12",
@@ -130,6 +130,6 @@
     "flipVertical": false,
     "hasAlpha": true,
     "fixAlphaTransparencyArtifacts": false,
-    "redirect": "d554c781-28b3-4174-83a3-92e05b598d01@6c48a"
+    "redirect": "88233f09-4ed5-49b4-b3ca-6ecc8ecf87df@6c48a"
   }
 }
