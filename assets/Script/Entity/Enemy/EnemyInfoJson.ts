@@ -28,7 +28,7 @@ export class EnemyInfoJson {
     /**
      * 掉落列表
      */
-    readonly dropList: Array<DropItemJson>;
+    readonly dropList: DropItemJson[];
 
     /**
      * 经验值

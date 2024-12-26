@@ -165,11 +165,11 @@ export class ItemCard extends Component {
         this._itemNameLabel.color = this._itemTypeLabel.color = this._itemRarityLabel.color = ITEM_RARITY_COLOR_MAP.get(rarity);
 
         // 设置显示信息
-        this._weaponAttributesLabel.string = EquipmentInfoUIUtil.setAttributes(item);
+        this._weaponAttributesLabel.string = EquipmentInfoUIUtil.getAttributes(item, rarity);
         this._weaponAttributesLabel.node.active = !!this._weaponAttributesLabel.string;
-        this._weaponUniqueEffectLabel.string = EquipmentInfoUIUtil.setUniqueEffect(item);
+        this._weaponUniqueEffectLabel.string = EquipmentInfoUIUtil.getUniqueEffect(item);
         this._weaponUniqueEffectLabel.node.active = !!this._weaponUniqueEffectLabel.string;
-        this._weaponSetEffectLabel.string = EquipmentInfoUIUtil.setSetEffect(item);
+        this._weaponSetEffectLabel.string = EquipmentInfoUIUtil.getSetEffect(item);
         this._weaponSetEffectLabel.node.active = !!this._weaponSetEffectLabel.string;
 
         // 设置按钮内容

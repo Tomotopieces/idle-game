@@ -16,7 +16,7 @@ export class UpgradeRecipeJson {
     /**
      * 装备名称
      */
-    readonly equipmentName: string;
+    readonly productName: string;
 
     /**
      * 目标品质
@@ -26,7 +26,7 @@ export class UpgradeRecipeJson {
     /**
      * 需求
      */
-    readonly requirements: Array<RecipeRequirementJson>;
+    readonly requirements: RecipeRequirementJson[];
 
     /**
      * 转为UpgradeRecipe
@@ -36,6 +36,6 @@ export class UpgradeRecipeJson {
      */
     static toUpgradeRecipe(id: number, recipeJson: UpgradeRecipeJson): UpgradeRecipe {
         const requirements = recipeJson.requirements.map(requirement => RecipeRequirementJson.toRecipeItem(requirement));
-        return new UpgradeRecipe(id, ITEM_TABLE.get(recipeJson.equipmentName) as Equipment, recipeJson.productRarity, requirements);
+        return new UpgradeRecipe(id, ITEM_TABLE.get(recipeJson.productName) as Equipment, recipeJson.productRarity, requirements);
     }
 }

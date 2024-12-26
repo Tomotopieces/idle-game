@@ -73,7 +73,7 @@ export const CRAFT_RECIPE_TABLE = new Map<string, CraftRecipe>();
 /**
  * 升阶配方表
  */
-export const UPGRADE_RECIPE_TABLE = new Map<string, UpgradeRecipe>();
+export const UPGRADE_RECIPE_LIST: UpgradeRecipe[] = [];
 
 /**
  * 敌人表

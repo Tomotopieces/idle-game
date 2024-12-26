@@ -52,7 +52,7 @@ export class EquipmentAttributes {
     /**
      * 独门妙用
      */
-    readonly effects: Array<string>;
+    readonly effects: string[];
 
     /**
      * 所属套装名称
@@ -71,7 +71,7 @@ export class EquipmentAttributes {
      */
     private _rank = 0;
 
-    constructor(additionalHealth: number, healthBoost: number, extraHealth: number, additionalDamage: number, damageBoost: number, additionalDefense: number | number[], defenseBoost: number, criticalRate: number, criticalBoost: number, effects: Array<string>, set: string, rarity: ItemRarity) {
+    constructor(additionalHealth: number, healthBoost: number, extraHealth: number, additionalDamage: number, damageBoost: number, additionalDefense: number | number[], defenseBoost: number, criticalRate: number, criticalBoost: number, effects: string[], set: string, rarity: ItemRarity) {
         // 从JSON中读取的Object，字段可能为null
         this.additionalHealth = additionalHealth ?? 0;
         this.healthBoost = healthBoost ?? 0;
@@ -91,10 +91,9 @@ export class EquipmentAttributes {
      * 从Object创建
      *
      * @param object  Object
-     * @param rarity 装备品质
      */
-    static fromObject(object: EquipmentAttributes, rarity: ItemRarity) {
-        return new EquipmentAttributes(object.additionalHealth, object.healthBoost, object.extraHealth, object.additionalDamage, object.damageBoost, object.additionalDefense, object.defenseBoost, object.criticalRate, object.criticalBoost, object.effects, object.setName, rarity);
+    static fromObject(object: EquipmentAttributes) {
+        return new EquipmentAttributes(object.additionalHealth, object.healthBoost, object.extraHealth, object.additionalDamage, object.damageBoost, object.additionalDefense, object.defenseBoost, object.criticalRate, object.criticalBoost, object.effects, object.setName, object.rarity);
     }
 
     /**
@@ -108,15 +107,19 @@ export class EquipmentAttributes {
         this._rank++;
     }
 
-    get rarity(): ItemRarity {
-        return this._rarity;
+    /**
+     * 根据品质获取等级
+     *
+     * @param rarity 品质
+     * @return 等级
+     */
+    private rarityToRank(rarity: ItemRarity): number {
+        const defaultRarity = RARITIES[RARITIES.indexOf(this._rarity) - this._rank];
+        return RARITIES.indexOf(rarity) - RARITIES.indexOf(defaultRarity);
     }
 
-    /**
-     * 获取当前品质的附加防御
-     */
-    get rankAdditionalDefense(): number {
-        return this.additionalDefense instanceof Array ? this.additionalDefense[this._rank] : this.additionalDefense;
+    get rarity(): ItemRarity {
+        return this._rarity;
     }
 
     /**
@@ -124,5 +127,24 @@ export class EquipmentAttributes {
      */
     get defaultAdditionalDefense(): number {
         return this.additionalDefense instanceof Array ? this.additionalDefense[0] : this.additionalDefense;
+    }
+
+    /**
+     * 获取指定品质的附加防御
+     *
+     * @param rarity 品质，默认为当前品质
+     */
+    getAdditionalDefense(rarity: ItemRarity = this._rarity): number {
+        return this.additionalDefense instanceof Array ? this.additionalDefense[this.rarityToRank(rarity)] : this.additionalDefense;
+    }
+
+    /**
+     * 获取附加防御升阶后的增量
+     *
+     * @param upgradedRarity 升阶后品质
+     */
+    additionalDefenseUpgradedDelta(upgradedRarity: ItemRarity = this.rarity): number {
+        const rank = this.rarityToRank(upgradedRarity);
+        return this.additionalDefense instanceof Array ? this.additionalDefense[rank] - this.additionalDefense[rank - 1] : 0;
     }
 }

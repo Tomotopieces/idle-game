@@ -35,7 +35,7 @@ export class PlayerSkillManager {
     /**
      * 技能队列
      */
-    private readonly _skillQueue = new Array<Skill>();
+    private readonly _skillQueue: Skill[] = [];
 
     /**
      * 玩家技能状态

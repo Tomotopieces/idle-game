@@ -148,6 +148,10 @@ export class PlayerEquipmentComponent {
         return unequipped;
     }
 
+    upgrade(equipment: Equipment) {
+        this._attributes.upgradeAttributeOfEquipment(equipment);
+    }
+
     /**
      * 计算套装效果
      *

@@ -19,7 +19,7 @@ export class AreaJson {
     /**
      * 舞台名称列表
      */
-    readonly stages: Array<string>;
+    readonly stages: string[];
 
     /**
      * 转换为Area

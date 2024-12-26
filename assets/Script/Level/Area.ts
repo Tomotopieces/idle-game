@@ -22,9 +22,9 @@ export class Area {
     /**
      * 舞台列表
      */
-    readonly stages: Array<Stage>;
+    readonly stages: Stage[];
 
-    constructor(id: number, displayName: string, name: string, stages: Array<Stage>) {
+    constructor(id: number, displayName: string, name: string, stages: Stage[]) {
         this.id = id;
         this.name = name;
         this.displayName = displayName;

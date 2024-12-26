@@ -14,7 +14,7 @@ export class CraftRecipeJson {
     /**
      * 需求
      */
-    readonly requirements: Array<RecipeRequirementJson>;
+    readonly requirements: RecipeRequirementJson[];
 
     /**
      * 转换为CraftRecipe

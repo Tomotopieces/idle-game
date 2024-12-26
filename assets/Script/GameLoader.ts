@@ -9,12 +9,13 @@ import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import {
     AREA_TABLE,
     CHAPTER_TABLE,
+    CRAFT_RECIPE_TABLE,
     DataPath,
     ENEMY_TABLE,
     ITEM_TABLE,
-    CRAFT_RECIPE_TABLE,
     SET_EFFECT_TABLE,
-    STAGE_TABLE, UPGRADE_RECIPE_TABLE
+    STAGE_TABLE,
+    UPGRADE_RECIPE_LIST
 } from "db://assets/Script/DataTable";
 import { ChapterJson } from "db://assets/Script/Level/ChapterJson";
 import { AnyFunction } from "db://assets/Script/Util/Functions";
@@ -42,7 +43,7 @@ export class GameLoader extends Component {
     /**
      * 加载函数
      */
-    private readonly _loadProcess: Array<AnyFunction> = [
+    private readonly _loadProcess: AnyFunction[] = [
         () => this.loadItemTable(),
         () => this.loadEquipmentTable(),
         () => this.loadCraftRecipeTable(),
@@ -71,7 +72,7 @@ export class GameLoader extends Component {
     private loadItemTable() {
         resources.load(DataPath.ITEM_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
-            const rawItems = data.json! as Array<Item>;
+            const rawItems = data.json! as Item[];
             rawItems.forEach((rawItem: Item, index: number) =>
                 ITEM_TABLE.set(rawItem.name, Item.fromObject(index, rawItem)));
             this.loadStep++;
@@ -84,7 +85,7 @@ export class GameLoader extends Component {
     private loadEquipmentTable() {
         resources.load(DataPath.EQUIPMENT_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
-            const rawItems = data.json! as Array<Equipment>;
+            const rawItems = data.json! as Equipment[];
             const indexOffset = ITEM_TABLE.size;
             rawItems.forEach((rawItem: Equipment, index: number) => {
                 const equipment = Equipment.fromObject(index + indexOffset, rawItem);
@@ -104,7 +105,7 @@ export class GameLoader extends Component {
     private loadCraftRecipeTable() {
         resources.load(DataPath.CRAFT_RECIPE_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
-            const rawRecipes = data.json! as Array<CraftRecipeJson>;
+            const rawRecipes = data.json! as CraftRecipeJson[];
             rawRecipes.forEach((rawRecipe: CraftRecipeJson, index: number) =>
                 CRAFT_RECIPE_TABLE.set(rawRecipe.productName, CraftRecipeJson.toCraftRecipe(index, rawRecipe)));
             this.loadStep++;
@@ -117,9 +118,9 @@ export class GameLoader extends Component {
     private loadUpgradeRecipeTable() {
         resources.load(DataPath.UPGRADE_RECIPE_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
-            const rawRecipes = data.json! as Array<UpgradeRecipeJson>;
+            const rawRecipes = data.json! as UpgradeRecipeJson[];
             rawRecipes.forEach((rawRecipe: UpgradeRecipeJson, index: number) =>
-                UPGRADE_RECIPE_TABLE.set(rawRecipe.equipmentName, UpgradeRecipeJson.toUpgradeRecipe(index, rawRecipe)));
+                UPGRADE_RECIPE_LIST.push(UpgradeRecipeJson.toUpgradeRecipe(index, rawRecipe)));
             this.loadStep++;
         });
     }
@@ -130,7 +131,7 @@ export class GameLoader extends Component {
     private loadEnemyTable() {
         resources.load(DataPath.ENEMY_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
-            const rawInfos = data.json! as Array<EnemyInfoJson>;
+            const rawInfos = data.json! as EnemyInfoJson[];
             rawInfos.forEach((rawInfo: EnemyInfoJson, index: number) =>
                 ENEMY_TABLE.set(rawInfo.name, EnemyInfoJson.toEnemyInfo(index, rawInfo)));
             this.loadStep++;
@@ -143,7 +144,7 @@ export class GameLoader extends Component {
     private loadStageTable() {
         resources.load(DataPath.STAGE_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
-            const rawStageList = data.json! as Array<StageJson>;
+            const rawStageList = data.json! as StageJson[];
             rawStageList.forEach((rawStage: StageJson, index: number) =>
                 STAGE_TABLE.set(rawStage.name, StageJson.toStage(index, rawStage)));
             this.loadStep++;
@@ -156,7 +157,7 @@ export class GameLoader extends Component {
     private loadAreaTable() {
         resources.load(DataPath.AREA_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
-            const rawAreas = data.json! as Array<AreaJson>;
+            const rawAreas = data.json! as AreaJson[];
             rawAreas.forEach((rawArea: AreaJson, index: number) =>
                 AREA_TABLE.set(rawArea.name, AreaJson.toArea(index, rawArea)));
             this.loadStep++;
@@ -169,7 +170,7 @@ export class GameLoader extends Component {
     private loadChapterTable() {
         resources.load(DataPath.CHAPTER_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
-            const rawChapters = data.json! as Array<ChapterJson>;
+            const rawChapters = data.json! as ChapterJson[];
             rawChapters.forEach((rawChapter: ChapterJson, index: number) =>
                 CHAPTER_TABLE.set(rawChapter.name, ChapterJson.toChapter(index, rawChapter)));
             this.loadStep++;

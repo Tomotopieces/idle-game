@@ -1,4 +1,6 @@
 import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
+import { EventCenter } from "db://assets/Script/Event/EventCenter";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 // 默认基础生命值
 const DEFAULT_HEALTH = 300;
@@ -171,7 +173,7 @@ export class PlayerAttributeComponent {
         this.damageBoost += equipment.attributes.damageBoost;
         this.criticalRate += equipment.attributes.criticalRate;
         this.criticalBoost += equipment.attributes.criticalBoost;
-        this.additionalDefense += equipment.attributes.rankAdditionalDefense;
+        this.additionalDefense += equipment.attributes.getAdditionalDefense();
         this.defenseBoost += equipment.attributes.defenseBoost;
     }
 
@@ -193,7 +195,7 @@ export class PlayerAttributeComponent {
         this.damageBoost -= equipment.attributes.damageBoost;
         this.criticalRate -= equipment.attributes.criticalRate;
         this.criticalBoost -= equipment.attributes.criticalBoost;
-        this.additionalDefense -= equipment.attributes.rankAdditionalDefense;
+        this.additionalDefense -= equipment.attributes.getAdditionalDefense();
         this.defenseBoost -= equipment.attributes.defenseBoost;
     }
 
@@ -302,5 +304,16 @@ export class PlayerAttributeComponent {
 
     set defenseBoost(value: number) {
         this._defenseBoost = Math.max(0, value); // 可小于1，不可小于0
+    }
+
+    /**
+     * 获取披挂升阶后的属性增量提升
+     *
+     * @param equipment 装备
+     */
+    upgradeAttributeOfEquipment(equipment: Equipment) {
+        console.log(`upgrade`);
+        this._additionalDefense += equipment.attributes.additionalDefenseUpgradedDelta();
+        EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this);
     }
 }

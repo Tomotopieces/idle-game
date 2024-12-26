@@ -25,7 +25,7 @@ export class SetEffectZiZhuBiJiao extends SetEffect {
 
             override onActivate(): void {
                 super.onActivate();
-                EventCenter.register(EventName.GET_DROPS, SetEffectZiZhuBiJiao.NAME, (dropStackList: Array<ItemStack>) => {
+                EventCenter.register(EventName.GET_DROPS, SetEffectZiZhuBiJiao.NAME, (dropStackList: ItemStack[]) => {
                     const index = dropStackList.findIndex(stack => stack.item.name === LING_YUN_NAME);
                     if (index !== -1) {
                         dropStackList[index].count = Math.round(dropStackList[index].count * 1.1);

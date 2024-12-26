@@ -1,11 +1,25 @@
 [
   {
-    "equipmentName": "xing_zhe_jie_gu",
-    "targetRarity": "rare",
+    "productName": "xing_zhe_jie_gu",
+    "productRarity": "rare",
     "requirements": [
       {
         "itemName": "can_si",
         "count": 2
+      },
+      {
+        "itemName": "ling_yun",
+        "count": 600
+      }
+    ]
+  },
+  {
+    "productName": "xing_zhe_zha_wan",
+    "productRarity": "rare",
+    "requirements": [
+      {
+        "itemName": "can_si",
+        "count": 1
       },
       {
         "itemName": "ling_yun",

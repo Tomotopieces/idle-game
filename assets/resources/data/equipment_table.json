@@ -57,7 +57,7 @@
     "rarity": "uncommon",
     "equipmentType": "head",
     "attributes": {
-      "additionalDefense": 8
+      "additionalDefense": [8, 14, 23, 32, 60]
     }
   },
   {

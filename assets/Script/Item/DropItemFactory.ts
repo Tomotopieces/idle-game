@@ -10,8 +10,8 @@ export class DropItemFactory {
      *
      * @param dropList 掉落列表
      */
-    static produce(dropList: Array<DropItem>): Array<ItemStack> {
-        const result = new Array<ItemStack>();
+    static produce(dropList: DropItem[]): ItemStack[] {
+        const result: ItemStack[] = [];
         dropList.forEach(drop => {
             if (Math.random() < drop.dropRate || drop.once) {
                 result.push(new ItemStack(drop.item, Math.floor(Math.random() * (drop.max - drop.min + 1) + drop.min)));

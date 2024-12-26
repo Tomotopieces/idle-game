@@ -7,6 +7,8 @@ import { RecipeRequirementUI } from "db://assets/Script/UI/Craft/RecipeRequireme
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
+import { Recipe } from "db://assets/Script/Recipe/Recipe";
+import { UpgradeRecipe } from "db://assets/Script/Recipe/UpgradeRecipe";
 
 const { ccclass, property } = _decorator;
 
@@ -87,7 +89,7 @@ export class RecipeInfo extends Component {
 
         this._requirementsNode = this.node.getChildByName('Requirements');
 
-        EventCenter.on(EventName.UI_UPDATE_STOREHOUSE, this.node.name, (stackList: Array<ItemStack>) => this.handleStorehouseUpdate(stackList));
+        EventCenter.on(EventName.UI_UPDATE_STOREHOUSE, this.node.name, (stackList: ItemStack[]) => this.handleStorehouseUpdate(stackList));
     }
 
     onDestroy() {
@@ -99,24 +101,25 @@ export class RecipeInfo extends Component {
      *
      * @param recipe 配方
      */
-    show(recipe: CraftRecipe) {
+    show(recipe: Recipe) {
         this.node.active = true;
         this._recipe = recipe;
+        const item = recipe.product;
+        const rarity = recipe instanceof UpgradeRecipe ? recipe.productRarity : item.rarity;
 
         // 基本信息
         this._itemIconSprite.spriteFrame = ResourceManager.getAsset(ResourceType.SPRITE_FRAME, recipe.product.icon) as SpriteFrame;
         this._itemNameLabel.string = recipe.product.displayName;
         this._itemTypeLabel.string = EquipmentInfoUIUtil.getItemTypeLabel(recipe.product);
-        this._itemRarityLabel.string = ITEM_RARITY_DISPLAY_NAME_MAP.get(recipe.product.rarity);
-        this._itemNameLabel.color = this._itemTypeLabel.color = this._itemRarityLabel.color = ITEM_RARITY_COLOR_MAP.get(recipe.product.rarity);
+        this._itemRarityLabel.string = ITEM_RARITY_DISPLAY_NAME_MAP.get(rarity);
+        this._itemNameLabel.color = this._itemTypeLabel.color = this._itemRarityLabel.color = ITEM_RARITY_COLOR_MAP.get(rarity);
 
         // 装备属性
-        const item = recipe.product;
-        this._weaponAttributesLabel.string = EquipmentInfoUIUtil.setAttributes(item, true);
+        this._weaponAttributesLabel.string = EquipmentInfoUIUtil.getAttributes(item, rarity);
         this._weaponAttributesLabel.node.active = !!this._weaponAttributesLabel.string;
-        this._weaponUniqueEffectLabel.string = EquipmentInfoUIUtil.setUniqueEffect(item);
+        this._weaponUniqueEffectLabel.string = EquipmentInfoUIUtil.getUniqueEffect(item);
         this._weaponUniqueEffectLabel.node.active = !!this._weaponUniqueEffectLabel.string;
-        this._weaponSetEffectLabel.string = EquipmentInfoUIUtil.setSetEffect(item, false);
+        this._weaponSetEffectLabel.string = EquipmentInfoUIUtil.getSetEffect(item, false);
         this._weaponSetEffectLabel.node.active = !!this._weaponSetEffectLabel.string;
 
         // 需求列表
@@ -144,7 +147,7 @@ export class RecipeInfo extends Component {
      *
      * @param stackList 更新物品列表
      */
-    private handleStorehouseUpdate(stackList: Array<ItemStack>) {
+    private handleStorehouseUpdate(stackList: ItemStack[]) {
         if (!this.node.active || !this._recipe) {
             return;
         }

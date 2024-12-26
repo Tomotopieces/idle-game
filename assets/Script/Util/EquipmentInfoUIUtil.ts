@@ -1,15 +1,15 @@
-import { Item, ItemType } from "db://assets/Script/Item/Item";
+import { Item, ItemRarity, ItemType } from "db://assets/Script/Item/Item";
 import { Equipment, EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
 import { SET_EFFECT_TABLE, UNIQUE_EFFECT_TABLE } from "db://assets/Script/DataTable";
 
 export class EquipmentInfoUIUtil {
     /**
-     * 设置物品属性信息
+     * 获取物品属性信息
      *
      * @param item 物品
-     * @param defaultValue 是否显示默认值（装备升阶前的属性）
+     * @param rarity 显示的品质，默认为物品当前品质
      */
-    static setAttributes(item: Item, defaultValue: boolean = false): string {
+    static getAttributes(item: Item, rarity?: ItemRarity): string {
         if (!(item instanceof Equipment)) {
             return ``;
         }
@@ -22,7 +22,7 @@ export class EquipmentInfoUIUtil {
         displayResult += equipment.attributes.additionalDamage ? `+${equipment.attributes.additionalDamage} 伤害\n` : ``;
         displayResult += equipment.attributes.damageBoost ? `+${equipment.attributes.damageBoost * 100}% 伤害加成\n` : ``;
         displayResult += equipment.attributes.additionalDefense ? `+${
-            defaultValue ? equipment.attributes.defaultAdditionalDefense : equipment.attributes.rankAdditionalDefense
+            rarity ? equipment.attributes.getAdditionalDefense(rarity) : equipment.attributes.defaultAdditionalDefense
         } 防御\n` : ``;
         displayResult += equipment.attributes.defenseBoost ? `+${equipment.attributes.defenseBoost * 100}% 防御加成\n` : ``;
         displayResult += equipment.attributes.criticalRate ? `+${equipment.attributes.criticalRate * 100}% 暴击率\n` : ``;
@@ -35,11 +35,11 @@ export class EquipmentInfoUIUtil {
     }
 
     /**
-     * 设置独门妙用信息
+     * 获取独门妙用信息
      *
      * @param item 物品
      */
-    static setUniqueEffect(item: Item): string {
+    static getUniqueEffect(item: Item): string {
         if (!(item instanceof Equipment)) {
             return ``;
         }
@@ -51,12 +51,12 @@ export class EquipmentInfoUIUtil {
     }
 
     /**
-     * 设置套装效果信息
+     * 获取套装效果信息
      *
      * @param item 物品
      * @param showActivated 是否显示是否已激活
      */
-    static setSetEffect(item: Item, showActivated: boolean = true): string {
+    static getSetEffect(item: Item, showActivated: boolean = true): string {
         if (!(item instanceof Equipment) || !(item as Equipment).attributes.setName) {
             return ``;
         }

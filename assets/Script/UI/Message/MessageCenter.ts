@@ -9,7 +9,7 @@ const { ccclass, property } = _decorator;
 /**
  * 消息队列
  */
-export const MESSAGE_QUEUE = new Array<Message>();
+export const MESSAGE_QUEUE: Message[] = [];
 
 /**
  * 最大消息数量

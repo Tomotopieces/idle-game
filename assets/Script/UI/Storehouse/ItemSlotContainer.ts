@@ -33,7 +33,7 @@ export class ItemSlotContainer extends Component {
     /**
      * 物品槽列表
      */
-    private _slotList: Array<Node> = [];
+    private _slotList: Node[] = [];
 
     start() {
         // TODO 改为使用 Layout 组件进行排版，重新设计排版逻辑
@@ -48,7 +48,7 @@ export class ItemSlotContainer extends Component {
         }
 
         // 监听仓库变化事件
-        EventCenter.on(EventName.UI_UPDATE_STOREHOUSE, this.node.name, (stackList: Array<ItemStack>) => this.updateSlotList(stackList));
+        EventCenter.on(EventName.UI_UPDATE_STOREHOUSE, this.node.name, (stackList: ItemStack[]) => this.updateSlotList(stackList));
     }
 
     /**
@@ -56,7 +56,7 @@ export class ItemSlotContainer extends Component {
      *
      * @param stackList 更新物品列表
      */
-    private updateSlotList(stackList: Array<ItemStack>) {
+    private updateSlotList(stackList: ItemStack[]) {
         // 更新List数据
         stackList.forEach(updateStack => {
             const index = this._slotList.findIndex(slot => slot.getComponent(ItemSlot).stack?.item.name === updateStack.item.name ?? false);

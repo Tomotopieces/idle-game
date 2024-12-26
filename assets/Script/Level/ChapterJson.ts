@@ -18,7 +18,7 @@ export class ChapterJson {
     /**
      * 区域名称列表
      */
-    readonly areas: Array<string>;
+    readonly areas: string[];
 
     /**
      * 转换为 Chapter

@@ -71,7 +71,7 @@ export class GameManager extends Component {
         EventCenter.on(EventName.UPDATE_LEVEL, this.node.name, (event: UpdateLevelEvent) => this.updateLevel(event.area, event.stage));
         EventCenter.on(EventName.EQUIPMENT_CHANGE, this.node.name, (event: EquipmentChangeEvent) => this.handleEquipmentChange(event));
         EventCenter.on(EventName.ENEMY_DIE, this.node.name, (enemy: EnemyController) => this.handleEnemyDie(enemy));
-        EventCenter.on(EventName.GET_DROPS, this.node.name, (dropStackList: Array<ItemStack>) => this.getDrops(dropStackList));
+        EventCenter.on(EventName.GET_DROPS, this.node.name, (dropStackList: ItemStack[]) => this.getDrops(dropStackList));
         EventCenter.on(EventName.GET_EXPERIENCE, this.node.name, (experience: number) => this.getExperience(experience));
         EventCenter.on(EventName.PLAYER_LEVEL_UP, this.node.name, (level: number) => this.handlePlayerLevelUp(level));
         EventCenter.on(EventName.GAIN_STANCE, this.node.name, (stance: number) => this.handleGainStance(stance));
@@ -170,6 +170,7 @@ export class GameManager extends Component {
      * 保存存档
      */
     private saveData() {
+        // TODO 保存&恢复 披挂的品质信息
         const saveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.equipments.equipmentMap, Storehouse.STOREHOUSE, Level.CHAPTER.name, Level.AREA.name, Level.STAGE.name, this.player.talents.talents, ENEMY_RECORD);
         sys.localStorage.setItem(LocalStorageDataName.SAVE_DATA, saveData.toJson());
         EventCenter.emit(EventName.UI_POST_MESSAGE, `保存成功`);
@@ -218,7 +219,7 @@ export class GameManager extends Component {
      *
      * @param dropStackList 掉落道具列表
      */
-    private getDrops(dropStackList: Array<ItemStack>) {
+    private getDrops(dropStackList: ItemStack[]) {
         Storehouse.putIn(dropStackList);
     }
 

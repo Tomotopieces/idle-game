@@ -71,11 +71,11 @@ export class EventCenter {
      */
     static on(eventName: EventName, id: string, listener: Listener) {
         const handler = (eventArgs: EventArgument) => {
-            let listeners: Array<Listener>;
+            let listeners: Listener[];
             if (this.LISTENER_MAP.has(eventName)) {
                 listeners = Array.from(this.LISTENER_MAP.get(eventName).values());
             } else {
-                listeners = new Array<Listener>();
+                listeners = [];
             }
             listeners.forEach(listener => listener(eventArgs));
             listener(eventArgs);
@@ -97,11 +97,11 @@ export class EventCenter {
      */
     static once(eventName: EventName, id: string, listener: Listener) {
         const handler = (eventArgs: EventArgument) => {
-            let listeners: Array<Listener>;
+            let listeners: Listener[];
             if (this.LISTENER_MAP.has(eventName)) {
                 listeners = Array.from(this.LISTENER_MAP.get(eventName).values());
             } else {
-                listeners = new Array<Listener>();
+                listeners = [];
             }
             listeners.forEach(listener => listener(eventArgs));
             listener(eventArgs);

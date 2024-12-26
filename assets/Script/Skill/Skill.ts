@@ -44,7 +44,7 @@ export abstract class Skill {
     /**
      * 技能事件
      */
-    protected events: Array<Runnable>;
+    protected events: Runnable[];
 
     /**
      * 是否正在排队
@@ -59,7 +59,7 @@ export abstract class Skill {
         this.description = description;
         this.cooldown = cooldown;
         this.timer = 0;
-        this.events = new Array<Runnable>();
+        this.events = [];
 
         this.playerAnim.on(Animation.EventType.STOP, (type: Animation.EventType, state: AnimationState) => this.handleAnimationStop(type, state), this.playerAnim);
     }

@@ -22,9 +22,9 @@ export class Chapter {
     /**
      * 区域列表
      */
-    readonly areas: Array<Area>;
+    readonly areas: Area[];
 
-    constructor(id: number, name: string, displayName: string, areas: Array<Area>) {
+    constructor(id: number, name: string, displayName: string, areas: Area[]) {
         this.id = id;
         this.name = name;
         this.displayName = displayName;

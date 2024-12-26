@@ -1,8 +1,8 @@
 import { _decorator, Component, Sprite, SpriteFrame } from 'cc';
-import { CraftRecipe } from "db://assets/Script/Recipe/CraftRecipe";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
+import { Recipe } from "db://assets/Script/Recipe/Recipe";
 
 const { ccclass } = _decorator;
 
@@ -19,7 +19,7 @@ export class RecipeSlot extends Component {
     /**
      * 配方
      */
-    private _recipe: CraftRecipe;
+    private _recipe: Recipe;
 
     onLoad() {
         this._productIcon = this.node.getChildByName('ProductIcon').getComponent(Sprite);
@@ -30,7 +30,7 @@ export class RecipeSlot extends Component {
      *
      * @param recipe 配方
      */
-    init(recipe: CraftRecipe) {
+    init(recipe: Recipe) {
         this._recipe = recipe;
         ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, recipe.product.icon, (spriteFrame: SpriteFrame) => {
             this._productIcon.spriteFrame = spriteFrame;
@@ -44,5 +44,9 @@ export class RecipeSlot extends Component {
      */
     click() {
         EventCenter.emit(EventName.UI_CLICK_RECIPE_SLOT, this._recipe);
+    }
+
+    get recipe(): Recipe {
+        return this._recipe;
     }
 }

@@ -4,6 +4,7 @@ import { Item, ItemType } from "db://assets/Script/Item/Item";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
+import { ITEM_TABLE } from "db://assets/Script/DataTable";
 
 /**
  * 仓库类型
@@ -28,8 +29,8 @@ export class Storehouse {
      * @param checkEquipmentSlot 是否检查装备栏
      * @param showMessage        是否进行消息提示
      */
-    static putIn(stackList: Array<ItemStack>, checkEquipmentSlot: boolean = true, showMessage: boolean = true) {
-        const failedList = new Array<ItemStack>();
+    static putIn(stackList: ItemStack[], checkEquipmentSlot: boolean = true, showMessage: boolean = true) {
+        const failedList: ItemStack[] = [];
         stackList.forEach(stack => {
             if (this.STOREHOUSE.has(stack.item.name) || (checkEquipmentSlot && this.inEquipmentSlot(stack.item))) {
                 if (stack.item.unique) {
@@ -61,7 +62,7 @@ export class Storehouse {
      *
      * @param stackList 需求物品列表
      */
-    static check(stackList: Array<ItemStack>): boolean {
+    static check(stackList: ItemStack[]): boolean {
         return stackList.every(stack => {
             if (this.STOREHOUSE.has(stack.item.name)) {
                 const itemStack = this.STOREHOUSE.get(stack.item.name);
@@ -78,7 +79,7 @@ export class Storehouse {
      * @param targets            目标物品列表
      * @param checkEquipmentSlot 是否检查装备栏
      */
-    static count(targets: Array<Item>, checkEquipmentSlot: boolean = true): Array<ItemStack> {
+    static count(targets: Item[], checkEquipmentSlot: boolean = true): ItemStack[] {
         const itemStacks = Array.from(this.STOREHOUSE.values()).filter(stack => targets.some(target => target.name === stack.item.name));
         if (checkEquipmentSlot) {
             targets.forEach(target => {
@@ -102,23 +103,15 @@ export class Storehouse {
      * @param target             目标物品
      * @param checkEquipmentSlot 是否检查装备栏
      */
-    static countOne(target: Item, checkEquipmentSlot: boolean = true): number {
-        let count = this.STOREHOUSE.get(target.name)?.count ?? 0;
+    static countOne(target: Item | string, checkEquipmentSlot: boolean = true): number {
+        const item = typeof target === 'string' ? ITEM_TABLE.get(target) : target;
+        let count = this.STOREHOUSE.get(item.name)?.count ?? 0;
         if (checkEquipmentSlot) {
-            if (Array.from(this.equipmentMap.values()).some(stack => stack.item?.name === target.name)) {
+            if (Array.from(this.equipmentMap.values()).some(stack => stack.item?.name === item.name)) {
                 count += 1;
             }
         }
         return count;
-    }
-
-    /**
-     * 检查物品是否存在
-     *
-     * @param itemName 物品名称
-     */
-    static checkOne(itemName: string): boolean {
-        return this.STOREHOUSE.has(itemName);
     }
 
     /**
@@ -127,7 +120,7 @@ export class Storehouse {
      * @param requireList 需求物品列表
      * @return 是否成功
      */
-    static tackOut(requireList: Array<ItemStack>): boolean {
+    static tackOut(requireList: ItemStack[]): boolean {
         for (const require of requireList) {
             if (this.STOREHOUSE.has(require.item.name)) {
                 const store = this.STOREHOUSE.get(require.item.name);
@@ -184,11 +177,11 @@ export class Storehouse {
      *
      * @param stackList 更新物品列表
      */
-    private static emitUpdateEvent(stackList: Array<ItemStack>) {
+    private static emitUpdateEvent(stackList: ItemStack[]) {
         // 发送被更新的物品的现有库存情况，避免修改stackList数据
-        const updateArray = new Array<ItemStack>();
-        stackList.forEach(stack => updateArray.push(new ItemStack(stack.item, this.STOREHOUSE.get(stack.item.name)?.count ?? 0)));
-        EventCenter.emit(EventName.UI_UPDATE_STOREHOUSE, updateArray);
+        const updateStacks: ItemStack[] = [];
+        stackList.forEach(stack => updateStacks.push(new ItemStack(stack.item, this.STOREHOUSE.get(stack.item.name)?.count ?? 0)));
+        EventCenter.emit(EventName.UI_UPDATE_STOREHOUSE, updateStacks);
     }
 
     /**

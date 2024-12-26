@@ -32,7 +32,7 @@ export class EnemyInfo {
     /**
      * 掉落列表
      */
-    readonly dropList: Array<DropItem>;
+    readonly dropList: DropItem[];
 
     /**
      * 经验值
@@ -44,7 +44,7 @@ export class EnemyInfo {
      */
     readonly icon: string;
 
-    constructor(id: number, name: string, displayName: string, health: number, damage: number, dropList: Array<DropItem>, experience: number, icon: string) {
+    constructor(id: number, name: string, displayName: string, health: number, damage: number, dropList: DropItem[], experience: number, icon: string) {
         this.id = id;
         this.name = name;
         this.displayName = displayName;

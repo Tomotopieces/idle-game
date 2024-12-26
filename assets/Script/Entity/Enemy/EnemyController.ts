@@ -83,7 +83,7 @@ export abstract class EnemyController extends Component {
     /**
      * 获取掉落奖励
      */
-    get dropList(): Array<DropItem> {
+    get dropList(): DropItem[] {
         return this._info.dropList;
     }
 

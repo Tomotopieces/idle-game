@@ -1,35 +1,24 @@
-import { ItemRarity } from "db://assets/Script/Item/Item";
+import { Item, ItemRarity, RARITIES } from "db://assets/Script/Item/Item";
 import { RecipeRequirement } from "db://assets/Script/Recipe/RecipeRequirement";
-import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
+import { Recipe } from "db://assets/Script/Recipe/Recipe";
 
 /**
  * 升阶配方
  */
-export class UpgradeRecipe {
+export class UpgradeRecipe extends Recipe {
     /**
-     * ID
+     * 需求品质
      */
-    readonly id: number;
-
-    /**
-     * 目标装备
-     */
-    readonly equipment: Equipment;
+    readonly requireRarity: ItemRarity;
 
     /**
      * 产出品质
      */
     readonly productRarity: ItemRarity;
 
-    /**
-     * 需求
-     */
-    readonly requirements: Array<RecipeRequirement>;
-
-    constructor(id: number, equipment: Equipment, productRarity: ItemRarity, requirements: Array<RecipeRequirement>) {
-        this.id = id;
-        this.equipment = equipment;
+    constructor(id: number, product: Item, productRarity: ItemRarity, requirements: RecipeRequirement[]) {
+        super(id, product, requirements);
         this.productRarity = productRarity;
-        this.requirements = requirements;
+        this.requireRarity = RARITIES[RARITIES.indexOf(productRarity) - 1];
     }
 }

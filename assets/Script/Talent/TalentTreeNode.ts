@@ -21,12 +21,12 @@ export class TalentTreeNode {
     /**
      * 前置天赋
      */
-    readonly parents: Array<string>;
+    readonly parents: string[];
 
     /**
      * 后置天赋
      */
-    readonly children: Array<string>;
+    readonly children: string[];
 
     /**
      * 是否自动解锁
@@ -52,11 +52,11 @@ export class TalentTreeNode {
      * @param autoActivate 自动激活
      * @param autoUnlock   自动解锁
      */
-    constructor(talent: Talent, prerequisite: Predicate<void>, parents: Array<string>, autoActivate: boolean, autoUnlock: boolean) {
+    constructor(talent: Talent, prerequisite: Predicate<void>, parents: string[], autoActivate: boolean, autoUnlock: boolean) {
         this.talent = talent;
         this.prerequisite = prerequisite ?? ALWAYS_TRUE;
         this.parents = parents ?? [];
-        this.children = new Array<string>();
+        this.children = [];
         this.autoActivate = autoActivate;
         this.autoUnlock = autoUnlock;
         this._locked = !autoUnlock;
