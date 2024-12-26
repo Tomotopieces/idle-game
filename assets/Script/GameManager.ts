@@ -170,7 +170,6 @@ export class GameManager extends Component {
      * 保存存档
      */
     private saveData() {
-        // TODO 保存&恢复 披挂的品质信息
         const saveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.equipments.equipmentMap, Storehouse.STOREHOUSE, Level.CHAPTER.name, Level.AREA.name, Level.STAGE.name, this.player.talents.talents, ENEMY_RECORD);
         sys.localStorage.setItem(LocalStorageDataName.SAVE_DATA, saveData.toJson());
         EventCenter.emit(EventName.UI_POST_MESSAGE, `保存成功`);

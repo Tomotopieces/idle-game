@@ -80,6 +80,7 @@ export class SaveData {
         const equipmentSlot = new Map<EquipmentType, ItemStack>(dataJson.equipmentSlot
             .map(stackJson => {
                 const equipment = ITEM_TABLE.get(stackJson.itemName) as Equipment;
+                equipment.attributes.upgrade(stackJson.rank);
                 return [equipment.equipmentType, new ItemStack(equipment, 1)];
             }));
         const storehouse = new Map<string, ItemStack>(dataJson.storehouse
@@ -95,9 +96,11 @@ export class SaveData {
     toJson(): string {
         const equipmentSlotJson = Array.from(this.equipmentSlot.values())
             .filter(stack => stack.item)
-            .map(item => new ItemStackJson(item.item.name, item.count));
+            .map(stack =>
+                new ItemStackJson(stack.item.name, (stack.item as Equipment).attributes.rank, stack.count));
         const storehouseJson = Array.from(this.storehouse.values())
-            .map(item => new ItemStackJson(item.item.name, item.count));
+            .map(stack =>
+                new ItemStackJson(stack.item.name, stack.item instanceof Equipment ? stack.item.attributes.rank : 0, stack.count));
         const talentsJson = MapUtil.stringify(this.talents);
         const enemyRecordJson = MapUtil.stringify(this.enemyRecord);
         return new SaveDataJson(this.level, this.experience, equipmentSlotJson, storehouseJson, this.chapterName, this.areaName, this.stageName, talentsJson, enemyRecordJson).toJson();

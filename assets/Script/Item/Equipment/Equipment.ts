@@ -64,6 +64,6 @@ export class Equipment extends Item {
      */
     static override fromObject(id: number, object: Equipment): Equipment {
         const item = Item.fromObject(id, object);
-        return new Equipment(id, item.name, item.displayName, item.itemType, item.description, item.icon, item.unique, object.equipmentType, EquipmentAttributes.fromObject(object.attributes), object.rarity);
+        return new Equipment(id, item.name, item.displayName, item.itemType, item.description, item.icon, item.unique, object.equipmentType, EquipmentAttributes.fromObject(object.attributes, object.rarity), object.rarity);
     }
 }

@@ -90,21 +90,24 @@ export class EquipmentAttributes {
     /**
      * 从Object创建
      *
-     * @param object  Object
+     * @param object Object
+     * @param rarity 品质
      */
-    static fromObject(object: EquipmentAttributes) {
-        return new EquipmentAttributes(object.additionalHealth, object.healthBoost, object.extraHealth, object.additionalDamage, object.damageBoost, object.additionalDefense, object.defenseBoost, object.criticalRate, object.criticalBoost, object.effects, object.setName, object.rarity);
+    static fromObject(object: EquipmentAttributes, rarity: ItemRarity) {
+        return new EquipmentAttributes(object.additionalHealth, object.healthBoost, object.extraHealth, object.additionalDamage, object.damageBoost, object.additionalDefense, object.defenseBoost, object.criticalRate, object.criticalBoost, object.effects, object.setName, rarity);
     }
 
     /**
      * 品质升阶
+     *
+     * @param ranks 升阶数，默认为1
      */
-    upgrade() {
+    upgrade(ranks: number = 1) {
         if (this._rarity === ItemRarity.MYTHICAL) {
             return;
         }
-        this._rarity = RARITIES[(RARITIES.indexOf(this._rarity) + 1)];
-        this._rank++;
+        this._rarity = RARITIES[(RARITIES.indexOf(this._rarity) + ranks)];
+        this._rank += ranks;
     }
 
     /**
@@ -146,5 +149,9 @@ export class EquipmentAttributes {
     additionalDefenseUpgradedDelta(upgradedRarity: ItemRarity = this.rarity): number {
         const rank = this.rarityToRank(upgradedRarity);
         return this.additionalDefense instanceof Array ? this.additionalDefense[rank] - this.additionalDefense[rank - 1] : 0;
+    }
+
+    get rank(): number {
+        return this._rank;
     }
 }
