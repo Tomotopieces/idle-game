@@ -194,5 +194,3 @@ export class GameLoader extends Component {
         this._loadProcess[this._loadStep]();
     }
 }
-
-

@@ -149,7 +149,7 @@ export class WorkshopPanel extends Component {
      * 铸造
      */
     private craft() {
-        if (!RecipeUtil.checkRequirements(this._currentRecipe) ||
+        if (!RecipeUtil.satisfy(this._currentRecipe) ||
             !RecipeUtil.canProduce(this._currentRecipe)) {
             // 未选中配方，或材料不足，或无法继续制作更多的
             return;
@@ -164,7 +164,7 @@ export class WorkshopPanel extends Component {
      * 升阶
      */
     private upgrade() {
-        if (!RecipeUtil.checkRequirements(this._currentRecipe)) {
+        if (!RecipeUtil.satisfy(this._currentRecipe)) {
             return;
         }
 

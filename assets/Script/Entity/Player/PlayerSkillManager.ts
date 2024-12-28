@@ -33,15 +33,25 @@ export class PlayerSkillManager {
     private readonly _autoSkillMap = new Map<string, Skill>();
 
     /**
+     * 技能表
+     *
+     * 技能名 -> 技能
+     */
+    private readonly _skillMap = new Map<string, Skill>();
+
+    /**
      * 技能队列
      */
-    private readonly _skillQueue: Skill[] = [];
+    private _skillQueue: Skill[] = [];
 
     /**
      * 玩家技能状态
      */
     private _state: SkillState = SkillState.IDLE;
 
+    /**
+     * 正在释放的技能
+     */
     private _currentSkill: Skill;
 
     /**
@@ -74,9 +84,11 @@ export class PlayerSkillManager {
      * 添加技能
      *
      * @param skill 技能
+     * @param auto  是否自动释放
      */
-    addSkill(skill: Skill) {
-        this._autoSkillMap.set(skill.name, skill);
+    addSkill(skill: Skill, auto: boolean = true) {
+        this._skillMap.set(skill.name, skill);
+        auto && this._autoSkillMap.set(skill.name, skill);
     }
 
     /**
@@ -97,6 +109,9 @@ export class PlayerSkillManager {
         this._skillQueue.push(skill);
     }
 
+    /**
+     * 恢复闲置状态
+     */
     idle() {
         this._state = SkillState.IDLE;
         this._currentSkill = null;
@@ -118,13 +133,9 @@ export class PlayerSkillManager {
      * @param skillName 技能名
      */
     forceTrigger(skillName: string) {
-        const index = this._skillQueue.findIndex(skill => skill.name === skillName);
-        if (index === -1) {
-            return;
-        }
+        this._skillQueue = this._skillQueue.filter(skill => skill.name !== skillName); // 若技能队列中存在该技能，则删除
         this.cancel(); // 取消当前技能
-        this._skillQueue[index].trigger();
-        this._skillQueue.splice(index, 1);
+        this._skillMap.get(skillName).trigger();
         this._state = SkillState.CASTING;
     }
 

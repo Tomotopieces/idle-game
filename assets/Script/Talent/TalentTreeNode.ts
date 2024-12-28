@@ -93,9 +93,6 @@ export class TalentTreeNode {
      */
     activate(level: number): void {
         level = Math.min(level, this.talent.maxLevel);
-        if (this._locked || this.talent.level === level) {
-            return;
-        }
 
         if (!level) {
             if (this.hasChildActivated()) {

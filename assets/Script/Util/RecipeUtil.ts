@@ -30,8 +30,8 @@ export class RecipeUtil {
      *
      * @param recipe 配方
      */
-    static checkRequirements(recipe: CraftRecipe): boolean {
-        return Storehouse.check(this.requirementsToStacks(recipe.requirements));
+    static satisfy(recipe: CraftRecipe): boolean {
+        return Storehouse.satisfy(this.requirementsToStacks(recipe.requirements));
     }
 
     /**

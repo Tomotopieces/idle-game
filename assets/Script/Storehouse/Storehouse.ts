@@ -4,7 +4,6 @@ import { Item, ItemType } from "db://assets/Script/Item/Item";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
-import { ITEM_TABLE } from "db://assets/Script/DataTable";
 
 /**
  * 仓库类型
@@ -33,6 +32,7 @@ export class Storehouse {
         const failedList: ItemStack[] = [];
         stackList.forEach(stack => {
             if (this.STOREHOUSE.has(stack.item.name) || (checkEquipmentSlot && this.inEquipmentSlot(stack.item))) {
+                // 仓库内已有
                 if (stack.item.unique) {
                     // 排除独特物品
                     failedList.push(stack);
@@ -60,16 +60,16 @@ export class Storehouse {
     /**
      * 检查物品是否足够
      *
-     * @param stackList 需求物品列表
+     * @param stackList          需求物品列表
+     * @param checkEquipmentSlot 是否检查装备栏
      */
-    static check(stackList: ItemStack[]): boolean {
+    static satisfy(stackList: ItemStack[], checkEquipmentSlot: boolean = true): boolean {
         return stackList.every(stack => {
-            if (this.STOREHOUSE.has(stack.item.name)) {
-                const itemStack = this.STOREHOUSE.get(stack.item.name);
-                return itemStack.count >= stack.count;
-            } else {
-                return false;
+            let count = this.STOREHOUSE.get(stack.item.name)?.count ?? 0;
+            if (checkEquipmentSlot && this.inEquipmentSlot(stack.item)) {
+                count += 1;
             }
+            return count >= stack.count;
         });
     }
 
@@ -100,14 +100,14 @@ export class Storehouse {
     /**
      * 统计物品数量
      *
-     * @param target             目标物品
+     * @param target             目标物品 | 名称
      * @param checkEquipmentSlot 是否检查装备栏
      */
     static countOne(target: Item | string, checkEquipmentSlot: boolean = true): number {
-        const item = typeof target === 'string' ? ITEM_TABLE.get(target) : target;
-        let count = this.STOREHOUSE.get(item.name)?.count ?? 0;
+        const itemName = target instanceof Item ? target.name : target;
+        let count = this.STOREHOUSE.get(itemName)?.count ?? 0;
         if (checkEquipmentSlot) {
-            if (Array.from(this.equipmentMap.values()).some(stack => stack.item?.name === item.name)) {
+            if (Array.from(this.equipmentMap.values()).some(stack => stack.item?.name === itemName)) {
                 count += 1;
             }
         }
@@ -141,19 +141,6 @@ export class Storehouse {
     }
 
     /**
-     * 检查物品是否在装备栏内
-     *
-     * @param item 物品
-     */
-    private static inEquipmentSlot(item: Item): boolean {
-        if (item.itemType !== ItemType.EQUIPMENT) {
-            return false;
-        }
-
-        return Array.from(Storehouse.equipmentMap.values()).some(stack => stack.item?.name === item.name)
-    }
-
-    /**
      * 取出一件物品
      *
      * @param itemName 物品名称
@@ -170,6 +157,20 @@ export class Storehouse {
         }
         Storehouse.emitUpdateEvent([{ item: itemStack.item, count: 1 }]);
         return true;
+    }
+
+    /**
+     * 检查物品是否在装备栏内
+     *
+     * @param item 物品
+     */
+    private static inEquipmentSlot(item: Item): boolean {
+        if (item.itemType !== ItemType.EQUIPMENT) {
+            // 跳过非装备物品
+            return false;
+        }
+
+        return Array.from(Storehouse.equipmentMap.values()).some(stack => stack.item?.name === item.name)
     }
 
     /**
