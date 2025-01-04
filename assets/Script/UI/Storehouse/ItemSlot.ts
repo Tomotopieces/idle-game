@@ -76,15 +76,29 @@ export class ItemSlot extends Component {
     set stack(value: ItemStack) {
         if (value) {
             this._stack = value;
-            ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, this._stack.item.icon, (spriteFrame: SpriteFrame) => {
-                this.stackSprite.spriteFrame = spriteFrame;
-            });
+            ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, this._stack.item.icon, (spriteFrame: SpriteFrame) =>
+                this.stackSprite.spriteFrame = spriteFrame);
             this.countLabel.string = `${value.count}`;
         } else {
             this._stack = value;
             this.stackSprite.spriteFrame = null;
             this.countLabel.string = '';
         }
+    }
+
+    /**
+     * 设置数量
+     *
+     * @param value 新数量
+     */
+    set count(value: number) {
+        if (!this._stack) {
+            console.error(`No ItemStack in slot`);
+            return;
+        }
+
+        this._stack.count = value;
+        this.countLabel.string = `${value}`;
     }
 }
 

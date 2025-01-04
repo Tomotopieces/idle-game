@@ -1,5 +1,4 @@
-import { _decorator, Component, instantiate, Node, Prefab, Vec3 } from 'cc';
-import { Storehouse } from "db://assets/Script/Storehouse/Storehouse";
+import { _decorator, Component, instantiate, Prefab } from 'cc';
 import { ItemSlot } from "db://assets/Script/UI/Storehouse/ItemSlot";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
@@ -8,16 +7,10 @@ import { EventName } from "db://assets/Script/Event/EventName";
 const { ccclass, property } = _decorator;
 
 // 默认仓库格子数量
-const DEFAULT_SLOT_SIZE = 30;
-
-// 容器宽度
-const CONTAINER_WIDTH = 720;
+const DEFAULT_SLOT_SIZE = 35;
 
 // 每行物品槽数量
 const SLOT_PER_ROW = 5;
-
-// 每格物品槽宽度
-const SLOT_SIZE = CONTAINER_WIDTH / SLOT_PER_ROW;
 
 /**
  * 仓库容器UI
@@ -27,87 +20,112 @@ export class ItemSlotContainer extends Component {
     /**
      * 物品槽Prefab
      */
-    @property({ type: Prefab, tooltip: '物品槽Prefab' })
-    slotPrefab: Prefab = null;
+    @property({ type: Prefab, displayName: '物品槽Prefab' })
+    slotPrefab: Prefab;
+
+    /**
+     * 显示物品列表
+     */
+    private readonly _displayStacks: ItemStack[] = [];
 
     /**
      * 物品槽列表
      */
-    private _slotList: Node[] = [];
+    private readonly _slots: ItemSlot[] = [];
 
-    start() {
-        // TODO 改为使用 Layout 组件进行排版，重新设计排版逻辑
-
-        // 添加物品槽
+    onLoad() {
         for (let i = 0; i < DEFAULT_SLOT_SIZE; i++) {
             const slot = instantiate(this.slotPrefab);
             this.node.addChild(slot);
-
-            // 设置slot位置
-            slot.setPosition(ItemSlotContainer.calculatePosition(i));
+            this._slots.push(slot.getComponent(ItemSlot));
         }
 
         // 监听仓库变化事件
-        EventCenter.on(EventName.UI_UPDATE_STOREHOUSE, this.node.name, (stackList: ItemStack[]) => this.updateSlotList(stackList));
+        EventCenter.on(EventName.UI_UPDATE_STOREHOUSE, this.node.name, (deltaList: ItemStack[]) => this.updateDisplayList(deltaList));
+    }
+
+    onDestroy() {
+        EventCenter.idOff(this.node.name);
     }
 
     /**
-     * 更新物品槽
+     * 更新显示物品列表
      *
-     * @param stackList 更新物品列表
+     * @param deltaList 更新物品列表
      */
-    private updateSlotList(stackList: ItemStack[]) {
+    private updateDisplayList(deltaList: ItemStack[]) {
         // 更新List数据
-        stackList.forEach(updateStack => {
-            const index = this._slotList.findIndex(slot => slot.getComponent(ItemSlot).stack?.item.name === updateStack.item.name ?? false);
+        deltaList.forEach(updateStack => {
+            const index = this._displayStacks.findIndex(stack => stack.item.name === updateStack.item.name);
             if (index == -1 && updateStack.count > 0) {
                 // 新增物品
-                const slot = instantiate(this.slotPrefab);
-                slot.getComponent(ItemSlot).stack = updateStack;
-                this._slotList.push(slot);
-                // 跳过数量为0的新物品
+                this.push(updateStack);
             } else if (updateStack.count > 0) {
                 // 修改物品数量
-                this._slotList[index].getComponent(ItemSlot).stack = updateStack;
+                this.updateCount(updateStack);
             } else {
                 // 删除物品
-                this._slotList.splice(index, 1);
+                this.remove(index);
             }
         });
-
-        // 更新UI
-        this.updateSlotUI();
     }
 
     /**
-     * 更新物品槽UI
-     */
-    private updateSlotUI() {
-        // 清空
-        this.node.removeAllChildren();
-
-        // 重新计算展示的物品槽数量
-        let slotCount = Math.max(Storehouse.STOREHOUSE.size, DEFAULT_SLOT_SIZE);
-        slotCount += SLOT_PER_ROW - slotCount % SLOT_PER_ROW;
-
-        for (let i = 0; i < slotCount; i++) {
-            const slot = i < this._slotList.length ? this._slotList[i] : instantiate(this.slotPrefab);
-            this.node.addChild(slot);
-            slot.setPosition(ItemSlotContainer.calculatePosition(i));
-        }
-    }
-
-    /**
-     * 计算物品槽在UI中的位置
+     * 新增物品
      *
-     * @param index 物品顺序索引
+     * @param stack 物品堆叠
      */
-    private static calculatePosition(index: number): Vec3 {
-        const rowIndex = Math.floor(index / SLOT_PER_ROW);
-        const columnIndex = index % SLOT_PER_ROW;
-        const x = (columnIndex + 0.5) * SLOT_SIZE;
-        const y = -(rowIndex + 0.5) * SLOT_SIZE;
-        return new Vec3(x, y);
+    private push(stack: ItemStack) {
+        if (this._displayStacks.length < this._slots.length) {
+            // 寻找第一个没有内容的slot，填入stack
+            for (let i = 0; i < this._slots.length; i++) {
+                if (!this._slots[i].stack) {
+                    this._slots[i].stack = stack;
+                    break;
+                }
+            }
+        } else {
+            // 添加一行slot，并在第一个中填入stack
+            for (let i = 0; i < SLOT_PER_ROW; i++) {
+                const slot = instantiate(this.slotPrefab);
+                this.node.addChild(slot);
+                this._slots.push(slot.getComponent(ItemSlot));
+
+                if (i === 0) {
+                    slot.getComponent(ItemSlot).stack = stack;
+                }
+            }
+        }
+        this._displayStacks.push(stack);
+    }
+
+    /**
+     * 更新物品数量
+     *
+     * @param stack 物品堆叠
+     */
+    private updateCount(stack: ItemStack) {
+        this._slots.forEach(slot => {
+            if (slot.stack?.item.name === stack.item.name) {
+                slot.count = stack.count;
+            }
+        });
+    }
+
+    /**
+     * 删除物品
+     *
+     * @param index 删除物品索引
+     */
+    private remove(index: number) {
+        const stack = this._displayStacks.splice(index, 1)[0];
+        index = this._slots.findIndex(slot => slot.stack?.item.name === stack.item.name);
+        const slot = this._slots.splice(index, 1)[0];
+        this.node.removeChild(slot.node);
+
+        const newSlot = instantiate(this.slotPrefab);
+        this.node.addChild(newSlot);
+        this._slots.push(newSlot.getComponent(ItemSlot));
     }
 }
 
