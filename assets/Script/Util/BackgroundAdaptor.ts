@@ -10,6 +10,6 @@ export class BackgroundAdaptor extends Component {
     start() {
         const windowSize = screen.windowSize;
         const transform = this.node.getComponent(UITransform);
-        transform.height *= transform.width / transform.height / windowSize.width * windowSize.height;
+        transform.height = transform.width / windowSize.width * windowSize.height;
     }
 }
