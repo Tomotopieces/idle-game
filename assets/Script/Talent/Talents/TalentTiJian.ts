@@ -20,8 +20,9 @@ export class TalentTiJian extends Talent {
      * 天赋等级 -> 攻速加成
      */
     private static readonly LIGHT_ATTACK_SPEED_BOOST_MAP = new Map<number, number>([
-        [1, 0.3],
-        [2, 0.8]
+        [0, 1],
+        [1, 1.3],
+        [2, 1.8]
     ]);
 
     constructor() {
@@ -30,11 +31,11 @@ export class TalentTiJian extends Talent {
 
     protected activateEffect(): void {
         const skill = PlayerController.PLAYER.skills.getSkill(SkillLightAttack.NAME) as SkillLightAttack;
-        skill.attackSpeedBoost += TalentTiJian.LIGHT_ATTACK_SPEED_BOOST_MAP.get(this.level);
+        skill.attackSpeedBoost = TalentTiJian.LIGHT_ATTACK_SPEED_BOOST_MAP.get(this.level);
     }
 
     protected deactivateEffect(): void {
         const skill = PlayerController.PLAYER.skills.getSkill(SkillLightAttack.NAME) as SkillLightAttack;
-        skill.attackSpeedBoost -= TalentTiJian.LIGHT_ATTACK_SPEED_BOOST_MAP.get(this.level);
+        skill.attackSpeedBoost = TalentTiJian.LIGHT_ATTACK_SPEED_BOOST_MAP.get(0);
     }
 }

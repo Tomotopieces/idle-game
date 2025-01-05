@@ -69,7 +69,7 @@ export abstract class Talent {
             return false;
         }
 
-        if (this._level || !level) {
+        if (this._level && !level) {
             this.deactivateEffect();
         }
 

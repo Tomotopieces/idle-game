@@ -63,9 +63,6 @@ export class PlayerTalentManager {
         if (talentTreeNode.locked || talentTreeNode.maxActivated()) {
             // 未解锁或已满级
             return;
-        } else if (this._sparks < talentTreeNode.talent.requirement) {
-            // 灵光点不足
-            return;
         }
 
         talentTreeNode.activate(talentTreeNode.talent.level + 1);
@@ -105,6 +102,9 @@ export class PlayerTalentManager {
      * @param talents 天赋加点
      */
     restore(talents: Map<string, number>) {
+        this._recordLevel = this._sparks = PlayerController.PLAYER.levelInfo.level;
+        EventCenter.emit(EventName.UI_UPDATE_SPARKS, this._sparks);
+
         if (!talents.size) {
             return;
         }

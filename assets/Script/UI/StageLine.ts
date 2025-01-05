@@ -6,6 +6,7 @@ import { Level } from "db://assets/Script/Level/Level";
 import { UpdateLevelEvent } from "db://assets/Script/Event/UpdateLevelEvent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
+import { Chapter } from "db://assets/Script/Level/Chapter";
 
 const { ccclass, property } = _decorator;
 
@@ -56,17 +57,19 @@ export class StageLine extends Component {
      * 按钮触发
      */
     clickPreviousAreaButton() {
-        let previousArea = Level.previousAreaOf(Level.AREA);
-        if (previousArea.name === Level.AREA.name) {
+        let targetChapter: Chapter;
+        let targetArea = Level.previousAreaOf(Level.AREA);
+        if (!targetArea) {
             // 若为本章节的第一个区域，则返回上一章节的最后一个区域
-            const previousChapter = Level.previousChapterOf(Level.CHAPTER);
-            if (previousChapter.name === Level.CHAPTER.name) {
+            targetChapter = Level.previousChapterOf(Level.CHAPTER);
+            if (!targetChapter) {
+                // 若为第一个章节，则不操作
                 return;
             }
-            previousArea = Level.lastAreaOf(previousChapter);
+            targetArea = Level.lastAreaOf(targetChapter);
         }
-        const stage = Level.firstStageOf(previousArea);
-        EventCenter.emit(EventName.UPDATE_LEVEL, new UpdateLevelEvent(previousArea, stage));
+        const stage = Level.firstStageOf(targetArea);
+        EventCenter.emit(EventName.UPDATE_LEVEL, new UpdateLevelEvent(targetChapter, targetArea, stage));
     }
 
     /**
@@ -75,17 +78,19 @@ export class StageLine extends Component {
      * 按钮触发
      */
     clickNextAreaButton() {
-        let nextArea = Level.nextAreaOf(Level.AREA);
-        if (nextArea.name === Level.AREA.name) {
+        let targetChapter: Chapter;
+        let targetArea = Level.nextAreaOf(Level.AREA);
+        if (!targetArea) {
             // 若为本章节的最后一个区域，则进入下一章节的第一个区域
-            const nextChapter = Level.nextChapterOf(Level.CHAPTER);
-            if (nextChapter.name === Level.CHAPTER.name) {
+            targetChapter = Level.nextChapterOf(Level.CHAPTER);
+            if (!targetChapter) {
+                // 若为最后一个章节，则不操作
                 return;
             }
-            nextArea = Level.firstAreaOf(nextChapter);
+            targetArea = Level.firstAreaOf(targetChapter);
         }
-        const stage = Level.firstStageOf(nextArea);
-        EventCenter.emit(EventName.UPDATE_LEVEL, new UpdateLevelEvent(nextArea, stage));
+        const stage = Level.firstStageOf(targetArea);
+        EventCenter.emit(EventName.UPDATE_LEVEL, new UpdateLevelEvent(targetChapter, targetArea, stage));
     }
 }
 

@@ -1,6 +1,6 @@
 import { Area } from "db://assets/Script/Level/Area";
 import { Stage } from "db://assets/Script/Level/Stage";
-import { AREA_TABLE, CHAPTER_TABLE, STAGE_TABLE } from "db://assets/Script/DataTable";
+import { AREA_TABLE, CHAPTERS, STAGE_TABLE } from "db://assets/Script/DataTable";
 import { Chapter } from "db://assets/Script/Level/Chapter";
 
 /**
@@ -55,24 +55,22 @@ export class Level {
      * 获取上一个章节
      *
      * @param currentChapter 当前章节
-     * @return 上一章节
+     * @return 上一章节或null
      */
     static previousChapterOf(currentChapter: Chapter): Chapter {
-        const chapters = Array.from(CHAPTER_TABLE.values()).sort((a, b) => a.id - b.id);
-        const currentIndex = chapters.findIndex(chapter => chapter.name === currentChapter.name);
-        return chapters[Math.max(currentIndex - 1, 0)];
+        const currentIndex = CHAPTERS.findIndex(chapter => chapter.name === currentChapter.name);
+        return currentIndex === 0 ? null : CHAPTERS[currentIndex - 1];
     }
 
     /**
      * 获取下一个章节
      *
      * @param currentChapter 当前章节
-     * @return 下一章节
+     * @return 下一章节或null
      */
     static nextChapterOf(currentChapter: Chapter): Chapter {
-        const chapters = Array.from(CHAPTER_TABLE.values()).sort((a, b) => a.id - b.id);
-        const currentIndex = chapters.findIndex(chapter => chapter.name === currentChapter.name);
-        return chapters[Math.min(currentIndex + 1, chapters.length - 1)];
+        const currentIndex = CHAPTERS.findIndex(chapter => chapter.name === currentChapter.name);
+        return currentIndex === CHAPTERS.length - 1 ? null : CHAPTERS[currentIndex + 1];
     }
 
     /**
@@ -98,23 +96,23 @@ export class Level {
      * 获取上一个区域
      *
      * @param currentArea 当前区域
-     * @reutnr 上一区域
+     * @reutnr 上一区域或null
      */
     static previousAreaOf(currentArea: Area): Area {
-        const areas = Array.from(AREA_TABLE.values()).sort((a, b) => a.id - b.id);
-        const currentIndex = areas.findIndex(area => area.name === currentArea.name);
-        return areas[Math.max(currentIndex - 1, 0)];
+        const chapter = CHAPTERS.find(chapter => chapter.areas.some(area => area.name === currentArea.name));
+        const currentIndex = chapter.areas.findIndex(area => area.name === currentArea.name);
+        return currentIndex === 0 ? null : chapter.areas[currentIndex - 1];
     }
 
     /**
      * 获取下一个区域
      *
      * @param currentArea 当前区域
-     * @return 下一区域
+     * @return 下一区域或null
      */
     static nextAreaOf(currentArea: Area): Area {
-        const areas = Array.from(AREA_TABLE.values()).sort((a, b) => a.id - b.id);
-        const currentIndex = areas.findIndex(area => area.name === currentArea.name);
-        return areas[Math.min(currentIndex + 1, areas.length - 1)];
+        const chapter = CHAPTERS.find(chapter => chapter.areas.some(area => area.name === currentArea.name));
+        const currentIndex = chapter.areas.findIndex(area => area.name === currentArea.name);
+        return currentIndex === chapter.areas.length - 1 ? null : chapter.areas[currentIndex + 1];
     }
 }

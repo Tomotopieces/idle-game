@@ -3,8 +3,6 @@ import { SaveData } from "db://assets/Script/SaveData/SaveData";
 import { LocalStorageDataName, } from "db://assets/Script/Util/Constant";
 import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
 import { Storehouse } from "db://assets/Script/Storehouse/Storehouse";
-import { Area } from "db://assets/Script/Level/Area";
-import { Stage } from "db://assets/Script/Level/Stage";
 import { LevelNameBar } from "db://assets/Script/UI/LevelNameBar";
 import { UpdateLevelEvent } from "db://assets/Script/Event/UpdateLevelEvent";
 import { StageLine } from "db://assets/Script/UI/StageLine";
@@ -68,7 +66,7 @@ export class GameManager extends Component {
     onLoad() {
         // 监听处理事件
         EventCenter.on(EventName.DEAL_DAMAGE, this.node.name, (event: DealDamageEvent) => this.handleDamage(event));
-        EventCenter.on(EventName.UPDATE_LEVEL, this.node.name, (event: UpdateLevelEvent) => this.updateLevel(event.area, event.stage));
+        EventCenter.on(EventName.UPDATE_LEVEL, this.node.name, (event: UpdateLevelEvent) => this.updateLevel(event));
         EventCenter.on(EventName.EQUIPMENT_CHANGE, this.node.name, (event: EquipmentChangeEvent) => this.handleEquipmentChange(event));
         EventCenter.on(EventName.ENEMY_DIE, this.node.name, (enemy: EnemyController) => this.handleEnemyDie(enemy));
         EventCenter.on(EventName.GET_DROPS, this.node.name, (dropStackList: ItemStack[]) => this.getDrops(dropStackList));
@@ -139,17 +137,17 @@ export class GameManager extends Component {
     /**
      * 更新关卡
      *
-     * @param area 区域
-     * @param stage 舞台
+     * @param event 事件参数
      */
-    private updateLevel(area: Area, stage: Stage) {
-        if (Level.AREA === area && Level.STAGE === stage) {
+    private updateLevel(event: UpdateLevelEvent) {
+        if (Level.CHAPTER === event.chapter && Level.AREA === event.area && Level.STAGE === event.stage) {
             return;
         }
 
-        Level.AREA = area;
-        Level.STAGE = stage;
-        this.enemy.info = stage.enemyInfo;
+        Level.CHAPTER = event.chapter;
+        Level.AREA = event.area;
+        Level.STAGE = event.stage;
+        this.enemy.info = event.stage.enemyInfo;
 
         this.levelNameBar.updateLevelName(Level.CHAPTER, Level.AREA, Level.STAGE);
         this.stageLine.updateCurrentLevel(Level.AREA, Level.STAGE);

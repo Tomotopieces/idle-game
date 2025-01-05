@@ -8,13 +8,16 @@ import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import {
     AREA_TABLE,
+    AREAS,
     CHAPTER_TABLE,
+    CHAPTERS,
     CRAFT_RECIPE_TABLE,
     DataPath,
     ENEMY_TABLE,
     ITEM_TABLE,
     SET_EFFECT_TABLE,
     STAGE_TABLE,
+    STAGES,
     UPGRADE_RECIPE_LIST
 } from "db://assets/Script/DataTable";
 import { ChapterJson } from "db://assets/Script/Level/ChapterJson";
@@ -145,8 +148,11 @@ export class GameLoader extends Component {
         resources.load(DataPath.STAGE_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
             const rawStageList = data.json! as StageJson[];
-            rawStageList.forEach((rawStage: StageJson, index: number) =>
-                STAGE_TABLE.set(rawStage.name, StageJson.toStage(index, rawStage)));
+            rawStageList.forEach((rawStage: StageJson, index: number) => {
+                const stage = StageJson.toStage(index, rawStage);
+                STAGE_TABLE.set(rawStage.name, stage);
+                STAGES.push(stage);
+            });
             this.loadStep++;
         });
     }
@@ -158,8 +164,11 @@ export class GameLoader extends Component {
         resources.load(DataPath.AREA_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
             const rawAreas = data.json! as AreaJson[];
-            rawAreas.forEach((rawArea: AreaJson, index: number) =>
-                AREA_TABLE.set(rawArea.name, AreaJson.toArea(index, rawArea)));
+            rawAreas.forEach((rawArea: AreaJson, index: number) => {
+                const area = AreaJson.toArea(index, rawArea);
+                AREA_TABLE.set(rawArea.name, area);
+                AREAS.push(area);
+            });
             this.loadStep++;
         });
     }
@@ -171,8 +180,11 @@ export class GameLoader extends Component {
         resources.load(DataPath.CHAPTER_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
             const rawChapters = data.json! as ChapterJson[];
-            rawChapters.forEach((rawChapter: ChapterJson, index: number) =>
-                CHAPTER_TABLE.set(rawChapter.name, ChapterJson.toChapter(index, rawChapter)));
+            rawChapters.forEach((rawChapter: ChapterJson, index: number) => {
+                const chapter = ChapterJson.toChapter(index, rawChapter);
+                CHAPTER_TABLE.set(rawChapter.name, chapter);
+                CHAPTERS.push(chapter);
+            });
             this.loadStep++;
         });
     }

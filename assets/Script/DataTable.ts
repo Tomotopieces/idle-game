@@ -84,16 +84,19 @@ export const ENEMY_TABLE = new Map<string, EnemyInfo>();
  * 舞台表
  */
 export const STAGE_TABLE = new Map<string, Stage>();
+export const STAGES: Stage[] = [];
 
 /**
  * 区域表
  */
 export const AREA_TABLE = new Map<string, Area>();
+export const AREAS: Area[] = [];
 
 /**
  * 章节表
  */
 export const CHAPTER_TABLE = new Map<string, Chapter>();
+export const CHAPTERS: Chapter[] = [];
 
 /**
  * 独门妙用 Map
