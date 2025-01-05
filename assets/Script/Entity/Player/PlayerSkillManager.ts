@@ -57,10 +57,10 @@ export class PlayerSkillManager {
     /**
      * 更新技能时间
      *
-     * @param deltaTime 时间增量
+     * @param dt 时间增量
      */
-    update(deltaTime: number) {
-        this._autoSkillMap.forEach(skill => skill.update(deltaTime));
+    update(dt: number) {
+        this._autoSkillMap.forEach(skill => skill.update(dt));
         if (this._skillQueue.length && this._state === SkillState.IDLE) {
             this._currentSkill = this._skillQueue.shift();
             this._currentSkill.trigger();

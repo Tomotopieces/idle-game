@@ -14,24 +14,9 @@ const { ccclass, executeInEditMode } = _decorator;
 @executeInEditMode(true)
 export class ItemCard extends Component {
     /**
-     * 信息 Layout
-     */
-    private _infoLayout: Node;
-
-    /**
-     * 信息 Layout Transform
-     */
-    private _infoLayoutTransform: UITransform;
-
-    /**
      * 自身 Transform
      */
     private _transform: UITransform;
-
-    /**
-     * 背景 Transform
-     */
-    private _backgroundTransform: UITransform;
 
     /**
      * 物品图标
@@ -86,51 +71,25 @@ export class ItemCard extends Component {
     onLoad() {
         /* 读取所有组件 */
 
-        this._infoLayout = this.node.getChildByName('InfoLayout');
-        this._infoLayoutTransform = this._infoLayout.getComponent(UITransform);
         this._transform = this.node.getComponent(UITransform);
-        this._backgroundTransform = this.node.getChildByName('Background').getComponent(UITransform);
 
-        const baseInfoNode = this._infoLayout.getChildByName('BaseInfo');
+        const baseInfoNode = this.node.getChildByName('BaseInfo');
         this._itemIconSprite = baseInfoNode.getChildByName('Icon').getComponent(Sprite);
         this._itemNameLabel = baseInfoNode.getChildByName('Name').getComponent(Label);
         this._itemTypeLabel = baseInfoNode.getChildByName('Type').getComponent(Label);
         this._itemRarityLabel = baseInfoNode.getChildByName('Rarity').getComponent(Label);
 
-        const weaponInfoNode = this._infoLayout.getChildByName('WeaponInfo');
+        const weaponInfoNode = this.node.getChildByName('WeaponInfo');
         this._weaponAttributesLabel = weaponInfoNode.getChildByName('Attributes').getComponent(Label);
         this._weaponUniqueEffectLabel = weaponInfoNode.getChildByName('UniqueEffect').getComponent(Label);
         this._weaponSetEffectLabel = weaponInfoNode.getChildByName('SetEffect').getComponent(Label);
 
-        this._operationButton = this._infoLayout.getChildByName('Operation').getChildByName('Button');
+        const OperationNode = this.node.getChildByName('Operation');
+        this._operationButton = OperationNode.getChildByName('Button');
         this._buttonSprite = this._operationButton.getChildByName('Sprite').getComponent(Sprite);
     }
 
     update(_dt: number) {
-        // 自动调整卡片大小，与信息Layout同步
-        this._backgroundTransform.width = this._transform.width = this._infoLayoutTransform.width;
-        this._backgroundTransform.height = this._transform.height = this._infoLayoutTransform.height;
-    }
-
-    /**
-     * 点击卡片
-     *
-     * 按钮触发
-     */
-    clickCard() {
-        this.hide();
-    }
-
-    /**
-     * 点击按钮
-     *
-     * 按钮触发
-     */
-    clickButton() {
-        if (this._onClick) {
-            this._onClick();
-        }
-        this.hide();
     }
 
     /**
@@ -146,14 +105,8 @@ export class ItemCard extends Component {
 
         // 设置卡片位置与锚点
         const resolutionSize = view.getDesignResolutionSize();
-        this._backgroundTransform.anchorX =
-            this._infoLayoutTransform.anchorX =
-                this._transform.anchorX =
-                    targetWorldPosition.x + this._transform.width <= resolutionSize.width ? 0 : 1;
-        this._backgroundTransform.anchorY =
-            this._infoLayoutTransform.anchorY =
-                this._transform.anchorY =
-                    targetWorldPosition.y - this._transform.height >= 0 ? 1 : 0;
+        this._transform.anchorX = targetWorldPosition.x + this._transform.width <= resolutionSize.width ? 0 : 1;
+        this._transform.anchorY = targetWorldPosition.y - this._transform.height >= 0 ? 1 : 0;
         this.node.setWorldPosition(targetWorldPosition);
 
         // 设置基本信息
@@ -177,8 +130,7 @@ export class ItemCard extends Component {
         this._operationButton.active = onClick !== EMPTY_FUNCTION;
         this._onClick = onClick;
 
-        // 更新 Layout
-        this._infoLayout.getComponent(Layout).updateLayout(true);
+        this.getComponent(Layout).updateLayout(true);
     }
 
     /**
@@ -186,5 +138,26 @@ export class ItemCard extends Component {
      */
     hide() {
         this.node.active = false;
+    }
+
+    /**
+     * 点击卡片
+     *
+     * 按钮触发
+     */
+    clickCard() {
+        this.hide();
+    }
+
+    /**
+     * 点击按钮
+     *
+     * 按钮触发
+     */
+    clickButton() {
+        if (this._onClick) {
+            this._onClick();
+        }
+        this.hide();
     }
 }

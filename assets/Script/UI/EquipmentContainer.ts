@@ -68,6 +68,10 @@ export class EquipmentContainer extends Component {
         EventCenter.on(EventName.UI_UPDATE_EQUIPMENT, this.node.name, (event: EquipmentChangeEvent) => this.updateEquipmentUI(event));
     }
 
+    onDestroy() {
+        EventCenter.idOff(this.node.name);
+    }
+
     /**
      * 更新装备UI
      *

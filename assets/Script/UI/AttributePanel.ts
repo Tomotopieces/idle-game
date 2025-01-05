@@ -46,6 +46,10 @@ export class AttributePanel extends Component {
         EventCenter.on(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.node.name, (event: PlayerAttributeComponent) => this.onUpdateAttributePanel(event));
     }
 
+    onDestroy() {
+        EventCenter.idOff(this.node.name);
+    }
+
     /**
      * 更新等级数据
      *

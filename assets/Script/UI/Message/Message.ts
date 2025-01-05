@@ -18,26 +18,6 @@ const DEFAULT_VERTICAL_PADDING = 20;
 const DEFAULT_DWELL_TIME = 5;
 
 /**
- * 消息状态
- */
-enum MessageState {
-    /**
-     * 渐入
-     */
-    FADE_IN,
-
-    /**
-     * 停留
-     */
-    STAY,
-
-    /**
-     * 渐出
-     */
-    FADE_OUT,
-}
-
-/**
  * 弹出消息
  */
 @ccclass('Message')
@@ -52,11 +32,6 @@ export class Message extends Component {
      * 消息组件 Transform
      */
     private _labelTransform: UITransform;
-
-    /**
-     * 消息背景 Transform
-     */
-    private _backgroundTransform: UITransform;
 
     /**
      * 自身 Transform
@@ -83,56 +58,25 @@ export class Message extends Component {
      */
     private _dwellTime: number = DEFAULT_DWELL_TIME;
 
-    /**
-     * 计时器
-     */
-    private _timer: number = 0;
-
-    /**
-     * 消息状态
-     */
-    private _state: MessageState;
-
     onLoad() {
         const labelNode = this.node.getChildByName('Label');
         this._label = labelNode.getComponent(Label);
         this._labelTransform = labelNode.getComponent(UITransform);
-        this._backgroundTransform = this.node.getChildByName('Background').getComponent(UITransform);
         this._transform = this.node.getComponent(UITransform);
         this._anim = this.node.getComponent(Animation);
     }
 
     start() {
         this._anim.play('FadeIn');
-        this._state = MessageState.FADE_IN;
+        this.node.once(Animation.EventType.FINISHED, () => {
+            this.scheduleOnce(() => this.fadeOut(), this._dwellTime);
+            this.node.once(Animation.EventType.FINISHED, () => this.node.destroy(), this);
+        }, this);
     }
 
-    update(dt: number) {
-        switch (this._state) {
-            case MessageState.FADE_IN:
-                if (!this._anim.getState('FadeIn').isPlaying) {
-                    this._state = MessageState.STAY;
-                }
-                break;
-            case MessageState.STAY:
-                this._timer += dt;
-                if (this._timer >= this._dwellTime) {
-                    this.fadeOut();
-                }
-                break;
-            case MessageState.FADE_OUT:
-                if (!this._anim.getState('FadeOut').isPlaying) {
-                    this.node.destroy();
-                }
-                break;
-        }
-
-        this._backgroundTransform.width =
-            this._transform.width =
-                this._labelTransform.width + this._horizontalPadding * 2;
-        this._backgroundTransform.height =
-            this._transform.height =
-                this._labelTransform.height + this._verticalPadding * 2;
+    onDestroy() {
+        this.unscheduleAllCallbacks();
+        this.node.targetOff(this);
     }
 
     @property({ type: String, tooltip: '消息内容' })
@@ -140,11 +84,13 @@ export class Message extends Component {
         return this._label.string;
     }
 
+    /**
+     * 消失动画
+     */
     fadeOut() {
         if (!this.isValid) {
             return;
         }
-        this._state = MessageState.FADE_OUT;
         this._anim.play('FadeOut');
     }
 
@@ -155,6 +101,10 @@ export class Message extends Component {
      */
     set message(message: string) {
         this._label.string = message;
+        this.scheduleOnce(() => {
+            this._transform.width = this._labelTransform.width + this._horizontalPadding * 2;
+            this._transform.height = this._labelTransform.height + this._verticalPadding * 2;
+        });
     }
 
     set horizontalPadding(value: number) {

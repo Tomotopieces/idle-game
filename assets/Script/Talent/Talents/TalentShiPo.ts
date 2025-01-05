@@ -24,14 +24,14 @@ export class TalentShiPo extends Talent {
     }
 
     protected activateEffect(): void {
-        const player = PlayerController.PLAYER;
+        const skills = PlayerController.PLAYER.skills;
         EventCenter.register(EventName.DEAL_DAMAGE, this.name, (event: DealDamageEvent) => {
             if (event.source === DamageUnit.ENEMY && // 敌人攻击命中时
-                player.skills.state === SkillState.CASTING && // 玩家正在进行
-                player.skills.currentSkill.name === SkillLightAttack.NAME && // 轻棍攻击
-                player.skills.inQueue(SkillHeavyAttack.NAME) !== -1 // 重棍已就绪
+                skills.state === SkillState.CASTING && // 玩家正在进行
+                skills.currentSkill.name === SkillLightAttack.NAME && // 轻棍攻击
+                skills.inQueue(SkillHeavyAttack.NAME) !== -1 // 重棍已就绪
             ) {
-                player.skills.forceTrigger(SkillHeavyAttack.NAME); // 触发重棍
+                skills.forceTrigger(SkillHeavyAttack.NAME); // 触发重棍
                 event.damage = 0; // 敌人伤害无效
             }
         });

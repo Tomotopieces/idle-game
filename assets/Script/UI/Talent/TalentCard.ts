@@ -18,24 +18,9 @@ export class TalentCard extends Component {
     private _talentTreeNode: TalentTreeNode;
 
     /**
-     * 信息 Layout
-     */
-    private _infoLayout: Node;
-
-    /**
-     * 信息 Layout Transform
-     */
-    private _infoLayoutTransform: UITransform;
-
-    /**
      * 自身 Transform
      */
     private _transform: UITransform;
-
-    /**
-     * 背景 Transform
-     */
-    private _backgroundTransform: UITransform;
 
     /**
      * 天赋名称 Label
@@ -63,23 +48,17 @@ export class TalentCard extends Component {
     private _operationNode: Node;
 
     onLoad() {
-        this._infoLayout = this.node.getChildByName("InfoLayout");
-        this._infoLayoutTransform = this._infoLayout.getComponent(UITransform);
         this._transform = this.node.getComponent(UITransform);
-        this._backgroundTransform = this.node.getChildByName("Background").getComponent(UITransform);
-        this._nameLabel = this._infoLayout.getChildByName("Name").getComponent(Label);
-        this._levelNode = this._infoLayout.getChildByName("Level");
+        this._nameLabel = this.node.getChildByName("Name").getComponent(Label);
+        this._levelNode = this.node.getChildByName("Level");
         this._levelLabel = this._levelNode.getComponent(Label);
-        this._descriptionLabel = this._infoLayout.getChildByName("Description").getComponent(Label);
-        this._operationNode = this._infoLayout.getChildByName("Operation");
+        this._descriptionLabel = this.node.getChildByName("Description").getComponent(Label);
+        this._operationNode = this.node.getChildByName("Operation");
     }
 
     update(_dt: number) {
-        this._backgroundTransform.width = this._transform.width = this._infoLayoutTransform.width;
-        this._backgroundTransform.height = this._transform.height = this._infoLayoutTransform.height;
-
         // 更新 Layout
-        this._infoLayout.getComponent(Layout).updateLayout(true);
+        this.getComponent(Layout).updateLayout(true);
     }
 
     show(targetWorldPosition: Vec3, talentTreeNode: TalentTreeNode) {
@@ -87,14 +66,8 @@ export class TalentCard extends Component {
 
         // 设置卡片位置与锚点
         const resolutionSize = view.getDesignResolutionSize();
-        this._backgroundTransform.anchorX =
-            this._infoLayoutTransform.anchorX =
-                this._transform.anchorX =
-                    targetWorldPosition.x + this._transform.width <= resolutionSize.width ? 0 : 1;
-        this._backgroundTransform.anchorY =
-            this._infoLayoutTransform.anchorY =
-                this._transform.anchorY =
-                    targetWorldPosition.y - this._transform.height >= 0 ? 1 : 0;
+        this._transform.anchorX = targetWorldPosition.x + this._transform.width <= resolutionSize.width ? 0 : 1;
+        this._transform.anchorY = targetWorldPosition.y - this._transform.height >= 0 ? 1 : 0;
         this.node.setWorldPosition(targetWorldPosition);
 
         // 设置卡片内容
@@ -106,7 +79,7 @@ export class TalentCard extends Component {
         this._operationNode.active = !talentTreeNode.locked && !talentTreeNode.maxActivated(); // 只在未锁定未到最大等级时显示操作按钮
 
         // 更新 Layout
-        this._infoLayout.getComponent(Layout).updateLayout(true);
+        this.getComponent(Layout).updateLayout(true);
     }
 
     clickCard() {
@@ -120,7 +93,7 @@ export class TalentCard extends Component {
 
         if (this._talentTreeNode.maxActivated()) {
             this._operationNode.active = false;
-            this._infoLayout.getComponent(Layout).updateLayout(true);
+            this.getComponent(Layout).updateLayout(true);
         }
 
         EventCenter.emit(EventName.UI_UPDATE_TALENT_SLOT, this._talentTreeNode);

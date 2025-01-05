@@ -53,9 +53,7 @@ export class TalentPanel extends Component {
     }
 
     onDestroy() {
-        EventCenter.off(EventName.UI_CLICK_TALENT_SLOT, this.node.name);
-        EventCenter.off(EventName.UI_UPDATE_TALENT_SLOT, this.node.name);
-        EventCenter.off(EventName.UI_UPDATE_SPARKS, this.node.name);
+        EventCenter.idOff(this.node.name);
     }
 
     /**

@@ -71,12 +71,7 @@ export class EventCenter {
      */
     static on(eventName: EventName, id: string, listener: Listener) {
         const handler = (eventArgs: EventArgument) => {
-            let listeners: Listener[];
-            if (this.LISTENER_MAP.has(eventName)) {
-                listeners = Array.from(this.LISTENER_MAP.get(eventName).values());
-            } else {
-                listeners = [];
-            }
+            const listeners: Listener[] = this.LISTENER_MAP.has(eventName) ? Array.from(this.LISTENER_MAP.get(eventName).values()) : [];
             listeners.forEach(listener => listener(eventArgs));
             listener(eventArgs);
         };
@@ -97,12 +92,7 @@ export class EventCenter {
      */
     static once(eventName: EventName, id: string, listener: Listener) {
         const handler = (eventArgs: EventArgument) => {
-            let listeners: Listener[];
-            if (this.LISTENER_MAP.has(eventName)) {
-                listeners = Array.from(this.LISTENER_MAP.get(eventName).values());
-            } else {
-                listeners = [];
-            }
+            const listeners: Listener[] = this.LISTENER_MAP.has(eventName) ? Array.from(this.LISTENER_MAP.get(eventName).values()) : [];
             listeners.forEach(listener => listener(eventArgs));
             listener(eventArgs);
             this.HANDLER_MAP.get(eventName).delete(id);

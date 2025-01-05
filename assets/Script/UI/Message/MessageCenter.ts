@@ -31,6 +31,10 @@ export class MessageCenter extends Component {
         EventCenter.on(EventName.UI_POST_MESSAGE, this.node.name, (message: string) => this.post(message));
     }
 
+    onDestroy() {
+        EventCenter.idOff(this.node.name);
+    }
+
     /**
      * 发送消息
      *

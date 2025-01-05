@@ -72,11 +72,11 @@ export abstract class Skill {
     /**
      * 更新
      *
-     * @param deltaTime 时间增量
+     * @param dt 时间增量
      */
-    update(deltaTime: number) {
+    update(dt: number) {
         if (this.timer < this.cooldown) {
-            this.timer += deltaTime;
+            this.timer += dt;
         } else if (this.cost() && !this.queuing) {
             this.player.skills.queue(this);
             this.queuing = true;
