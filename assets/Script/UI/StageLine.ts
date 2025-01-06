@@ -3,7 +3,7 @@ import { Stage } from "db://assets/Script/Level/Stage";
 import { Area } from "db://assets/Script/Level/Area";
 import { StageButton } from "db://assets/Script/UI/StageButton";
 import { Level } from "db://assets/Script/Level/Level";
-import { UpdateLevelEvent } from "db://assets/Script/Event/UpdateLevelEvent";
+import { UpdateLevelEvent } from "db://assets/Script/Event/Events/UpdateLevelEvent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
 import { Chapter } from "db://assets/Script/Level/Chapter";

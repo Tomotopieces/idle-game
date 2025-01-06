@@ -3,7 +3,7 @@ import { PlayerAttributeComponent } from "db://assets/Script/Entity/Player/Playe
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { EquipmentChangeEvent } from "db://assets/Script/Event/EquipmentChangeEvent";
+import { EquipmentChangeEvent } from "db://assets/Script/Event/Events/EquipmentChangeEvent";
 import { SET_EFFECT_TABLE, UNIQUE_EFFECT_TABLE } from "db://assets/Script/DataTable";
 import { EventName } from "db://assets/Script/Event/EventName";
 

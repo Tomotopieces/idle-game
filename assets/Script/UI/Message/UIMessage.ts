@@ -1,6 +1,6 @@
-import { _decorator, Animation, Component, Label, UITransform } from 'cc';
+import { _decorator, Animation, Component, RichText, UITransform } from 'cc';
 
-const { ccclass, property, executeInEditMode } = _decorator;
+const { ccclass } = _decorator;
 
 /**
  * 默认水平 Padding 40px
@@ -20,18 +20,17 @@ const DEFAULT_DWELL_TIME = 5;
 /**
  * 弹出消息
  */
-@ccclass('Message')
-@executeInEditMode(true)
-export class Message extends Component {
+@ccclass('UIMessage')
+export class UIMessage extends Component {
     /**
-     * 消息文本组件
+     * 富文本组件
      */
-    private _label: Label;
+    private _richText: RichText;
 
     /**
-     * 消息组件 Transform
+     * 富文本组件 Transform
      */
-    private _labelTransform: UITransform;
+    private _richTextTransform: UITransform;
 
     /**
      * 自身 Transform
@@ -59,9 +58,9 @@ export class Message extends Component {
     private _dwellTime: number = DEFAULT_DWELL_TIME;
 
     onLoad() {
-        const labelNode = this.node.getChildByName('Label');
-        this._label = labelNode.getComponent(Label);
-        this._labelTransform = labelNode.getComponent(UITransform);
+        const richTextNode = this.node.getChildByName('RichText');
+        this._richText = richTextNode.getComponent(RichText);
+        this._richTextTransform = richTextNode.getComponent(UITransform);
         this._transform = this.node.getComponent(UITransform);
         this._anim = this.node.getComponent(Animation);
     }
@@ -77,11 +76,6 @@ export class Message extends Component {
     onDestroy() {
         this.unscheduleAllCallbacks();
         this.node.targetOff(this);
-    }
-
-    @property({ type: String, tooltip: '消息内容' })
-    get message(): string {
-        return this._label.string;
     }
 
     /**
@@ -100,23 +94,11 @@ export class Message extends Component {
      * @param message 消息内容
      */
     set message(message: string) {
-        this._label.string = message;
+        this._richText.string = message;
         this.scheduleOnce(() => {
-            this._transform.width = this._labelTransform.width + this._horizontalPadding * 2;
-            this._transform.height = this._labelTransform.height + this._verticalPadding * 2;
+            this._transform.width = this._richTextTransform.width + this._horizontalPadding * 2;
+            this._transform.height = this._richTextTransform.height + this._verticalPadding * 2;
         });
-    }
-
-    set horizontalPadding(value: number) {
-        this._horizontalPadding = Math.max(value, 0);
-    }
-
-    set verticalPadding(value: number) {
-        this._verticalPadding = Math.max(value, 0);
-    }
-
-    set dwellTime(value: number) {
-        this._dwellTime = Math.max(value, 0);
     }
 }
 

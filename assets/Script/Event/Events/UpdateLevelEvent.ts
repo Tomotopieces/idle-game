@@ -32,8 +32,6 @@ export class UpdateLevelEvent extends EventArgument {
      */
     constructor(chapter: Chapter, area: Area, stage: Stage) {
         super();
-        console.log(`chapter: ${chapter?.name}, area: ${area?.name}, stage: ${stage?.name}`);
-        console.log(`or chapter: ${Level.CHAPTER.name}, area: ${Level.AREA.name}, stage: ${Level.STAGE.name}`);
         this.chapter = chapter ?? Level.CHAPTER;
         this.area = area ?? Level.AREA;
         this.stage = stage ?? Level.STAGE;

@@ -1,7 +1,7 @@
 import { Talent } from "db://assets/Script/Talent/Talent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
-import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/DealDamageEvent";
+import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
 import { SkillState } from "db://assets/Script/Entity/Player/PlayerSkillManager";
 import { SkillHeavyAttack } from "db://assets/Script/Skill/Skills/SkillHeavyAttack";
 import { SkillLightAttack } from "db://assets/Script/Skill/Skills/SkillLightAttack";

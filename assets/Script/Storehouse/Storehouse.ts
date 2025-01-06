@@ -4,6 +4,8 @@ import { Item, ItemType } from "db://assets/Script/Item/Item";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
+import { UIPostMessageEvent } from "db://assets/Script/Event/Events/UIPostMessageEvent";
+import { MessageType } from "db://assets/Script/UI/Message/MessageFactory";
 
 /**
  * 仓库类型
@@ -52,7 +54,7 @@ export class Storehouse {
 
         if (showMessage) {
             updateList.forEach(stack =>
-                EventCenter.emit(EventName.UI_POST_MESSAGE, `获得：${stack.item.displayName} * ${stack.count}`));
+                EventCenter.emit(EventName.UI_POST_MESSAGE, new UIPostMessageEvent(MessageType.GAIN_ITEM, stack)));
         }
         Storehouse.emitUpdateEvent(updateList);
     }

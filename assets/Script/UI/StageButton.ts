@@ -1,5 +1,5 @@
 import { _decorator, Component, Sprite, SpriteFrame } from 'cc';
-import { UpdateLevelEvent } from "db://assets/Script/Event/UpdateLevelEvent";
+import { UpdateLevelEvent } from "db://assets/Script/Event/Events/UpdateLevelEvent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 
 import { STAGE_TABLE } from "db://assets/Script/DataTable";

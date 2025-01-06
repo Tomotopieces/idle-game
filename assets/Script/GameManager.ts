@@ -4,20 +4,22 @@ import { LocalStorageDataName, } from "db://assets/Script/Util/Constant";
 import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
 import { Storehouse } from "db://assets/Script/Storehouse/Storehouse";
 import { LevelNameBar } from "db://assets/Script/UI/LevelNameBar";
-import { UpdateLevelEvent } from "db://assets/Script/Event/UpdateLevelEvent";
+import { UpdateLevelEvent } from "db://assets/Script/Event/Events/UpdateLevelEvent";
 import { StageLine } from "db://assets/Script/UI/StageLine";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
-import { EquipmentChangeEvent } from "db://assets/Script/Event/EquipmentChangeEvent";
+import { EquipmentChangeEvent } from "db://assets/Script/Event/Events/EquipmentChangeEvent";
 import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/DealDamageEvent";
+import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
 import { AREA_TABLE, CHAPTER_TABLE, ITEM_TABLE, STAGE_TABLE } from "db://assets/Script/DataTable";
 import { DropItemFactory } from "db://assets/Script/Item/DropItemFactory";
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 import { DefaultLevelName, Level } from "db://assets/Script/Level/Level";
 import { EventName } from "db://assets/Script/Event/EventName";
 import { ENEMY_RECORD } from "db://assets/Script/EnemyRecord/EnemyRecord";
+import { UIPostMessageEvent } from "db://assets/Script/Event/Events/UIPostMessageEvent";
+import { MessageType } from "db://assets/Script/UI/Message/MessageFactory";
 
 const { ccclass, property } = _decorator;
 
@@ -170,7 +172,7 @@ export class GameManager extends Component {
     private saveData() {
         const saveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.equipments.equipmentMap, Storehouse.STOREHOUSE, Level.CHAPTER.name, Level.AREA.name, Level.STAGE.name, this.player.talents.talents, ENEMY_RECORD);
         sys.localStorage.setItem(LocalStorageDataName.SAVE_DATA, saveData.toJson());
-        EventCenter.emit(EventName.UI_POST_MESSAGE, `保存成功`);
+        EventCenter.emit(EventName.UI_POST_MESSAGE, new UIPostMessageEvent(MessageType.DEFAULT, `保存成功`));
     }
 
     /**
@@ -263,7 +265,7 @@ export class GameManager extends Component {
         this.player.updateHealthBar();
         this.player.talents.levelUp(level);
         EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
-        EventCenter.emit(EventName.UI_POST_MESSAGE, `等级提升：${level - 1} → ${level}`);
+        EventCenter.emit(EventName.UI_POST_MESSAGE, new UIPostMessageEvent(MessageType.LEVEL_UP, level));
     }
 
     /**

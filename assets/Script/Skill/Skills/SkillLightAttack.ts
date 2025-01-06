@@ -1,6 +1,6 @@
 import { Skill } from "db://assets/Script/Skill/Skill";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/DealDamageEvent";
+import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
 import { EventName } from "db://assets/Script/Event/EventName";
 
 /**

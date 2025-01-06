@@ -2,7 +2,7 @@ import { _decorator, Component } from 'cc';
 import { ItemSlot } from "db://assets/Script/UI/Storehouse/ItemSlot";
 import { EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
-import { EquipmentChangeEvent } from "db://assets/Script/Event/EquipmentChangeEvent";
+import { EquipmentChangeEvent } from "db://assets/Script/Event/Events/EquipmentChangeEvent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
 
