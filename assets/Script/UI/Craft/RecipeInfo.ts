@@ -44,6 +44,11 @@ export class RecipeInfo extends Component {
     private _itemRarityLabel: Label;
 
     /**
+     * 物品描述
+     */
+    private _itemDescriptionLabel: Label;
+
+    /**
      * 武器属性
      */
     private _weaponAttributesLabel: Label;
@@ -76,13 +81,17 @@ export class RecipeInfo extends Component {
     private _recipe: CraftRecipe;
 
     onLoad() {
-        const baseInfoNode = this.node.getChildByName('BaseInfo');
+        const itemInfoLayout = this.node.getChildByName('ItemInfoLayout');
+
+        const baseInfoNode = itemInfoLayout.getChildByName('BaseInfo');
         this._itemIconSprite = baseInfoNode.getChildByName('Icon').getComponent(Sprite);
         this._itemNameLabel = baseInfoNode.getChildByName('Name').getComponent(Label);
         this._itemTypeLabel = baseInfoNode.getChildByName('Type').getComponent(Label);
         this._itemRarityLabel = baseInfoNode.getChildByName('Rarity').getComponent(Label);
 
-        const weaponInfoNode = this.node.getChildByName('WeaponInfo');
+        this._itemDescriptionLabel = itemInfoLayout.getChildByName('Description').getComponent(Label);
+
+        const weaponInfoNode = itemInfoLayout.getChildByName('WeaponInfo');
         this._weaponAttributesLabel = weaponInfoNode.getChildByName('Attributes').getComponent(Label);
         this._weaponUniqueEffectLabel = weaponInfoNode.getChildByName('UniqueEffect').getComponent(Label);
         this._weaponSetEffectLabel = weaponInfoNode.getChildByName('SetEffect').getComponent(Label);
@@ -109,10 +118,17 @@ export class RecipeInfo extends Component {
 
         // 基本信息
         this._itemIconSprite.spriteFrame = ResourceManager.getAsset(ResourceType.SPRITE_FRAME, recipe.product.icon) as SpriteFrame;
+        if (!this._itemIconSprite.spriteFrame) {
+            ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, recipe.product.icon, (spriteFrame: SpriteFrame) => {
+                this._itemIconSprite.spriteFrame = spriteFrame;
+            });
+        }
         this._itemNameLabel.string = recipe.product.displayName;
         this._itemTypeLabel.string = EquipmentInfoUIUtil.getItemTypeLabel(recipe.product);
         this._itemRarityLabel.string = ITEM_RARITY_DISPLAY_NAME_MAP.get(rarity);
         this._itemNameLabel.color = this._itemTypeLabel.color = this._itemRarityLabel.color = ITEM_RARITY_COLOR_MAP.get(rarity);
+
+        this._itemDescriptionLabel.string = recipe.product.description;
 
         // 装备属性
         this._weaponAttributesLabel.string = EquipmentInfoUIUtil.getAttributes(item, rarity);

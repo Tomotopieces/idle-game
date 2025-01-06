@@ -5,13 +5,12 @@ import { EMPTY_FUNCTION, Runnable } from "db://assets/Script/Util/Functions";
 import { EquipmentInfoUIUtil } from "db://assets/Script/Util/EquipmentInfoUIUtil";
 import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
 
-const { ccclass, executeInEditMode } = _decorator;
+const { ccclass } = _decorator;
 
 /**
  * 物品卡片
  */
 @ccclass('ItemCard')
-@executeInEditMode(true)
 export class ItemCard extends Component {
     /**
      * 自身 Transform
@@ -37,6 +36,11 @@ export class ItemCard extends Component {
      * 物品品质
      */
     private _itemRarityLabel: Label;
+
+    /**
+     * 物品描述
+     */
+    private _itemDescriptionLabel: Label;
 
     /**
      * 武器属性
@@ -79,6 +83,8 @@ export class ItemCard extends Component {
         this._itemTypeLabel = baseInfoNode.getChildByName('Type').getComponent(Label);
         this._itemRarityLabel = baseInfoNode.getChildByName('Rarity').getComponent(Label);
 
+        this._itemDescriptionLabel = this.node.getChildByName('Description').getComponent(Label);
+
         const weaponInfoNode = this.node.getChildByName('WeaponInfo');
         this._weaponAttributesLabel = weaponInfoNode.getChildByName('Attributes').getComponent(Label);
         this._weaponUniqueEffectLabel = weaponInfoNode.getChildByName('UniqueEffect').getComponent(Label);
@@ -116,6 +122,9 @@ export class ItemCard extends Component {
         const rarity = item instanceof Equipment ? item.attributes.rarity : item.rarity;
         this._itemRarityLabel.string = ITEM_RARITY_DISPLAY_NAME_MAP.get(rarity);
         this._itemNameLabel.color = this._itemTypeLabel.color = this._itemRarityLabel.color = ITEM_RARITY_COLOR_MAP.get(rarity);
+
+        // 设置物品描述
+        this._itemDescriptionLabel.string = item.description;
 
         // 设置显示信息
         this._weaponAttributesLabel.string = EquipmentInfoUIUtil.getAttributes(item, rarity);

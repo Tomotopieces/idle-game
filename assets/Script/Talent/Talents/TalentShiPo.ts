@@ -15,7 +15,7 @@ import { PlayerController } from "db://assets/Script/Entity/Player/PlayerControl
 export class TalentShiPo extends Talent {
     static readonly NAME = "shi_po";
     static readonly DISPLAY_NAME = "识破";
-    static readonly DESCRIPTION = "识破";
+    static readonly DESCRIPTION = "轻棍衔接重棍，消耗一段棍势，可打出破棍式\n使出破棍式的同时，能化解攻击，抵消伤害";
     static readonly REQUIREMENT = 1;
     static readonly MAX_LEVEL = 1;
 

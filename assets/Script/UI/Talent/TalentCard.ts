@@ -38,6 +38,16 @@ export class TalentCard extends Component {
     private _levelLabel: Label;
 
     /**
+     * 升级需求节点
+     */
+    private _requirementNode: Node;
+
+    /**
+     * 升级需求 Label
+     */
+    private _requirementLabel: Label;
+
+    /**
      * 天赋描述 Label
      */
     private _descriptionLabel: Label;
@@ -52,6 +62,8 @@ export class TalentCard extends Component {
         this._nameLabel = this.node.getChildByName("Name").getComponent(Label);
         this._levelNode = this.node.getChildByName("Level");
         this._levelLabel = this._levelNode.getComponent(Label);
+        this._requirementNode = this.node.getChildByName("Requirement");
+        this._requirementLabel = this._requirementNode.getComponent(Label);
         this._descriptionLabel = this.node.getChildByName("Description").getComponent(Label);
         this._operationNode = this.node.getChildByName("Operation");
     }
@@ -75,6 +87,8 @@ export class TalentCard extends Component {
         this._nameLabel.string = talentTreeNode.talent.displayName;
         this._levelNode.active = !talentTreeNode.locked; // 只在解锁后显示等级
         this._levelLabel.string = `Lv.${talentTreeNode.talent.level}`;
+        this._requirementNode.active = !talentTreeNode.maxActivated();
+        this._requirementLabel.string = `需要点数：${talentTreeNode.talent.requirement}`;
         this._descriptionLabel.string = talentTreeNode.talent.description;
         this._operationNode.active = !talentTreeNode.locked && !talentTreeNode.maxActivated(); // 只在未锁定未到最大等级时显示操作按钮
 
@@ -93,6 +107,7 @@ export class TalentCard extends Component {
 
         if (this._talentTreeNode.maxActivated()) {
             this._operationNode.active = false;
+            this._requirementNode.active = false;
             this.getComponent(Layout).updateLayout(true);
         }
 
