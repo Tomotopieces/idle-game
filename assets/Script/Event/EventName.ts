@@ -101,4 +101,9 @@ export enum EventName {
      * 点击配方槽UI
      */
     UI_CLICK_RECIPE_SLOT = 'UI_CLICK_RECIPE_SLOT',
+
+    /**
+     * 卖出物品
+     */
+    SELL_ITEM = 'SELL_ITEM',
 }

@@ -58,6 +58,11 @@ export enum DataPath {
      * 章节配置表
      */
     CHAPTER_TABLE = 'data/chapter_table',
+
+    /**
+     * 贩卖品表
+     */
+    FOR_SALE_ITEM_TABLE = 'data/for_sale_table',
 }
 
 /**

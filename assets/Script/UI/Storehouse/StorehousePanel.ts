@@ -18,20 +18,26 @@ export class StorehousePanel extends Component {
     /**
      * 物品信息卡片
      */
-    @property({ type: ItemCard, tooltip: '物品信息卡片' })
+    @property({ type: ItemCard, displayName: '物品信息卡片' })
     itemCard: ItemCard;
 
     /**
      * 确认按钮图片
      */
-    @property({ type: SpriteFrame, tooltip: '确认按钮图片' })
+    @property({ type: SpriteFrame, displayName: '确认按钮图片' })
     confirmImage: SpriteFrame;
 
     /**
      * 取消按钮图片
      */
-    @property({ type: SpriteFrame, tooltip: '取消按钮图片' })
+    @property({ type: SpriteFrame, displayName: '取消按钮图片' })
     cancelImage: SpriteFrame;
+
+    /**
+     * 钱袋图片
+     */
+    @property({ type: SpriteFrame, displayName: '钱袋图片' })
+    moneyBagImage: SpriteFrame;
 
     /**
      * 动画机
@@ -72,11 +78,22 @@ export class StorehousePanel extends Component {
             return;
         }
         const position = itemSlot.node.getWorldPosition();
-        const equip = itemSlot.slotType === SlotType.STOREHOUSE; // 装备还是卸下
-        const buttonImage = equip ? this.confirmImage : this.cancelImage;
-        const operation = itemSlot.stack.item?.itemType === ItemType.EQUIPMENT ?
-            () => EventCenter.emit(EventName.EQUIPMENT_CHANGE, new EquipmentChangeEvent(itemSlot.stack.item as Equipment, equip)) :
-            EMPTY_FUNCTION;
+        let buttonImage: SpriteFrame;
+        let operation: () => void;
+        switch (itemSlot.stack.item?.itemType) {
+            case ItemType.EQUIPMENT:
+                const equip = itemSlot.slotType === SlotType.STOREHOUSE; // 装备还是卸下
+                buttonImage = equip ? this.confirmImage : this.cancelImage;
+                operation = () => EventCenter.emit(EventName.EQUIPMENT_CHANGE, new EquipmentChangeEvent(itemSlot.stack.item as Equipment, equip));
+                break;
+            case ItemType.FOR_SALE:
+                buttonImage = this.moneyBagImage;
+                operation = () => EventCenter.emit(EventName.SELL_ITEM, itemSlot.stack);
+                break;
+            default:
+                operation = EMPTY_FUNCTION;
+                break;
+        }
         this.itemCard.show(position,
             itemSlot.stack.item,
             operation,

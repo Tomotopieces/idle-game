@@ -122,7 +122,7 @@ export class Storehouse {
      * @param requireList 需求物品列表
      * @return 是否成功
      */
-    static tackOut(requireList: ItemStack[]): boolean {
+    static takeOut(requireList: ItemStack[]): boolean {
         for (const require of requireList) {
             if (this.STOREHOUSE.has(require.item.name)) {
                 const store = this.STOREHOUSE.get(require.item.name);
@@ -148,7 +148,7 @@ export class Storehouse {
      * @param itemName 物品名称
      * @return 是否成功
      */
-    static tackOutOne(itemName: string): boolean {
+    static takeOutOne(itemName: string): boolean {
         const itemStack = this.STOREHOUSE.get(itemName);
         if (!itemStack) {
             return false;

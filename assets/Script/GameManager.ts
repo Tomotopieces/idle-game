@@ -1,6 +1,6 @@
 import { _decorator, CCInteger, Component, director, sys } from 'cc';
 import { SaveData } from "db://assets/Script/SaveData/SaveData";
-import { LocalStorageDataName, } from "db://assets/Script/Util/Constant";
+import { LING_YUN_NAME, LocalStorageDataName, } from "db://assets/Script/Util/Constant";
 import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
 import { Storehouse } from "db://assets/Script/Storehouse/Storehouse";
 import { LevelNameBar } from "db://assets/Script/UI/LevelNameBar";
@@ -20,6 +20,7 @@ import { EventName } from "db://assets/Script/Event/EventName";
 import { ENEMY_RECORD } from "db://assets/Script/EnemyRecord/EnemyRecord";
 import { UIPostMessageEvent } from "db://assets/Script/Event/Events/UIPostMessageEvent";
 import { MessageType } from "db://assets/Script/UI/Message/MessageFactory";
+import { ForSaleItem } from "db://assets/Script/Item/ForSaleItem";
 
 const { ccclass, property } = _decorator;
 
@@ -76,6 +77,7 @@ export class GameManager extends Component {
         EventCenter.on(EventName.PLAYER_LEVEL_UP, this.node.name, (level: number) => this.handlePlayerLevelUp(level));
         EventCenter.on(EventName.GAIN_STANCE, this.node.name, (stance: number) => this.handleGainStance(stance));
         EventCenter.on(EventName.TALENT_UPGRADE, this.node.name, (talentTreeNode: TalentTreeNode) => this.handleTalentUpgrade(talentTreeNode));
+        EventCenter.on(EventName.SELL_ITEM, this.node.name, (stack: ItemStack) => this.handleSellItem(stack));
     }
 
     start() {
@@ -238,7 +240,7 @@ export class GameManager extends Component {
      */
     private handleEquipmentChange(event: EquipmentChangeEvent) {
         if (event.equip) {
-            if (!Storehouse.tackOutOne(event.equipment.name)) {
+            if (!Storehouse.takeOutOne(event.equipment.name)) {
                 return;
             }
             const unequipped = this.player.equipments.equip(event.equipment);
@@ -284,6 +286,18 @@ export class GameManager extends Component {
      */
     private handleTalentUpgrade(talentTreeNode: TalentTreeNode) {
         this.player.talents.upgradeTalent(talentTreeNode);
+    }
+
+    /**
+     * 处理出售物品事件
+     *
+     * @param stack 物品堆叠
+     */
+    private handleSellItem(stack: ItemStack) {
+        Storehouse.takeOut([stack]);
+        const itemForSale = stack.item as ForSaleItem;
+        const price = itemForSale.price * stack.count;
+        Storehouse.putIn([new ItemStack(ITEM_TABLE.get(LING_YUN_NAME), price)], false);
     }
 
     /**

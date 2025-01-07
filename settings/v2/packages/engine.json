@@ -65,13 +65,13 @@
         "_value": false
       },
       "intersection-2d": {
-        "_value": true
+        "_value": false
       },
       "primitive": {
         "_value": false
       },
       "profiler": {
-        "_value": true
+        "_value": false
       },
       "occlusion-query": {
         "_value": false
@@ -83,13 +83,13 @@
         "_value": false
       },
       "particle-2d": {
-        "_value": true
+        "_value": false
       },
       "audio": {
         "_value": true
       },
       "video": {
-        "_value": true
+        "_value": false
       },
       "webview": {
         "_value": true
@@ -149,12 +149,8 @@
       "custom-pipeline",
       "gfx-webgl",
       "gfx-webgl2",
-      "intersection-2d",
-      "particle-2d",
-      "profiler",
       "tween",
       "ui",
-      "video",
       "webview"
     ],
     "noDeprecatedFeatures": {

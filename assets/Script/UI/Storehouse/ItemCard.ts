@@ -95,9 +95,6 @@ export class ItemCard extends Component {
         this._buttonSprite = this._operationButton.getChildByName('Sprite').getComponent(Sprite);
     }
 
-    update(_dt: number) {
-    }
-
     /**
      * 显示
      *

@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "8d5df21f-52fb-4510-9ffa-ae53969dd5e8",
+  "uuid": "c0b9c2a3-4bec-4cf1-ad4a-468cd96d7e1b",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "8d5df21f-52fb-4510-9ffa-ae53969dd5e8@6c48a",
-      "displayName": "Up",
+      "uuid": "c0b9c2a3-4bec-4cf1-ad4a-468cd96d7e1b@6c48a",
+      "displayName": "MoneyBag",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "8d5df21f-52fb-4510-9ffa-ae53969dd5e8",
+        "imageUuidOrDatabaseUri": "c0b9c2a3-4bec-4cf1-ad4a-468cd96d7e1b",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,8 +34,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "8d5df21f-52fb-4510-9ffa-ae53969dd5e8@f9941",
-      "displayName": "Up",
+      "uuid": "c0b9c2a3-4bec-4cf1-ad4a-468cd96d7e1b@f9941",
+      "displayName": "MoneyBag",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -114,7 +114,7 @@
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "8d5df21f-52fb-4510-9ffa-ae53969dd5e8@6c48a",
+        "imageUuidOrDatabaseUri": "c0b9c2a3-4bec-4cf1-ad4a-468cd96d7e1b@6c48a",
         "atlasUuid": ""
       },
       "ver": "1.0.12",
@@ -127,9 +127,9 @@
   },
   "userData": {
     "type": "sprite-frame",
+    "flipVertical": false,
     "hasAlpha": true,
     "fixAlphaTransparencyArtifacts": false,
-    "redirect": "8d5df21f-52fb-4510-9ffa-ae53969dd5e8@6c48a",
-    "flipVertical": false
+    "redirect": "c0b9c2a3-4bec-4cf1-ad4a-468cd96d7e1b@6c48a"
   }
 }

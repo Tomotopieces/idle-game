@@ -18,6 +18,11 @@ export enum ItemType {
      * 消耗品
      */
     CONSUMABLE = 'consumable',
+
+    /**
+     * 贩卖品
+     */
+    FOR_SALE = 'forSale',
 }
 
 /**

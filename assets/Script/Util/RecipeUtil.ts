@@ -52,7 +52,7 @@ export class RecipeUtil {
      */
     static craft(recipe: CraftRecipe): boolean {
         const requirements = recipe.requirements.filter(requirement => requirement.consume);
-        if (Storehouse.tackOut(this.requirementsToStacks(requirements))) {
+        if (Storehouse.takeOut(this.requirementsToStacks(requirements))) {
             Storehouse.putIn([new ItemStack(recipe.product, 1)]);
             return true;
         }
@@ -67,7 +67,7 @@ export class RecipeUtil {
      */
     static upgrade(recipe: UpgradeRecipe): boolean {
         const requirements = recipe.requirements.filter(requirement => requirement.consume);
-        if (Storehouse.tackOut(this.requirementsToStacks(requirements))) {
+        if (Storehouse.takeOut(this.requirementsToStacks(requirements))) {
             (recipe.product as Equipment).attributes.upgrade();
             return true;
         }

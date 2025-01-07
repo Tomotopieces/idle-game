@@ -24,6 +24,7 @@ import { ChapterJson } from "db://assets/Script/Level/ChapterJson";
 import { AnyFunction } from "db://assets/Script/Util/Functions";
 import { CraftRecipeJson } from "db://assets/Script/Recipe/CraftRecipeJson";
 import { UpgradeRecipeJson } from "db://assets/Script/Recipe/UpgradeRecipeJson";
+import { ForSaleItem } from "db://assets/Script/Item/ForSaleItem";
 
 const { ccclass, property } = _decorator;
 
@@ -48,6 +49,7 @@ export class GameLoader extends Component {
      */
     private readonly _loadProcess: AnyFunction[] = [
         () => this.loadItemTable(),
+        () => this.loadForSaleItemTable(),
         () => this.loadEquipmentTable(),
         () => this.loadCraftRecipeTable(),
         () => this.loadUpgradeRecipeTable(),
@@ -78,6 +80,20 @@ export class GameLoader extends Component {
             const rawItems = data.json! as Item[];
             rawItems.forEach((rawItem: Item, index: number) =>
                 ITEM_TABLE.set(rawItem.name, Item.fromObject(index, rawItem)));
+            this.loadStep++;
+        });
+    }
+
+    /**
+     * 加载贩卖品表
+     */
+    private loadForSaleItemTable() {
+        resources.load(DataPath.FOR_SALE_ITEM_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+            err && console.error(err);
+            const rawItems = data.json! as ForSaleItem[];
+            const indexOffset = ITEM_TABLE.size;
+            rawItems.forEach((rawItem: ForSaleItem, index: number) =>
+                ITEM_TABLE.set(rawItem.name, ForSaleItem.fromObject(index + indexOffset, rawItem)));
             this.loadStep++;
         });
     }

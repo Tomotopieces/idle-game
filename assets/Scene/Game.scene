@@ -15365,6 +15365,10 @@
       "__uuid__": "55448a41-47e0-42f9-8dc5-c557486cf107@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
+    "moneyBagImage": {
+      "__uuid__": "c0b9c2a3-4bec-4cf1-ad4a-468cd96d7e1b@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
     "_id": "ee+2B50x9P64ohsq9MN1nT"
   },
   {
