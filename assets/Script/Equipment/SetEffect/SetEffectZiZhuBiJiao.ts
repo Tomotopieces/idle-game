@@ -1,4 +1,4 @@
-import { SetEffect, SetLevelEffect } from "db://assets/Script/Item/Equipment/SetEffect/SetEffect";
+import { SetEffect, SetLevelEffect } from "db://assets/Script/Equipment/SetEffect/SetEffect";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { LING_YUN_NAME } from "db://assets/Script/Util/Constant";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
@@ -40,4 +40,3 @@ export class SetEffectZiZhuBiJiao extends SetEffect {
         })
     }
 }
-

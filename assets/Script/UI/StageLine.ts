@@ -93,5 +93,3 @@ export class StageLine extends Component {
         EventCenter.emit(EventName.UPDATE_LEVEL, new UpdateLevelEvent(targetChapter, targetArea, stage));
     }
 }
-
-

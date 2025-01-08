@@ -1,5 +1,5 @@
 import { EnemyInfo } from "db://assets/Script/Entity/Enemy/EnemyInfo";
-import { DropItemJson } from "db://assets/Script/Item/DropItemJson";
+import { DropItemJson } from "db://assets/Script/Drop/DropItemJson";
 
 /**
  * 敌人信息JSON

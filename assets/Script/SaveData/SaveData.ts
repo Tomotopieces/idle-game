@@ -1,7 +1,7 @@
 import { StorehouseType } from "db://assets/Script/Storehouse/Storehouse";
 import { ItemStackJson } from "db://assets/Script/Item/ItemStackJson";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
-import { Equipment, EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
+import { Equipment, EquipmentType } from "db://assets/Script/Equipment/Equipment";
 import { SaveDataJson } from "db://assets/Script/SaveData/SaveDataJson";
 
 import { ITEM_TABLE } from "db://assets/Script/DataTable";
@@ -106,4 +106,3 @@ export class SaveData {
         return new SaveDataJson(this.level, this.experience, equipmentSlotJson, storehouseJson, this.chapterName, this.areaName, this.stageName, talentsJson, enemyRecordJson).toJson();
     }
 }
-

@@ -3,7 +3,7 @@ import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { ItemSlot, SlotType } from "db://assets/Script/UI/Storehouse/ItemSlot";
 import { ItemType } from "db://assets/Script/Item/Item";
 import { EquipmentChangeEvent } from "db://assets/Script/Event/Events/EquipmentChangeEvent";
-import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
+import { Equipment } from "db://assets/Script/Equipment/Equipment";
 import { ItemCard } from "db://assets/Script/UI/Storehouse/ItemCard";
 import { EMPTY_FUNCTION } from "db://assets/Script/Util/Functions";
 import { EventName } from "db://assets/Script/Event/EventName";
@@ -86,7 +86,7 @@ export class StorehousePanel extends Component {
                 buttonImage = equip ? this.confirmImage : this.cancelImage;
                 operation = () => EventCenter.emit(EventName.EQUIPMENT_CHANGE, new EquipmentChangeEvent(itemSlot.stack.item as Equipment, equip));
                 break;
-            case ItemType.FOR_SALE:
+            case ItemType.TRADING:
                 buttonImage = this.moneyBagImage;
                 operation = () => EventCenter.emit(EventName.SELL_ITEM, itemSlot.stack);
                 break;
@@ -100,5 +100,3 @@ export class StorehousePanel extends Component {
             buttonImage);
     }
 }
-
-

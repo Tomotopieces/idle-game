@@ -1,7 +1,7 @@
 import { UpgradeRecipe } from "db://assets/Script/Recipe/UpgradeRecipe";
 import { RecipeRequirementJson } from "db://assets/Script/Recipe/RecipeRequirementJson";
 import { ITEM_TABLE } from "db://assets/Script/DataTable";
-import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
+import { Equipment } from "db://assets/Script/Equipment/Equipment";
 import { ItemRarity } from "db://assets/Script/Item/Item";
 
 /**

@@ -8,7 +8,7 @@ import { RecipeUtil } from "db://assets/Script/Util/RecipeUtil";
 import { UpgradeRecipe } from "db://assets/Script/Recipe/UpgradeRecipe";
 import { Recipe } from "db://assets/Script/Recipe/Recipe";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
-import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
+import { Equipment } from "db://assets/Script/Equipment/Equipment";
 
 const { ccclass, property } = _decorator;
 

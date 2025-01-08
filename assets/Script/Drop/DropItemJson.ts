@@ -1,5 +1,4 @@
-import { DropItem } from "db://assets/Script/Item/DropItem";
-
+import { DropItem } from "db://assets/Script/Drop/DropItem";
 import { ITEM_TABLE } from "db://assets/Script/DataTable";
 
 /**

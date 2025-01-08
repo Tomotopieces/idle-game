@@ -101,5 +101,3 @@ export class UIMessage extends Component {
         });
     }
 }
-
-

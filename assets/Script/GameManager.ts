@@ -9,18 +9,18 @@ import { StageLine } from "db://assets/Script/UI/StageLine";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { EquipmentChangeEvent } from "db://assets/Script/Event/Events/EquipmentChangeEvent";
-import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
+import { Equipment } from "db://assets/Script/Equipment/Equipment";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
 import { AREA_TABLE, CHAPTER_TABLE, ITEM_TABLE, STAGE_TABLE } from "db://assets/Script/DataTable";
-import { DropItemFactory } from "db://assets/Script/Item/DropItemFactory";
+import { DropItemFactory } from "db://assets/Script/Drop/DropItemFactory";
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 import { DefaultLevelName, Level } from "db://assets/Script/Level/Level";
 import { EventName } from "db://assets/Script/Event/EventName";
 import { ENEMY_RECORD } from "db://assets/Script/EnemyRecord/EnemyRecord";
 import { UIPostMessageEvent } from "db://assets/Script/Event/Events/UIPostMessageEvent";
 import { MessageType } from "db://assets/Script/UI/Message/MessageFactory";
-import { ForSaleItem } from "db://assets/Script/Item/ForSaleItem";
+import { TradingItem } from "db://assets/Script/Trading/TradingItem";
 
 const { ccclass, property } = _decorator;
 
@@ -295,8 +295,8 @@ export class GameManager extends Component {
      */
     private handleSellItem(stack: ItemStack) {
         Storehouse.takeOut([stack]);
-        const itemForSale = stack.item as ForSaleItem;
-        const price = itemForSale.price * stack.count;
+        const tradingItem = stack.item as TradingItem;
+        const price = tradingItem.price * stack.count;
         Storehouse.putIn([new ItemStack(ITEM_TABLE.get(LING_YUN_NAME), price)], false);
     }
 

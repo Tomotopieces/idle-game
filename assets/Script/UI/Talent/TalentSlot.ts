@@ -127,5 +127,3 @@ export class TalentSlot extends Component {
         return this._talentTreeNode;
     }
 }
-
-

@@ -56,5 +56,3 @@ export class MessageCenter extends Component {
         }
     }
 }
-
-

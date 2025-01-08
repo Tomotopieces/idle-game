@@ -71,5 +71,3 @@ export class AttributePanel extends Component {
         this.criticalBoostLabel.string = event.criticalBoost * 100 + '%';
     }
 }
-
-

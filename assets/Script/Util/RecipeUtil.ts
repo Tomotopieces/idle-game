@@ -4,7 +4,7 @@ import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { RecipeRequirement } from "db://assets/Script/Recipe/RecipeRequirement";
 import { CRAFT_RECIPE_TABLE, UPGRADE_RECIPE_LIST } from "db://assets/Script/DataTable";
 import { UpgradeRecipe } from "db://assets/Script/Recipe/UpgradeRecipe";
-import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
+import { Equipment } from "db://assets/Script/Equipment/Equipment";
 
 /**
  * 配方工具

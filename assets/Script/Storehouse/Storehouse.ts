@@ -1,5 +1,5 @@
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
-import { Equipment, EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
+import { Equipment, EquipmentType } from "db://assets/Script/Equipment/Equipment";
 import { Item, ItemType } from "db://assets/Script/Item/Item";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
@@ -83,19 +83,21 @@ export class Storehouse {
      */
     static count(targets: Item[], checkEquipmentSlot: boolean = true): ItemStack[] {
         const itemStacks = Array.from(this.STOREHOUSE.values()).filter(stack => targets.some(target => target.name === stack.item.name));
-        if (checkEquipmentSlot) {
-            targets.forEach(target => {
-                const stack = this.equipmentMap.get((target as Equipment).equipmentType);
-                if (stack) {
-                    const index = itemStacks.findIndex(stack => stack.item.name === target.name);
-                    if (index !== -1) {
-                        itemStacks[index].count += stack.count;
-                    } else {
-                        itemStacks.push(stack);
-                    }
-                }
-            });
+        if (!checkEquipmentSlot) {
+            return itemStacks;
         }
+        targets.forEach(target => {
+            const stack = this.equipmentMap.get((target as Equipment).equipmentType);
+            if (!stack) {
+                return;
+            }
+            const index = itemStacks.findIndex(stack => stack.item.name === target.name);
+            if (index !== -1) {
+                itemStacks[index].count += stack.count;
+            } else {
+                itemStacks.push(stack);
+            }
+        });
         return itemStacks;
     }
 
@@ -108,10 +110,8 @@ export class Storehouse {
     static countOne(target: Item | string, checkEquipmentSlot: boolean = true): number {
         const itemName = target instanceof Item ? target.name : target;
         let count = this.STOREHOUSE.get(itemName)?.count ?? 0;
-        if (checkEquipmentSlot) {
-            if (Array.from(this.equipmentMap.values()).some(stack => stack.item?.name === itemName)) {
-                count += 1;
-            }
+        if (checkEquipmentSlot && Array.from(this.equipmentMap.values()).some(stack => stack.item?.name === itemName)) {
+            count += 1;
         }
         return count;
     }

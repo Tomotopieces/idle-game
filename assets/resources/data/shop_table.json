@@ -1,0 +1,32 @@
+[
+  {
+    "scene": "hei_feng_shan",
+    "products": [
+      {
+        "itemName": "mian_sha",
+        "price": 100,
+        "count": 2
+      },
+      {
+        "itemName": "jing_shi",
+        "price": 100,
+        "count": 2
+      }
+    ]
+  },
+  {
+    "scene": "huang_feng_ling",
+    "products": [
+      {
+        "itemName": "yao_he",
+        "price": 500,
+        "count": 2
+      },
+      {
+        "itemName": "can_si",
+        "price": 500,
+        "count": 2
+      }
+    ]
+  }
+]

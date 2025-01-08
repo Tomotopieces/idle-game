@@ -2,18 +2,19 @@ import { Area } from "db://assets/Script/Level/Area";
 import { Stage } from "db://assets/Script/Level/Stage";
 import { Item } from "db://assets/Script/Item/Item";
 import { EnemyInfo } from "db://assets/Script/Entity/Enemy/EnemyInfo";
-import { UniqueEffect } from "db://assets/Script/Item/Equipment/UniqueEffect/UniqueEffect";
+import { UniqueEffect } from "db://assets/Script/Equipment/UniqueEffect/UniqueEffect";
 import {
     UniqueEffectLinGunShuangShe
-} from "db://assets/Script/Item/Equipment/UniqueEffect/UniqueEffectLinGunShuangShe";
-import { SetEffect } from "db://assets/Script/Item/Equipment/SetEffect/SetEffect";
-import { SetEffectZiZhuBiJiao } from "db://assets/Script/Item/Equipment/SetEffect/SetEffectZiZhuBiJiao";
+} from "db://assets/Script/Equipment/UniqueEffect/UniqueEffectLinGunShuangShe";
+import { SetEffect } from "db://assets/Script/Equipment/SetEffect/SetEffect";
+import { SetEffectZiZhuBiJiao } from "db://assets/Script/Equipment/SetEffect/SetEffectZiZhuBiJiao";
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 import { TalentTiJian } from "db://assets/Script/Talent/Talents/TalentTiJian";
 import { TalentShiPo } from "db://assets/Script/Talent/Talents/TalentShiPo";
 import { Chapter } from "db://assets/Script/Level/Chapter";
 import { CraftRecipe } from "db://assets/Script/Recipe/CraftRecipe";
 import { UpgradeRecipe } from "db://assets/Script/Recipe/UpgradeRecipe";
+import { Shop } from "db://assets/Script/Trading/Shop";
 
 /**
  * 数据资源路径常量
@@ -62,7 +63,12 @@ export enum DataPath {
     /**
      * 贩卖品表
      */
-    FOR_SALE_ITEM_TABLE = 'data/for_sale_table',
+    TRADING_ITEM_TABLE = 'data/trading_item_table',
+
+    /**
+     * 商店配置表
+     */
+    SHOP_TABLE = 'data/shop_table',
 }
 
 /**
@@ -89,19 +95,22 @@ export const ENEMY_TABLE = new Map<string, EnemyInfo>();
  * 舞台表
  */
 export const STAGE_TABLE = new Map<string, Stage>();
-export const STAGES: Stage[] = [];
 
 /**
  * 区域表
  */
 export const AREA_TABLE = new Map<string, Area>();
-export const AREAS: Area[] = [];
 
 /**
  * 章节表
  */
 export const CHAPTER_TABLE = new Map<string, Chapter>();
 export const CHAPTERS: Chapter[] = [];
+
+/**
+ * 商店表
+ */
+export const SHOP_TABLE = new Map<string, Shop>();
 
 /**
  * 独门妙用 Map

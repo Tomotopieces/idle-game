@@ -78,5 +78,3 @@ export class ResourceManager extends Component {
         }
     }
 }
-
-

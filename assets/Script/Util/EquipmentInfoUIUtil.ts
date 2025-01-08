@@ -1,5 +1,5 @@
 import { Item, ItemRarity, ItemType } from "db://assets/Script/Item/Item";
-import { Equipment, EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
+import { Equipment, EquipmentType } from "db://assets/Script/Equipment/Equipment";
 import { SET_EFFECT_TABLE, UNIQUE_EFFECT_TABLE } from "db://assets/Script/DataTable";
 
 export class EquipmentInfoUIUtil {

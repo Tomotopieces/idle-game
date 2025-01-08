@@ -1,4 +1,4 @@
-import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
+import { Equipment } from "db://assets/Script/Equipment/Equipment";
 import { EventArgument } from "db://assets/Script/Event/EventArgument";
 
 /**

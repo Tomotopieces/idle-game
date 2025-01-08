@@ -27,5 +27,3 @@ export class LevelNameBar extends Component {
         this.label.string = `${chapter.displayName} - ${area.displayName} - ${stage.displayName}`;
     }
 }
-
-

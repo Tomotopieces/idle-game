@@ -22,7 +22,7 @@ export enum ItemType {
     /**
      * 贩卖品
      */
-    FOR_SALE = 'forSale',
+    TRADING = 'trading',
 }
 
 /**
@@ -159,4 +159,3 @@ export class Item {
         return new Item(id, object.name, object.displayName, object.itemType, object.description, object.icon, object.unique, object.rarity);
     }
 }
-

@@ -3,7 +3,7 @@ import { Item, ITEM_RARITY_COLOR_MAP, ITEM_RARITY_DISPLAY_NAME_MAP } from "db://
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { EMPTY_FUNCTION, Runnable } from "db://assets/Script/Util/Functions";
 import { EquipmentInfoUIUtil } from "db://assets/Script/Util/EquipmentInfoUIUtil";
-import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
+import { Equipment } from "db://assets/Script/Equipment/Equipment";
 
 const { ccclass } = _decorator;
 

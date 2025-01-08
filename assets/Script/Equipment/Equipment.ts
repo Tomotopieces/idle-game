@@ -1,5 +1,5 @@
 import { Item, ItemRarity, ItemType } from "db://assets/Script/Item/Item";
-import { EquipmentAttributes } from "db://assets/Script/Item/Equipment/EquipmentAttributes";
+import { EquipmentAttributes } from "db://assets/Script/Equipment/EquipmentAttributes";
 
 /**
  * 装备类型

@@ -121,5 +121,3 @@ export class TalentCard extends Component {
         this.node.active = false;
     }
 }
-
-

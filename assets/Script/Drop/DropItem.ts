@@ -39,4 +39,3 @@ export class DropItem {
         this.once = once;
     }
 }
-

@@ -101,5 +101,3 @@ export class ItemSlot extends Component {
         this.countLabel.string = `${value}`;
     }
 }
-
-

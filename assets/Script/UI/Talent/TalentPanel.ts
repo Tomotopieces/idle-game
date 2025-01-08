@@ -99,5 +99,3 @@ export class TalentPanel extends Component {
         talentSlot?.updateBottomSprite();
     }
 }
-
-

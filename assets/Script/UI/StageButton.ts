@@ -40,5 +40,3 @@ export class StageButton extends Component {
         this.getComponent(Sprite).spriteFrame = this.greenRound;
     }
 }
-
-

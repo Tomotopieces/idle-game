@@ -1,5 +1,5 @@
 import { _decorator, Animation, CCFloat, Component, ProgressBar, Sprite, SpriteFrame } from 'cc';
-import { DropItem } from "db://assets/Script/Item/DropItem";
+import { DropItem } from "db://assets/Script/Drop/DropItem";
 import { EnemyInfo } from "db://assets/Script/Entity/Enemy/EnemyInfo";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { EnemyAttributeComponent } from "db://assets/Script/Entity/Enemy/EnemyAttributeComponent";

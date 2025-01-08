@@ -174,5 +174,3 @@ export class RecipeInfo extends Component {
         });
     }
 }
-
-

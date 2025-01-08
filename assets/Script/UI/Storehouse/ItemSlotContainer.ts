@@ -128,5 +128,3 @@ export class ItemSlotContainer extends Component {
         this._slots.push(newSlot.getComponent(ItemSlot));
     }
 }
-
-

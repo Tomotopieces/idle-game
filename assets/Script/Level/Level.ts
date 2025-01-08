@@ -1,6 +1,6 @@
 import { Area } from "db://assets/Script/Level/Area";
 import { Stage } from "db://assets/Script/Level/Stage";
-import { AREA_TABLE, CHAPTERS, STAGE_TABLE } from "db://assets/Script/DataTable";
+import { CHAPTERS } from "db://assets/Script/DataTable";
 import { Chapter } from "db://assets/Script/Level/Chapter";
 
 /**
@@ -38,7 +38,7 @@ export class Level {
      * @return 区域
      */
     static firstAreaOf(chapter: Chapter): Area {
-        return AREA_TABLE.get(chapter.areas[0].name);
+        return chapter.areas[0];
     }
 
     /**
@@ -48,7 +48,7 @@ export class Level {
      * @reutnr 区域
      */
     static lastAreaOf(chapter: Chapter): Area {
-        return AREA_TABLE.get(chapter.areas[chapter.areas.length - 1].name);
+        return chapter.areas[chapter.areas.length - 1];
     }
 
     /**
@@ -80,7 +80,7 @@ export class Level {
      * @return 舞台
      */
     static firstStageOf(area: Area): Stage {
-        return STAGE_TABLE.get(area.stages[0].name);
+        return area.stages[0];
     }
 
     /**
@@ -89,7 +89,7 @@ export class Level {
      * @param area 区域
      */
     static lastStageOf(area: Area): Stage {
-        return STAGE_TABLE.get(area.stages[area.stages.length - 1].name);
+        return area.stages[area.stages.length - 1];
     }
 
     /**

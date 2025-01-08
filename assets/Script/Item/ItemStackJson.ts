@@ -1,7 +1,7 @@
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 
 import { ITEM_TABLE } from "db://assets/Script/DataTable";
-import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
+import { Equipment } from "db://assets/Script/Equipment/Equipment";
 
 /**
  * 物品堆叠JSON

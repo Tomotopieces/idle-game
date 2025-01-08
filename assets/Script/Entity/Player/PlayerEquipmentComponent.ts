@@ -1,4 +1,4 @@
-import { Equipment, EquipmentType } from "db://assets/Script/Item/Equipment/Equipment";
+import { Equipment, EquipmentType } from "db://assets/Script/Equipment/Equipment";
 import { PlayerAttributeComponent } from "db://assets/Script/Entity/Player/PlayerAttributeComponent";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 

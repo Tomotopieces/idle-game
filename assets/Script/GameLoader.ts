@@ -4,11 +4,10 @@ import { Item } from "db://assets/Script/Item/Item";
 import { EnemyInfoJson } from "db://assets/Script/Entity/Enemy/EnemyInfoJson";
 import { StageJson } from "db://assets/Script/Level/StageJson";
 import { AreaJson } from "db://assets/Script/Level/AreaJson";
-import { Equipment } from "db://assets/Script/Item/Equipment/Equipment";
+import { Equipment } from "db://assets/Script/Equipment/Equipment";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import {
     AREA_TABLE,
-    AREAS,
     CHAPTER_TABLE,
     CHAPTERS,
     CRAFT_RECIPE_TABLE,
@@ -16,15 +15,16 @@ import {
     ENEMY_TABLE,
     ITEM_TABLE,
     SET_EFFECT_TABLE,
+    SHOP_TABLE,
     STAGE_TABLE,
-    STAGES,
     UPGRADE_RECIPE_LIST
 } from "db://assets/Script/DataTable";
 import { ChapterJson } from "db://assets/Script/Level/ChapterJson";
 import { AnyFunction } from "db://assets/Script/Util/Functions";
 import { CraftRecipeJson } from "db://assets/Script/Recipe/CraftRecipeJson";
 import { UpgradeRecipeJson } from "db://assets/Script/Recipe/UpgradeRecipeJson";
-import { ForSaleItem } from "db://assets/Script/Item/ForSaleItem";
+import { TradingItem } from "db://assets/Script/Trading/TradingItem";
+import { ShopJson } from "db://assets/Script/Trading/ShopJson";
 
 const { ccclass, property } = _decorator;
 
@@ -49,7 +49,7 @@ export class GameLoader extends Component {
      */
     private readonly _loadProcess: AnyFunction[] = [
         () => this.loadItemTable(),
-        () => this.loadForSaleItemTable(),
+        () => this.loadTradingItemTable(),
         () => this.loadEquipmentTable(),
         () => this.loadCraftRecipeTable(),
         () => this.loadUpgradeRecipeTable(),
@@ -57,6 +57,7 @@ export class GameLoader extends Component {
         () => this.loadStageTable(),
         () => this.loadAreaTable(),
         () => this.loadChapterTable(),
+        () => this.loadShopTable(),
         () => this.onLoadFinished()
     ];
 
@@ -87,13 +88,13 @@ export class GameLoader extends Component {
     /**
      * 加载贩卖品表
      */
-    private loadForSaleItemTable() {
-        resources.load(DataPath.FOR_SALE_ITEM_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+    private loadTradingItemTable() {
+        resources.load(DataPath.TRADING_ITEM_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
-            const rawItems = data.json! as ForSaleItem[];
+            const rawItems = data.json! as TradingItem[];
             const indexOffset = ITEM_TABLE.size;
-            rawItems.forEach((rawItem: ForSaleItem, index: number) =>
-                ITEM_TABLE.set(rawItem.name, ForSaleItem.fromObject(index + indexOffset, rawItem)));
+            rawItems.forEach((rawItem: TradingItem, index: number) =>
+                ITEM_TABLE.set(rawItem.name, TradingItem.fromObject(index + indexOffset, rawItem)));
             this.loadStep++;
         });
     }
@@ -164,11 +165,8 @@ export class GameLoader extends Component {
         resources.load(DataPath.STAGE_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
             const rawStageList = data.json! as StageJson[];
-            rawStageList.forEach((rawStage: StageJson, index: number) => {
-                const stage = StageJson.toStage(index, rawStage);
-                STAGE_TABLE.set(rawStage.name, stage);
-                STAGES.push(stage);
-            });
+            rawStageList.forEach((rawStage: StageJson, index: number) =>
+                STAGE_TABLE.set(rawStage.name, StageJson.toStage(index, rawStage)));
             this.loadStep++;
         });
     }
@@ -180,11 +178,8 @@ export class GameLoader extends Component {
         resources.load(DataPath.AREA_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
             const rawAreas = data.json! as AreaJson[];
-            rawAreas.forEach((rawArea: AreaJson, index: number) => {
-                const area = AreaJson.toArea(index, rawArea);
-                AREA_TABLE.set(rawArea.name, area);
-                AREAS.push(area);
-            });
+            rawAreas.forEach((rawArea: AreaJson, index: number) =>
+                AREA_TABLE.set(rawArea.name, AreaJson.toArea(index, rawArea)));
             this.loadStep++;
         });
     }
@@ -201,6 +196,19 @@ export class GameLoader extends Component {
                 CHAPTER_TABLE.set(rawChapter.name, chapter);
                 CHAPTERS.push(chapter);
             });
+            this.loadStep++;
+        });
+    }
+
+    /**
+     * 加载商店表
+     */
+    private loadShopTable() {
+        resources.load(DataPath.SHOP_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+            err && console.error(err);
+            const rawShops = data.json! as ShopJson[];
+            rawShops.forEach((rawShop: ShopJson, index: number) =>
+                SHOP_TABLE.set(rawShop.scene, ShopJson.toShop(index, rawShop)));
             this.loadStep++;
         });
     }

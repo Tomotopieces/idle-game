@@ -2,7 +2,7 @@
   {
     "name": "sui_jin_pian",
     "displayName": "碎金片",
-    "itemType": "forSale",
+    "itemType": "trading",
     "description": "细碎的金片，看不出从何物上剥落而来。或可在土地庙做些买卖",
     "icon": "item/sui_jin_pian",
     "rarity": "uncommon",
@@ -11,7 +11,7 @@
   {
     "name": "xiao_jin_pian",
     "displayName": "小金片",
-    "itemType": "forSale",
+    "itemType": "trading",
     "description": "小巧的金片，沾着些石屑，到底从何而来？或可在土地庙做些买卖",
     "icon": "item/sui_jin_pian",
     "rarity": "rare",
@@ -20,7 +20,7 @@
   {
     "name": "da_jin_pian",
     "displayName": "大金片",
-    "itemType": "forSale",
+    "itemType": "trading",
     "description": "天呐！天呐！这金片原是从金佛面上剥下。收在身边徒惹因果，还是去土地庙卖了妥当",
     "icon": "item/sui_jin_pian",
     "rarity": "epic",
@@ -29,7 +29,7 @@
   {
     "name": "jin_wen_shou",
     "displayName": "金稳兽",
-    "itemType": "forSale",
+    "itemType": "trading",
     "description": "佛殿屋脊上金做的稳兽，沉重异常，不知能不能用来换点东西",
     "icon": "item/jin_wen_shou",
     "rarity": "epic",
