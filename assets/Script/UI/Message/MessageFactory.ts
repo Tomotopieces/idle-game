@@ -1,6 +1,7 @@
 import { UIPostMessageEvent } from "db://assets/Script/Event/Events/UIPostMessageEvent";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { ITEM_RARITY_COLOR_MAP } from "db://assets/Script/Item/Item";
+import { Color } from "cc";
 
 /**
  * 消息类型
@@ -10,6 +11,11 @@ export enum MessageType {
      * 默认
      */
     DEFAULT,
+
+    /**
+     * 警告
+     */
+    WARNING,
 
     /**
      * 获得物品
@@ -27,6 +33,11 @@ export enum MessageType {
  */
 export class MessageFactory {
     /**
+     * 红色
+     */
+    private static readonly red = Color.RED.toHEX();
+
+    /**
      * 消息工厂
      *
      * @param postEvent 消息推送事件
@@ -37,6 +48,8 @@ export class MessageFactory {
             default:
             case MessageType.DEFAULT:
                 return postEvent.messageObject as string;
+            case MessageType.WARNING:
+                return `<color=${this.red}>${postEvent.messageObject as string}</color>`;
             case MessageType.GAIN_ITEM:
                 const stack = postEvent.messageObject as ItemStack;
                 const colorCode = ITEM_RARITY_COLOR_MAP.get(stack.item.rarity).toHEX(`#rrggbb`);

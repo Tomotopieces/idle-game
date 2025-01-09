@@ -10,5 +10,10 @@ export class LedgerRecord {
     /**
      * 卖出数量
      */
-    readonly sellCount: number;
+    sellCount: number;
+
+    constructor(itemName: string, sellCount: number) {
+        this.itemName = itemName;
+        this.sellCount = sellCount;
+    }
 }
