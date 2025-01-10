@@ -1,4 +1,5 @@
 import { ItemStackJson } from "db://assets/Script/Item/ItemStackJson";
+import { LedgerRecord } from "db://assets/Script/Trading/LedgerRecord";
 
 /**
  * 存档数据JSON
@@ -49,7 +50,12 @@ export class SaveDataJson {
      */
     enemyRecord: string;
 
-    constructor(level: number, experience: number, equipmentSlot: ItemStackJson[], storehouse: ItemStackJson[], chapterName: string, areaName: string, stageName: string, talents: string, enemyRecord: string) {
+    /**
+     * 账本
+     */
+    ledger: LedgerRecord[];
+
+    constructor(level: number, experience: number, equipmentSlot: ItemStackJson[], storehouse: ItemStackJson[], chapterName: string, areaName: string, stageName: string, talents: string, enemyRecord: string, ledger: LedgerRecord[]) {
         this.level = level;
         this.experience = experience;
         this.equipmentSlot = equipmentSlot;
@@ -59,6 +65,7 @@ export class SaveDataJson {
         this.stageName = stageName;
         this.talents = talents;
         this.enemyRecord = enemyRecord;
+        this.ledger = ledger;
     }
 
     /**

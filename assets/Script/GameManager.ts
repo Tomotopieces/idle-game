@@ -21,6 +21,7 @@ import { ENEMY_RECORD } from "db://assets/Script/EnemyRecord/EnemyRecord";
 import { UIPostMessageEvent } from "db://assets/Script/Event/Events/UIPostMessageEvent";
 import { MessageType } from "db://assets/Script/UI/Message/MessageFactory";
 import { TradingItem } from "db://assets/Script/Trading/TradingItem";
+import { ShopUtil } from "db://assets/Script/Trading/ShopUtil";
 
 const { ccclass, property } = _decorator;
 
@@ -172,7 +173,7 @@ export class GameManager extends Component {
      * 保存存档
      */
     private saveData() {
-        const saveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.equipments.equipmentMap, Storehouse.STOREHOUSE, Level.CHAPTER.name, Level.AREA.name, Level.STAGE.name, this.player.talents.talents, ENEMY_RECORD);
+        const saveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.equipments.equipmentMap, Storehouse.STOREHOUSE, Level.CHAPTER.name, Level.AREA.name, Level.STAGE.name, this.player.talents.talents, ENEMY_RECORD, ShopUtil.LEDGER);
         sys.localStorage.setItem(LocalStorageDataName.SAVE_DATA, saveData.toJson());
         EventCenter.emit(EventName.UI_POST_MESSAGE, new UIPostMessageEvent(MessageType.DEFAULT, `保存成功`));
     }

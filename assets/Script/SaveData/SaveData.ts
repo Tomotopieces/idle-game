@@ -7,6 +7,8 @@ import { SaveDataJson } from "db://assets/Script/SaveData/SaveDataJson";
 import { ITEM_TABLE } from "db://assets/Script/DataTable";
 import { MapUtil } from "db://assets/Script/Util/MapUtil";
 import { DefaultLevelName } from "db://assets/Script/Level/Level";
+import { LedgerRecord } from "db://assets/Script/Trading/LedgerRecord";
+import { ArrayUtil } from "db://assets/Script/Util/ArrayUtil";
 
 /**
  * 存档数据
@@ -57,7 +59,12 @@ export class SaveData {
      */
     enemyRecord: Map<string, number>;
 
-    constructor(level: number, experience: number, equipmentSlot: Map<EquipmentType, ItemStack>, storehouse: StorehouseType, chapterName: string, areaName: string, stageName: string, talents: Map<string, number>, enemyRecord: Map<string, number>) {
+    /**
+     * 账本
+     */
+    ledger: Map<string, LedgerRecord[]>;
+
+    constructor(level: number, experience: number, equipmentSlot: Map<EquipmentType, ItemStack>, storehouse: StorehouseType, chapterName: string, areaName: string, stageName: string, talents: Map<string, number>, enemyRecord: Map<string, number>, ledger: Map<string, LedgerRecord[]>) {
         this.level = level ?? 0;
         this.experience = experience ?? 0;
         this.equipmentSlot = equipmentSlot ?? new Map<EquipmentType, ItemStack>();
@@ -67,6 +74,7 @@ export class SaveData {
         this.stageName = stageName ?? DefaultLevelName.STAGE;
         this.talents = talents ?? new Map<string, number>();
         this.enemyRecord = enemyRecord ?? new Map<string, number>();
+        this.ledger = ledger ?? new Map<string, LedgerRecord[]>();
     }
 
     /**
@@ -87,7 +95,8 @@ export class SaveData {
             .map(itemStackJson => [itemStackJson.itemName, ItemStackJson.toItemStack(itemStackJson)]));
         const talents = dataJson.talents ? MapUtil.parse(dataJson.talents) as Map<string, number> : null;
         const enemyRecord = dataJson.enemyRecord ? MapUtil.parse(dataJson.enemyRecord) as Map<string, number> : null;
-        return new SaveData(dataJson.level, dataJson.experience, equipmentSlot, storehouse, dataJson.chapterName, dataJson.areaName, dataJson.stageName, talents, enemyRecord);
+        const ledger = ArrayUtil.groupBy(dataJson.ledger, record => record.shopScene);
+        return new SaveData(dataJson.level, dataJson.experience, equipmentSlot, storehouse, dataJson.chapterName, dataJson.areaName, dataJson.stageName, talents, enemyRecord, ledger);
     }
 
     /**
@@ -103,6 +112,7 @@ export class SaveData {
                 new ItemStackJson(stack.item.name, stack.item instanceof Equipment ? stack.item.attributes.rank : 0, stack.count));
         const talentsJson = MapUtil.stringify(this.talents);
         const enemyRecordJson = MapUtil.stringify(this.enemyRecord);
-        return new SaveDataJson(this.level, this.experience, equipmentSlotJson, storehouseJson, this.chapterName, this.areaName, this.stageName, talentsJson, enemyRecordJson).toJson();
+        const ledger = ArrayUtil.flat(Array.from(this.ledger.values()));
+        return new SaveDataJson(this.level, this.experience, equipmentSlotJson, storehouseJson, this.chapterName, this.areaName, this.stageName, talentsJson, enemyRecordJson, ledger).toJson();
     }
 }

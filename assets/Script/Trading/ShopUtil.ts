@@ -43,7 +43,7 @@ export class ShopUtil {
             // 灵韵不足
             EventCenter.emit(EventName.UI_POST_MESSAGE, new UIPostMessageEvent(MessageType.WARNING, `没钱别摸`));
             return;
-        } else if (stack.count === 0) {
+        } else if (!stack.count) {
             // 售罄
             EventCenter.emit(EventName.UI_POST_MESSAGE, new UIPostMessageEvent(MessageType.WARNING, `卖完了`));
             return;
@@ -64,7 +64,7 @@ export class ShopUtil {
         if (record) {
             record.sellCount++;
         } else {
-            records.push(new LedgerRecord(tradingItem.name, 0));
+            records.push(new LedgerRecord(shop.scene, tradingItem.name, 0));
         }
     }
 }
