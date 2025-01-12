@@ -85,7 +85,7 @@ export class MessageUI extends Component {
         this._fadingOut = true;
         this.unscheduleAllCallbacks(); // 若为 MessageCenter 中调用的情况，则可以取消 start 中设定的 fadeOut schedule
         this._anim.play('FadeOut');
-        this.scheduleOnce(() => this.destroy(), 1);
+        this.scheduleOnce(() => this.node.destroy(), 0.25);
     }
 
     /**
