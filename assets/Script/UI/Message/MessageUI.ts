@@ -57,6 +57,11 @@ export class MessageUI extends Component {
      */
     private _dwellTime: number = DEFAULT_DWELL_TIME;
 
+    /**
+     * 是否正在淡出
+     */
+    private _fadingOut: boolean = false;
+
     onLoad() {
         const richTextNode = this.node.getChildByName('RichText');
         this._richText = richTextNode.getComponent(RichText);
@@ -74,6 +79,10 @@ export class MessageUI extends Component {
      * 淡出
      */
     fadeOut() {
+        if (this._fadingOut) {
+            return;
+        }
+        this._fadingOut = true;
         this.unscheduleAllCallbacks(); // 若为 MessageCenter 中调用的情况，则可以取消 start 中设定的 fadeOut schedule
         this._anim.play('FadeOut');
         this.scheduleOnce(() => this.destroy(), 1);
