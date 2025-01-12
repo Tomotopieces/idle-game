@@ -1,5 +1,5 @@
 import { _decorator, Component, instantiate, Prefab } from 'cc';
-import { UIMessage } from "db://assets/Script/UI/Message/UIMessage";
+import { MessageUI } from "db://assets/Script/UI/Message/MessageUI";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 
 import { EventName } from "db://assets/Script/Event/EventName";
@@ -11,7 +11,7 @@ const { ccclass, property } = _decorator;
 /**
  * 消息队列
  */
-export const MESSAGE_QUEUE: UIMessage[] = [];
+export const MESSAGE_QUEUE: MessageUI[] = [];
 
 /**
  * 最大消息数量
@@ -45,7 +45,7 @@ export class MessageCenter extends Component {
     private post(event: UIPostMessageEvent) {
         const messageNode = instantiate(this.messagePrefab);
         this.node.addChild(messageNode);
-        const messageObject = messageNode.getComponent(UIMessage);
+        const messageObject = messageNode.getComponent(MessageUI);
         messageObject.message = MessageFactory.produce(event);
 
         MESSAGE_QUEUE.push(messageObject);

@@ -20,8 +20,8 @@ const DEFAULT_DWELL_TIME = 5;
 /**
  * 弹出消息
  */
-@ccclass('UIMessage')
-export class UIMessage extends Component {
+@ccclass('MessageUI')
+export class MessageUI extends Component {
     /**
      * 富文本组件
      */
@@ -67,25 +67,16 @@ export class UIMessage extends Component {
 
     start() {
         this._anim.play('FadeIn');
-        this.node.once(Animation.EventType.FINISHED, () => {
-            this.scheduleOnce(() => this.fadeOut(), this._dwellTime);
-            this.node.once(Animation.EventType.FINISHED, () => this.node.destroy(), this);
-        }, this);
-    }
-
-    onDestroy() {
-        this.unscheduleAllCallbacks();
-        this.node.targetOff(this);
+        this.scheduleOnce(() => this.fadeOut(), this._dwellTime);
     }
 
     /**
-     * 消失动画
+     * 淡出
      */
     fadeOut() {
-        if (!this.isValid) {
-            return;
-        }
+        this.unscheduleAllCallbacks(); // 若为 MessageCenter 中调用的情况，则可以取消 start 中设定的 fadeOut schedule
         this._anim.play('FadeOut');
+        this.scheduleOnce(() => this.destroy(), 1);
     }
 
     /**
