@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node, Sprite, SpriteFrame } from 'cc';
+import { _decorator, CCString, Component, Label, Node, Sprite, SpriteFrame } from 'cc';
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 import { TALENT_TREE } from "db://assets/Script/DataTable";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
@@ -103,7 +103,7 @@ export class TalentSlot extends Component {
         EventCenter.emit(EventName.UI_CLICK_TALENT_SLOT, this);
     }
 
-    @property({ type: String, displayName: '天赋名', tooltip: '拼音小写+下划线分词' })
+    @property({ type: CCString, displayName: '天赋名', tooltip: '拼音小写+下划线分词' })
     get talentName(): string {
         return this._talentName;
     }

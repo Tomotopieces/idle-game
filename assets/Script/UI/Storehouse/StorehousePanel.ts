@@ -51,7 +51,7 @@ export class StorehousePanel extends Component {
 
     onLoad() {
         this._anim = this.node.getComponent(Animation);
-        EventCenter.on(EventName.UI_CLICK_ITEM_SLOT, this.node.name, (itemSlot: ItemSlot) => this.onClickItemSlot(itemSlot));
+        EventCenter.on(EventName.UI_CLICK_ITEM_SLOT, this.node.name, (itemSlot: ItemSlot) => this.handleClickItemSlot(itemSlot));
     }
 
     /**
@@ -72,7 +72,7 @@ export class StorehousePanel extends Component {
      *
      * @param itemSlot 点击的物品槽
      */
-    private onClickItemSlot(itemSlot: ItemSlot) {
+    private handleClickItemSlot(itemSlot: ItemSlot) {
         if (!itemSlot.stack) {
             this.itemCard.hide();
             return;

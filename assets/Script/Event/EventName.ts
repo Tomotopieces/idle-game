@@ -23,9 +23,14 @@ export enum EventName {
     GET_EXPERIENCE = 'GET_EXPERIENCE',
 
     /**
-     * 更新关卡
+     * 更新游戏关卡
      */
-    UPDATE_LEVEL = 'UPDATE_LEVEL',
+    UPDATE_GAME_LEVEL = 'UPDATE_GAME_LEVEL',
+
+    /**
+     * 游戏关卡更新（后）
+     */
+    GAME_LEVEL_UPDATED = 'GAME_LEVEL_UPDATED',
 
     /**
      * 玩家升级
@@ -103,7 +108,17 @@ export enum EventName {
     UI_CLICK_RECIPE_SLOT = 'UI_CLICK_RECIPE_SLOT',
 
     /**
+     * 点击商品槽UI
+     */
+    UI_CLICK_PRODUCT_SLOT = 'UI_CLICK_PRODUCT_SLOT',
+
+    /**
      * 卖出物品
      */
     SELL_ITEM = 'SELL_ITEM',
+
+    /**
+     * 商品购买（后）
+     */
+    PRODUCT_PURCHASED = 'PRODUCT_PURCHASED',
 }

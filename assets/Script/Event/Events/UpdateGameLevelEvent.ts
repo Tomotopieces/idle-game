@@ -7,7 +7,7 @@ import { Chapter } from "db://assets/Script/Level/Chapter";
 /**
  * 更新关卡事件参数
  */
-export class UpdateLevelEvent extends EventArgument {
+export class UpdateGameLevelEvent extends EventArgument {
     /**
      * 章节
      */

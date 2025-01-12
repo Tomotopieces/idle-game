@@ -10,7 +10,12 @@ export class CanvasAdaptor extends Component {
     start() {
         const window = screen.windowSize;
         const designSize = view.getDesignResolutionSize();
-        const height = designSize.width / window.width * window.height;
-        view.setDesignResolutionSize(designSize.width, height, view.getResolutionPolicy());
+        if (window.height / window.width > designSize.height / designSize.width) {
+            const height = designSize.width / window.width * window.height;
+            view.setDesignResolutionSize(designSize.width, height, view.getResolutionPolicy());
+        } else {
+            const width = designSize.height / window.height * window.width;
+            view.setDesignResolutionSize(width, designSize.height, view.getResolutionPolicy());
+        }
     }
 }

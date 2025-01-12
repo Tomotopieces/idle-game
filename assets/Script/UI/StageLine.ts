@@ -1,12 +1,11 @@
 import { _decorator, Component, instantiate, Prefab, Widget } from 'cc';
-import { Stage } from "db://assets/Script/Level/Stage";
-import { Area } from "db://assets/Script/Level/Area";
 import { StageButton } from "db://assets/Script/UI/StageButton";
 import { Level } from "db://assets/Script/Level/Level";
-import { UpdateLevelEvent } from "db://assets/Script/Event/Events/UpdateLevelEvent";
+import { UpdateGameLevelEvent } from "db://assets/Script/Event/Events/UpdateGameLevelEvent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
 import { Chapter } from "db://assets/Script/Level/Chapter";
+import { GameLevelUpdatedEvent } from "db://assets/Script/Event/Events/GameLevelUpdatedEvent";
 
 const { ccclass, property } = _decorator;
 
@@ -19,36 +18,14 @@ export class StageLine extends Component {
      * 舞台选择按钮Prefab
      */
     @property({ type: Prefab, tooltip: '舞台选择按钮Prefab' })
-    stageButtonPrefab: Prefab = null;
+    stageButtonPrefab: Prefab;
 
-    /**
-     * 更新当前关卡
-     *
-     * @param newArea 区域
-     * @param newStage 舞台
-     */
-    updateCurrentLevel(newArea: Area, newStage: Stage) {
-        // 清空子节点
-        this.node.removeAllChildren();
+    onLoad() {
+        EventCenter.on(EventName.GAME_LEVEL_UPDATED, this.node.name, (event: GameLevelUpdatedEvent) => this.handleGameLevelUpdate(event));
+    }
 
-        // 计算节点间隔
-        const spaceBetween = newArea.stages.length > 1 ? 1 / (newArea.stages.length - 1) : 50;
-        newArea.stages.forEach((stage, index) => {
-            const node = instantiate(this.stageButtonPrefab);
-            const button = node.getComponent(StageButton);
-            button.stageName = stage.name;
-            this.node.addChild(node);
-
-            // 设置位置
-            const widget = node.getComponent(Widget);
-            widget.isAbsoluteHorizontalCenter = false;
-            widget.horizontalCenter = newArea.stages.length > 1 ? index * spaceBetween - 0.5 : 0;
-
-            // 设置是否为当前舞台
-            if (stage.name === newStage.name) {
-                button.setCurrent();
-            }
-        });
+    onDestroy() {
+        EventCenter.idOff(this.node.name);
     }
 
     /**
@@ -69,7 +46,7 @@ export class StageLine extends Component {
             targetArea = Level.lastAreaOf(targetChapter);
         }
         const stage = Level.firstStageOf(targetArea);
-        EventCenter.emit(EventName.UPDATE_LEVEL, new UpdateLevelEvent(targetChapter, targetArea, stage));
+        EventCenter.emit(EventName.UPDATE_GAME_LEVEL, new UpdateGameLevelEvent(targetChapter, targetArea, stage));
     }
 
     /**
@@ -90,6 +67,38 @@ export class StageLine extends Component {
             targetArea = Level.firstAreaOf(targetChapter);
         }
         const stage = Level.firstStageOf(targetArea);
-        EventCenter.emit(EventName.UPDATE_LEVEL, new UpdateLevelEvent(targetChapter, targetArea, stage));
+        EventCenter.emit(EventName.UPDATE_GAME_LEVEL, new UpdateGameLevelEvent(targetChapter, targetArea, stage));
+    }
+
+    /**
+     * 处理游戏关卡更新事件
+     *
+     * @param event 事件参数
+     */
+    private handleGameLevelUpdate(event: GameLevelUpdatedEvent) {
+        // 清空子节点
+        this.node.removeAllChildren();
+
+        const newArea = event.area;
+        const newStage = event.stage;
+
+        // 计算节点间隔
+        const spaceBetween = newArea.stages.length > 1 ? 1 / (newArea.stages.length - 1) : 50;
+        newArea.stages.forEach((stage, index) => {
+            const node = instantiate(this.stageButtonPrefab);
+            const button = node.getComponent(StageButton);
+            button.stageName = stage.name;
+            this.node.addChild(node);
+
+            // 设置位置
+            const widget = node.getComponent(Widget);
+            widget.isAbsoluteHorizontalCenter = false;
+            widget.horizontalCenter = newArea.stages.length > 1 ? index * spaceBetween - 0.5 : 0;
+
+            // 设置是否为当前舞台
+            if (stage.name === newStage.name) {
+                button.setCurrent();
+            }
+        });
     }
 }

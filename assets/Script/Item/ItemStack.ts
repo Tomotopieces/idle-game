@@ -30,4 +30,14 @@ export class ItemStack {
     static of(itemName: string, count: number): ItemStack {
         return new ItemStack(ITEM_TABLE.get(itemName), count);
     }
+
+    /**
+     * 拷贝
+     *
+     * @param itemStack ItemStack
+     * @return ItemStack
+     */
+    static copy(itemStack: ItemStack): ItemStack {
+        return new ItemStack(itemStack.item, itemStack.count);
+    }
 }

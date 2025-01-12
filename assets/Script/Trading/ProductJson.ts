@@ -21,18 +21,12 @@ export class ProductJson {
      */
     readonly count: number;
 
-    constructor(itemName: string, price: number, count: number) {
-        this.itemName = itemName;
-        this.price = price;
-        this.count = count;
-    }
-
     /**
      * 转换为ItemStack
      *
      * @param productJson ProductJson
      */
-    toItemStack(productJson: ProductJson): ItemStack {
+    static toItemStack(productJson: ProductJson): ItemStack {
         return new ItemStack(TradingItem.fromItem(ITEM_TABLE.get(productJson.itemName), productJson.price), productJson.count);
     }
 }

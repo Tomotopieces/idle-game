@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "ItemSlot",
+    "_name": "ProductSlot",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "ItemSlot",
+    "_name": "ProductSlot",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -583,12 +583,12 @@
       "__id__": 1
     },
     "component": "",
-    "_componentId": "822fa6ZnX5Ma64RciBGYuTS",
+    "_componentId": "5ceb5Y6KSBD/6pMHty8t4d/",
     "handler": "click",
     "customEventData": ""
   },
   {
-    "__type__": "822fa6ZnX5Ma64RciBGYuTS",
+    "__type__": "5ceb5Y6KSBD/6pMHty8t4d/",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -599,12 +599,11 @@
     "__prefab": {
       "__id__": 26
     },
-    "slotType": "STOREHOUSE",
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "dfVAK501NL34516DVqtNWG"
+    "fileId": "f79n250pNCFJzXrGQAXiRF"
   },
   {
     "__type__": "cc.PrefabInfo",

@@ -1,9 +1,8 @@
-import { _decorator, Component, Label, Layout, Node, Sprite, SpriteFrame, UITransform, Vec3, view } from 'cc';
-import { Item, ITEM_RARITY_COLOR_MAP, ITEM_RARITY_DISPLAY_NAME_MAP } from "db://assets/Script/Item/Item";
-import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
+import { _decorator, Component, Layout, Node, Sprite, SpriteFrame, UITransform, Vec3, view, Widget } from 'cc';
+import { Item } from "db://assets/Script/Item/Item";
 import { EMPTY_FUNCTION, Runnable } from "db://assets/Script/Util/Functions";
-import { EquipmentInfoUIUtil } from "db://assets/Script/Util/EquipmentInfoUIUtil";
 import { Equipment } from "db://assets/Script/Equipment/Equipment";
+import { ItemInfoUI } from "db://assets/Script/Prefab/ItemInfoUI";
 
 const { ccclass } = _decorator;
 
@@ -18,44 +17,19 @@ export class ItemCard extends Component {
     private _transform: UITransform;
 
     /**
-     * 物品图标
+     * 物品信息
      */
-    private _itemIconSprite: Sprite;
+    private _itemInfo: ItemInfoUI;
 
     /**
-     * 物品名称
+     * 物品信息 Widget
      */
-    private _itemNameLabel: Label;
+    private _itemInfoWidget: Widget;
 
     /**
-     * 物品类型
+     * 按钮 Widget
      */
-    private _itemTypeLabel: Label;
-
-    /**
-     * 物品品质
-     */
-    private _itemRarityLabel: Label;
-
-    /**
-     * 物品描述
-     */
-    private _itemDescriptionLabel: Label;
-
-    /**
-     * 武器属性
-     */
-    private _weaponAttributesLabel: Label;
-
-    /**
-     * 武器独门妙用
-     */
-    private _weaponUniqueEffectLabel: Label;
-
-    /**
-     * 武器套装效果
-     */
-    private _weaponSetEffectLabel: Label;
+    private _operationWidget: Widget;
 
     /**
      * 按钮
@@ -73,24 +47,13 @@ export class ItemCard extends Component {
     private _onClick: Runnable;
 
     onLoad() {
-        /* 读取所有组件 */
-
         this._transform = this.node.getComponent(UITransform);
 
-        const baseInfoNode = this.node.getChildByName('BaseInfo');
-        this._itemIconSprite = baseInfoNode.getChildByName('Icon').getComponent(Sprite);
-        this._itemNameLabel = baseInfoNode.getChildByName('Name').getComponent(Label);
-        this._itemTypeLabel = baseInfoNode.getChildByName('Type').getComponent(Label);
-        this._itemRarityLabel = baseInfoNode.getChildByName('Rarity').getComponent(Label);
-
-        this._itemDescriptionLabel = this.node.getChildByName('Description').getComponent(Label);
-
-        const weaponInfoNode = this.node.getChildByName('WeaponInfo');
-        this._weaponAttributesLabel = weaponInfoNode.getChildByName('Attributes').getComponent(Label);
-        this._weaponUniqueEffectLabel = weaponInfoNode.getChildByName('UniqueEffect').getComponent(Label);
-        this._weaponSetEffectLabel = weaponInfoNode.getChildByName('SetEffect').getComponent(Label);
+        this._itemInfo = this.node.getChildByName('ItemInfo').getComponent(ItemInfoUI);
+        this._itemInfoWidget = this._itemInfo.getComponent(Widget);
 
         const OperationNode = this.node.getChildByName('Operation');
+        this._operationWidget = OperationNode.getComponent(Widget);
         this._operationButton = OperationNode.getChildByName('Button');
         this._buttonSprite = this._operationButton.getChildByName('Sprite').getComponent(Sprite);
     }
@@ -107,29 +70,14 @@ export class ItemCard extends Component {
         this.node.active = true;
 
         // 设置卡片位置与锚点
-        const resolutionSize = view.getDesignResolutionSize();
-        this._transform.anchorX = targetWorldPosition.x + this._transform.width <= resolutionSize.width ? 0 : 1;
+        const designSize = view.getDesignResolutionSize();
+        this._transform.anchorX = targetWorldPosition.x + this._transform.width <= designSize.width ? 0 : 1;
         this._transform.anchorY = targetWorldPosition.y - this._transform.height >= 0 ? 1 : 0;
         this.node.setWorldPosition(targetWorldPosition);
 
-        // 设置基本信息
-        this._itemIconSprite.spriteFrame = ResourceManager.getAsset(ResourceType.SPRITE_FRAME, item.icon) as SpriteFrame;
-        this._itemNameLabel.string = item.displayName;
-        this._itemTypeLabel.string = EquipmentInfoUIUtil.getItemTypeLabel(item);
+        // 设置物品信息
         const rarity = item instanceof Equipment ? item.attributes.rarity : item.rarity;
-        this._itemRarityLabel.string = ITEM_RARITY_DISPLAY_NAME_MAP.get(rarity);
-        this._itemNameLabel.color = this._itemTypeLabel.color = this._itemRarityLabel.color = ITEM_RARITY_COLOR_MAP.get(rarity);
-
-        // 设置物品描述
-        this._itemDescriptionLabel.string = item.description;
-
-        // 设置显示信息
-        this._weaponAttributesLabel.string = EquipmentInfoUIUtil.getAttributes(item, rarity);
-        this._weaponAttributesLabel.node.active = !!this._weaponAttributesLabel.string;
-        this._weaponUniqueEffectLabel.string = EquipmentInfoUIUtil.getUniqueEffect(item);
-        this._weaponUniqueEffectLabel.node.active = !!this._weaponUniqueEffectLabel.string;
-        this._weaponSetEffectLabel.string = EquipmentInfoUIUtil.getSetEffect(item);
-        this._weaponSetEffectLabel.node.active = !!this._weaponSetEffectLabel.string;
+        this._itemInfo.show(item, rarity);
 
         // 设置按钮内容
         this._buttonSprite.spriteFrame = buttonImage;
@@ -137,6 +85,8 @@ export class ItemCard extends Component {
         this._onClick = onClick;
 
         this.getComponent(Layout).updateLayout(true);
+        this._itemInfoWidget.updateAlignment();
+        this._operationWidget.updateAlignment();
     }
 
     /**

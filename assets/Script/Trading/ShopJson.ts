@@ -15,11 +15,6 @@ export class ShopJson {
      */
     readonly products: ProductJson[];
 
-    constructor(scene: string, products: ProductJson[]) {
-        this.scene = scene;
-        this.products = products;
-    }
-
     /**
      * 转换为商店
      *
@@ -27,6 +22,6 @@ export class ShopJson {
      * @param shopJson 商店JSON
      */
     static toShop(id: number, shopJson: ShopJson): Shop {
-        return new Shop(id, shopJson.scene, shopJson.products.map(productJson => productJson.toItemStack(productJson)));
+        return new Shop(id, shopJson.scene, shopJson.products.map(productJson => ProductJson.toItemStack(productJson)));
     }
 }

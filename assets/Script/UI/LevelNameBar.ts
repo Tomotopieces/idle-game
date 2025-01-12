@@ -2,6 +2,9 @@ import { _decorator, Component, Label } from 'cc';
 import { Stage } from "db://assets/Script/Level/Stage";
 import { Area } from "db://assets/Script/Level/Area";
 import { Chapter } from "db://assets/Script/Level/Chapter";
+import { EventCenter } from "db://assets/Script/Event/EventCenter";
+import { EventName } from "db://assets/Script/Event/EventName";
+import { GameLevelUpdatedEvent } from "db://assets/Script/Event/Events/GameLevelUpdatedEvent";
 
 const { ccclass, property } = _decorator;
 
@@ -14,7 +17,15 @@ export class LevelNameBar extends Component {
      * 关卡名称Label
      */
     @property({ type: Label, tooltip: '关卡名称Label' })
-    label: Label = null;
+    label: Label;
+
+    onLoad() {
+        EventCenter.on(EventName.GAME_LEVEL_UPDATED, this.node.name, (event: GameLevelUpdatedEvent) => this.handleGameLevelUpdated(event));
+    }
+
+    onDestroy() {
+        EventCenter.idOff(this.node.name);
+    }
 
     /**
      * 更新关卡名称
@@ -25,5 +36,14 @@ export class LevelNameBar extends Component {
      */
     updateLevelName(chapter: Chapter, area: Area, stage: Stage) {
         this.label.string = `${chapter.displayName} - ${area.displayName} - ${stage.displayName}`;
+    }
+
+    /**
+     * 处理关卡更新事件
+     *
+     * @param event 事件参数
+     */
+    private handleGameLevelUpdated(event: GameLevelUpdatedEvent) {
+        this.label.string = `${event.chapter.displayName} - ${event.area.displayName} - ${event.stage.displayName}`;
     }
 }

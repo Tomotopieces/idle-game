@@ -6,6 +6,9 @@ export class ArrayUtil {
      * @return 一维数组
      */
     static flat<T>(array: T[][]): T[] {
+        if (!array) {
+            return null;
+        }
         return array.reduce((a, b) => a.concat(b), []);
     }
 
@@ -17,6 +20,9 @@ export class ArrayUtil {
      * @return Map<K, T[]>
      */
     static groupBy<T, K extends any>(array: T[], getKey: (item: T) => K): Map<K, T[]> {
+        if (!array) {
+            return null;
+        }
         return array.reduce((map, item) => {
             const key = getKey(item);
             if (!map.has(key)) {

@@ -14,12 +14,12 @@ export class RecipeRequirementUI extends Component {
     /**
      * 背景
      */
-    private _background: Sprite;
+    private _backgroundSprite: Sprite;
 
     /**
      * 物品图标
      */
-    private _icon: Sprite;
+    private _iconSprite: Sprite;
 
     /**
      * 物品名称标签
@@ -37,8 +37,8 @@ export class RecipeRequirementUI extends Component {
     private _requirement: RecipeRequirement;
 
     onLoad() {
-        this._background = this.node.getChildByName('Background').getComponent(Sprite);
-        this._icon = this.node.getChildByName('Icon').getComponent(Sprite);
+        this._backgroundSprite = this.node.getChildByName('Background').getComponent(Sprite);
+        this._iconSprite = this.node.getChildByName('Icon').getComponent(Sprite);
         this._nameLabel = this.node.getChildByName('Name').getComponent(Label);
         this._countLabel = this.node.getChildByName('Count').getComponent(Label);
     }
@@ -52,26 +52,25 @@ export class RecipeRequirementUI extends Component {
         this._requirement = requirement;
 
         // 背景颜色
-        const color = ITEM_RARITY_COLOR_MAP.get(requirement.item.rarity);
-        this._background.color = new Color(color.r, color.g, color.b, 51);
-        ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, requirement.item.icon,
-            (spriteFrame: SpriteFrame) => this._icon.spriteFrame = spriteFrame);
+        const color = ITEM_RARITY_COLOR_MAP.get(this._requirement.item.rarity);
+        this._backgroundSprite.color = new Color(color.r, color.g, color.b, 51);
+        ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, this._requirement.item.icon,
+            (spriteFrame: SpriteFrame) => this._iconSprite.spriteFrame = spriteFrame);
 
         // 名称标签
-        this._nameLabel.string = requirement.item.displayName;
+        this._nameLabel.string = this._requirement.item.displayName;
 
         // 数量标签
-        const count = Storehouse.countOne(requirement.item);
-        this._countLabel.string = `${count} / ${requirement.count}`;
-        this._countLabel.color = count >= requirement.count ? Color.WHITE : Color.RED;
+        this.updateCountLabel(Storehouse.countOne(this._requirement.item));
     }
 
     /**
-     * 更新数量
+     * 更新数量标签
+     *
+     * @param storeCount 持有数量
      */
-    updateCount() {
-        const count = Storehouse.countOne(this._requirement.item);
-        this._countLabel.string = `${count} / ${this._requirement.count}`;
-        this._countLabel.color = count >= this._requirement.count ? Color.WHITE : Color.RED;
+    updateCountLabel(storeCount: number) {
+        this._countLabel.string = `${storeCount} / ${this._requirement.count}`;
+        this._countLabel.color = storeCount >= this._requirement.count ? Color.WHITE : Color.RED;
     }
 }

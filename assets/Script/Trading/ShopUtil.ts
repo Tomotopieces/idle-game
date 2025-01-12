@@ -10,11 +10,14 @@ import { EventName } from "db://assets/Script/Event/EventName";
 import { UIPostMessageEvent } from "db://assets/Script/Event/Events/UIPostMessageEvent";
 import { MessageType } from "db://assets/Script/UI/Message/MessageFactory";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
+import { ProductPurchasedEvent } from "db://assets/Script/Event/Events/ProductPurchasedEvent";
 
 /**
  * 商店工具
  */
 export class ShopUtil {
+    static SHOP: Shop;
+
     /**
      * 账本
      *
@@ -23,10 +26,13 @@ export class ShopUtil {
     static LEDGER = new Map<string, LedgerRecord[]>();
 
     /**
-     * 获取当前商店
+     * 更新并获取当前商店
      */
     static shop(): Shop {
-        return SHOP_TABLE.get(Level.STAGE.name) ?? SHOP_TABLE.get(Level.AREA.name) ?? SHOP_TABLE.get(Level.CHAPTER.name);
+        // 从小到大范围查询
+        return this.SHOP = SHOP_TABLE.get(Level.STAGE.name) ||
+            SHOP_TABLE.get(Level.AREA.name) ||
+            SHOP_TABLE.get(Level.CHAPTER.name);
     }
 
     /**
@@ -38,8 +44,8 @@ export class ShopUtil {
      * @param stack 库存
      */
     static buy(shop: Shop, stack: ItemStack) {
-        const tradingItem = stack.item as TradingItem;
-        if (Storehouse.countOne(LING_YUN_NAME, false) < tradingItem.price) {
+        const product = stack.item as TradingItem;
+        if (Storehouse.countOne(LING_YUN_NAME, false) < product.price) {
             // 灵韵不足
             EventCenter.emit(EventName.UI_POST_MESSAGE, new UIPostMessageEvent(MessageType.WARNING, `没钱别摸`));
             return;
@@ -50,8 +56,8 @@ export class ShopUtil {
         }
 
         // 购买
-        if (Storehouse.takeOut([ItemStack.of(LING_YUN_NAME, tradingItem.price)])) {
-            Storehouse.putIn([new ItemStack(tradingItem, 1)]);
+        if (Storehouse.takeOut([ItemStack.of(LING_YUN_NAME, product.price)])) {
+            Storehouse.putIn([new ItemStack(product, 1)]);
             stack.count--;
         }
 
@@ -60,11 +66,24 @@ export class ShopUtil {
             this.LEDGER.set(shop.scene, []);
         }
         const records = this.LEDGER.get(shop.scene);
-        const record = records.find(record => record.itemName === tradingItem.name);
+        const record = records.find(record => record.itemName === product.name);
         if (record) {
             record.sellCount++;
         } else {
-            records.push(new LedgerRecord(shop.scene, tradingItem.name, 0));
+            records.push(new LedgerRecord(shop.scene, product.name, 0));
         }
+
+        // 发送事件
+        EventCenter.emit(EventName.PRODUCT_PURCHASED, new ProductPurchasedEvent(product.name));
+    }
+
+    /**
+     * 获取商品的账本记录
+     *
+     * @param itemName 商品名
+     * @return 账本记录
+     */
+    static ledgerRecord(itemName: string): LedgerRecord {
+        return this.LEDGER.get(this.SHOP.scene)?.find(record => record.itemName === itemName) ?? new LedgerRecord(this.SHOP.scene, itemName, 0);
     }
 }

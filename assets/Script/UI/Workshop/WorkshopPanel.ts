@@ -2,8 +2,8 @@ import { _decorator, Animation, Component, instantiate, Node, Prefab, Sprite, Sp
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
 import { CraftRecipe } from "db://assets/Script/Recipe/CraftRecipe";
-import { RecipeInfo } from "db://assets/Script/UI/Craft/RecipeInfo";
-import { RecipeSlot } from "db://assets/Script/UI/Craft/RecipeSlot";
+import { RecipeInfoUI } from "db://assets/Script/UI/Workshop/RecipeInfoUI";
+import { RecipeSlot } from "db://assets/Script/UI/Workshop/RecipeSlot";
 import { RecipeUtil } from "db://assets/Script/Util/RecipeUtil";
 import { UpgradeRecipe } from "db://assets/Script/Recipe/UpgradeRecipe";
 import { Recipe } from "db://assets/Script/Recipe/Recipe";
@@ -39,12 +39,6 @@ export class WorkshopPanel extends Component {
     recipeSlotPrefab: Prefab;
 
     /**
-     * 配方栏节点
-     */
-    @property({ type: Node, displayName: '配方栏节点' })
-    recipeBarNode: Node;
-
-    /**
      * 铸造按钮图片
      */
     @property({ type: SpriteFrame, displayName: '铸造按钮图片' })
@@ -55,6 +49,11 @@ export class WorkshopPanel extends Component {
      */
     @property({ type: SpriteFrame, displayName: '升阶按钮图片' })
     upgradeButtonImage: SpriteFrame;
+
+    /**
+     * 配方栏节点
+     */
+    private _recipeBarNode: Node;
 
     /**
      * 铸造模式按钮
@@ -74,7 +73,7 @@ export class WorkshopPanel extends Component {
     /**
      * 配方信息
      */
-    private _recipeInfo: RecipeInfo;
+    private _recipeInfo: RecipeInfoUI;
 
     /**
      * 动画机
@@ -92,21 +91,16 @@ export class WorkshopPanel extends Component {
     private _currentRecipe: Recipe;
 
     /**
-     * 制作按钮
-     */
-    private _operationButton: Node;
-
-    /**
      * 工坊模式
      */
     private _workMode: WorkMode = WorkMode.CRAFT;
 
     onLoad() {
+        this._recipeBarNode = this.node.getChildByName('RecipeScrollView').getChildByName('RecipeBar');
         this._craftModeButton = this.node.getChildByName('CraftModeButton');
         this._upgradeModeButton = this.node.getChildByName('UpgradeModeButton');
         this._operationButtonImage = this.node.getChildByName('OperationButton').getChildByName('Image').getComponent(Sprite);
-        this._recipeInfo = this.node.getChildByName('RecipeInfo').getComponent(RecipeInfo);
-        this._operationButton = this.node.getChildByName('OperationButton');
+        this._recipeInfo = this.node.getChildByName('RecipeInfo').getComponent(RecipeInfoUI);
         this._anim = this.getComponent(Animation);
 
         EventCenter.on(EventName.UI_CLICK_RECIPE_SLOT, this.node.name, (recipe: CraftRecipe) => this.handleClickRecipeSlot(recipe));
@@ -120,19 +114,19 @@ export class WorkshopPanel extends Component {
      * 填充配方栏
      */
     private populateRecipeBar() {
-        this.recipeBarNode.removeAllChildren();
+        this._recipeBarNode.removeAllChildren();
 
         const recipes: Recipe[] = this._workMode === WorkMode.CRAFT ?
             RecipeUtil.availableCraftRecipes() :
             RecipeUtil.availableUpgradeRecipes();
         recipes.forEach(recipe => {
             const node = instantiate(this.recipeSlotPrefab);
-            this.recipeBarNode.addChild(node);
+            this._recipeBarNode.addChild(node);
             const recipeSlot = node.getComponent(RecipeSlot);
             recipeSlot.init(recipe);
         });
         this._currentRecipe = recipes[0];
-        this._currentRecipe ? this._recipeInfo.show(this._currentRecipe) : this._recipeInfo.hide();
+        !!this._currentRecipe ? this._recipeInfo.show(this._currentRecipe) : this._recipeInfo.hide();
     }
 
     /**

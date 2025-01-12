@@ -1,4 +1,4 @@
-import { _decorator, Component, Enum, Label, Node, Sprite, SpriteFrame } from 'cc';
+import { _decorator, Component, Enum, Label, Sprite, SpriteFrame } from 'cc';
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
@@ -27,18 +27,6 @@ export enum SlotType {
 @ccclass('ItemSlot')
 export class ItemSlot extends Component {
     /**
-     * 物品堆叠Node
-     */
-    @property({ type: Node, tooltip: '物品堆叠Node' })
-    stackNode: Node = null;
-
-    /**
-     * 数量Label
-     */
-    @property({ type: Label, tooltip: '数量Label' })
-    countLabel: Label = null;
-
-    /**
      * 物品槽类型
      */
     @property({ type: Enum(SlotType), tooltip: '物品槽类型' })
@@ -47,13 +35,22 @@ export class ItemSlot extends Component {
     /**
      * 物品图标Sprite
      */
-    @property({ type: Sprite, tooltip: '物品图标Sprite' })
-    stackSprite: Sprite = null;
+    private _iconSprite: Sprite = null;
+
+    /**
+     * 数量Label
+     */
+    private _countLabel: Label = null;
 
     /**
      * 物品堆叠
      */
     private _stack: ItemStack = null;
+
+    onLoad() {
+        this._iconSprite = this.node.getChildByName('Icon').getComponent(Sprite);
+        this._countLabel = this.node.getChildByName('Count').getComponent(Label);
+    }
 
     /**
      * 点击展示物品信息卡片
@@ -74,15 +71,14 @@ export class ItemSlot extends Component {
      * @param value 新物品堆叠
      */
     set stack(value: ItemStack) {
+        this._stack = value;
         if (value) {
-            this._stack = value;
             ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, this._stack.item.icon, (spriteFrame: SpriteFrame) =>
-                this.stackSprite.spriteFrame = spriteFrame);
-            this.countLabel.string = `${value.count}`;
+                this._iconSprite.spriteFrame = spriteFrame);
+            this._countLabel.string = `${value.count}`;
         } else {
-            this._stack = value;
-            this.stackSprite.spriteFrame = null;
-            this.countLabel.string = '';
+            this._iconSprite.spriteFrame = null;
+            this._countLabel.string = '';
         }
     }
 
@@ -98,6 +94,6 @@ export class ItemSlot extends Component {
         }
 
         this._stack.count = value;
-        this.countLabel.string = `${value}`;
+        this._countLabel.string = `${value}`;
     }
 }

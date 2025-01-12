@@ -3,9 +3,7 @@ import { SaveData } from "db://assets/Script/SaveData/SaveData";
 import { LING_YUN_NAME, LocalStorageDataName, } from "db://assets/Script/Util/Constant";
 import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
 import { Storehouse } from "db://assets/Script/Storehouse/Storehouse";
-import { LevelNameBar } from "db://assets/Script/UI/LevelNameBar";
-import { UpdateLevelEvent } from "db://assets/Script/Event/Events/UpdateLevelEvent";
-import { StageLine } from "db://assets/Script/UI/StageLine";
+import { UpdateGameLevelEvent } from "db://assets/Script/Event/Events/UpdateGameLevelEvent";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { EquipmentChangeEvent } from "db://assets/Script/Event/Events/EquipmentChangeEvent";
@@ -22,6 +20,7 @@ import { UIPostMessageEvent } from "db://assets/Script/Event/Events/UIPostMessag
 import { MessageType } from "db://assets/Script/UI/Message/MessageFactory";
 import { TradingItem } from "db://assets/Script/Trading/TradingItem";
 import { ShopUtil } from "db://assets/Script/Trading/ShopUtil";
+import { GameLevelUpdatedEvent } from "db://assets/Script/Event/Events/GameLevelUpdatedEvent";
 
 const { ccclass, property } = _decorator;
 
@@ -45,21 +44,9 @@ export class GameManager extends Component {
     enemy: EnemyController = null;
 
     /**
-     * 关卡名称条
-     */
-    @property({ type: LevelNameBar, tooltip: '关卡名称条' })
-    levelNameBar: LevelNameBar = null;
-
-    /**
-     * 关卡选择条
-     */
-    @property({ type: StageLine, tooltip: '关卡选择条' })
-    stageLine: StageLine = null;
-
-    /**
      * 自动保存间隔（秒）
      */
-    @property({ type: CCInteger, tooltip: '自动保存间隔（秒）' })
+    @property({ type: CCInteger, displayName: '自动保存间隔（秒）' })
     autoSaveInterval: number = 5 * 60;
 
     /**
@@ -70,11 +57,11 @@ export class GameManager extends Component {
     onLoad() {
         // 监听处理事件
         EventCenter.on(EventName.DEAL_DAMAGE, this.node.name, (event: DealDamageEvent) => this.handleDamage(event));
-        EventCenter.on(EventName.UPDATE_LEVEL, this.node.name, (event: UpdateLevelEvent) => this.updateLevel(event));
+        EventCenter.on(EventName.UPDATE_GAME_LEVEL, this.node.name, (event: UpdateGameLevelEvent) => this.handleUpdateGameLevel(event));
         EventCenter.on(EventName.EQUIPMENT_CHANGE, this.node.name, (event: EquipmentChangeEvent) => this.handleEquipmentChange(event));
         EventCenter.on(EventName.ENEMY_DIE, this.node.name, (enemy: EnemyController) => this.handleEnemyDie(enemy));
-        EventCenter.on(EventName.GET_DROPS, this.node.name, (dropStackList: ItemStack[]) => this.getDrops(dropStackList));
-        EventCenter.on(EventName.GET_EXPERIENCE, this.node.name, (experience: number) => this.getExperience(experience));
+        EventCenter.on(EventName.GET_DROPS, this.node.name, (dropStackList: ItemStack[]) => this.handleGetDrops(dropStackList));
+        EventCenter.on(EventName.GET_EXPERIENCE, this.node.name, (experience: number) => this.handleGetExperience(experience));
         EventCenter.on(EventName.PLAYER_LEVEL_UP, this.node.name, (level: number) => this.handlePlayerLevelUp(level));
         EventCenter.on(EventName.GAIN_STANCE, this.node.name, (stance: number) => this.handleGainStance(stance));
         EventCenter.on(EventName.TALENT_UPGRADE, this.node.name, (talentTreeNode: TalentTreeNode) => this.handleTalentUpgrade(talentTreeNode));
@@ -86,6 +73,7 @@ export class GameManager extends Component {
         const saveData = this.loadSaveData();
         this.restorePlayerAndStorehouseData(saveData);
         this.restoreLevelAndEnemyData(saveData);
+        this.restoreLedger(saveData);
 
         // 自动存档
         this.schedule(this._autoSaveCallback, this.autoSaveInterval);
@@ -98,6 +86,8 @@ export class GameManager extends Component {
 
     /**
      * 恢复玩家与仓库数据
+     *
+     * @param saveData 存档数据
      */
     private restorePlayerAndStorehouseData(saveData: SaveData) {
         if (!saveData) {
@@ -121,6 +111,8 @@ export class GameManager extends Component {
 
     /**
      * 恢复关卡与敌人数据
+     *
+     * @param saveData 存档数据
      */
     private restoreLevelAndEnemyData(saveData: SaveData) {
         if (saveData) {
@@ -135,27 +127,18 @@ export class GameManager extends Component {
         }
         this.enemy.info = Level.STAGE.enemyInfo;
 
-        this.levelNameBar.updateLevelName(Level.CHAPTER, Level.AREA, Level.STAGE);
-        this.stageLine.updateCurrentLevel(Level.AREA, Level.STAGE);
+        EventCenter.emit(EventName.GAME_LEVEL_UPDATED, new GameLevelUpdatedEvent());
     }
 
     /**
-     * 更新关卡
+     * 恢复账本数据
      *
-     * @param event 事件参数
+     * @param saveData 存档数据
      */
-    private updateLevel(event: UpdateLevelEvent) {
-        if (Level.CHAPTER === event.chapter && Level.AREA === event.area && Level.STAGE === event.stage) {
-            return;
+    private restoreLedger(saveData: SaveData) {
+        if (saveData) {
+            ShopUtil.LEDGER = saveData.ledger;
         }
-
-        Level.CHAPTER = event.chapter;
-        Level.AREA = event.area;
-        Level.STAGE = event.stage;
-        this.enemy.info = event.stage.enemyInfo;
-
-        this.levelNameBar.updateLevelName(Level.CHAPTER, Level.AREA, Level.STAGE);
-        this.stageLine.updateCurrentLevel(Level.AREA, Level.STAGE);
     }
 
     /**
@@ -179,6 +162,24 @@ export class GameManager extends Component {
     }
 
     /**
+     * 处理更新游戏关卡事件
+     *
+     * @param event 事件参数
+     */
+    private handleUpdateGameLevel(event: UpdateGameLevelEvent) {
+        if (Level.CHAPTER === event.chapter && Level.AREA === event.area && Level.STAGE === event.stage) {
+            return;
+        }
+
+        Level.CHAPTER = event.chapter;
+        Level.AREA = event.area;
+        Level.STAGE = event.stage;
+        this.enemy.info = event.stage.enemyInfo;
+
+        EventCenter.emit(EventName.GAME_LEVEL_UPDATED, new GameLevelUpdatedEvent());
+    }
+
+    /**
      * 处理伤害事件
      *
      * @param event 事件参数
@@ -195,7 +196,7 @@ export class GameManager extends Component {
     }
 
     /**
-     * 敌人死亡
+     * 处理敌人死亡时间
      *
      * @param enemy 敌人
      */
@@ -217,20 +218,20 @@ export class GameManager extends Component {
     }
 
     /**
-     * 获取掉落物
+     * 处理获取掉落物事件
      *
      * @param dropStackList 掉落道具列表
      */
-    private getDrops(dropStackList: ItemStack[]) {
+    private handleGetDrops(dropStackList: ItemStack[]) {
         Storehouse.putIn(dropStackList);
     }
 
     /**
-     * 获取经验值
+     *  处理获取经验值事件
      *
      * @param experience 经验值
      */
-    private getExperience(experience: number) {
+    private handleGetExperience(experience: number) {
         this.player.levelInfo.gainExperience(experience);
     }
 

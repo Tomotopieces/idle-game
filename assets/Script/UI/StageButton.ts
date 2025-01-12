@@ -1,5 +1,5 @@
 import { _decorator, Component, Sprite, SpriteFrame } from 'cc';
-import { UpdateLevelEvent } from "db://assets/Script/Event/Events/UpdateLevelEvent";
+import { UpdateGameLevelEvent } from "db://assets/Script/Event/Events/UpdateGameLevelEvent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 
 import { STAGE_TABLE } from "db://assets/Script/DataTable";
@@ -30,7 +30,7 @@ export class StageButton extends Component {
      */
     click() {
         const stage = STAGE_TABLE.get(this.stageName);
-        EventCenter.emit(EventName.UPDATE_LEVEL, new UpdateLevelEvent(null, null, stage));
+        EventCenter.emit(EventName.UPDATE_GAME_LEVEL, new UpdateGameLevelEvent(null, null, stage));
     }
 
     /**
