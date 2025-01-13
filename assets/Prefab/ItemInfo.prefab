@@ -1442,7 +1442,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "UniqueEffect",
+    "_name": "UniqueUtility",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -1640,7 +1640,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "SetEffect",
+    "_name": "SetBonus",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {

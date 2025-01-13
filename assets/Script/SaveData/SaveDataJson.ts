@@ -1,5 +1,5 @@
-import { ItemStackJson } from "db://assets/Script/Item/ItemStackJson";
-import { LedgerRecord } from "db://assets/Script/Trading/LedgerRecord";
+import { ItemStackSerial } from "db://assets/Script/Item/ItemStackSerial";
+import { LedgerRecord } from "db://assets/Script/Shop/LedgerRecord";
 
 /**
  * 存档数据JSON
@@ -18,12 +18,12 @@ export class SaveDataJson {
     /**
      * 装备槽
      */
-    equipmentSlot: ItemStackJson[];
+    equipmentSlot: ItemStackSerial[];
 
     /**
      * 仓库数组
      */
-    storehouse: ItemStackJson[];
+    storehouse: ItemStackSerial[];
 
     /**
      * 章节名称
@@ -55,7 +55,7 @@ export class SaveDataJson {
      */
     ledger: LedgerRecord[];
 
-    constructor(level: number, experience: number, equipmentSlot: ItemStackJson[], storehouse: ItemStackJson[], chapterName: string, areaName: string, stageName: string, talents: string, enemyRecord: string, ledger: LedgerRecord[]) {
+    constructor(level: number, experience: number, equipmentSlot: ItemStackSerial[], storehouse: ItemStackSerial[], chapterName: string, areaName: string, stageName: string, talents: string, enemyRecord: string, ledger: LedgerRecord[]) {
         this.level = level;
         this.experience = experience;
         this.equipmentSlot = equipmentSlot;

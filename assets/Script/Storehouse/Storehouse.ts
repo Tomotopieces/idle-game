@@ -1,11 +1,15 @@
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
-import { Equipment, EquipmentType } from "db://assets/Script/Equipment/Equipment";
-import { Item, ItemType } from "db://assets/Script/Item/Item";
+import { Equipment } from "db://assets/Script/Equipment/Equipment";
+import { Item } from "db://assets/Script/Item/Item";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
 import { UIPostMessageEvent } from "db://assets/Script/Event/Events/UIPostMessageEvent";
 import { MessageType } from "db://assets/Script/UI/Message/MessageFactory";
+import { ItemType } from "db://assets/Script/Item/ItemType";
+import { EquipmentType } from "db://assets/Script/Equipment/EquipmentType";
+import { ItemFactory } from "db://assets/Script/Item/ItemFactory";
+import { EquipmentSlot } from "db://assets/Script/Entity/Player/PlayerEquipmentComponent";
 
 /**
  * 仓库类型
@@ -21,7 +25,7 @@ export class Storehouse {
     /**
      * 装备栏
      */
-    private static _equipmentSlot: Map<EquipmentType, ItemStack> = null;
+    private static _equipmentSlot: Map<EquipmentType, EquipmentSlot> = null;
 
     /**
      * 放入物品
@@ -87,15 +91,15 @@ export class Storehouse {
             return itemStacks;
         }
         targets.forEach(target => {
-            const stack = this.equipmentMap.get((target as Equipment).equipmentType);
-            if (!stack) {
+            const slot = this.equipmentMap.get((target as Equipment).equipmentType);
+            if (!slot.stack) {
                 return;
             }
             const index = itemStacks.findIndex(stack => stack.item.name === target.name);
             if (index !== -1) {
-                itemStacks[index].count += stack.count;
+                itemStacks[index].count += slot.stack.count;
             } else {
-                itemStacks.push(stack);
+                itemStacks.push(slot.stack);
             }
         });
         return itemStacks;
@@ -110,7 +114,7 @@ export class Storehouse {
     static countOne(target: Item | string, checkEquipmentSlot: boolean = true): number {
         const itemName = target instanceof Item ? target.name : target;
         let count = this.STOREHOUSE.get(itemName)?.count ?? 0;
-        if (checkEquipmentSlot && Array.from(this.equipmentMap.values()).some(stack => stack.item?.name === itemName)) {
+        if (checkEquipmentSlot && Array.from(this.equipmentMap.values()).some(slot => slot.stack?.item.name === itemName)) {
             count += 1;
         }
         return count;
@@ -157,7 +161,7 @@ export class Storehouse {
         if (itemStack.count <= 0) {
             this.STOREHOUSE.delete(itemName);
         }
-        Storehouse.emitUpdateEvent([{ item: itemStack.item, count: 1 }]);
+        Storehouse.emitUpdateEvent([ItemFactory.itemStack(itemStack.item, 1)]);
         return true;
     }
 
@@ -172,7 +176,7 @@ export class Storehouse {
             return false;
         }
 
-        return Array.from(Storehouse.equipmentMap.values()).some(stack => stack.item?.name === item.name)
+        return Array.from(Storehouse.equipmentMap.values()).some(slot => slot.stack?.item.name === item.name)
     }
 
     /**
@@ -182,17 +186,16 @@ export class Storehouse {
      */
     private static emitUpdateEvent(stackList: ItemStack[]) {
         // 发送被更新的物品的现有库存情况，避免修改stackList数据
-        const updateStacks: ItemStack[] = [];
-        stackList.forEach(stack => updateStacks.push(new ItemStack(stack.item, this.STOREHOUSE.get(stack.item.name)?.count ?? 0)));
+        const updateStacks = stackList.map(stack => this.STOREHOUSE.get(stack.item.name) || ItemFactory.itemStack(stack.item, 0));
         EventCenter.emit(EventName.UI_UPDATE_STOREHOUSE, updateStacks);
     }
 
     /**
      * 获取装备栏
      */
-    private static get equipmentMap(): Map<EquipmentType, ItemStack> {
+    private static get equipmentMap(): Map<EquipmentType, EquipmentSlot> {
         if (!Storehouse._equipmentSlot) {
-            Storehouse._equipmentSlot = PlayerController.PLAYER.equipments.equipmentMap;
+            Storehouse._equipmentSlot = PlayerController.PLAYER.equipments.equipmentSlotMap;
         }
         return Storehouse._equipmentSlot;
     }

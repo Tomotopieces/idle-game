@@ -173,7 +173,7 @@ export class PlayerAttributeComponent {
         this.damageBoost += equipment.attributes.damageBoost;
         this.criticalRate += equipment.attributes.criticalRate;
         this.criticalBoost += equipment.attributes.criticalBoost;
-        this.additionalDefense += equipment.attributes.getAdditionalDefense();
+        this.additionalDefense += equipment.attributes.additionalDefenseOf();
         this.defenseBoost += equipment.attributes.defenseBoost;
     }
 
@@ -195,7 +195,7 @@ export class PlayerAttributeComponent {
         this.damageBoost -= equipment.attributes.damageBoost;
         this.criticalRate -= equipment.attributes.criticalRate;
         this.criticalBoost -= equipment.attributes.criticalBoost;
-        this.additionalDefense -= equipment.attributes.getAdditionalDefense();
+        this.additionalDefense -= equipment.attributes.additionalDefenseOf();
         this.defenseBoost -= equipment.attributes.defenseBoost;
     }
 
@@ -312,7 +312,6 @@ export class PlayerAttributeComponent {
      * @param equipment 装备
      */
     upgradeAttributeOfEquipment(equipment: Equipment) {
-        console.log(`upgrade`);
         this._additionalDefense += equipment.attributes.additionalDefenseUpgradedDelta();
         EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this);
     }

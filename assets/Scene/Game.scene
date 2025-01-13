@@ -4186,7 +4186,7 @@
     "enemy": {
       "__id__": 33
     },
-    "autoSaveInterval": 10,
+    "autoSaveInterval": 600,
     "_id": "90t4N6D3RIpIMI21GYMQda"
   },
   {

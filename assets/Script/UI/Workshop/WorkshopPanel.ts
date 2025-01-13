@@ -163,9 +163,9 @@ export class WorkshopPanel extends Component {
         }
 
         if (RecipeUtil.upgrade(this._currentRecipe as UpgradeRecipe)) {
-            const equipment = this._currentRecipe.product as Equipment;
+            const equipment = this._currentRecipe.output as Equipment;
             const equipments = PlayerController.PLAYER.equipments;
-            if (equipments.equipmentMap.get(equipment.equipmentType).item?.name === equipment.name) {
+            if (equipments.equipmentSlotMap.get(equipment.equipmentType).stack?.item.name === equipment.name) {
                 equipments.upgrade(equipment);
             }
 

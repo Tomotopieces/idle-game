@@ -1,10 +1,10 @@
 import { _decorator, Component } from 'cc';
 import { ItemSlot } from "db://assets/Script/UI/Storehouse/ItemSlot";
-import { EquipmentType } from "db://assets/Script/Equipment/Equipment";
-import { ItemStack } from "db://assets/Script/Item/ItemStack";
-import { EquipmentChangeEvent } from "db://assets/Script/Event/Events/EquipmentChangeEvent";
+import { EquipEvent } from "db://assets/Script/Event/Events/EquipEvent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
+import { EquipmentType } from "db://assets/Script/Equipment/EquipmentType";
+import { Equipment } from "db://assets/Script/Equipment/Equipment";
 
 const { ccclass } = _decorator;
 
@@ -65,7 +65,7 @@ export class EquipmentContainer extends Component {
             [EquipmentType.CURIOS, this._curiosSlot]
         ]);
 
-        EventCenter.on(EventName.UI_UPDATE_EQUIPMENT, this.node.name, (event: EquipmentChangeEvent) => this.updateEquipmentUI(event));
+        EventCenter.on(EventName.UI_UPDATE_EQUIPMENT, this.node.name, (event: EquipEvent) => this.updateEquipmentUI(event));
     }
 
     onDestroy() {
@@ -77,11 +77,12 @@ export class EquipmentContainer extends Component {
      *
      * @param event 事件参数
      */
-    private updateEquipmentUI(event: EquipmentChangeEvent) {
+    private updateEquipmentUI(event: EquipEvent) {
+        const equipment = event.equipmentStack.item as Equipment;
         if (event.equip) {
-            this._typeMap.get(event.equipment.equipmentType).stack = new ItemStack(event.equipment, 1);
+            this._typeMap.get(equipment.equipmentType).stack = event.equipmentStack;
         } else {
-            this._typeMap.get(event.equipment.equipmentType).stack = null;
+            this._typeMap.get(equipment.equipmentType).stack = null;
         }
     }
 }

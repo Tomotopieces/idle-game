@@ -1,10 +1,8 @@
 import { _decorator, Component, director, JsonAsset, ProgressBar, resources } from 'cc';
 import { SceneName } from "db://assets/Script/Util/Constant";
-import { Item } from "db://assets/Script/Item/Item";
 import { EnemyInfoJson } from "db://assets/Script/Entity/Enemy/EnemyInfoJson";
 import { StageJson } from "db://assets/Script/Level/StageJson";
 import { AreaJson } from "db://assets/Script/Level/AreaJson";
-import { Equipment } from "db://assets/Script/Equipment/Equipment";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import {
     AREA_TABLE,
@@ -13,8 +11,8 @@ import {
     CRAFT_RECIPE_TABLE,
     DataPath,
     ENEMY_TABLE,
-    ITEM_TABLE,
-    SET_EFFECT_TABLE,
+    ITEM_META_TABLE,
+    SET_BONUS_TABLE,
     SHOP_TABLE,
     STAGE_TABLE,
     UPGRADE_RECIPE_LIST
@@ -23,8 +21,10 @@ import { ChapterJson } from "db://assets/Script/Level/ChapterJson";
 import { AnyFunction } from "db://assets/Script/Util/Functions";
 import { CraftRecipeJson } from "db://assets/Script/Recipe/CraftRecipeJson";
 import { UpgradeRecipeJson } from "db://assets/Script/Recipe/UpgradeRecipeJson";
-import { TradingItem } from "db://assets/Script/Trading/TradingItem";
-import { ShopJson } from "db://assets/Script/Trading/ShopJson";
+import { ShopJson } from "db://assets/Script/Shop/ShopJson";
+import { ItemMetaJson } from "db://assets/Script/Item/ItemMetaJson";
+import { SellableMetaJson } from "db://assets/Script/Sellable/SellableMetaJson";
+import { EquipmentMetaJson } from "db://assets/Script/Equipment/EquipmentMetaJson";
 
 const { ccclass, property } = _decorator;
 
@@ -48,9 +48,9 @@ export class GameLoader extends Component {
      * 加载函数
      */
     private readonly _loadProcess: AnyFunction[] = [
-        () => this.loadItemTable(),
-        () => this.loadTradingItemTable(),
-        () => this.loadEquipmentTable(),
+        () => this.loadItemMetaTable(),
+        () => this.loadSellableMetaTable(),
+        () => this.loadEquipmentMetaTable(),
         () => this.loadCraftRecipeTable(),
         () => this.loadUpgradeRecipeTable(),
         () => this.loadEnemyTable(),
@@ -73,46 +73,44 @@ export class GameLoader extends Component {
     }
 
     /**
-     * 加载道具表
+     * 加载道具元数据
      */
-    private loadItemTable() {
+    private loadItemMetaTable() {
         resources.load(DataPath.ITEM_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
-            const rawItems = data.json! as Item[];
-            rawItems.forEach((rawItem: Item, index: number) =>
-                ITEM_TABLE.set(rawItem.name, Item.fromObject(index, rawItem)));
+            const jsons = data.json! as ItemMetaJson[];
+            jsons.forEach((json, index) => ITEM_META_TABLE.set(json.name, ItemMetaJson.toItemMeta(index, json)));
             this.loadStep++;
         });
     }
 
     /**
-     * 加载贩卖品表
+     * 加载贩卖品元数据
      */
-    private loadTradingItemTable() {
-        resources.load(DataPath.TRADING_ITEM_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+    private loadSellableMetaTable() {
+        resources.load(DataPath.SELLABLE_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
-            const rawItems = data.json! as TradingItem[];
-            const indexOffset = ITEM_TABLE.size;
-            rawItems.forEach((rawItem: TradingItem, index: number) =>
-                ITEM_TABLE.set(rawItem.name, TradingItem.fromObject(index + indexOffset, rawItem)));
+            const jsons = data.json! as SellableMetaJson[];
+            const idOffset = ITEM_META_TABLE.size;
+            jsons.forEach((json, index) => ITEM_META_TABLE.set(json.name, SellableMetaJson.toSellableMeta(idOffset + index, json)));
             this.loadStep++;
         });
     }
 
     /**
-     * 加载装备表
+     * 加载装备元数据
      */
-    private loadEquipmentTable() {
+    private loadEquipmentMetaTable() {
         resources.load(DataPath.EQUIPMENT_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
-            const rawItems = data.json! as Equipment[];
-            const indexOffset = ITEM_TABLE.size;
-            rawItems.forEach((rawItem: Equipment, index: number) => {
-                const equipment = Equipment.fromObject(index + indexOffset, rawItem);
-                ITEM_TABLE.set(rawItem.name, equipment); // 存入道具表
-                if (equipment.attributes.setName) {
+            const jsons = data.json! as EquipmentMetaJson[];
+            const indexOffset = ITEM_META_TABLE.size;
+            jsons.forEach((json, index) => {
+                const meta = EquipmentMetaJson.toEquipmentMeta(index + indexOffset, json);
+                ITEM_META_TABLE.set(json.name, meta); // 存入道具表
+                if (meta.attributes.setName) {
                     // 登记套装装备
-                    SET_EFFECT_TABLE.get(equipment.attributes.setName).record(equipment.name);
+                    SET_BONUS_TABLE.get(meta.attributes.setName).record(meta.name);
                 }
             });
             this.loadStep++;
@@ -127,7 +125,7 @@ export class GameLoader extends Component {
             err && console.error(err);
             const rawRecipes = data.json! as CraftRecipeJson[];
             rawRecipes.forEach((rawRecipe: CraftRecipeJson, index: number) =>
-                CRAFT_RECIPE_TABLE.set(rawRecipe.productName, CraftRecipeJson.toCraftRecipe(index, rawRecipe)));
+                CRAFT_RECIPE_TABLE.set(rawRecipe.outputName, CraftRecipeJson.toCraftRecipe(index, rawRecipe)));
             this.loadStep++;
         })
     }

@@ -46,7 +46,7 @@ export class MessageCenter extends Component {
         const messageNode = instantiate(this.messagePrefab);
         this.node.addChild(messageNode);
         const messageObject = messageNode.getComponent(MessageUI);
-        messageObject.message = MessageFactory.produce(event);
+        messageObject.message = MessageFactory.message(event);
 
         MESSAGE_QUEUE.push(messageObject);
         if (MESSAGE_QUEUE.length > MAX_MESSAGE_COUNT) {

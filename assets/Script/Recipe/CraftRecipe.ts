@@ -6,7 +6,7 @@ import { Recipe } from "db://assets/Script/Recipe/Recipe";
  * 铸造配方
  */
 export class CraftRecipe extends Recipe {
-    constructor(id: number, product: Item, requirements: RecipeRequirement[]) {
-        super(id, product, requirements);
+    constructor(id: number, output: Item, requirements: RecipeRequirement[]) {
+        super(id, output, requirements);
     }
 }

@@ -13,16 +13,16 @@ export abstract class Recipe {
     /**
      * 产物
      */
-    readonly product: Item;
+    readonly output: Item;
 
     /**
      * 需求
      */
     readonly requirements: RecipeRequirement[];
 
-    protected constructor(id: number, product: Item, requirements: RecipeRequirement[]) {
+    protected constructor(id: number, output: Item, requirements: RecipeRequirement[]) {
         this.id = id;
-        this.product = product;
+        this.output = output;
         this.requirements = requirements;
     }
 }

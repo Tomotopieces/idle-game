@@ -40,7 +40,7 @@ export enum EventName {
     /**
      * 装备变更
      */
-    EQUIPMENT_CHANGE = 'EQUIPMENT_CHANGE',
+    EQUIP = 'EQUIP',
 
     /**
      * 造成伤害

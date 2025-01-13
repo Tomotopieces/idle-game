@@ -1,10 +1,8 @@
 import { _decorator, Color, Component, Label, Sprite, SpriteFrame } from "cc";
-import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
-import { LedgerRecord } from "db://assets/Script/Trading/LedgerRecord";
-import { ShopUtil } from "db://assets/Script/Trading/ShopUtil";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
+import { Product } from "db://assets/Script/Shop/Product";
 
 const { ccclass } = _decorator;
 
@@ -39,45 +37,34 @@ export class ProductSlot extends Component {
     private _countLabel: Label;
 
     /**
-     * 现有库存
+     * 商品
      */
-    private _stock: ItemStack = null;
-
-    /**
-     * 购买记录
-     */
-    private _ledgerRecord: LedgerRecord;
+    private _product: Product;
 
     onLoad() {
         this._iconSprite = this.node.getChildByName("Icon").getComponent(Sprite);
         this._countLabel = this.node.getChildByName("Count").getComponent(Label);
     }
 
-    get stock(): ItemStack {
-        return this._stock;
+    get product(): Product {
+        return this._product;
     }
 
     /**
-     * 设置商品库存
+     * 初始化
      *
-     * @param originalStock 原始库存
+     * @param product 商品
      */
-    set stock(originalStock: ItemStack) {
-        this._stock = ItemStack.copy(originalStock);
-
-        // 图标
-        ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, this._stock.item.icon, (spriteFrame: SpriteFrame) =>
+    init(product: Product) {
+        this._product = product;
+        ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, this._product.itemMeta.icon, (spriteFrame: SpriteFrame) =>
             this._iconSprite.spriteFrame = spriteFrame);
-
-        // 数量
-        this._ledgerRecord = ShopUtil.ledgerRecord(originalStock.item.name);
-        this._stock.count -= this._ledgerRecord.sellCount;
         this.updateCountLabel();
     }
 
     updateCountLabel() {
-        this._countLabel.string = `${this._stock.count}`;
-        this._countLabel.color = new Color(this._stock.count > 0 ? StockCountColor.DEFAULT : StockCountColor.ZERO);
+        this._countLabel.string = `${this._product.count}`;
+        this._countLabel.color = new Color(this._product.count > 0 ? StockCountColor.DEFAULT : StockCountColor.ZERO);
     }
 
     /**

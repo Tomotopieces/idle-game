@@ -48,7 +48,7 @@ export class EnemyInfoJson {
      * @return EnemyInfo
      */
     static toEnemyInfo(id: number, infoJson: EnemyInfoJson): EnemyInfo {
-        const dropList = infoJson.dropList.map(jsonDrop => DropItemJson.toDropItem(jsonDrop));
+        const dropList = infoJson.dropList.map(dropJson => DropItemJson.toDropItem(dropJson));
         return new EnemyInfo(id, infoJson.name, infoJson.displayName, infoJson.health, infoJson.damage, dropList, infoJson.experience, infoJson.icon);
     }
 }

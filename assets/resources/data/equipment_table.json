@@ -180,7 +180,7 @@
     "equipmentType": "weapon",
     "attributes": {
       "additionalDamage": 40,
-      "effects": [
+      "uniqueUtility": [
         "lin_gun_shuang_she"
       ]
     }

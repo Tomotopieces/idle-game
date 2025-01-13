@@ -1,5 +1,5 @@
 import { Item } from "db://assets/Script/Item/Item";
-import { ITEM_TABLE } from "db://assets/Script/DataTable";
+import { ItemStackSerial } from "db://assets/Script/Item/ItemStackSerial";
 
 /**
  * 物品堆叠
@@ -15,29 +15,18 @@ export class ItemStack {
      */
     count: number;
 
+    /**
+     * 新物品请使用 ItemFactory.itemStack 方法创建
+     */
     constructor(item: Item, count: number) {
         this.item = item;
         this.count = count;
     }
 
     /**
-     * 通过物品名称构造
-     *
-     * @param itemName 物品名称
-     * @param count    物品数量
-     * @returns 物品堆叠
+     * 序列化
      */
-    static of(itemName: string, count: number): ItemStack {
-        return new ItemStack(ITEM_TABLE.get(itemName), count);
-    }
-
-    /**
-     * 拷贝
-     *
-     * @param itemStack ItemStack
-     * @return ItemStack
-     */
-    static copy(itemStack: ItemStack): ItemStack {
-        return new ItemStack(itemStack.item, itemStack.count);
+    serialize(): ItemStackSerial {
+        return new ItemStackSerial(this);
     }
 }

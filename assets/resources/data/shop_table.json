@@ -5,12 +5,12 @@
       {
         "itemName": "mian_sha",
         "price": 100,
-        "count": 2
+        "initial": 2
       },
       {
         "itemName": "jing_shi",
         "price": 100,
-        "count": 2
+        "initial": 2
       }
     ]
   },
@@ -20,12 +20,12 @@
       {
         "itemName": "yao_he",
         "price": 500,
-        "count": 2
+        "initial": 2
       },
       {
         "itemName": "can_si",
         "price": 500,
-        "count": 2
+        "initial": 2
       }
     ]
   }

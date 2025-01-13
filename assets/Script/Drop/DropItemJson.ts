@@ -1,5 +1,5 @@
 import { DropItem } from "db://assets/Script/Drop/DropItem";
-import { ITEM_TABLE } from "db://assets/Script/DataTable";
+import { ITEM_META_TABLE } from "db://assets/Script/DataTable";
 
 /**
  * 掉落物品JSON
@@ -8,34 +8,34 @@ export class DropItemJson {
     /**
      * 物品名称
      */
-    private readonly _itemName: string;
+    readonly itemName: string;
 
     /**
      * 物品掉落概率
      */
-    private readonly _dropRate: number;
+    readonly dropRate: number;
 
     /**
      * 最大数量
      */
-    private readonly _max: number;
+    readonly max: number;
 
     /**
      * 最小数量
      */
-    private readonly _min: number;
+    readonly min: number;
 
     /**
      * 一次性掉落
      */
-    private readonly _once: boolean;
+    readonly once: boolean;
 
     constructor(itemName: string, dropRate: number, max: number, min: number, once: boolean) {
-        this._itemName = itemName;
-        this._dropRate = dropRate ?? 1;
-        this._max = max ?? 1;
-        this._min = min ?? 1;
-        this._once = once ?? false;
+        this.itemName = itemName;
+        this.dropRate = dropRate ?? 1;
+        this.max = max ?? 1;
+        this.min = min ?? 1;
+        this.once = once ?? false;
     }
 
     /**
@@ -45,17 +45,17 @@ export class DropItemJson {
      */
     static toDropItem(jsonDropItem: DropItemJson): DropItem {
         jsonDropItem = DropItemJson.fromObject(jsonDropItem);
-        const item = ITEM_TABLE.get(jsonDropItem._itemName);
-        return new DropItem(item, jsonDropItem._dropRate, jsonDropItem._max, jsonDropItem._min, jsonDropItem._once);
+        const meta = ITEM_META_TABLE.get(jsonDropItem.itemName);
+        return new DropItem(meta, jsonDropItem.dropRate, jsonDropItem.max, jsonDropItem.min, jsonDropItem.once);
     }
 
     /**
      * 从Object对象重新创建
      *
-     * @param obj Object
-     * @return DropItemJson
+     * @param object Object
+     * @return {DropItemJson} DropItemJson
      */
-    static fromObject(obj: any): DropItemJson {
-        return new DropItemJson(obj.itemName, obj.dropRate, obj.max, obj.min, obj.once);
+    static fromObject(object: DropItemJson): DropItemJson {
+        return new DropItemJson(object.itemName, object.dropRate, object.max, object.min, object.once);
     }
 }

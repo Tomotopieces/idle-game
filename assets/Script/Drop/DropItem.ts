@@ -1,4 +1,4 @@
-import { Item } from "db://assets/Script/Item/Item";
+import { ItemMeta } from "db://assets/Script/Item/ItemMeta";
 
 /**
  * 物品掉落
@@ -7,7 +7,7 @@ export class DropItem {
     /**
      * 物品
      */
-    readonly item: Item;
+    readonly itemMeta: ItemMeta;
 
     /**
      * 物品掉落概率
@@ -31,8 +31,8 @@ export class DropItem {
      */
     readonly once: boolean = false;
 
-    constructor(item: Item, dropRate: number, max: number, min: number, once: boolean) {
-        this.item = item;
+    constructor(itemMeta: ItemMeta, dropRate: number, max: number, min: number, once: boolean) {
+        this.itemMeta = itemMeta;
         this.dropRate = dropRate;
         this.max = max;
         this.min = min;

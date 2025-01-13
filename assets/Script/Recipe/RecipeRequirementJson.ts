@@ -1,5 +1,5 @@
 import { RecipeRequirement } from "db://assets/Script/Recipe/RecipeRequirement";
-import { ITEM_TABLE } from "db://assets/Script/DataTable";
+import { ITEM_META_TABLE } from "db://assets/Script/DataTable";
 
 /**
  * 配方材料JSON
@@ -27,6 +27,6 @@ export class RecipeRequirementJson {
      * @return RecipeRequirement
      */
     static toRecipeItem(requirementJson: RecipeRequirementJson): RecipeRequirement {
-        return new RecipeRequirement(ITEM_TABLE.get(requirementJson.itemName), requirementJson.count, requirementJson.consume);
+        return new RecipeRequirement(ITEM_META_TABLE.get(requirementJson.itemName), requirementJson.count, requirementJson.consume);
     }
 }

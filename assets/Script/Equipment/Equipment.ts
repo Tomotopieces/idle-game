@@ -1,40 +1,8 @@
-import { Item, ItemRarity, ItemType } from "db://assets/Script/Item/Item";
+import { Item } from "db://assets/Script/Item/Item";
 import { EquipmentAttributes } from "db://assets/Script/Equipment/EquipmentAttributes";
-
-/**
- * 装备类型
- */
-export enum EquipmentType {
-    /**
-     * 武器
-     */
-    WEAPON = 'weapon',
-
-    /**
-     * 头冠
-     */
-    HEAD = 'head',
-
-    /**
-     * 衣甲
-     */
-    CHEST = 'chest',
-
-    /**
-     * 臂甲
-     */
-    ARM = 'arm',
-
-    /**
-     * 腿甲
-     */
-    LEG = 'leg',
-
-    /**
-     * 珍玩
-     */
-    CURIOS = 'curios'
-}
+import { ItemRarity } from "db://assets/Script/Item/ItemRarity";
+import { EquipmentMeta } from "db://assets/Script/Equipment/EquipmentMeta";
+import { EquipmentType } from "db://assets/Script/Equipment/EquipmentType";
 
 /**
  * 装备
@@ -50,20 +18,29 @@ export class Equipment extends Item {
      */
     readonly attributes: EquipmentAttributes;
 
-    constructor(id: number, name: string, displayName: string, type: ItemType, description: string, icon: string, unique: boolean, equipmentType: EquipmentType, attributes: EquipmentAttributes, rarity: ItemRarity) {
-        super(id, name, displayName, type, description, icon, unique, rarity);
-        this.equipmentType = equipmentType;
-        this.attributes = attributes;
+    /**
+     * 装备阶级（升级次数）
+     */
+    rank: number;
+
+    constructor(meta: EquipmentMeta, rank: number = 0) {
+        super(meta);
+        this.equipmentType = meta.equipmentType;
+        this.attributes = new EquipmentAttributes(meta.attributes, this);
+        this.rank = rank;
     }
 
     /**
-     * 从Object创建
-     *
-     * @param id     ID
-     * @param object Object
+     * 升阶
      */
-    static override fromObject(id: number, object: Equipment): Equipment {
-        const item = Item.fromObject(id, object);
-        return new Equipment(id, item.name, item.displayName, item.itemType, item.description, item.icon, item.unique, object.equipmentType, EquipmentAttributes.fromObject(object.attributes, object.rarity), object.rarity);
+    upgrade() {
+        this.rank++;
+    }
+
+    /**
+     * 升阶后品质
+     */
+    get rankRarity(): ItemRarity {
+        return ItemRarity.ofValue(this.rarity.value + this.rank);
     }
 }

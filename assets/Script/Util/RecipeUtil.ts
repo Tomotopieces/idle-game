@@ -5,6 +5,7 @@ import { RecipeRequirement } from "db://assets/Script/Recipe/RecipeRequirement";
 import { CRAFT_RECIPE_TABLE, UPGRADE_RECIPE_LIST } from "db://assets/Script/DataTable";
 import { UpgradeRecipe } from "db://assets/Script/Recipe/UpgradeRecipe";
 import { Equipment } from "db://assets/Script/Equipment/Equipment";
+import { ItemFactory } from "db://assets/Script/Item/ItemFactory";
 
 /**
  * 配方工具
@@ -21,8 +22,10 @@ export class RecipeUtil {
      * 可用的升阶配方列表
      */
     static availableUpgradeRecipes(): UpgradeRecipe[] {
-        return UPGRADE_RECIPE_LIST.filter(recipe => !!Storehouse.countOne(recipe.product) &&
-            recipe.requireRarity === (recipe.product as Equipment).attributes.rarity);
+        return UPGRADE_RECIPE_LIST.filter(recipe => {
+            const material = Storehouse.STOREHOUSE.get(recipe.output.name)?.item as Equipment;
+            return !!material && recipe.requireRarity === material.rankRarity;
+        });
     }
 
     /**
@@ -41,7 +44,7 @@ export class RecipeUtil {
      * @return 是否能铸造
      */
     static canProduce(recipe: CraftRecipe): boolean {
-        return !recipe.product.unique || !Storehouse.countOne(recipe.product); // 非唯一，或不存在
+        return !recipe.output.unique || !Storehouse.countOne(recipe.output); // 非唯一，或不存在
     }
 
     /**
@@ -53,7 +56,7 @@ export class RecipeUtil {
     static craft(recipe: CraftRecipe): boolean {
         const requirements = recipe.requirements.filter(requirement => requirement.consume);
         if (Storehouse.takeOut(this.requirementsToStacks(requirements))) {
-            Storehouse.putIn([new ItemStack(recipe.product, 1)]);
+            Storehouse.putIn([ItemFactory.itemStack(recipe.output, 1)]);
             return true;
         }
         return false;
@@ -68,7 +71,7 @@ export class RecipeUtil {
     static upgrade(recipe: UpgradeRecipe): boolean {
         const requirements = recipe.requirements.filter(requirement => requirement.consume);
         if (Storehouse.takeOut(this.requirementsToStacks(requirements))) {
-            (recipe.product as Equipment).attributes.upgrade();
+            (recipe.output as Equipment).upgrade();
             return true;
         }
     }
@@ -80,6 +83,6 @@ export class RecipeUtil {
      * @return 物品堆叠列表
      */
     private static requirementsToStacks(requirements: RecipeRequirement[]): ItemStack[] {
-        return requirements.map(requirement => new ItemStack(requirement.item, requirement.count));
+        return requirements.map(requirement => ItemFactory.itemStack(requirement.item, requirement.count));
     }
 }

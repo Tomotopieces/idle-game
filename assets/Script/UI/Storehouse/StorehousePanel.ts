@@ -1,12 +1,11 @@
 import { _decorator, Animation, Component, SpriteFrame } from 'cc';
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { ItemSlot, SlotType } from "db://assets/Script/UI/Storehouse/ItemSlot";
-import { ItemType } from "db://assets/Script/Item/Item";
-import { EquipmentChangeEvent } from "db://assets/Script/Event/Events/EquipmentChangeEvent";
-import { Equipment } from "db://assets/Script/Equipment/Equipment";
+import { EquipEvent } from "db://assets/Script/Event/Events/EquipEvent";
 import { ItemCard } from "db://assets/Script/UI/Storehouse/ItemCard";
 import { EMPTY_FUNCTION } from "db://assets/Script/Util/Functions";
 import { EventName } from "db://assets/Script/Event/EventName";
+import { ItemType } from "db://assets/Script/Item/ItemType";
 
 const { ccclass, property } = _decorator;
 
@@ -84,11 +83,13 @@ export class StorehousePanel extends Component {
             case ItemType.EQUIPMENT:
                 const equip = itemSlot.slotType === SlotType.STOREHOUSE; // 装备还是卸下
                 buttonImage = equip ? this.confirmImage : this.cancelImage;
-                operation = () => EventCenter.emit(EventName.EQUIPMENT_CHANGE, new EquipmentChangeEvent(itemSlot.stack.item as Equipment, equip));
+                operation = () => EventCenter.emit(EventName.EQUIP, new EquipEvent(itemSlot.stack, equip));
                 break;
-            case ItemType.TRADING:
+            case ItemType.SELLABLE:
                 buttonImage = this.moneyBagImage;
-                operation = () => EventCenter.emit(EventName.SELL_ITEM, itemSlot.stack);
+                operation = () => {
+                    EventCenter.emit(EventName.SELL_ITEM, itemSlot.stack);
+                }
                 break;
             default:
                 operation = EMPTY_FUNCTION;

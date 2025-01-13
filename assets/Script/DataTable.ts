@@ -1,20 +1,20 @@
 import { Area } from "db://assets/Script/Level/Area";
 import { Stage } from "db://assets/Script/Level/Stage";
-import { Item } from "db://assets/Script/Item/Item";
 import { EnemyInfo } from "db://assets/Script/Entity/Enemy/EnemyInfo";
-import { UniqueEffect } from "db://assets/Script/Equipment/UniqueEffect/UniqueEffect";
+import { UniqueUtility } from "db://assets/Script/Equipment/UniqueUtility/UniqueUtility";
 import {
-    UniqueEffectLinGunShuangShe
-} from "db://assets/Script/Equipment/UniqueEffect/UniqueEffectLinGunShuangShe";
-import { SetEffect } from "db://assets/Script/Equipment/SetEffect/SetEffect";
-import { SetEffectZiZhuBiJiao } from "db://assets/Script/Equipment/SetEffect/SetEffectZiZhuBiJiao";
+    UniqueUtilityLinGunShuangShe
+} from "db://assets/Script/Equipment/UniqueUtility/Effects/UniqueUtilityLinGunShuangShe";
+import { SetBonus } from "db://assets/Script/Equipment/SetBonus/SetBonus";
+import { SetBonusZiZhuBiJiao } from "db://assets/Script/Equipment/SetBonus/Effects/SetBonusZiZhuBiJiao";
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 import { TalentTiJian } from "db://assets/Script/Talent/Talents/TalentTiJian";
 import { TalentShiPo } from "db://assets/Script/Talent/Talents/TalentShiPo";
 import { Chapter } from "db://assets/Script/Level/Chapter";
 import { CraftRecipe } from "db://assets/Script/Recipe/CraftRecipe";
 import { UpgradeRecipe } from "db://assets/Script/Recipe/UpgradeRecipe";
-import { Shop } from "db://assets/Script/Trading/Shop";
+import { Shop } from "db://assets/Script/Shop/Shop";
+import { ItemMeta } from "db://assets/Script/Item/ItemMeta";
 
 /**
  * 数据资源路径常量
@@ -61,9 +61,9 @@ export enum DataPath {
     CHAPTER_TABLE = 'data/chapter_table',
 
     /**
-     * 贩卖品表
+     * 玩家贩卖品表
      */
-    TRADING_ITEM_TABLE = 'data/trading_item_table',
+    SELLABLE_TABLE = 'data/sellable_table',
 
     /**
      * 商店配置表
@@ -74,7 +74,7 @@ export enum DataPath {
 /**
  * 道具表
  */
-export const ITEM_TABLE = new Map<string, Item>();
+export const ITEM_META_TABLE = new Map<string, ItemMeta>();
 
 /**
  * 铸造配方表
@@ -117,16 +117,16 @@ export const SHOP_TABLE = new Map<string, Shop>();
  *
  * 效果名（装备名） -> 效果
  */
-export const UNIQUE_EFFECT_TABLE = new Map<string, UniqueEffect>();
-UNIQUE_EFFECT_TABLE.set(UniqueEffectLinGunShuangShe.NAME, new UniqueEffectLinGunShuangShe());
+export const UNIQUE_UTILITY_TABLE = new Map<string, UniqueUtility>();
+UNIQUE_UTILITY_TABLE.set(UniqueUtilityLinGunShuangShe.NAME, new UniqueUtilityLinGunShuangShe());
 
 /**
  * 套装效果 Map
  *
  * 效果名 -> 套装效果
  */
-export const SET_EFFECT_TABLE = new Map<string, SetEffect>();
-SET_EFFECT_TABLE.set(SetEffectZiZhuBiJiao.NAME, new SetEffectZiZhuBiJiao());
+export const SET_BONUS_TABLE = new Map<string, SetBonus>();
+SET_BONUS_TABLE.set(SetBonusZiZhuBiJiao.NAME, new SetBonusZiZhuBiJiao());
 
 /**
  * 天赋树

@@ -1,6 +1,5 @@
 import { UIPostMessageEvent } from "db://assets/Script/Event/Events/UIPostMessageEvent";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
-import { ITEM_RARITY_COLOR_MAP } from "db://assets/Script/Item/Item";
 import { Color } from "cc";
 
 /**
@@ -43,7 +42,7 @@ export class MessageFactory {
      * @param postEvent 消息推送事件
      * @return 消息富文本内容
      */
-    static produce(postEvent: UIPostMessageEvent): string {
+    static message(postEvent: UIPostMessageEvent): string {
         switch (postEvent.type) {
             default:
             case MessageType.DEFAULT:
@@ -52,7 +51,7 @@ export class MessageFactory {
                 return `<color=${this.red}>${postEvent.messageObject as string}</color>`;
             case MessageType.GAIN_ITEM:
                 const stack = postEvent.messageObject as ItemStack;
-                const colorCode = ITEM_RARITY_COLOR_MAP.get(stack.item.rarity).toHEX(`#rrggbb`);
+                const colorCode = stack.item.rarity.color.toHEX(`#rrggbb`);
                 return `获得 <color=${colorCode}>【${stack.item.displayName}】</color> * ${stack.count}`;
             case MessageType.LEVEL_UP:
                 const level = postEvent.messageObject as number;

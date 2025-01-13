@@ -6,11 +6,11 @@ import { Storehouse } from "db://assets/Script/Storehouse/Storehouse";
 import { UpdateGameLevelEvent } from "db://assets/Script/Event/Events/UpdateGameLevelEvent";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
-import { EquipmentChangeEvent } from "db://assets/Script/Event/Events/EquipmentChangeEvent";
+import { EquipEvent } from "db://assets/Script/Event/Events/EquipEvent";
 import { Equipment } from "db://assets/Script/Equipment/Equipment";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
-import { AREA_TABLE, CHAPTER_TABLE, ITEM_TABLE, STAGE_TABLE } from "db://assets/Script/DataTable";
+import { AREA_TABLE, CHAPTER_TABLE, ITEM_META_TABLE, STAGE_TABLE } from "db://assets/Script/DataTable";
 import { DropItemFactory } from "db://assets/Script/Drop/DropItemFactory";
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 import { DefaultLevelName, Level } from "db://assets/Script/Level/Level";
@@ -18,9 +18,10 @@ import { EventName } from "db://assets/Script/Event/EventName";
 import { ENEMY_RECORD } from "db://assets/Script/EnemyRecord/EnemyRecord";
 import { UIPostMessageEvent } from "db://assets/Script/Event/Events/UIPostMessageEvent";
 import { MessageType } from "db://assets/Script/UI/Message/MessageFactory";
-import { TradingItem } from "db://assets/Script/Trading/TradingItem";
-import { ShopUtil } from "db://assets/Script/Trading/ShopUtil";
+import { Sellable } from "db://assets/Script/Sellable/Sellable";
+import { ShopManager } from "db://assets/Script/Shop/ShopManager";
 import { GameLevelUpdatedEvent } from "db://assets/Script/Event/Events/GameLevelUpdatedEvent";
+import { ItemFactory } from "db://assets/Script/Item/ItemFactory";
 
 const { ccclass, property } = _decorator;
 
@@ -58,7 +59,7 @@ export class GameManager extends Component {
         // 监听处理事件
         EventCenter.on(EventName.DEAL_DAMAGE, this.node.name, (event: DealDamageEvent) => this.handleDamage(event));
         EventCenter.on(EventName.UPDATE_GAME_LEVEL, this.node.name, (event: UpdateGameLevelEvent) => this.handleUpdateGameLevel(event));
-        EventCenter.on(EventName.EQUIPMENT_CHANGE, this.node.name, (event: EquipmentChangeEvent) => this.handleEquipmentChange(event));
+        EventCenter.on(EventName.EQUIP, this.node.name, (event: EquipEvent) => this.handleEquip(event));
         EventCenter.on(EventName.ENEMY_DIE, this.node.name, (enemy: EnemyController) => this.handleEnemyDie(enemy));
         EventCenter.on(EventName.GET_DROPS, this.node.name, (dropStackList: ItemStack[]) => this.handleGetDrops(dropStackList));
         EventCenter.on(EventName.GET_EXPERIENCE, this.node.name, (experience: number) => this.handleGetExperience(experience));
@@ -96,8 +97,8 @@ export class GameManager extends Component {
         }
 
         this.player.levelInfo.restore(saveData.level, saveData.experience);
-        saveData.equipmentSlot.forEach(stack => {
-            this.player.equipments.equip(stack.item as Equipment);
+        saveData.equipmentSlot.forEach(slot => {
+            this.player.equipments.equip(slot.stack);
         });
         this.player.attributes.levelUp(saveData.level);
         this.player.talents.restore(saveData.talents);
@@ -137,7 +138,7 @@ export class GameManager extends Component {
      */
     private restoreLedger(saveData: SaveData) {
         if (saveData) {
-            ShopUtil.LEDGER = saveData.ledger;
+            ShopManager.LEDGER = saveData.ledger;
         }
     }
 
@@ -156,7 +157,7 @@ export class GameManager extends Component {
      * 保存存档
      */
     private saveData() {
-        const saveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.equipments.equipmentMap, Storehouse.STOREHOUSE, Level.CHAPTER.name, Level.AREA.name, Level.STAGE.name, this.player.talents.talents, ENEMY_RECORD, ShopUtil.LEDGER);
+        const saveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.equipments.equipmentSlotMap, Storehouse.STOREHOUSE, Level.CHAPTER.name, Level.AREA.name, Level.STAGE.name, this.player.talents.talents, ENEMY_RECORD, ShopManager.LEDGER);
         sys.localStorage.setItem(LocalStorageDataName.SAVE_DATA, saveData.toJson());
         EventCenter.emit(EventName.UI_POST_MESSAGE, new UIPostMessageEvent(MessageType.DEFAULT, `保存成功`));
     }
@@ -207,8 +208,8 @@ export class GameManager extends Component {
             // 排除只掉落一次的掉落物
             dropList = dropList.filter(drop => !drop.once);
         }
-        const productions = DropItemFactory.produce(dropList);
-        EventCenter.emit(EventName.GET_DROPS, productions);
+        const drops = DropItemFactory.drop(dropList);
+        EventCenter.emit(EventName.GET_DROPS, drops);
 
         // 结算经验
         EventCenter.emit(EventName.GET_EXPERIENCE, enemy.info.experience);
@@ -240,22 +241,23 @@ export class GameManager extends Component {
      *
      * @param event 事件参数
      */
-    private handleEquipmentChange(event: EquipmentChangeEvent) {
+    private handleEquip(event: EquipEvent) {
+        const equipment = event.equipmentStack.item as Equipment;
         if (event.equip) {
-            if (!Storehouse.takeOutOne(event.equipment.name)) {
+            if (!Storehouse.takeOutOne(equipment.name)) {
                 return;
             }
-            const unequipped = this.player.equipments.equip(event.equipment);
+            const unequipped = this.player.equipments.equip(ItemFactory.itemStack(equipment, 1));
             EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
             if (unequipped) {
-                Storehouse.putIn([new ItemStack(unequipped, 1)], false, false);
+                Storehouse.putIn([unequipped], false, false);
             }
         } else {
-            if (!this.player.equipments.unequip(event.equipment.equipmentType)) {
+            if (!this.player.equipments.unequip(equipment.equipmentType)) {
                 return;
             }
             EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
-            Storehouse.putIn([new ItemStack(event.equipment, 1)], false, false);
+            Storehouse.putIn([event.equipmentStack], false, false);
         }
     }
 
@@ -296,20 +298,20 @@ export class GameManager extends Component {
      * @param stack 物品堆叠
      */
     private handleSellItem(stack: ItemStack) {
+        const sellable = stack.item as Sellable;
+        const price = sellable.price * stack.count;
         Storehouse.takeOut([stack]);
-        const tradingItem = stack.item as TradingItem;
-        const price = tradingItem.price * stack.count;
-        Storehouse.putIn([new ItemStack(ITEM_TABLE.get(LING_YUN_NAME), price)], false);
+        Storehouse.putIn([ItemFactory.itemStack(LING_YUN_NAME, price)], false);
     }
 
     /**
      * 装备初始套装
      */
     private equipStarterSet() {
-        this.player.equipments.equip(ITEM_TABLE.get('liu_mu_gun') as Equipment);
-        this.player.equipments.equip(ITEM_TABLE.get('mian_bu_zha_wan') as Equipment);
-        this.player.equipments.equip(ITEM_TABLE.get('hu_pi_qun') as Equipment);
-        this.player.equipments.equip(ITEM_TABLE.get('mian_bu_tui_beng') as Equipment);
+        this.player.equipments.equip(ItemFactory.itemStack('liu_mu_gun', 1));
+        this.player.equipments.equip(ItemFactory.itemStack('mian_bu_zha_wan', 1));
+        this.player.equipments.equip(ItemFactory.itemStack('hu_pi_qun', 1));
+        this.player.equipments.equip(ItemFactory.itemStack('mian_bu_tui_beng', 1));
     }
 
     /**
@@ -346,12 +348,12 @@ export class GameManager extends Component {
      */
     gift() {
         Storehouse.putIn([
-            new ItemStack(ITEM_TABLE.get('tong_yun_bang'), 1),
-            new ItemStack(ITEM_TABLE.get('bai_xi_nuo_mian'), 1),
-            new ItemStack(ITEM_TABLE.get('bai_xi_chen_qian_yi'), 1),
-            new ItemStack(ITEM_TABLE.get('bai_xi_hu_shou'), 1),
-            new ItemStack(ITEM_TABLE.get('bai_xi_diao_tui'), 1),
-            new ItemStack(ITEM_TABLE.get('ru_yi_jin_gu_bang'), 1)
+            ItemFactory.itemStack(ITEM_META_TABLE.get('tong_yun_bang'), 1),
+            ItemFactory.itemStack(ITEM_META_TABLE.get('bai_xi_nuo_mian'), 1),
+            ItemFactory.itemStack(ITEM_META_TABLE.get('bai_xi_chen_qian_yi'), 1),
+            ItemFactory.itemStack(ITEM_META_TABLE.get('bai_xi_hu_shou'), 1),
+            ItemFactory.itemStack(ITEM_META_TABLE.get('bai_xi_diao_tui'), 1),
+            ItemFactory.itemStack(ITEM_META_TABLE.get('ru_yi_jin_gu_bang'), 1)
         ]);
     }
 }

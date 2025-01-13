@@ -76,7 +76,7 @@ export class ItemCard extends Component {
         this.node.setWorldPosition(targetWorldPosition);
 
         // 设置物品信息
-        const rarity = item instanceof Equipment ? item.attributes.rarity : item.rarity;
+        const rarity = item instanceof Equipment ? item.rankRarity : item.rarity;
         this._itemInfo.show(item, rarity);
 
         // 设置按钮内容

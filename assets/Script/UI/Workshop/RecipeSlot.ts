@@ -14,7 +14,7 @@ export class RecipeSlot extends Component {
     /**
      * 产物图标
      */
-    private _productIcon: Sprite;
+    private _outputIcon: Sprite;
 
     /**
      * 配方
@@ -22,7 +22,7 @@ export class RecipeSlot extends Component {
     private _recipe: Recipe;
 
     onLoad() {
-        this._productIcon = this.node.getChildByName('ProductIcon').getComponent(Sprite);
+        this._outputIcon = this.node.getChildByName('OutputIcon').getComponent(Sprite);
     }
 
     /**
@@ -32,8 +32,8 @@ export class RecipeSlot extends Component {
      */
     init(recipe: Recipe) {
         this._recipe = recipe;
-        ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, recipe.product.icon, (spriteFrame: SpriteFrame) => {
-            this._productIcon.spriteFrame = spriteFrame;
+        ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, recipe.output.icon, (spriteFrame: SpriteFrame) => {
+            this._outputIcon.spriteFrame = spriteFrame;
         });
     }
 

@@ -1,12 +1,12 @@
 import { _decorator, Color, Component, Label } from "cc";
-import { ProductSlot } from "db://assets/Script/UI/Shop/ProductSlot";
 import { ItemInfoUI } from "db://assets/Script/Prefab/ItemInfoUI";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { LING_YUN_NAME } from "db://assets/Script/Util/Constant";
-import { TradingItem } from "db://assets/Script/Trading/TradingItem";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
 import { Storehouse } from "db://assets/Script/Storehouse/Storehouse";
+import { Product } from "db://assets/Script/Shop/Product";
+import { ItemFactory } from "db://assets/Script/Item/ItemFactory";
 
 const { ccclass } = _decorator;
 
@@ -28,7 +28,7 @@ export class ProductInfoUI extends Component {
     /**
      * 商品
      */
-    private _product: ProductSlot;
+    private _product: Product;
 
     onLoad() {
         this._itemInfo = this.node.getChildByName('ItemInfo').getComponent(ItemInfoUI);
@@ -46,10 +46,10 @@ export class ProductInfoUI extends Component {
      *
      * @param product 商品槽
      */
-    show(product: ProductSlot) {
+    show(product: Product) {
         this.node.active = true;
         this._product = product;
-        this._itemInfo.show(this._product.stock.item);
+        this._itemInfo.show(ItemFactory.item(product.itemMeta));
 
         this.updatePriceLabel();
     }
@@ -84,7 +84,7 @@ export class ProductInfoUI extends Component {
      */
     private updatePriceLabel(lingYun?: number) {
         lingYun = lingYun ?? Storehouse.countOne(LING_YUN_NAME);
-        const price = (this._product.stock.item as TradingItem).price;
+        const price = this._product.price;
         this._priceLabel.string = `${lingYun} / ${price}`;
         this._priceLabel.color = lingYun >= price ? Color.WHITE : Color.RED;
     }

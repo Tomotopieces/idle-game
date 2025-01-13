@@ -3,9 +3,10 @@ import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { ProductSlot } from "db://assets/Script/UI/Shop/ProductSlot";
 import { EventName } from "db://assets/Script/Event/EventName";
 import { ProductInfoUI } from "db://assets/Script/UI/Shop/ProductInfoUI";
-import { ShopUtil } from "db://assets/Script/Trading/ShopUtil";
-import { Shop } from "db://assets/Script/Trading/Shop";
+import { ShopManager } from "db://assets/Script/Shop/ShopManager";
+import { Shop } from "db://assets/Script/Shop/Shop";
 import { ProductPurchasedEvent } from "db://assets/Script/Event/Events/ProductPurchasedEvent";
+import { Product } from "db://assets/Script/Shop/Product";
 
 const { ccclass, property } = _decorator;
 
@@ -28,7 +29,12 @@ export class ShopPanel extends Component {
     /**
      * 商品槽列表
      */
-    private _stocks: ProductSlot[] = [];
+    private _slots: ProductSlot[] = [];
+
+    /**
+     * 商品列表
+     */
+    private _products: Product[] = [];
 
     /**
      * 商品信息
@@ -48,7 +54,7 @@ export class ShopPanel extends Component {
     /**
      * 当前商品
      */
-    private _currentProduct: ProductSlot;
+    private _currentProduct: Product;
 
     /**
      * 当前商店
@@ -88,7 +94,7 @@ export class ShopPanel extends Component {
      * @param productSlot 商品槽
      */
     private handleClickProductSlot(productSlot: ProductSlot) {
-        this._currentProduct = productSlot;
+        this._currentProduct = productSlot.product;
         this._productInfo.show(this._currentProduct);
     }
 
@@ -96,7 +102,7 @@ export class ShopPanel extends Component {
      * 填充商品栏
      */
     private populateProductBar() {
-        const shop = ShopUtil.shop();
+        const shop = ShopManager.shop();
         if (this._shop === shop) {
             // 商店不变则不处理
             return;
@@ -104,19 +110,17 @@ export class ShopPanel extends Component {
 
         this._shop = shop;
         this._productBarNode.removeAllChildren();
-        this._stocks = [];
+        this._products = [];
 
-        shop.products.forEach((product, index) => {
+        shop.productMetas.forEach(meta => {
             const node = instantiate(this.productSlotPrefab);
             this._productBarNode.addChild(node);
             const productSlot: ProductSlot = node.getComponent(ProductSlot);
-            productSlot.stock = product;
-            this._stocks.push(productSlot);
-
-            if (!index) {
-                this._currentProduct = productSlot;
-            }
+            productSlot.init(ShopManager.product(meta));
+            this._slots.push(productSlot);
+            this._products.push(productSlot.product);
         });
+        this._currentProduct = this._products[0];
         !!this._currentProduct ? this._productInfo.show(this._currentProduct) : this._productInfo.hide();
     }
 
@@ -126,7 +130,7 @@ export class ShopPanel extends Component {
      * @param event 事件参数
      */
     private handleProductPurchased(event: ProductPurchasedEvent) {
-        this._stocks.find(stock => stock.stock.item.name === event.productName).updateCountLabel();
+        this._slots.find(slot => slot.product.itemMeta.name === event.productName).updateCountLabel();
     }
 
     /**
@@ -135,6 +139,6 @@ export class ShopPanel extends Component {
      * 按钮触发
      */
     clickOperationButton() {
-        ShopUtil.buy(ShopUtil.SHOP, this._currentProduct.stock);
+        ShopManager.buy(this._currentProduct);
     }
 }
