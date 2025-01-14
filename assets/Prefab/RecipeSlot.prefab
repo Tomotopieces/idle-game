@@ -71,7 +71,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "ProductIcon",
+    "_name": "OutputIcon",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {

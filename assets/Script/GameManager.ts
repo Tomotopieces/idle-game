@@ -57,7 +57,7 @@ export class GameManager extends Component {
 
     onLoad() {
         // 监听处理事件
-        EventCenter.on(EventName.DEAL_DAMAGE, this.node.name, (event: DealDamageEvent) => this.handleDamage(event));
+        EventCenter.on(EventName.DEAL_DAMAGE, this.node.name, (event: DealDamageEvent) => this.handleDealDamage(event));
         EventCenter.on(EventName.UPDATE_GAME_LEVEL, this.node.name, (event: UpdateGameLevelEvent) => this.handleUpdateGameLevel(event));
         EventCenter.on(EventName.EQUIP, this.node.name, (event: EquipEvent) => this.handleEquip(event));
         EventCenter.on(EventName.ENEMY_DIE, this.node.name, (enemy: EnemyController) => this.handleEnemyDie(enemy));
@@ -185,7 +185,7 @@ export class GameManager extends Component {
      *
      * @param event 事件参数
      */
-    private handleDamage(event: DealDamageEvent) {
+    private handleDealDamage(event: DealDamageEvent) {
         switch (event.source) {
             case DamageUnit.ENEMY:
                 this.player.hurt(event.damage);

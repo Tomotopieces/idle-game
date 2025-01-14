@@ -1,6 +1,6 @@
 [
   {
-    "productName": "xing_zhe_jie_gu",
+    "outputName": "xing_zhe_jie_gu",
     "requirements": [
       {
         "itemName": "mian_sha",
@@ -13,7 +13,7 @@
     ]
   },
   {
-    "productName": "xing_zhe_zha_wan",
+    "outputName": "xing_zhe_zha_wan",
     "requirements": [
       {
         "itemName": "mian_sha",
@@ -26,7 +26,7 @@
     ]
   },
   {
-    "productName": "xing_zhe_zhi_duo",
+    "outputName": "xing_zhe_zhi_duo",
     "requirements": [
       {
         "itemName": "mian_sha",
@@ -39,7 +39,7 @@
     ]
   },
   {
-    "productName": "xing_zhe_tui_beng",
+    "outputName": "xing_zhe_tui_beng",
     "requirements": [
       {
         "itemName": "mian_sha",
@@ -52,7 +52,7 @@
     ]
   },
   {
-    "productName": "lin_gun_shuang_she",
+    "outputName": "lin_gun_shuang_she",
     "requirements": [
       {
         "itemName": "liu_mu_gun",

@@ -1,7 +1,7 @@
 [
   {
-    "productName": "xing_zhe_jie_gu",
-    "productRarity": "rare",
+    "outputName": "xing_zhe_jie_gu",
+    "outputRarity": "rare",
     "requirements": [
       {
         "itemName": "can_si",
@@ -14,8 +14,8 @@
     ]
   },
   {
-    "productName": "xing_zhe_zha_wan",
-    "productRarity": "rare",
+    "outputName": "xing_zhe_zha_wan",
+    "outputRarity": "rare",
     "requirements": [
       {
         "itemName": "can_si",

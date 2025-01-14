@@ -39,14 +39,14 @@ export abstract class EnemyController extends Component {
     private _info: EnemyInfo = null;
 
     /**
-     * 实体组件
-     */
-    private attributes: EnemyAttributeComponent;
-
-    /**
      * 自动攻击计时器
      */
     private _autoAttackTimer: number = 0;
+
+    /**
+     * 实体组件
+     */
+    private _attributes: EnemyAttributeComponent;
 
     onLoad() {
         EnemyController.ENEMY = this;
@@ -63,10 +63,10 @@ export abstract class EnemyController extends Component {
      * @param damage 伤害值
      */
     hurt(damage: number) {
-        this.attributes.getHurt(damage);
+        this._attributes.getHurt(damage);
         this.updateHealthBar();
 
-        if (this.attributes.health === 0) {
+        if (this._attributes.health === 0) {
             this.onDie();
         }
     }
@@ -77,7 +77,7 @@ export abstract class EnemyController extends Component {
      * 动画帧事件触发
      */
     makeDamage() {
-        EventCenter.emit(EventName.DEAL_DAMAGE, new DealDamageEvent(DamageUnit.ENEMY, DamageUnit.PLAYER, this.attributes.finalDamage()));
+        EventCenter.emit(EventName.DEAL_DAMAGE, new DealDamageEvent(DamageUnit.ENEMY, DamageUnit.PLAYER, this._attributes.finalDamage()));
     }
 
     /**
@@ -108,7 +108,7 @@ export abstract class EnemyController extends Component {
      * 初始化基础数据
      */
     private init() {
-        this.attributes = new EnemyAttributeComponent(this._info);
+        this._attributes = new EnemyAttributeComponent(this._info);
         ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, this._info.icon, (spriteFrame: SpriteFrame) => {
             this.getComponent(Sprite).spriteFrame = spriteFrame;
         });
@@ -140,7 +140,7 @@ export abstract class EnemyController extends Component {
      * 更新血条显示
      */
     private updateHealthBar() {
-        this.healthBar.progress = this.attributes.health / this.attributes.maxHealth;
+        this.healthBar.progress = this._attributes.health / this._attributes.maxHealth;
     }
 
     /**
@@ -151,5 +151,9 @@ export abstract class EnemyController extends Component {
         this._autoAttackTimer = 0;
         this.init();
         EventCenter.emit(EventName.ENEMY_DIE, this);
+    }
+
+    get attributes(): EnemyAttributeComponent {
+        return this._attributes;
     }
 }

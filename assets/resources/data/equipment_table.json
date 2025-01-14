@@ -170,6 +170,22 @@
     }
   },
   {
+    "name": "bai_lian_zi",
+    "displayName": "白脸子",
+    "itemType": "equipment",
+    "description": "善化不足，恶化有余。",
+    "icon": "enemy/ling_xu_zi",
+    "unique": true,
+    "rarity": "uncommon",
+    "equipmentType": "head",
+    "attributes": {
+      "additionalDefense": 10,
+      "uniqueUtility": [
+        "bai_lian_zi"
+      ]
+    }
+  },
+  {
     "name": "lin_gun_shuang_she",
     "displayName": "鳞棍·双蛇",
     "itemType": "equipment",

@@ -15,6 +15,7 @@ import { CraftRecipe } from "db://assets/Script/Recipe/CraftRecipe";
 import { UpgradeRecipe } from "db://assets/Script/Recipe/UpgradeRecipe";
 import { Shop } from "db://assets/Script/Shop/Shop";
 import { ItemMeta } from "db://assets/Script/Item/ItemMeta";
+import { UniqueUtilityBaiLianZi } from "db://assets/Script/Equipment/UniqueUtility/Effects/UniqueUtilityBaiLianZi";
 
 /**
  * 数据资源路径常量
@@ -119,6 +120,7 @@ export const SHOP_TABLE = new Map<string, Shop>();
  */
 export const UNIQUE_UTILITY_TABLE = new Map<string, UniqueUtility>();
 UNIQUE_UTILITY_TABLE.set(UniqueUtilityLinGunShuangShe.NAME, new UniqueUtilityLinGunShuangShe());
+UNIQUE_UTILITY_TABLE.set(UniqueUtilityBaiLianZi.NAME, new UniqueUtilityBaiLianZi());
 
 /**
  * 套装效果 Map

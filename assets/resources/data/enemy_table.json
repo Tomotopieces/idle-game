@@ -8,11 +8,14 @@
     "dropList": [
       {
         "itemName": "ling_yun",
-        "max": 5,
-        "min": 1
+        "max": 5
       },
       {
         "itemName": "mian_sha",
+        "dropRate": 0.05
+      },
+      {
+        "itemName": "sui_jin_pian",
         "dropRate": 0.01
       }
     ],
@@ -27,9 +30,23 @@
     "dropList": [
       {
         "itemName": "ling_yun",
-        "dropRate": 1,
-        "max": 20,
-        "min": 20
+        "max": 10,
+        "min": 5
+      },
+      {
+        "itemName": "mian_sha",
+        "dropRate": 0.1,
+        "max": 2
+      },
+      {
+        "itemName": "jing_shi",
+        "max": 2,
+        "min": 2,
+        "once": true
+      },
+      {
+        "itemName": "xiao_jin_pian",
+        "once": true
       }
     ],
     "experience": 2
@@ -42,21 +59,24 @@
     "icon": "enemy/guang_zhi",
     "dropList": [
       {
-        "itemName": "sui_jin_pian"
-      },
-      {
-        "itemName": "xiao_jin_pian"
-      },
-      {
-        "itemName": "da_jin_pian"
-      },
-      {
-        "itemName": "jin_wen_shou"
+        "itemName": "ling_yun",
+        "max": 20,
+        "min": 20
       },
       {
         "itemName": "mian_sha",
         "dropRate": 0.1,
         "max": 2
+      },
+      {
+        "itemName": "jing_shi",
+        "dropRate": 0.1
+      },
+      {
+        "itemName": "da_jin_pian",
+        "max": 2,
+        "min": 2,
+        "once": true
       }
     ],
     "experience": 5
@@ -66,13 +86,35 @@
     "displayName": "灵虚子",
     "health": 100,
     "damage": 10,
-    "icon": "enemy/wolf",
+    "icon": "enemy/ling_xu_zi",
     "dropList": [
       {
         "itemName": "ling_yun",
         "dropRate": 1,
-        "max": 10,
-        "min": 1
+        "max": 25,
+        "min": 10
+      },
+      {
+        "itemName": "mian_sha",
+        "max": 2,
+        "min": 2,
+        "once": true
+      },
+      {
+        "itemName": "jing_shi",
+        "max": 2,
+        "min": 2,
+        "once": true
+      },
+      {
+        "itemName": "da_jin_pian",
+        "max": 2,
+        "min": 2,
+        "once": true
+      },
+      {
+        "itemName": "bai_lian_zi",
+        "once": true
       }
     ],
     "experience": 5
@@ -83,7 +125,18 @@
     "health": 100,
     "damage": 10,
     "icon": "enemy/frog",
-    "dropList": [],
+    "dropList": [
+      {
+        "itemName": "ling_yun",
+        "max": 30,
+        "min": 20
+      },
+      {
+        "itemName": "mian_sha",
+        "dropRate": 0.2,
+        "max": 2
+      }
+    ],
     "experience": 10
   },
   {
@@ -92,7 +145,18 @@
     "health": 100,
     "damage": 10,
     "icon": "enemy/snake",
-    "dropList": [],
+    "dropList": [
+      {
+        "itemName": "ling_yun",
+        "max": 30,
+        "min": 20
+      },
+      {
+        "itemName": "jing_shi",
+        "dropRate": 0.2,
+        "max": 2
+      }
+    ],
     "experience": 10
   },
   {
@@ -104,8 +168,18 @@
     "dropList": [
       {
         "itemName": "ling_yun",
-        "max": 200,
-        "min": 200
+        "max": 50,
+        "min": 30
+      },
+      {
+        "itemName": "mian_sha",
+        "dropRate": 0.2,
+        "max": 2
+      },
+      {
+        "itemName": "jing_shi",
+        "dropRate": 0.2,
+        "max": 2
       },
       {
         "itemName": "yu_chui_ya",
@@ -117,11 +191,17 @@
   {
     "name": "jin_chi_zhang_lao",
     "displayName": "金池长老",
-    "health": 100,
-    "damage": 10,
+    "health": 300,
+    "damage": 15,
     "icon": "enemy/baldhead",
-    "dropList": [],
-    "experience": 10
+    "dropList": [
+      {
+        "itemName": "ling_yun",
+        "max": 1000,
+        "min": 1000
+      }
+    ],
+    "experience": 100
   },
   {
     "name": "lang_ci_ke",
@@ -129,7 +209,23 @@
     "health": 100,
     "damage": 10,
     "icon": "enemy/wolf",
-    "dropList": [],
+    "dropList": [
+      {
+        "itemName": "ling_yun",
+        "max": 10,
+        "min": 5
+      },
+      {
+        "itemName": "mian_sha",
+        "dropRate": 0.1,
+        "max": 2
+      },
+      {
+        "itemName": "jing_shi",
+        "dropRate": 0.05,
+        "max": 2
+      }
+    ],
     "experience": 10
   },
   {
@@ -146,7 +242,24 @@
         "min": 1
       },
       {
-        "itemName": "can_si"
+        "itemName": "mian_sha",
+        "dropRate": 0.5,
+        "max": 2
+      },
+      {
+        "itemName": "jing_shi",
+        "dropRate": 0.25,
+        "max": 2
+      },
+      {
+        "itemName": "can_si",
+        "dropRate": 0.3,
+        "max": 2
+      },
+      {
+        "itemName": "yao_he",
+        "dropRate": 0.15,
+        "max": 2
       },
       {
         "itemName": "lie_huo_wu_jin",
