@@ -146,7 +146,6 @@ export abstract class EnemyController extends Component {
      */
     private updateHealthBar() {
         this._healthBar.progress = this._attributes.health / this._attributes.maxHealth;
-        console.log(`[PlayerController.updateHealthBar] health: ${this._attributes.health}, finalHealth: ${this._attributes.maxHealth}, progress: ${this._healthBar.progress}`);
     }
 
     /**
