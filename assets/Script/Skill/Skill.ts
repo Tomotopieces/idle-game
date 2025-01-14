@@ -53,7 +53,7 @@ export abstract class Skill {
 
     protected constructor(name: string, displayName: string, description: string, cooldown: number) {
         this.player = PlayerController.PLAYER;
-        this.playerAnim = this.player.getComponent(Animation);
+        this.playerAnim = this.player.anim;
         this.name = name;
         this.displayName = displayName;
         this.description = description;

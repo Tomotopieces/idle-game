@@ -1,4 +1,4 @@
-import { _decorator, Component, ProgressBar } from 'cc';
+import { _decorator, Animation, Component, ProgressBar } from 'cc';
 import { PlayerAttributeComponent } from "db://assets/Script/Entity/Player/PlayerAttributeComponent";
 import { PlayerLevelComponent } from "db://assets/Script/Entity/Player/PlayerLevelComponent";
 import { PlayerEquipmentComponent } from "db://assets/Script/Entity/Player/PlayerEquipmentComponent";
@@ -9,7 +9,7 @@ import { PlayerTalentManager } from "db://assets/Script/Entity/Player/PlayerTale
 import { EventName } from "db://assets/Script/Event/EventName";
 import { SkillHeavyAttack } from "db://assets/Script/Skill/Skills/SkillHeavyAttack";
 
-const { ccclass, property } = _decorator;
+const { ccclass } = _decorator;
 
 /**
  * 玩家控制器
@@ -17,12 +17,6 @@ const { ccclass, property } = _decorator;
 @ccclass('PlayerController')
 export class PlayerController extends Component {
     static PLAYER: PlayerController;
-
-    /**
-     * 血条
-     */
-    @property({ type: ProgressBar, tooltip: '血条' })
-    healthBar!: ProgressBar;
 
     /**
      * 属性信息
@@ -49,8 +43,20 @@ export class PlayerController extends Component {
      */
     readonly talents: PlayerTalentManager = new PlayerTalentManager();
 
+    /**
+     * 血条
+     */
+    private _healthBar: ProgressBar;
+
+    /**
+     * 动画机
+     */
+    private _anim: Animation;
+
     onLoad() {
         PlayerController.PLAYER = this;
+        this._healthBar = this.node.getChildByName('HealthBar').getComponent(ProgressBar);
+        this._anim = this.getComponent(Animation);
         this.init();
     }
 
@@ -87,7 +93,7 @@ export class PlayerController extends Component {
      * 更新血条显示
      */
     updateHealthBar() {
-        this.healthBar.progress = this.attributes.health / this.attributes.finalHealth();
+        this._healthBar.progress = this.attributes.health / this.attributes.finalHealth();
     }
 
     /**
@@ -100,5 +106,9 @@ export class PlayerController extends Component {
      */
     skillAnimEvent(skillName: string, eventIndex: number) {
         this.skills.triggerEvent(skillName, eventIndex);
+    }
+
+    get anim(): Animation {
+        return this._anim;
     }
 }

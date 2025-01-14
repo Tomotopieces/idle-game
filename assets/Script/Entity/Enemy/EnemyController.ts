@@ -25,13 +25,17 @@ export abstract class EnemyController extends Component {
     /**
      * 血条
      */
-    @property({ type: ProgressBar, tooltip: '血条' })
-    healthBar: ProgressBar = null;
+    private _healthBar: ProgressBar;
+
+    /**
+     * 贴图
+     */
+    private _sprite: Sprite;
 
     /**
      * 动画机
      */
-    private _anim: Animation = null;
+    private _anim: Animation;
 
     /**
      * 基本信息
@@ -50,6 +54,8 @@ export abstract class EnemyController extends Component {
 
     onLoad() {
         EnemyController.ENEMY = this;
+        this._healthBar = this.node.getChildByName('HealthBar').getComponent(ProgressBar);
+        this._sprite = this.node.getChildByName('Sprite').getComponent(Sprite);
         this._anim = this.getComponent(Animation);
     }
 
@@ -109,9 +115,8 @@ export abstract class EnemyController extends Component {
      */
     private init() {
         this._attributes = new EnemyAttributeComponent(this._info);
-        ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, this._info.icon, (spriteFrame: SpriteFrame) => {
-            this.getComponent(Sprite).spriteFrame = spriteFrame;
-        });
+        ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, this._info.icon, (spriteFrame: SpriteFrame) =>
+            this._sprite.spriteFrame = spriteFrame);
         this.updateHealthBar();
     }
 
@@ -140,7 +145,8 @@ export abstract class EnemyController extends Component {
      * 更新血条显示
      */
     private updateHealthBar() {
-        this.healthBar.progress = this._attributes.health / this._attributes.maxHealth;
+        this._healthBar.progress = this._attributes.health / this._attributes.maxHealth;
+        console.log(`[PlayerController.updateHealthBar] health: ${this._attributes.health}, finalHealth: ${this._attributes.maxHealth}, progress: ${this._healthBar.progress}`);
     }
 
     /**
