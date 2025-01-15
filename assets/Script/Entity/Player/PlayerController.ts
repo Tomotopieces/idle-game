@@ -90,6 +90,15 @@ export class PlayerController extends Component {
     }
 
     /**
+     * 恢复血量
+     *
+     * @param value 恢复值，准确值[1, )或百分比值(0, 1)
+     */
+    recover(value: number) {
+        this.attributes.health += (value >= 1 ? value : value * this.attributes.finalHealth());
+    }
+
+    /**
      * 更新血条显示
      */
     updateHealthBar() {

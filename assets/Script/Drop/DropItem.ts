@@ -11,6 +11,8 @@ export class DropItem {
 
     /**
      * 物品掉落概率
+     *
+     * 百分比值，0~1
      */
     readonly dropRate: number = 1;
 
