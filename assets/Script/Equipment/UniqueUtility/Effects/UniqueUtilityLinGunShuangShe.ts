@@ -1,6 +1,6 @@
 import { UniqueUtility } from "db://assets/Script/Equipment/UniqueUtility/UniqueUtility";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
+import { Unit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
 import { EventName } from "db://assets/Script/Event/EventName";
 
 /**
@@ -35,7 +35,7 @@ export class UniqueUtilityLinGunShuangShe extends UniqueUtility {
         this._attackCount = 0;
         EventCenter.register(EventName.DEAL_DAMAGE, UniqueUtilityLinGunShuangShe.NAME,
             (event: DealDamageEvent) => {
-                if (event.source !== DamageUnit.PLAYER) {
+                if (event.source !== Unit.PLAYER) {
                     return;
                 }
 

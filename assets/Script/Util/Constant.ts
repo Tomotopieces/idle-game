@@ -1,4 +1,9 @@
 /**
+ * 未定义图片
+ */
+export const UNDEFINED_IMAGE = `item/undefined`;
+
+/**
  * 灵韵名称
  */
 export const LING_YUN_NAME = 'ling_yun';

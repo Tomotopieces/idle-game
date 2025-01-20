@@ -1,7 +1,7 @@
 import { _decorator, Component, Label } from 'cc';
-import { PlayerAttributeComponent } from "db://assets/Script/Entity/Player/PlayerAttributeComponent";
+import { PlayerAttributeManager } from "db://assets/Script/Entity/Player/PlayerAttributeManager";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { PlayerLevelComponent } from "db://assets/Script/Entity/Player/PlayerLevelComponent";
+import { PlayerLevelManager } from "db://assets/Script/Entity/Player/PlayerLevelManager";
 import { EventName } from "db://assets/Script/Event/EventName";
 
 const { ccclass, property } = _decorator;
@@ -42,8 +42,8 @@ export class AttributePanel extends Component {
     criticalBoostLabel: Label;
 
     onLoad() {
-        EventCenter.on(EventName.UI_UPDATE_PLAYER_LEVEL_INFO, this.node.name, (event: PlayerLevelComponent) => this.onUpdateLevel(event));
-        EventCenter.on(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.node.name, (event: PlayerAttributeComponent) => this.onUpdateAttributePanel(event));
+        EventCenter.on(EventName.UI_UPDATE_PLAYER_LEVEL_INFO, this.node.name, (event: PlayerLevelManager) => this.onUpdateLevel(event));
+        EventCenter.on(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.node.name, (event: PlayerAttributeManager) => this.onUpdateAttributePanel(event));
     }
 
     onDestroy() {
@@ -55,7 +55,7 @@ export class AttributePanel extends Component {
      *
      * @param event 事件参数
      */
-    private onUpdateLevel(event: PlayerLevelComponent) {
+    private onUpdateLevel(event: PlayerLevelManager) {
         this.levelLabel.string = `Lv.${event.level} [ ${event.experience} / ${event.requirement()} ]`
     }
 
@@ -64,7 +64,7 @@ export class AttributePanel extends Component {
      *
      * @param event 事件参数
      */
-    private onUpdateAttributePanel(event: PlayerAttributeComponent) {
+    private onUpdateAttributePanel(event: PlayerAttributeManager) {
         this.damageLabel.string = event.paperFinalDamage().toString();
         this.defenseLabel.string = event.finalDefense().toString();
         this.criticalLabel.string = event.criticalRate * 100 + '%';

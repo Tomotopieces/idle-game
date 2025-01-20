@@ -1,6 +1,6 @@
 import { Skill } from "db://assets/Script/Skill/Skill";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
+import { Unit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
 import { EventName } from "db://assets/Script/Event/EventName";
 
 /**
@@ -38,8 +38,8 @@ export class SkillHeavyAttack extends Skill {
         const costResult = this.player.skills.resources.costOneStanceLevel();
         const finalDamageBoost = costResult ? 1.5 : 1.2; // 若消耗棍势，则伤害更高
         EventCenter.emit(EventName.DEAL_DAMAGE, new DealDamageEvent(
-            DamageUnit.PLAYER,
-            DamageUnit.ENEMY,
+            Unit.PLAYER,
+            Unit.ENEMY,
             this.player.attributes.finalDamage() * finalDamageBoost))
     }
 }

@@ -1,0 +1,45 @@
+[
+  {
+    "name": "lao_hu_lu",
+    "displayName": "老葫芦",
+    "itemType": "gourd",
+    "description": "人间纵有珍羞味，怎比山猴乐更宁？",
+    "icon": "item/yerba_mate",
+    "capacity": 5,
+    "autoRecoverInterval": 60,
+    "autoDrinkInterval": 45
+  },
+  {
+    "name": "zheng_xian_hong_hu_lu",
+    "displayName": "争先红葫芦",
+    "itemType": "gourd",
+    "description": "强者为尊该让我，英雄只此敢争先。",
+    "icon": "item/yerba_mate",
+    "rarity": "rare",
+    "capacity": 5,
+    "autoRecoverInterval": 60,
+    "autoDrinkInterval": 45
+  },
+  {
+    "name": "wu_gui_hu_lu",
+    "displayName": "五鬼葫芦",
+    "itemType": "gourd",
+    "description": "杀人一万，自损三千。",
+    "icon": "item/yerba_mate",
+    "rarity": "rare",
+    "capacity": 5,
+    "autoRecoverInterval": 60,
+    "autoDrinkInterval": 45
+  },
+  {
+    "name": "qian_kun_cai_hu_lu",
+    "displayName": "乾坤彩葫芦",
+    "itemType": "gourd",
+    "description": "善恶若无报，乾坤必有私。",
+    "icon": "item/yerba_mate",
+    "rarity": "mythical",
+    "capacity": 6,
+    "autoRecoverInterval": 60,
+    "autoDrinkInterval": 45
+  }
+]

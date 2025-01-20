@@ -1,0 +1,18 @@
+[
+  {
+    "name": "nen_yu_ou",
+    "displayName": "嫩玉藕",
+    "itemType": "ingredient",
+    "description": "下有并根藕，上有并头莲。",
+    "unique": true,
+    "rarity": "rare"
+  },
+  {
+    "name": "bai_hua_rui",
+    "displayName": "百花蕤",
+    "itemType": "ingredient",
+    "description": "春采百花为饮食，夏寻诸果作生涯。",
+    "unique": true,
+    "rarity": "mythical"
+  }
+]

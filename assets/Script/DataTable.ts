@@ -24,56 +24,56 @@ export enum DataPath {
     /**
      * 道具配置表
      */
-    ITEM_TABLE = 'data/item_table',
+    ITEMS = 'data/items',
 
     /**
      * 装备配置表
      */
-    EQUIPMENT_TABLE = 'data/equipment_table',
+    EQUIPMENTS = 'data/equipments',
 
     /**
      * 铸造配方配置表
      */
-    CRAFT_RECIPE_TABLE = 'data/craft_recipe_table',
+    CRAFT_RECIPES = 'data/craft_recipes',
 
     /**
      * 升阶配方配置表
      */
-    UPGRADE_RECIPE_TABLE = 'data/upgrade_recipe_table',
+    UPGRADE_RECIPES = 'data/upgrade_recipes',
 
     /**
      * 敌人配置表
      */
-    ENEMY_TABLE = 'data/enemy_table',
+    ENEMY_TABLES = 'data/enemys',
 
     /**
      * 关卡配置表
      */
-    STAGE_TABLE = 'data/stage_table',
+    STAGE_TABLES = 'data/stages',
 
     /**
      * 区域配置表
      */
-    AREA_TABLE = 'data/area_table',
+    AREA_TABLES = 'data/areas',
 
     /**
      * 章节配置表
      */
-    CHAPTER_TABLE = 'data/chapter_table',
+    CHAPTERS = 'data/chapters',
 
     /**
      * 玩家贩卖品表
      */
-    SELLABLE_TABLE = 'data/sellable_table',
+    SELLABLES = 'data/sellables',
 
     /**
      * 商店配置表
      */
-    SHOP_TABLE = 'data/shop_table',
+    SHOPS = 'data/shops',
 }
 
 /**
- * 道具表
+ * 物品表
  */
 export const ITEM_META_TABLE = new Map<string, ItemMeta>();
 

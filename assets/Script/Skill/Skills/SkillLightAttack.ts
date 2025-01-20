@@ -1,6 +1,6 @@
 import { Skill } from "db://assets/Script/Skill/Skill";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
+import { Unit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
 import { EventName } from "db://assets/Script/Event/EventName";
 
 /**
@@ -54,7 +54,7 @@ export class SkillLightAttack extends Skill {
      * 攻击帧事件
      */
     private attackFrameEvent() {
-        EventCenter.emit(EventName.DEAL_DAMAGE, new DealDamageEvent(DamageUnit.PLAYER, DamageUnit.ENEMY, this.player.attributes.finalDamage()));
+        EventCenter.emit(EventName.DEAL_DAMAGE, new DealDamageEvent(Unit.PLAYER, Unit.ENEMY, this.player.attributes.finalDamage()));
         EventCenter.emit(EventName.GAIN_STANCE, SkillLightAttack.GAIN_STANCE);
     }
 

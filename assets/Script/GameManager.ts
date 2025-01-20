@@ -9,7 +9,7 @@ import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { EquipEvent } from "db://assets/Script/Event/Events/EquipEvent";
 import { Equipment } from "db://assets/Script/Equipment/Equipment";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
+import { Unit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
 import { AREA_TABLE, CHAPTER_TABLE, ITEM_META_TABLE, STAGE_TABLE } from "db://assets/Script/DataTable";
 import { DropItemFactory } from "db://assets/Script/Drop/DropItemFactory";
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
@@ -22,6 +22,7 @@ import { Sellable } from "db://assets/Script/Sellable/Sellable";
 import { ShopManager } from "db://assets/Script/Shop/ShopManager";
 import { GameLevelUpdatedEvent } from "db://assets/Script/Event/Events/GameLevelUpdatedEvent";
 import { ItemFactory } from "db://assets/Script/Item/ItemFactory";
+import { PlayerDrinkEvent } from "db://assets/Script/Event/Events/PlayerDrinkEvent";
 
 const { ccclass, property } = _decorator;
 
@@ -67,6 +68,7 @@ export class GameManager extends Component {
         EventCenter.on(EventName.GAIN_STANCE, this.node.name, (stance: number) => this.handleGainStance(stance));
         EventCenter.on(EventName.TALENT_UPGRADE, this.node.name, (talentTreeNode: TalentTreeNode) => this.handleTalentUpgrade(talentTreeNode));
         EventCenter.on(EventName.SELL_ITEM, this.node.name, (stack: ItemStack) => this.handleSellItem(stack));
+        EventCenter.on(EventName.PLAYER_DRINK, this.node.name, (event: PlayerDrinkEvent) => this.handlePlayerDrink(event));
     }
 
     start() {
@@ -187,10 +189,10 @@ export class GameManager extends Component {
      */
     private handleDealDamage(event: DealDamageEvent) {
         switch (event.source) {
-            case DamageUnit.ENEMY:
+            case Unit.ENEMY:
                 this.player.hurt(event.damage);
                 break;
-            case DamageUnit.PLAYER:
+            case Unit.PLAYER:
                 this.enemy.hurt(event.damage);
                 break;
         }
@@ -302,6 +304,15 @@ export class GameManager extends Component {
         const price = sellable.price * stack.count;
         Storehouse.takeOut([stack]);
         Storehouse.putIn([ItemFactory.itemStack(LING_YUN_NAME, price)], false);
+    }
+
+    /**
+     * 处理玩家饮酒事件
+     *
+     * @param event 事件参数
+     */
+    private handlePlayerDrink(event: PlayerDrinkEvent) {
+        this.player.recover(event.healthRecoverRatio);
     }
 
     /**

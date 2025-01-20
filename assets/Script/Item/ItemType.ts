@@ -13,6 +13,21 @@ export enum ItemType {
     EQUIPMENT = 'equipment',
 
     /**
+     * 葫芦
+     */
+    GOURD = 'gourd',
+
+    /**
+     * 酒
+     */
+    LIQUOR = 'liquor',
+
+    /**
+     * 泡酒物
+     */
+    INGREDIENT = 'ingredient',
+
+    /**
      * 消耗品
      */
     CONSUMABLE = 'consumable',

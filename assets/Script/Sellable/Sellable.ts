@@ -5,13 +5,14 @@ import { SellableMeta } from "db://assets/Script/Sellable/SellableMeta";
  * 玩家贩卖品
  */
 export class Sellable extends Item {
-    /**
-     * 价格
-     */
-    readonly price: number;
+    readonly meta: SellableMeta;
 
     constructor(meta: SellableMeta) {
         super(meta);
-        this.price = meta.price;
+        this.meta = meta;
+    }
+
+    get price(): number {
+        return this.meta.price;
     }
 }

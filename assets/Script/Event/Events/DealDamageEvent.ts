@@ -1,9 +1,9 @@
 import { EventArgument } from "db://assets/Script/Event/EventArgument";
 
 /**
- * 伤害交互单位
+ * 作用单位
  */
-export enum DamageUnit {
+export enum Unit {
     PLAYER = 'Player',
     ENEMY = 'Enemy'
 }
@@ -15,19 +15,19 @@ export class DealDamageEvent extends EventArgument {
     /**
      * 伤害来源
      */
-    source: DamageUnit;
+    source: Unit;
 
     /**
      * 伤害目标
      */
-    target: DamageUnit;
+    target: Unit;
 
     /**
      * 伤害数值
      */
     damage: number;
 
-    constructor(source: DamageUnit, target: DamageUnit, damage: number) {
+    constructor(source: Unit, target: Unit, damage: number) {
         super();
         this.source = source;
         this.target = target;

@@ -121,4 +121,14 @@ export enum EventName {
      * 商品购买（后）
      */
     PRODUCT_PURCHASED = 'PRODUCT_PURCHASED',
+
+    /**
+     * 玩家饮酒
+     */
+    PLAYER_DRINK = 'PLAYER_DRINK',
+
+    /**
+     * 玩家饮酒结束
+     */
+    PLAYER_DRINK_END = 'PLAYER_DRINK_END',
 }

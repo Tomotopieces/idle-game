@@ -76,7 +76,7 @@ export class GameLoader extends Component {
      * 加载道具元数据
      */
     private loadItemMetaTable() {
-        resources.load(DataPath.ITEM_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+        resources.load(DataPath.ITEMS, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
             const jsons = data.json! as ItemMetaJson[];
             jsons.forEach((json, index) => ITEM_META_TABLE.set(json.name, ItemMetaJson.toItemMeta(index, json)));
@@ -88,7 +88,7 @@ export class GameLoader extends Component {
      * 加载贩卖品元数据
      */
     private loadSellableMetaTable() {
-        resources.load(DataPath.SELLABLE_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+        resources.load(DataPath.SELLABLES, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
             const jsons = data.json! as SellableMetaJson[];
             const idOffset = ITEM_META_TABLE.size;
@@ -101,7 +101,7 @@ export class GameLoader extends Component {
      * 加载装备元数据
      */
     private loadEquipmentMetaTable() {
-        resources.load(DataPath.EQUIPMENT_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+        resources.load(DataPath.EQUIPMENTS, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
             const jsons = data.json! as EquipmentMetaJson[];
             const indexOffset = ITEM_META_TABLE.size;
@@ -121,7 +121,7 @@ export class GameLoader extends Component {
      * 加载铸造配方表
      */
     private loadCraftRecipeTable() {
-        resources.load(DataPath.CRAFT_RECIPE_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+        resources.load(DataPath.CRAFT_RECIPES, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
             const rawRecipes = data.json! as CraftRecipeJson[];
             rawRecipes.forEach((rawRecipe: CraftRecipeJson, index: number) =>
@@ -134,7 +134,7 @@ export class GameLoader extends Component {
      * 加载升阶配方表
      */
     private loadUpgradeRecipeTable() {
-        resources.load(DataPath.UPGRADE_RECIPE_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+        resources.load(DataPath.UPGRADE_RECIPES, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
             const rawRecipes = data.json! as UpgradeRecipeJson[];
             rawRecipes.forEach((rawRecipe: UpgradeRecipeJson, index: number) =>
@@ -147,7 +147,7 @@ export class GameLoader extends Component {
      * 加载敌人表
      */
     private loadEnemyTable() {
-        resources.load(DataPath.ENEMY_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+        resources.load(DataPath.ENEMY_TABLES, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
             const rawInfos = data.json! as EnemyInfoJson[];
             rawInfos.forEach((rawInfo: EnemyInfoJson, index: number) =>
@@ -160,7 +160,7 @@ export class GameLoader extends Component {
      * 加载舞台表
      */
     private loadStageTable() {
-        resources.load(DataPath.STAGE_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+        resources.load(DataPath.STAGE_TABLES, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
             const rawStageList = data.json! as StageJson[];
             rawStageList.forEach((rawStage: StageJson, index: number) =>
@@ -173,7 +173,7 @@ export class GameLoader extends Component {
      * 加载区域表
      */
     private loadAreaTable() {
-        resources.load(DataPath.AREA_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+        resources.load(DataPath.AREA_TABLES, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
             const rawAreas = data.json! as AreaJson[];
             rawAreas.forEach((rawArea: AreaJson, index: number) =>
@@ -186,7 +186,7 @@ export class GameLoader extends Component {
      * 加载章节表
      */
     private loadChapterTable() {
-        resources.load(DataPath.CHAPTER_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+        resources.load(DataPath.CHAPTERS, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
             const rawChapters = data.json! as ChapterJson[];
             rawChapters.forEach((rawChapter: ChapterJson, index: number) => {
@@ -202,7 +202,7 @@ export class GameLoader extends Component {
      * 加载商店表
      */
     private loadShopTable() {
-        resources.load(DataPath.SHOP_TABLE, JsonAsset, (err: any, data: JsonAsset) => {
+        resources.load(DataPath.SHOPS, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
             const rawShops = data.json! as ShopJson[];
             rawShops.forEach((rawShop: ShopJson, index: number) =>

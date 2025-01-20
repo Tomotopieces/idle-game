@@ -1,13 +1,15 @@
 import { _decorator, Animation, Component, ProgressBar } from 'cc';
-import { PlayerAttributeComponent } from "db://assets/Script/Entity/Player/PlayerAttributeComponent";
-import { PlayerLevelComponent } from "db://assets/Script/Entity/Player/PlayerLevelComponent";
-import { PlayerEquipmentComponent } from "db://assets/Script/Entity/Player/PlayerEquipmentComponent";
+import { PlayerAttributeManager } from "db://assets/Script/Entity/Player/PlayerAttributeManager";
+import { PlayerLevelManager } from "db://assets/Script/Entity/Player/PlayerLevelManager";
+import { PlayerEquipmentManager } from "db://assets/Script/Entity/Player/PlayerEquipmentManager";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { PlayerSkillManager } from "db://assets/Script/Entity/Player/PlayerSkillManager";
 import { SkillLightAttack } from "db://assets/Script/Skill/Skills/SkillLightAttack";
 import { PlayerTalentManager } from "db://assets/Script/Entity/Player/PlayerTalentManager";
 import { EventName } from "db://assets/Script/Event/EventName";
 import { SkillHeavyAttack } from "db://assets/Script/Skill/Skills/SkillHeavyAttack";
+import { GourdManager } from "db://assets/Script/Entity/Player/GourdManager";
+import { BuffManager } from "db://assets/Script/Buff/BuffManager";
 
 const { ccclass } = _decorator;
 
@@ -21,17 +23,22 @@ export class PlayerController extends Component {
     /**
      * 属性信息
      */
-    readonly attributes: PlayerAttributeComponent = new PlayerAttributeComponent();
+    readonly attributes: PlayerAttributeManager = new PlayerAttributeManager();
 
     /**
      * 等级信息
      */
-    readonly levelInfo: PlayerLevelComponent = new PlayerLevelComponent();
+    readonly levelInfo: PlayerLevelManager = new PlayerLevelManager();
 
     /**
      * 装备信息
      */
-    readonly equipments: PlayerEquipmentComponent = new PlayerEquipmentComponent(this.attributes);
+    readonly equipments: PlayerEquipmentManager = new PlayerEquipmentManager(this.attributes);
+
+    /**
+     * 葫芦管理
+     */
+    readonly gourd: GourdManager = new GourdManager();
 
     /**
      * 技能管理器
@@ -44,7 +51,12 @@ export class PlayerController extends Component {
     readonly talents: PlayerTalentManager = new PlayerTalentManager();
 
     /**
-     * 血条
+     * buff管理器
+     */
+    readonly buffs: BuffManager = new BuffManager();
+
+    /**
+     * 血条UI
      */
     private _healthBar: ProgressBar;
 
@@ -62,6 +74,7 @@ export class PlayerController extends Component {
 
     update(dt: number) {
         this.skills.update(dt);
+        this.buffs.update(dt);
     }
 
     /**
@@ -92,10 +105,10 @@ export class PlayerController extends Component {
     /**
      * 恢复血量
      *
-     * @param value 恢复值，准确值[1, )或百分比值(0, 1)
+     * @param value 恢复值，准确值(1, )或百分比值(0, 1]
      */
     recover(value: number) {
-        this.attributes.health += (value >= 1 ? value : value * this.attributes.finalHealth());
+        this.attributes.health += (value > 1 ? value : value * this.attributes.finalHealth());
     }
 
     /**

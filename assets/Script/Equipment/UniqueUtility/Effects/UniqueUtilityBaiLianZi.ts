@@ -1,7 +1,7 @@
 import { UniqueUtility } from "db://assets/Script/Equipment/UniqueUtility/UniqueUtility";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
-import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
+import { Unit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
 import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController";
 
 /**
@@ -30,7 +30,7 @@ export class UniqueUtilityBaiLianZi extends UniqueUtility {
     onActivate(): void {
         EventCenter.register(EventName.DEAL_DAMAGE, UniqueUtilityBaiLianZi.NAME,
             (event: DealDamageEvent) => {
-                if (event.source !== DamageUnit.PLAYER) {
+                if (event.source !== Unit.PLAYER) {
                     return;
                 }
                 const enemy = EnemyController.ENEMY;

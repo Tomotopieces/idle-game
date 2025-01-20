@@ -9,7 +9,7 @@ export class Item {
     /**
      * 元数据
      */
-    meta: ItemMeta;
+    readonly meta: ItemMeta;
 
     /**
      * 请使用 ItemFactory.item 创建

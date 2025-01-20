@@ -9,7 +9,7 @@ import { MessageType } from "db://assets/Script/UI/Message/MessageFactory";
 import { ItemType } from "db://assets/Script/Item/ItemType";
 import { EquipmentType } from "db://assets/Script/Equipment/EquipmentType";
 import { ItemFactory } from "db://assets/Script/Item/ItemFactory";
-import { EquipmentSlot } from "db://assets/Script/Entity/Player/PlayerEquipmentComponent";
+import { EquipmentSlot } from "db://assets/Script/Entity/Player/PlayerEquipmentManager";
 
 /**
  * 仓库类型

@@ -1,5 +1,6 @@
 import { ItemType } from "db://assets/Script/Item/ItemType";
 import { ItemRarity } from "db://assets/Script/Item/ItemRarity";
+import { UNDEFINED_IMAGE } from "db://assets/Script/Util/Constant";
 
 /**
  * 物品元数据
@@ -57,7 +58,7 @@ export class ItemMeta {
         this.displayName = displayName;
         this.itemType = itemType;
         this.description = description;
-        this.icon = icon;
+        this.icon = icon ?? UNDEFINED_IMAGE;
         this.unique = unique ?? false;
         this.rarity = rarity ?? ItemRarity.COMMON;
     }

@@ -1,5 +1,7 @@
 /**
  * 独门妙用
+ *
+ * 装备/珍玩/葫芦/酒/泡酒物的独特效果
  */
 export abstract class UniqueUtility {
     /**

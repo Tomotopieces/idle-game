@@ -8,10 +8,7 @@ import { EquipmentType } from "db://assets/Script/Equipment/EquipmentType";
  * 装备
  */
 export class Equipment extends Item {
-    /**
-     * 装备类型
-     */
-    readonly equipmentType: EquipmentType;
+    readonly meta: EquipmentMeta;
 
     /**
      * 装备属性
@@ -25,7 +22,7 @@ export class Equipment extends Item {
 
     constructor(meta: EquipmentMeta, rank: number = 0) {
         super(meta);
-        this.equipmentType = meta.equipmentType;
+        this.meta = meta;
         this.attributes = new EquipmentAttributes(meta.attributes, this);
         this.rank = rank;
     }
@@ -42,5 +39,9 @@ export class Equipment extends Item {
      */
     get rankRarity(): ItemRarity {
         return ItemRarity.ofValue(this.rarity.value + this.rank);
+    }
+
+    get equipmentType(): EquipmentType {
+        return this.meta.equipmentType;
     }
 }

@@ -1,7 +1,7 @@
 import { Talent } from "db://assets/Script/Talent/Talent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
-import { DamageUnit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
+import { Unit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
 import { SkillState } from "db://assets/Script/Entity/Player/PlayerSkillManager";
 import { SkillHeavyAttack } from "db://assets/Script/Skill/Skills/SkillHeavyAttack";
 import { SkillLightAttack } from "db://assets/Script/Skill/Skills/SkillLightAttack";
@@ -26,7 +26,7 @@ export class TalentShiPo extends Talent {
     protected activateEffect(): void {
         const skills = PlayerController.PLAYER.skills;
         EventCenter.register(EventName.DEAL_DAMAGE, this.name, (event: DealDamageEvent) => {
-            if (event.source === DamageUnit.ENEMY && // 敌人攻击命中时
+            if (event.source === Unit.ENEMY && // 敌人攻击命中时
                 skills.state === SkillState.CASTING && // 玩家正在进行
                 skills.currentSkill.name === SkillLightAttack.NAME && // 轻棍攻击
                 skills.inQueue(SkillHeavyAttack.NAME) !== -1 // 重棍已就绪
