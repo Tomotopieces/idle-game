@@ -25,6 +25,9 @@ import { ShopJson } from "db://assets/Script/Shop/ShopJson";
 import { ItemMetaJson } from "db://assets/Script/Item/ItemMetaJson";
 import { SellableMetaJson } from "db://assets/Script/Sellable/SellableMetaJson";
 import { EquipmentMetaJson } from "db://assets/Script/Equipment/EquipmentMetaJson";
+import { GourdMetaJson } from "db://assets/Script/Drink/Gourd/GourdMetaJson";
+import { LiquorMetaJson } from "db://assets/Script/Drink/Liquor/LiquorMetaJson";
+import { InfusedIngredientMetaJson } from "db://assets/Script/Drink/InfusedIngredient/InfusedIngredientMetaJson";
 
 const { ccclass, property } = _decorator;
 
@@ -51,6 +54,9 @@ export class GameLoader extends Component {
         () => this.loadItemMetaTable(),
         () => this.loadSellableMetaTable(),
         () => this.loadEquipmentMetaTable(),
+        () => this.loadGourdMetaTable(),
+        () => this.loadLiquorMetaTable(),
+        () => this.loadInfusedIngredientMetaTable(),
         () => this.loadCraftRecipeTable(),
         () => this.loadUpgradeRecipeTable(),
         () => this.loadEnemyTable(),
@@ -92,7 +98,8 @@ export class GameLoader extends Component {
             err && console.error(err);
             const jsons = data.json! as SellableMetaJson[];
             const idOffset = ITEM_META_TABLE.size;
-            jsons.forEach((json, index) => ITEM_META_TABLE.set(json.name, SellableMetaJson.toSellableMeta(idOffset + index, json)));
+            jsons.forEach((json, index) =>
+                ITEM_META_TABLE.set(json.name, SellableMetaJson.toSellableMeta(idOffset + index, json)));
             this.loadStep++;
         });
     }
@@ -104,9 +111,9 @@ export class GameLoader extends Component {
         resources.load(DataPath.EQUIPMENTS, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
             const jsons = data.json! as EquipmentMetaJson[];
-            const indexOffset = ITEM_META_TABLE.size;
+            const idOffset = ITEM_META_TABLE.size;
             jsons.forEach((json, index) => {
-                const meta = EquipmentMetaJson.toEquipmentMeta(index + indexOffset, json);
+                const meta = EquipmentMetaJson.toEquipmentMeta(index + idOffset, json);
                 ITEM_META_TABLE.set(json.name, meta); // 存入道具表
                 if (meta.attributes.setName) {
                     // 登记套装装备
@@ -118,14 +125,56 @@ export class GameLoader extends Component {
     }
 
     /**
+     * 加载葫芦元数据
+     */
+    private loadGourdMetaTable() {
+        resources.load(DataPath.GOURDS, JsonAsset, (err: any, data: JsonAsset) => {
+            err && console.error(err);
+            const jsons = data.json! as GourdMetaJson[];
+            const idOffset = ITEM_META_TABLE.size;
+            jsons.forEach((json: GourdMetaJson, index: number) =>
+                ITEM_META_TABLE.set(json.name, GourdMetaJson.toGourdMeta(idOffset + index, json)));
+            this.loadStep++;
+        });
+    }
+
+    /**
+     * 加载酒元数据
+     */
+    private loadLiquorMetaTable() {
+        resources.load(DataPath.LIQUORS, JsonAsset, (err: any, data: JsonAsset) => {
+            err && console.error(err);
+            const jsons = data.json! as LiquorMetaJson[];
+            const idOffset = ITEM_META_TABLE.size;
+            jsons.forEach((json: LiquorMetaJson, index: number) =>
+                ITEM_META_TABLE.set(json.name, LiquorMetaJson.toLiquorMeta(idOffset + index, json)));
+            this.loadStep++;
+        });
+    }
+
+    /**
+     * 加载泡酒物元数据
+     */
+    private loadInfusedIngredientMetaTable() {
+        resources.load(DataPath.INFUSED_INGREDIENTS, JsonAsset, (err: any, data: JsonAsset) => {
+            err && console.error(err);
+            const jsons = data.json! as InfusedIngredientMetaJson[];
+            const idOffset = ITEM_META_TABLE.size;
+            jsons.forEach((json: InfusedIngredientMetaJson, index: number) =>
+                ITEM_META_TABLE.set(json.name, InfusedIngredientMetaJson.toInfusedIngredientMeta(idOffset + index, json)));
+            this.loadStep++;
+        })
+    }
+
+    /**
      * 加载铸造配方表
      */
     private loadCraftRecipeTable() {
         resources.load(DataPath.CRAFT_RECIPES, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
-            const rawRecipes = data.json! as CraftRecipeJson[];
-            rawRecipes.forEach((rawRecipe: CraftRecipeJson, index: number) =>
-                CRAFT_RECIPE_TABLE.set(rawRecipe.outputName, CraftRecipeJson.toCraftRecipe(index, rawRecipe)));
+            const jsons = data.json! as CraftRecipeJson[];
+            jsons.forEach((json: CraftRecipeJson, index: number) =>
+                CRAFT_RECIPE_TABLE.set(json.outputName, CraftRecipeJson.toCraftRecipe(index, json)));
             this.loadStep++;
         })
     }

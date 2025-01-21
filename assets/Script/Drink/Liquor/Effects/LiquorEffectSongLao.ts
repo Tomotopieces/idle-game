@@ -1,5 +1,7 @@
 import { UniqueUtility } from "db://assets/Script/Equipment/UniqueUtility/UniqueUtility";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
+import { EventCenter } from "db://assets/Script/Event/EventCenter";
+import { EventName } from "db://assets/Script/Event/EventName";
 
 /**
  * 松醪效果
@@ -15,12 +17,15 @@ export class LiquorEffectSongLao extends UniqueUtility {
     }
 
     onActivate(): void {
-        const player = PlayerController.PLAYER;
-        if (player.attributes.health >= player.attributes.finalHealth() / 2) {
-            player.skills.resources.stance += 75;
-        }
+        EventCenter.on(EventName.PLAYER_DRINK, LiquorEffectSongLao.NAME, (_event: any) => {
+            const player = PlayerController.PLAYER;
+            if (player.attributes.health >= player.attributes.finalHealth() / 2) {
+                player.skills.resources.stance += 75;
+            }
+        });
     }
 
     onDeactivate(): void {
+        EventCenter.off(EventName.PLAYER_DRINK, LiquorEffectSongLao.NAME);
     }
 }

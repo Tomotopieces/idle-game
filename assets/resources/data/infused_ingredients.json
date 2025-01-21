@@ -1,5 +1,13 @@
 [
   {
+    "name": "tie_gu_yin_shen",
+    "displayName": "铁骨银参",
+    "itemType": "ingredient",
+    "description": "盛则泻之，虚则补之。",
+    "unique": true,
+    "rarity": "rare"
+  },
+  {
     "name": "nen_yu_ou",
     "displayName": "嫩玉藕",
     "itemType": "ingredient",

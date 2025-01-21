@@ -16,6 +16,19 @@ import { UpgradeRecipe } from "db://assets/Script/Recipe/UpgradeRecipe";
 import { Shop } from "db://assets/Script/Shop/Shop";
 import { ItemMeta } from "db://assets/Script/Item/ItemMeta";
 import { UniqueUtilityBaiLianZi } from "db://assets/Script/Equipment/UniqueUtility/Effects/UniqueUtilityBaiLianZi";
+import { LiquorEffectSongLao } from "db://assets/Script/Drink/Liquor/Effects/LiquorEffectSongLao";
+import { GourdEffectZhengXianHongHuLu } from "db://assets/Script/Drink/Gourd/Effects/GourdEffectZhengXianHongHuLu";
+import { GourdEffectWuGuiHuLu } from "db://assets/Script/Drink/Gourd/Effects/GourdEffectWuGuiHuLu";
+import { GourdEffectQianKunCaiHuLu } from "db://assets/Script/Drink/Gourd/Effects/GourdEffectQianKunCaiHuLu";
+import {
+    IngredientEffectTieGuYinShen
+} from "db://assets/Script/Drink/InfusedIngredient/Effects/IngredientEffectTieGuYinShen";
+import { IngredientEffectNenYuOu } from "db://assets/Script/Drink/InfusedIngredient/Effects/IngredientEffectNenYuOu";
+import {
+    IngredientEffectBaiHuaRui
+} from "db://assets/Script/Drink/InfusedIngredient/Effects/IngredientEffectBaiHuaRui";
+import { LiquorEffectYeZiJiu } from "db://assets/Script/Drink/Liquor/Effects/LiquorEffectYeZiJiu";
+import { LiquorEffectGaoErNiang } from "db://assets/Script/Drink/Liquor/Effects/LiquorEffectGaoErNiang";
 
 /**
  * 数据资源路径常量
@@ -30,6 +43,21 @@ export enum DataPath {
      * 装备配置表
      */
     EQUIPMENTS = 'data/equipments',
+
+    /**
+     * 葫芦配置表
+     */
+    GOURDS = 'data/gourds',
+
+    /**
+     * 酒配置表
+     */
+    LIQUORS = 'data/liquors',
+
+    /**
+     * 泡酒物配置表
+     */
+    INFUSED_INGREDIENTS = 'data/infused_ingredients',
 
     /**
      * 铸造配方配置表
@@ -114,13 +142,28 @@ export const CHAPTERS: Chapter[] = [];
 export const SHOP_TABLE = new Map<string, Shop>();
 
 /**
- * 独门妙用 Map
- *
- * 效果名（装备名） -> 效果
+ * 独门妙用表
  */
 export const UNIQUE_UTILITY_TABLE = new Map<string, UniqueUtility>();
+
+// 装备
 UNIQUE_UTILITY_TABLE.set(UniqueUtilityLinGunShuangShe.NAME, new UniqueUtilityLinGunShuangShe());
 UNIQUE_UTILITY_TABLE.set(UniqueUtilityBaiLianZi.NAME, new UniqueUtilityBaiLianZi());
+
+// 葫芦
+UNIQUE_UTILITY_TABLE.set(GourdEffectZhengXianHongHuLu.NAME, new GourdEffectZhengXianHongHuLu());
+UNIQUE_UTILITY_TABLE.set(GourdEffectWuGuiHuLu.NAME, new GourdEffectWuGuiHuLu());
+UNIQUE_UTILITY_TABLE.set(GourdEffectQianKunCaiHuLu.NAME, new GourdEffectQianKunCaiHuLu());
+
+// 酒
+UNIQUE_UTILITY_TABLE.set(LiquorEffectYeZiJiu.NAME, new LiquorEffectYeZiJiu());
+UNIQUE_UTILITY_TABLE.set(LiquorEffectGaoErNiang.NAME, new LiquorEffectGaoErNiang());
+UNIQUE_UTILITY_TABLE.set(LiquorEffectSongLao.NAME, new LiquorEffectSongLao());
+
+// 泡酒物
+UNIQUE_UTILITY_TABLE.set(IngredientEffectTieGuYinShen.NAME, new IngredientEffectTieGuYinShen());
+UNIQUE_UTILITY_TABLE.set(IngredientEffectNenYuOu.NAME, new IngredientEffectNenYuOu());
+UNIQUE_UTILITY_TABLE.set(IngredientEffectBaiHuaRui.NAME, new IngredientEffectBaiHuaRui());
 
 /**
  * 套装效果 Map
