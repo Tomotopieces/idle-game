@@ -30,5 +30,6 @@ export class LiquorEffectGaoErNiang extends UniqueUtility {
     }
 
     onDeactivate(): void {
+        EventCenter.unregister(EventName.PLAYER_DRINK, LiquorEffectGaoErNiang.NAME);
     }
 }
