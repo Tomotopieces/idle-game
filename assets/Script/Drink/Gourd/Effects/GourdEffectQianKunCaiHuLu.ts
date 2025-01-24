@@ -21,7 +21,7 @@ export class GourdEffectQianKunCaiHuLu extends UniqueUtility {
 
     onActivate(): void {
         EventCenter.register(EventName.PLAYER_DRINK, GourdEffectQianKunCaiHuLu.NAME, (_event: PlayerDrinkEvent) => {
-            if (PlayerController.PLAYER.gourd.gourd.remain !== 1) {
+            if (PlayerController.PLAYER.drink.gourd.remain !== 1) {
                 return;
             }
             const buff = new Buff(GourdEffectQianKunCaiHuLu.NAME, Unit.PLAYER, BuffType.BUFF, 30, null,

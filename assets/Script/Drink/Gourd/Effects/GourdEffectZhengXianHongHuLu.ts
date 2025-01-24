@@ -20,7 +20,7 @@ export class GourdEffectZhengXianHongHuLu extends UniqueUtility {
 
     onActivate(): void {
         EventCenter.register(EventName.PLAYER_DRINK, GourdEffectZhengXianHongHuLu.NAME, (event: PlayerDrinkEvent) => {
-            if (PlayerController.PLAYER.gourd.gourd.state === GourdState.FULL) {
+            if (PlayerController.PLAYER.drink.gourd.state === GourdState.FULL) {
                 event.healthRecoverRatio = 1;
             }
         });
