@@ -9,8 +9,8 @@ import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { EquipEvent } from "db://assets/Script/Event/Events/EquipEvent";
 import { Equipment } from "db://assets/Script/Equipment/Equipment";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { Unit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
-import { AREA_TABLE, CHAPTER_TABLE, ITEM_META_TABLE, STAGE_TABLE } from "db://assets/Script/DataTable";
+import { DealDamageEvent, Unit } from "db://assets/Script/Event/Events/DealDamageEvent";
+import { AREA_TABLE, CHAPTER_TABLE, STAGE_TABLE } from "db://assets/Script/DataTable";
 import { DropItemFactory } from "db://assets/Script/Drop/DropItemFactory";
 import { TalentTreeNode } from "db://assets/Script/Talent/TalentTreeNode";
 import { DefaultLevelName, Level } from "db://assets/Script/Level/Level";
@@ -84,7 +84,7 @@ export class GameManager extends Component {
 
     onDestroy() {
         EventCenter.idOff(this.node.name);
-        this.unschedule(this._autoSaveCallback);
+        this.unscheduleAllCallbacks();
     }
 
     /**
@@ -319,10 +319,10 @@ export class GameManager extends Component {
      * 装备初始套装
      */
     private equipStarterSet() {
-        this.player.equipments.equip(ItemFactory.itemStack('liu_mu_gun', 1));
-        this.player.equipments.equip(ItemFactory.itemStack('mian_bu_zha_wan', 1));
-        this.player.equipments.equip(ItemFactory.itemStack('hu_pi_qun', 1));
-        this.player.equipments.equip(ItemFactory.itemStack('mian_bu_tui_beng', 1));
+        this.player.equipments.equip(ItemFactory.itemStack(`liu_mu_gun`, 1));
+        this.player.equipments.equip(ItemFactory.itemStack(`mian_bu_zha_wan`, 1));
+        this.player.equipments.equip(ItemFactory.itemStack(`hu_pi_qun`, 1));
+        this.player.equipments.equip(ItemFactory.itemStack(`mian_bu_tui_beng`, 1));
     }
 
     /**
@@ -359,12 +359,12 @@ export class GameManager extends Component {
      */
     gift() {
         Storehouse.putIn([
-            ItemFactory.itemStack(ITEM_META_TABLE.get('tong_yun_bang'), 1),
-            ItemFactory.itemStack(ITEM_META_TABLE.get('bai_xi_nuo_mian'), 1),
-            ItemFactory.itemStack(ITEM_META_TABLE.get('bai_xi_chen_qian_yi'), 1),
-            ItemFactory.itemStack(ITEM_META_TABLE.get('bai_xi_hu_shou'), 1),
-            ItemFactory.itemStack(ITEM_META_TABLE.get('bai_xi_diao_tui'), 1),
-            ItemFactory.itemStack(ITEM_META_TABLE.get('ru_yi_jin_gu_bang'), 1)
+            ItemFactory.itemStack(`tong_yun_bang`, 1),
+            ItemFactory.itemStack(`bai_xi_nuo_mian`, 1),
+            ItemFactory.itemStack(`bai_xi_chen_qian_yi`, 1),
+            ItemFactory.itemStack(`bai_xi_hu_shou`, 1),
+            ItemFactory.itemStack(`bai_xi_diao_tui`, 1),
+            ItemFactory.itemStack(`ru_yi_jin_gu_bang`, 1)
         ]);
     }
 }

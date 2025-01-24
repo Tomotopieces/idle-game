@@ -14,13 +14,4 @@ export class EquipmentSerial extends ItemSerial {
         super(equipment);
         this.rank = equipment.rank;
     }
-
-    /**
-     * 反序列化
-     */
-    deserialize(): Equipment {
-        const equipment = super.deserialize() as Equipment;
-        equipment.rank = this.rank;
-        return equipment;
-    }
 }

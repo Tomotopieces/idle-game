@@ -36,6 +36,9 @@ export class DrinkManager {
      */
     private _autoDrinkTimer: number = 0;
 
+    /**
+     * 危险点血量比例
+     */
     private readonly _dangerousRatio: number = 0.5;
 
     /**
@@ -106,7 +109,7 @@ export class DrinkManager {
         const oldGourd = this._gourd;
         oldGourd?.drinkEffect.onDeactivate();
         this._gourd = gourd;
-        this._gourd?.drinkEffect.onActivate();
+        this._gourd.drinkEffect.onActivate();
 
         // 计算剩余酒量
         this._gourd.remain = oldGourd ? Math.min(this._gourd.capacity, oldGourd.remain) : this._gourd.capacity;
@@ -121,7 +124,7 @@ export class DrinkManager {
         const oldLiquor = this._liquor;
         oldLiquor?.drinkEffect.onDeactivate();
         this._liquor = liquor;
-        this._liquor?.drinkEffect.onActivate();
+        this._liquor.drinkEffect.onActivate();
 
         // 计算泡酒物数量
         if (this._liquor.ingredientCapacity < (oldLiquor?.ingredientCapacity ?? 0)) {

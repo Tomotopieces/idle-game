@@ -17,9 +17,11 @@ export class Gourd extends Item {
      */
     remain: number;
 
-    constructor(meta: GourdMeta) {
+    constructor(meta: GourdMeta, remain: number = meta.capacity) {
         super(meta);
         this.meta = meta;
+
+        this.remain = remain;
     }
 
     /**
