@@ -7,20 +7,15 @@ import { UniqueUtility } from "db://assets/Script/Equipment/UniqueUtility/Unique
  * 葫芦
  */
 export class Gourd extends Item {
-    /**
-     * 元数据
-     */
-    readonly meta: GourdMeta;
+    declare meta: GourdMeta;
 
     /**
      * 剩余量
      */
     remain: number;
 
-    constructor(meta: GourdMeta, remain: number = meta.capacity) {
-        super(meta);
-        this.meta = meta;
-
+    constructor(meta: GourdMeta, uuid?: string, remain: number = meta.capacity) {
+        super(meta, uuid);
         this.remain = remain;
     }
 

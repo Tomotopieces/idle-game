@@ -8,7 +8,6 @@ import { UIPostMessageEvent } from "db://assets/Script/Event/Events/UIPostMessag
 import { MessageType } from "db://assets/Script/UI/Message/MessageFactory";
 import { ItemType } from "db://assets/Script/Item/ItemType";
 import { EquipmentType } from "db://assets/Script/Equipment/EquipmentType";
-import { ItemFactory } from "db://assets/Script/Item/ItemFactory";
 import { EquipmentSlot } from "db://assets/Script/Entity/Player/PlayerEquipmentManager";
 
 /**
@@ -161,7 +160,7 @@ export class Storehouse {
         if (itemStack.count <= 0) {
             this.STOREHOUSE.delete(itemName);
         }
-        Storehouse.emitUpdateEvent([ItemFactory.itemStack(itemStack.item, 1)]);
+        Storehouse.emitUpdateEvent([ItemStack.of(itemStack.item, 1)]);
         return true;
     }
 
@@ -186,7 +185,7 @@ export class Storehouse {
      */
     private static emitUpdateEvent(stackList: ItemStack[]) {
         // 发送被更新的物品的现有库存情况，避免修改stackList数据
-        const updateStacks = stackList.map(stack => this.STOREHOUSE.get(stack.item.name) || ItemFactory.itemStack(stack.item, 0));
+        const updateStacks = stackList.map(stack => this.STOREHOUSE.get(stack.item.name) || ItemStack.of(stack.item, 0));
         EventCenter.emit(EventName.UI_UPDATE_STOREHOUSE, updateStacks);
     }
 

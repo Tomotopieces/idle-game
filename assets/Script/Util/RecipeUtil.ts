@@ -5,7 +5,6 @@ import { RecipeRequirement } from "db://assets/Script/Recipe/RecipeRequirement";
 import { CRAFT_RECIPE_TABLE, UPGRADE_RECIPE_LIST } from "db://assets/Script/DataTable";
 import { UpgradeRecipe } from "db://assets/Script/Recipe/UpgradeRecipe";
 import { Equipment } from "db://assets/Script/Equipment/Equipment";
-import { ItemFactory } from "db://assets/Script/Item/ItemFactory";
 
 /**
  * 配方工具
@@ -56,7 +55,7 @@ export class RecipeUtil {
     static craft(recipe: CraftRecipe): boolean {
         const requirements = recipe.requirements.filter(requirement => requirement.consume);
         if (Storehouse.takeOut(this.requirementsToStacks(requirements))) {
-            Storehouse.putIn([ItemFactory.itemStack(recipe.output, 1)]);
+            Storehouse.putIn([ItemStack.of(recipe.output, 1)]);
             return true;
         }
         return false;
@@ -83,6 +82,6 @@ export class RecipeUtil {
      * @return 物品堆叠列表
      */
     private static requirementsToStacks(requirements: RecipeRequirement[]): ItemStack[] {
-        return requirements.map(requirement => ItemFactory.itemStack(requirement.item, requirement.count));
+        return requirements.map(requirement => ItemStack.of(requirement.item, requirement.count));
     }
 }

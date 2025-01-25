@@ -49,7 +49,7 @@ export class ProductInfoUI extends Component {
     show(product: Product) {
         this.node.active = true;
         this._product = product;
-        this._itemInfo.show(ItemFactory.item(product.itemMeta));
+        this._itemInfo.show(ItemFactory.create(product.itemMeta));
 
         this.updatePriceLabel();
     }

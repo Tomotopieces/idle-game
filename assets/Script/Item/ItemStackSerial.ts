@@ -1,6 +1,4 @@
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
-
-import { ITEM_META_TABLE } from "db://assets/Script/DataTable";
 import { ItemFactory } from "db://assets/Script/Item/ItemFactory";
 import { ItemSerial } from "db://assets/Script/Item/ItemSerial";
 
@@ -26,9 +24,10 @@ export class ItemStackSerial {
     /**
      * 反序列化
      *
-     * @param stackSerial ItemStackSerial
+     * @param serial 序列化数据
+     * @return {ItemStack} 物品堆叠
      */
-    static deserialize(stackSerial: ItemStackSerial): ItemStack {
-        return ItemFactory.itemStack(ITEM_META_TABLE.get(stackSerial.itemSerial.name), stackSerial.count);
+    static deserialize(serial: ItemStackSerial): ItemStack {
+        return ItemStack.of(ItemFactory.deserialize(serial.itemSerial), serial.count);
     }
 }

@@ -1,6 +1,5 @@
 import { DropItem } from "db://assets/Script/Drop/DropItem";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
-import { ItemFactory } from "db://assets/Script/Item/ItemFactory";
 
 /**
  * 物品掉落工厂
@@ -15,7 +14,7 @@ export class DropItemFactory {
         const result: ItemStack[] = [];
         dropList.forEach(drop => {
             if (Math.random() < drop.dropRate || drop.once) {
-                result.push(ItemFactory.itemStack(drop.itemMeta, Math.floor(Math.random() * (drop.max - drop.min + 1) + drop.min)));
+                result.push(ItemStack.of(drop.itemMeta, Math.floor(Math.random() * (drop.max - drop.min + 1) + drop.min)));
             }
         });
         return result;

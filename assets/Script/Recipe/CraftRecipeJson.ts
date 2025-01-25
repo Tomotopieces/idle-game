@@ -25,7 +25,7 @@ export class CraftRecipeJson {
      * @return CraftRecipe
      */
     static toCraftRecipe(id: number, recipeJson: CraftRecipeJson): CraftRecipe {
-        const item = ItemFactory.item(ITEM_META_TABLE.get(recipeJson.outputName));
+        const item = ItemFactory.create(ITEM_META_TABLE.get(recipeJson.outputName));
         return new CraftRecipe(id, item, recipeJson.requirements.map(requirement => RecipeRequirementJson.toRecipeItem(requirement)));
     }
 }

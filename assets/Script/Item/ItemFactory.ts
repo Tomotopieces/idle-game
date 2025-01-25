@@ -4,11 +4,9 @@ import { Sellable } from "db://assets/Script/Sellable/Sellable";
 import { ItemMeta } from "db://assets/Script/Item/ItemMeta";
 import { EquipmentMeta } from "db://assets/Script/Equipment/EquipmentMeta";
 import { SellableMeta } from "db://assets/Script/Sellable/SellableMeta";
-import { ItemStack } from "db://assets/Script/Item/ItemStack";
 import { ITEM_META_TABLE } from "db://assets/Script/DataTable";
 import { ItemSerial } from "db://assets/Script/Item/ItemSerial";
 import { EquipmentSerial } from "db://assets/Script/Equipment/EquipmentSerial";
-import { ItemStackSerial } from "db://assets/Script/Item/ItemStackSerial";
 import { GourdMeta } from "db://assets/Script/Drink/Gourd/GourdMeta";
 import { Gourd } from "db://assets/Script/Drink/Gourd/Gourd";
 import { LiquorMeta } from "db://assets/Script/Drink/Liquor/LiquorMeta";
@@ -16,85 +14,85 @@ import { Liquor } from "db://assets/Script/Drink/Liquor/Liquor";
 import { InfusedIngredient } from "db://assets/Script/Drink/InfusedIngredient/InfusedIngredient";
 import { InfusedIngredientMeta } from "db://assets/Script/Drink/InfusedIngredient/InfusedIngredientMeta";
 import { GourdSerial } from "db://assets/Script/Drink/Gourd/GourdSerial";
-
-/**
- * 根据Meta类型推断物品类型
- */
-type ItemFromMeta<Meta extends ItemMeta> =
-    Meta extends EquipmentMeta ? Equipment :
-    Meta extends SellableMeta ? Sellable :
-    Meta extends GourdMeta ? Gourd :
-    Meta extends LiquorMeta ? Liquor :
-    Meta extends InfusedIngredientMeta ? InfusedIngredient :
-    Item;
-
-/**
- * 根据物品类型推断序列化类型
- */
-type SerialFromItem<T extends Item> =
-    T extends Equipment ? EquipmentSerial :
-    T extends GourdMeta ? GourdSerial :
-    ItemSerial;
+import { Constructor } from "db://assets/Script/Util/Functions";
 
 /**
  * 物品工厂
  */
 export class ItemFactory {
     /**
-     * 通过元数据生产新物品
-     *
-     * @param meta 元数据
-     * @return {ItemFromMeta} 物品
+     * 物品构造注册表
      */
-    static item<Meta extends ItemMeta>(meta: Meta): ItemFromMeta<Meta> {
-        return meta instanceof EquipmentMeta ? new Equipment(meta) as ItemFromMeta<Meta> :
-               meta instanceof SellableMeta ? new Sellable(meta) as ItemFromMeta<Meta> :
-               meta instanceof GourdMeta ? new Gourd(meta) as ItemFromMeta<Meta> :
-               meta instanceof LiquorMeta ? new Liquor(meta) as ItemFromMeta<Meta> :
-               meta instanceof InfusedIngredientMeta ? new InfusedIngredient(meta) as ItemFromMeta<Meta> :
-               new Item(meta) as ItemFromMeta<Meta>;
+    private static readonly itemRegistry = new Map<Constructor<ItemMeta>, Constructor<Item>>();
+
+    /**
+     * 序列化构造注册表
+     */
+    private static readonly serialRegistry = new Map<Constructor<Item>, Constructor<ItemSerial>>();
+
+    /**
+     * 反序列化方法注册表
+     */
+    private static readonly deserializeRegistry = new Map<Constructor<ItemMeta>, (meta: ItemMeta, serial: ItemSerial) => Item>();
+
+    /**
+     * 初始化
+     */
+    static init() {
+        // 注册物品构造
+        this.itemRegistry.set(ItemMeta, Item);
+        this.itemRegistry.set(EquipmentMeta, Equipment);
+        this.itemRegistry.set(SellableMeta, Sellable);
+        this.itemRegistry.set(GourdMeta, Gourd);
+        this.itemRegistry.set(LiquorMeta, Liquor);
+        this.itemRegistry.set(InfusedIngredientMeta, InfusedIngredient);
+
+        // 注册序列化构造
+        this.serialRegistry.set(Item, ItemSerial);
+        this.serialRegistry.set(Equipment, EquipmentSerial);
+        this.serialRegistry.set(Sellable, ItemSerial);
+        this.serialRegistry.set(Gourd, GourdSerial);
+        this.serialRegistry.set(Liquor, ItemSerial);
+        this.serialRegistry.set(InfusedIngredient, ItemSerial);
+
+        // 注册反序列化方法（直接使用将Serial作为参数的Item构造函数将导致循环依赖）
+        this.deserializeRegistry.set(ItemMeta, ItemSerial.deserialize);
+        this.deserializeRegistry.set(EquipmentMeta, EquipmentSerial.deserialize);
+        this.deserializeRegistry.set(SellableMeta, ItemSerial.deserialize);
+        this.deserializeRegistry.set(GourdMeta, GourdSerial.deserialize);
+        this.deserializeRegistry.set(LiquorMeta, ItemSerial.deserialize);
+        this.deserializeRegistry.set(InfusedIngredientMeta, ItemSerial.deserialize);
     }
 
     /**
-     * 通过元数据生产新物品堆叠
+     * 通过元数据生产新物品
      *
-     * @param data  元数据 | 物品 | 名称
-     * @param count 堆叠数量
-     * @return {ItemStack} 物品堆叠
+     * @param meta 元数据
+     * @return {Item} 物品
      */
-    static itemStack<Meta extends ItemMeta>(data: Meta | Item | string, count: number): ItemStack {
-        const item =
-            data instanceof ItemMeta ? ItemFactory.item(data) :
-            data instanceof Item ? data :
-            this.item(ITEM_META_TABLE.get(data));
-        return new ItemStack(item, count) as ItemStack;
+    static create<Meta extends ItemMeta>(meta: Meta): Item {
+        const constructor = this.itemRegistry.get(meta.constructor as Constructor<ItemMeta>) ?? Item;
+        return new constructor(meta);
     }
 
     /**
      * 序列化物品
      *
      * @param item 物品
+     * @return {ItemSerial} 序列化数据
      */
-    static serialize<T extends Item>(item: T): SerialFromItem<T> {
-        // 对带状态的物品子类进行特殊序列化处理
-        return item instanceof Equipment ? new EquipmentSerial(item) as SerialFromItem<T> :
-               item instanceof Gourd ? new GourdSerial(item) as SerialFromItem<T> :
-               new ItemSerial(item) as SerialFromItem<T>;
+    static serialize<T extends Item>(item: T): ItemSerial {
+        const constructor = this.serialRegistry.get(item.constructor as Constructor<T>) ?? ItemSerial;
+        return new constructor(item);
     }
 
     /**
-     * 反序列化物品堆叠
+     * 反序列化物品
      *
-     * 根据物品名称进行Meta类型判断，生成对应类型物品
-     *
-     * @param stackSerial 序列化物品堆叠
-     * @return {ItemStack} 物品堆叠
+     * @param serial 序列化数据
      */
-    static stackDeserialize(stackSerial: ItemStackSerial): ItemStack {
-        const meta = ITEM_META_TABLE.get(stackSerial.itemSerial.name);
-        // 对带状态的物品子类进行特殊反序列化处理
-        return meta instanceof EquipmentMeta ? this.itemStack(new Equipment(meta, (stackSerial.itemSerial as EquipmentSerial).rank), stackSerial.count) :
-               meta instanceof GourdMeta ? this.itemStack(new Gourd(meta, (stackSerial.itemSerial as GourdSerial).remain), stackSerial.count) :
-               this.itemStack(meta, stackSerial.count);
+    static deserialize(serial: ItemSerial) {
+        const meta = ITEM_META_TABLE.get(serial.name);
+        return (this.deserializeRegistry.get(meta.constructor as Constructor<ItemMeta>) ?? ItemSerial.deserialize)(meta, serial);
     }
 }

@@ -24,6 +24,11 @@ export type Runnable = () => void;
 export type AnyFunction = (...args: any) => any;
 
 /**
+ * 构造函数类型
+ */
+export type Constructor<T> = new (...args: any[]) => T;
+
+/**
  * 始终返回 true 的 Predicate
  */
 export const ALWAYS_TRUE: Predicate<void> = () => true;

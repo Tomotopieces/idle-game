@@ -48,7 +48,7 @@ export class DrinkManager {
      */
     update(dt: number) {
         // 葫芦未满时自动恢复酒量
-        if (this.gourd.state !== GourdState.FULL) {
+        if (this._gourd.state !== GourdState.FULL) {
             this._autoRecoverTimer += dt;
             if (this._autoRecoverTimer >= this._gourd.autoRecoverInterval) {
                 this._autoRecoverTimer -= this._gourd.autoRecoverInterval;
@@ -91,7 +91,7 @@ export class DrinkManager {
      * 饮酒
      */
     drink() {
-        if (this.gourd.remain <= 0 || !this._liquor) {
+        if (this._gourd.remain <= 0 || !this._liquor) {
             return;
         }
 

@@ -28,6 +28,7 @@ import { EquipmentMetaJson } from "db://assets/Script/Equipment/EquipmentMetaJso
 import { GourdMetaJson } from "db://assets/Script/Drink/Gourd/GourdMetaJson";
 import { LiquorMetaJson } from "db://assets/Script/Drink/Liquor/LiquorMetaJson";
 import { InfusedIngredientMetaJson } from "db://assets/Script/Drink/InfusedIngredient/InfusedIngredientMetaJson";
+import { ItemFactory } from "db://assets/Script/Item/ItemFactory";
 
 const { ccclass, property } = _decorator;
 
@@ -69,6 +70,7 @@ export class GameLoader extends Component {
 
     onLoad() {
         EventCenter.init();
+        ItemFactory.init();
 
         // 加载配置文件
         this.loadStep = 0;

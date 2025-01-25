@@ -9,9 +9,9 @@ import { EventName } from "db://assets/Script/Event/EventName";
 import { UIPostMessageEvent } from "db://assets/Script/Event/Events/UIPostMessageEvent";
 import { MessageType } from "db://assets/Script/UI/Message/MessageFactory";
 import { ProductPurchasedEvent } from "db://assets/Script/Event/Events/ProductPurchasedEvent";
-import { ItemFactory } from "db://assets/Script/Item/ItemFactory";
 import { Product } from "db://assets/Script/Shop/Product";
 import { ProductMeta } from "db://assets/Script/Shop/ProductMeta";
+import { ItemStack } from "db://assets/Script/Item/ItemStack";
 
 /**
  * 商店管理器
@@ -55,8 +55,8 @@ export class ShopManager {
         }
 
         // 购买
-        if (Storehouse.takeOut([ItemFactory.itemStack(LING_YUN_NAME, product.price)])) {
-            Storehouse.putIn([ItemFactory.itemStack(product.itemMeta, 1)]);
+        if (Storehouse.takeOut([ItemStack.of(LING_YUN_NAME, product.price)])) {
+            Storehouse.putIn([ItemStack.of(product.itemMeta, 1)]);
             product.count--;
         }
 

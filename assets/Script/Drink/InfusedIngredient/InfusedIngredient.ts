@@ -6,11 +6,10 @@ import { UniqueUtility } from "db://assets/Script/Equipment/UniqueUtility/Unique
  * 泡酒物
  */
 export class InfusedIngredient extends Item {
-    readonly meta: InfusedIngredientMeta;
+    declare meta: InfusedIngredientMeta;
 
-    constructor(meta: InfusedIngredientMeta) {
-        super(meta);
-        this.meta = meta;
+    constructor(meta: InfusedIngredientMeta, uuid?: string) {
+        super(meta, uuid);
     }
 
     get drinkEffect(): UniqueUtility {

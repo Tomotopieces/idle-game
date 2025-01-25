@@ -8,7 +8,7 @@ import { EquipmentType } from "db://assets/Script/Equipment/EquipmentType";
  * 装备
  */
 export class Equipment extends Item {
-    readonly meta: EquipmentMeta;
+    declare meta: EquipmentMeta;
 
     /**
      * 装备属性
@@ -20,9 +20,8 @@ export class Equipment extends Item {
      */
     rank: number;
 
-    constructor(meta: EquipmentMeta, rank: number = 0) {
-        super(meta);
-        this.meta = meta;
+    constructor(meta: EquipmentMeta, uuid?: string, rank: number = 0) {
+        super(meta, uuid);
         this.attributes = new EquipmentAttributes(meta.attributes, this);
         this.rank = rank;
     }

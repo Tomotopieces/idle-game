@@ -5,11 +5,10 @@ import { SellableMeta } from "db://assets/Script/Sellable/SellableMeta";
  * 玩家贩卖品
  */
 export class Sellable extends Item {
-    readonly meta: SellableMeta;
+    declare meta: SellableMeta;
 
-    constructor(meta: SellableMeta) {
-        super(meta);
-        this.meta = meta;
+    constructor(meta: SellableMeta, uuid?: string) {
+        super(meta, uuid);
     }
 
     get price(): number {

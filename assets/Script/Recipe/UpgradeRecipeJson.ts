@@ -38,6 +38,6 @@ export class UpgradeRecipeJson {
      */
     static toUpgradeRecipe(id: number, recipeJson: UpgradeRecipeJson): UpgradeRecipe {
         const requirements = recipeJson.requirements.map(requirement => RecipeRequirementJson.toRecipeItem(requirement));
-        return new UpgradeRecipe(id, ItemFactory.item(ITEM_META_TABLE.get(recipeJson.inputName) as EquipmentMeta), recipeJson.outputRarity, requirements);
+        return new UpgradeRecipe(id, ItemFactory.create(ITEM_META_TABLE.get(recipeJson.inputName) as EquipmentMeta), recipeJson.outputRarity, requirements);
     }
 }

@@ -21,7 +21,6 @@ import { MessageType } from "db://assets/Script/UI/Message/MessageFactory";
 import { Sellable } from "db://assets/Script/Sellable/Sellable";
 import { ShopManager } from "db://assets/Script/Shop/ShopManager";
 import { GameLevelUpdatedEvent } from "db://assets/Script/Event/Events/GameLevelUpdatedEvent";
-import { ItemFactory } from "db://assets/Script/Item/ItemFactory";
 import { PlayerDrinkEvent } from "db://assets/Script/Event/Events/PlayerDrinkEvent";
 
 const { ccclass, property } = _decorator;
@@ -249,7 +248,7 @@ export class GameManager extends Component {
             if (!Storehouse.takeOutOne(equipment.name)) {
                 return;
             }
-            const unequipped = this.player.equipments.equip(ItemFactory.itemStack(equipment, 1));
+            const unequipped = this.player.equipments.equip(ItemStack.of(equipment, 1));
             EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
             if (unequipped) {
                 Storehouse.putIn([unequipped], false, false);
@@ -303,7 +302,7 @@ export class GameManager extends Component {
         const sellable = stack.item as Sellable;
         const price = sellable.price * stack.count;
         Storehouse.takeOut([stack]);
-        Storehouse.putIn([ItemFactory.itemStack(LING_YUN_NAME, price)], false);
+        Storehouse.putIn([ItemStack.of(LING_YUN_NAME, price)], false);
     }
 
     /**
@@ -319,10 +318,10 @@ export class GameManager extends Component {
      * 装备初始套装
      */
     private equipStarterSet() {
-        this.player.equipments.equip(ItemFactory.itemStack(`liu_mu_gun`, 1));
-        this.player.equipments.equip(ItemFactory.itemStack(`mian_bu_zha_wan`, 1));
-        this.player.equipments.equip(ItemFactory.itemStack(`hu_pi_qun`, 1));
-        this.player.equipments.equip(ItemFactory.itemStack(`mian_bu_tui_beng`, 1));
+        this.player.equipments.equip(ItemStack.of(`liu_mu_gun`, 1));
+        this.player.equipments.equip(ItemStack.of(`mian_bu_zha_wan`, 1));
+        this.player.equipments.equip(ItemStack.of(`hu_pi_qun`, 1));
+        this.player.equipments.equip(ItemStack.of(`mian_bu_tui_beng`, 1));
     }
 
     /**
@@ -359,12 +358,12 @@ export class GameManager extends Component {
      */
     gift() {
         Storehouse.putIn([
-            ItemFactory.itemStack(`tong_yun_bang`, 1),
-            ItemFactory.itemStack(`bai_xi_nuo_mian`, 1),
-            ItemFactory.itemStack(`bai_xi_chen_qian_yi`, 1),
-            ItemFactory.itemStack(`bai_xi_hu_shou`, 1),
-            ItemFactory.itemStack(`bai_xi_diao_tui`, 1),
-            ItemFactory.itemStack(`ru_yi_jin_gu_bang`, 1)
+            ItemStack.of(`tong_yun_bang`, 1),
+            ItemStack.of(`bai_xi_nuo_mian`, 1),
+            ItemStack.of(`bai_xi_chen_qian_yi`, 1),
+            ItemStack.of(`bai_xi_hu_shou`, 1),
+            ItemStack.of(`bai_xi_diao_tui`, 1),
+            ItemStack.of(`ru_yi_jin_gu_bang`, 1)
         ]);
     }
 }

@@ -7,8 +7,8 @@ import { DefaultLevelName } from "db://assets/Script/Level/Level";
 import { LedgerRecord } from "db://assets/Script/Shop/LedgerRecord";
 import { ArrayUtil } from "db://assets/Script/Util/ArrayUtil";
 import { EquipmentType } from "db://assets/Script/Equipment/EquipmentType";
-import { ItemFactory } from "db://assets/Script/Item/ItemFactory";
 import { EquipmentSlot } from "db://assets/Script/Entity/Player/PlayerEquipmentManager";
+import { ItemStackSerial } from "db://assets/Script/Item/ItemStackSerial";
 
 /**
  * 存档数据
@@ -87,13 +87,13 @@ export class SaveData {
         const dataJson = JSON.parse(json) as SaveDataJson;
         const equipmentSlot = new Map<EquipmentType, EquipmentSlot>(dataJson.equipmentSlot
             .map(stackSerial => {
-                const stack = ItemFactory.stackDeserialize(stackSerial);
+                const stack = ItemStackSerial.deserialize(stackSerial);
                 const slot = new EquipmentSlot();
                 slot.stack = stack;
                 return [(stack.item as Equipment).equipmentType, slot];
             }));
         const storehouse = new Map<string, ItemStack>(dataJson.storehouse
-            .map(stackSerial => [stackSerial.itemSerial.name, ItemFactory.stackDeserialize(stackSerial)]));
+            .map(stackSerial => [stackSerial.itemSerial.name, ItemStackSerial.deserialize(stackSerial)]));
         const talents = dataJson.talents ? MapUtil.parse(dataJson.talents) as Map<string, number> : null;
         const enemyRecord = dataJson.enemyRecord ? MapUtil.parse(dataJson.enemyRecord) as Map<string, number> : null;
         const ledger = ArrayUtil.groupBy(dataJson.ledger, record => record.shopScene);

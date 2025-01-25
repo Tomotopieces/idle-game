@@ -1,6 +1,7 @@
 import { ItemMeta } from "db://assets/Script/Item/ItemMeta";
 import { ItemType } from "db://assets/Script/Item/ItemType";
 import { ItemRarity } from "db://assets/Script/Item/ItemRarity";
+import { UUIDUtil } from "db://assets/Script/Util/UUIDUtil";
 
 /**
  * 物品
@@ -12,10 +13,16 @@ export class Item {
     readonly meta: ItemMeta;
 
     /**
+     * 唯一标识符
+     */
+    readonly uuid: string;
+
+    /**
      * 请使用 ItemFactory.item 创建
      */
-    constructor(meta: ItemMeta) {
+    constructor(meta: ItemMeta, uuid?: string) {
         this.meta = meta;
+        this.uuid = uuid ?? UUIDUtil.make();
     }
 
     get name(): string {

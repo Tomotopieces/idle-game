@@ -6,11 +6,10 @@ import { LiquorMeta } from "db://assets/Script/Drink/Liquor/LiquorMeta";
  * 酒
  */
 export class Liquor extends Item {
-    readonly meta: LiquorMeta;
+    declare meta: LiquorMeta;
 
-    constructor(meta: LiquorMeta) {
-        super(meta);
-        this.meta = meta;
+    constructor(meta: LiquorMeta, uuid?: string) {
+        super(meta, uuid);
     }
 
     get healthRecoverRatio(): number {
