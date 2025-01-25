@@ -1,4 +1,4 @@
-import { UniqueUtility } from "db://assets/Script/Equipment/UniqueUtility/UniqueUtility";
+import { PassiveEffect } from "db://assets/Script/PassiveEffect/PassiveEffect";
 import { Item } from "db://assets/Script/Item/Item";
 import { LiquorMeta } from "db://assets/Script/Drink/Liquor/LiquorMeta";
 
@@ -20,7 +20,7 @@ export class Liquor extends Item {
         return this.meta.ingredientCapacity;
     }
 
-    get drinkEffect(): UniqueUtility {
-        return this.meta.drinkEffect;
+    get effect(): PassiveEffect {
+        return this.meta.effect;
     }
 }

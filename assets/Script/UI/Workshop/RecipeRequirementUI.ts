@@ -60,7 +60,7 @@ export class RecipeRequirementUI extends Component {
         this._nameLabel.string = this._requirement.item.displayName;
 
         // 数量标签
-        this.updateCountLabel(Storehouse.countOne(this._requirement.item));
+        this.updateCountLabel(Storehouse.count(this._requirement.item));
     }
 
     /**

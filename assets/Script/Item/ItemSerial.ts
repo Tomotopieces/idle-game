@@ -6,17 +6,18 @@ import { ItemMeta } from "db://assets/Script/Item/ItemMeta";
  */
 export class ItemSerial {
     /**
-     * 名称
-     */
-    readonly name: string;
-
-    /**
      * 唯一标识符
      */
     readonly uuid: string;
 
-    constructor(item: Item | string) {
-        this.name = item instanceof Item ? item.name : item;
+    /**
+     * 名称
+     */
+    readonly name: string;
+
+    constructor(item: Item) {
+        this.uuid = item.uuid;
+        this.name = item.name;
     }
 
     /**

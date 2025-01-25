@@ -3,6 +3,8 @@ import { EquipmentAttributes } from "db://assets/Script/Equipment/EquipmentAttri
 import { ItemRarity } from "db://assets/Script/Item/ItemRarity";
 import { EquipmentMeta } from "db://assets/Script/Equipment/EquipmentMeta";
 import { EquipmentType } from "db://assets/Script/Equipment/EquipmentType";
+import { PassiveEffect } from "db://assets/Script/PassiveEffect/PassiveEffect";
+import { SetBonus } from "db://assets/Script/Equipment/SetBonus/SetBonus";
 
 /**
  * 装备
@@ -42,5 +44,13 @@ export class Equipment extends Item {
 
     get equipmentType(): EquipmentType {
         return this.meta.equipmentType;
+    }
+
+    get uniqueEffect(): PassiveEffect {
+        return this.meta.uniqueEffect;
+    }
+
+    get setBonus(): SetBonus {
+        return this.meta.setBonus;
     }
 }

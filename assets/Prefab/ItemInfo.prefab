@@ -1442,7 +1442,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "UniqueUtility",
+    "_name": "UniqueEffect",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {

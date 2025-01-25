@@ -1,5 +1,5 @@
 import { ItemMeta } from "db://assets/Script/Item/ItemMeta";
-import { UniqueUtility } from "db://assets/Script/Equipment/UniqueUtility/UniqueUtility";
+import { PassiveEffect } from "db://assets/Script/PassiveEffect/PassiveEffect";
 
 /**
  * 酒元数据
@@ -20,12 +20,12 @@ export class LiquorMeta extends ItemMeta {
     /**
      * 饮用效果
      */
-    readonly drinkEffect: UniqueUtility;
+    readonly effect: PassiveEffect;
 
-    constructor(meta: ItemMeta, healthRecoverRatio: number, ingredientCapacity: number, drinkEffect: UniqueUtility) {
+    constructor(meta: ItemMeta, healthRecoverRatio: number, ingredientCapacity: number, drinkEffect: PassiveEffect) {
         super(meta.id, meta.name, meta.displayName, meta.itemType, meta.description, meta.icon, meta.unique, meta.rarity);
         this.healthRecoverRatio = healthRecoverRatio;
         this.ingredientCapacity = ingredientCapacity;
-        this.drinkEffect = drinkEffect;
+        this.effect = drinkEffect;
     }
 }

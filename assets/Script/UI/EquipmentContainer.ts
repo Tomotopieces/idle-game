@@ -4,7 +4,7 @@ import { EquipEvent } from "db://assets/Script/Event/Events/EquipEvent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
 import { EquipmentType } from "db://assets/Script/Equipment/EquipmentType";
-import { Equipment } from "db://assets/Script/Equipment/Equipment";
+import { ItemStack } from "db://assets/Script/Item/ItemStack";
 
 const { ccclass } = _decorator;
 
@@ -78,11 +78,6 @@ export class EquipmentContainer extends Component {
      * @param event 事件参数
      */
     private updateEquipmentUI(event: EquipEvent) {
-        const equipment = event.equipmentStack.item as Equipment;
-        if (event.equip) {
-            this._typeMap.get(equipment.equipmentType).stack = event.equipmentStack;
-        } else {
-            this._typeMap.get(equipment.equipmentType).stack = null;
-        }
+        this._typeMap.get(event.equipment.equipmentType).stack = event.equip ? ItemStack.of(event.equipment, 1) : null;
     }
 }

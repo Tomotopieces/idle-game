@@ -77,7 +77,7 @@ export class ItemCard extends Component {
 
         // 设置物品信息
         const rarity = item instanceof Equipment ? item.rankRarity : item.rarity;
-        this._itemInfo.show(item, rarity);
+        this._itemInfo.show(item, rarity, true);
 
         // 设置按钮内容
         this._buttonSprite.spriteFrame = buttonImage;

@@ -57,7 +57,13 @@
     "rarity": "uncommon",
     "equipmentType": "head",
     "attributes": {
-      "additionalDefense": [8, 14, 23, 32, 60]
+      "additionalDefense": [
+        8,
+        14,
+        23,
+        32,
+        60
+      ]
     }
   },
   {
@@ -123,9 +129,9 @@
     "rarity": "uncommon",
     "equipmentType": "head",
     "attributes": {
-      "additionalDefense": 7,
-      "setName": "zi_zhu_bi_jiao"
-    }
+      "additionalDefense": 7
+    },
+    "setBonus": "zi_zhu_bi_jiao"
   },
   {
     "name": "bai_xi_chen_qian_yi",
@@ -137,9 +143,9 @@
     "rarity": "uncommon",
     "equipmentType": "chest",
     "attributes": {
-      "additionalDefense": 14,
-      "setName": "zi_zhu_bi_jiao"
-    }
+      "additionalDefense": 14
+    },
+    "setBonus": "zi_zhu_bi_jiao"
   },
   {
     "name": "bai_xi_hu_shou",
@@ -151,9 +157,9 @@
     "rarity": "uncommon",
     "equipmentType": "arm",
     "attributes": {
-      "additionalDefense": 5,
-      "setName": "zi_zhu_bi_jiao"
-    }
+      "additionalDefense": 5
+    },
+    "setBonus": "zi_zhu_bi_jiao"
   },
   {
     "name": "bai_xi_diao_tui",
@@ -165,9 +171,9 @@
     "rarity": "uncommon",
     "equipmentType": "leg",
     "attributes": {
-      "additionalDefense": 8,
-      "setName": "zi_zhu_bi_jiao"
-    }
+      "additionalDefense": 8
+    },
+    "setBonus": "zi_zhu_bi_jiao"
   },
   {
     "name": "bai_lian_zi",
@@ -179,11 +185,9 @@
     "rarity": "uncommon",
     "equipmentType": "head",
     "attributes": {
-      "additionalDefense": 10,
-      "uniqueUtility": [
-        "bai_lian_zi"
-      ]
-    }
+      "additionalDefense": 10
+    },
+    "uniqueEffect": "bai_lian_zi"
   },
   {
     "name": "lin_gun_shuang_she",
@@ -195,11 +199,9 @@
     "rarity": "uncommon",
     "equipmentType": "weapon",
     "attributes": {
-      "additionalDamage": 40,
-      "uniqueUtility": [
-        "lin_gun_shuang_she"
-      ]
-    }
+      "additionalDamage": 40
+    },
+    "uniqueEffect": "lin_gun_shuang_she"
   },
   {
     "name": "shou_gun_xiong_pi",

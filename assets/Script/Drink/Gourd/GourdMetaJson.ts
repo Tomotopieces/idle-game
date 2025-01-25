@@ -1,6 +1,6 @@
 import { GourdMeta } from "db://assets/Script/Drink/Gourd/GourdMeta";
 import { ItemMetaJson } from "db://assets/Script/Item/ItemMetaJson";
-import { UNIQUE_UTILITY_TABLE } from "db://assets/Script/DataTable";
+import { PASSIVE_EFFECT_TABLE } from "db://assets/Script/DataTable";
 
 /**
  * 葫芦元数据JSON
@@ -29,7 +29,7 @@ export class GourdMetaJson extends ItemMetaJson {
      * @return {GourdMeta} GourdMeta
      */
     static toGourdMeta(id: number, json: GourdMetaJson): GourdMeta {
-        const drinkEffect = UNIQUE_UTILITY_TABLE.get(json.name);
+        const drinkEffect = PASSIVE_EFFECT_TABLE.get(json.name);
         return new GourdMeta(ItemMetaJson.toItemMeta(id, json), json.capacity, json.autoRecoverInterval, json.autoDrinkInterval, drinkEffect);
     }
 }

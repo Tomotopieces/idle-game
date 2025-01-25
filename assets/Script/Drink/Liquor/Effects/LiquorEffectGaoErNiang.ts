@@ -1,4 +1,4 @@
-import { UniqueUtility } from "db://assets/Script/Equipment/UniqueUtility/UniqueUtility";
+import { PassiveEffect } from "db://assets/Script/PassiveEffect/PassiveEffect";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { PlayerDrinkEvent } from "db://assets/Script/Event/Events/PlayerDrinkEvent";
 import { EventName } from "db://assets/Script/Event/EventName";
@@ -11,7 +11,7 @@ import { PlayerController } from "db://assets/Script/Entity/Player/PlayerControl
  *
  * 每饮一口，立刻恢复当前上限两成的生命；其后片时内，持续缓慢恢复两成半的生命
  */
-export class LiquorEffectGaoErNiang extends UniqueUtility {
+export class LiquorEffectGaoErNiang extends PassiveEffect {
     static readonly NAME: string = `gao_er_niang`;
     static readonly DESCRIPTION: string = `每饮一口，立刻恢复当前上限两成的生命；其后片时内，持续缓慢恢复两成半的生命`;
 
@@ -19,7 +19,7 @@ export class LiquorEffectGaoErNiang extends UniqueUtility {
         super(LiquorEffectGaoErNiang.NAME, LiquorEffectGaoErNiang.DESCRIPTION);
     }
 
-    onActivate(): void {
+    activate(): void {
         EventCenter.register(EventName.PLAYER_DRINK, LiquorEffectGaoErNiang.NAME, (_event: PlayerDrinkEvent) => {
             const buff = new Buff(LiquorEffectGaoErNiang.NAME, Unit.PLAYER, BuffType.BUFF, 5, 1,
                 null,
@@ -29,7 +29,7 @@ export class LiquorEffectGaoErNiang extends UniqueUtility {
         });
     }
 
-    onDeactivate(): void {
+    deactivate(): void {
         EventCenter.unregister(EventName.PLAYER_DRINK, LiquorEffectGaoErNiang.NAME);
     }
 }

@@ -65,7 +65,7 @@ export class RecipeInfoUI extends Component {
         const rarity = recipe instanceof UpgradeRecipe ? recipe.outputRarity : item.rarity;
 
         // 物品信息
-        this._itemInfo.show(item, rarity, false);
+        this._itemInfo.show(item, rarity);
 
         // 需求列表
         this._requirementsNode.removeAllChildren();

@@ -49,17 +49,7 @@ export class EquipmentAttributesMeta {
      */
     readonly criticalBoost: number;
 
-    /**
-     * 独门妙用
-     */
-    readonly uniqueUtility: string[];
-
-    /**
-     * 所属套装名称
-     */
-    readonly setName: string;
-
-    constructor(additionalHealth: number, healthBoost: number, extraHealth: number, additionalDamage: number, damageBoost: number, additionalDefense: number | number[], defenseBoost: number, criticalRate: number, criticalBoost: number, uniqueUtility: string[], set: string) {
+    constructor(additionalHealth: number, healthBoost: number, extraHealth: number, additionalDamage: number, damageBoost: number, additionalDefense: number | number[], defenseBoost: number, criticalRate: number, criticalBoost: number) {
         // 从JSON中读取的Object，字段可能为null
         this.additionalHealth = additionalHealth ?? 0;
         this.healthBoost = healthBoost ?? 0;
@@ -70,8 +60,6 @@ export class EquipmentAttributesMeta {
         this.defenseBoost = defenseBoost ?? 0;
         this.criticalRate = criticalRate ?? 0;
         this.criticalBoost = criticalBoost ?? 0;
-        this.uniqueUtility = uniqueUtility ?? [];
-        this.setName = set ?? '';
     }
 
     /**
@@ -81,6 +69,6 @@ export class EquipmentAttributesMeta {
      * @return {EquipmentAttributesMeta} EquipmentAttributesMeta
      */
     static fromObject(object: EquipmentAttributesMeta): EquipmentAttributesMeta {
-        return new EquipmentAttributesMeta(object.additionalHealth, object.healthBoost, object.extraHealth, object.additionalDamage, object.damageBoost, object.additionalDefense, object.defenseBoost, object.criticalRate, object.criticalBoost, object.uniqueUtility, object.setName);
+        return new EquipmentAttributesMeta(object.additionalHealth, object.healthBoost, object.extraHealth, object.additionalDamage, object.damageBoost, object.additionalDefense, object.defenseBoost, object.criticalRate, object.criticalBoost);
     }
 }

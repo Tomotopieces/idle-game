@@ -1,7 +1,7 @@
 import { GourdState } from "db://assets/Script/Drink/Gourd/GourdState";
 import { GourdMeta } from "db://assets/Script/Drink/Gourd/GourdMeta";
 import { Item } from "db://assets/Script/Item/Item";
-import { UniqueUtility } from "db://assets/Script/Equipment/UniqueUtility/UniqueUtility";
+import { PassiveEffect } from "db://assets/Script/PassiveEffect/PassiveEffect";
 
 /**
  * 葫芦
@@ -40,7 +40,7 @@ export class Gourd extends Item {
         return this.meta.autoDrinkInterval;
     }
 
-    get drinkEffect(): UniqueUtility {
-        return this.meta.drinkEffect;
+    get effect(): PassiveEffect {
+        return this.meta.effect;
     }
 }

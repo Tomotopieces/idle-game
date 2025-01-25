@@ -18,7 +18,7 @@ export class UpgradeRecipeJson {
     /**
      * 装备名称
      */
-    readonly inputName: string;
+    readonly outputName: string;
 
     /**
      * 产出品质
@@ -38,6 +38,10 @@ export class UpgradeRecipeJson {
      */
     static toUpgradeRecipe(id: number, recipeJson: UpgradeRecipeJson): UpgradeRecipe {
         const requirements = recipeJson.requirements.map(requirement => RecipeRequirementJson.toRecipeItem(requirement));
-        return new UpgradeRecipe(id, ItemFactory.create(ITEM_META_TABLE.get(recipeJson.inputName) as EquipmentMeta), recipeJson.outputRarity, requirements);
+        const itemMeta = ITEM_META_TABLE.get(recipeJson.outputName);
+        if (!itemMeta) {
+            console.error(`[UpgradeRecipeJson.toUpgradeRecipe] no such item meta: ${recipeJson.outputName}`);
+        }
+        return new UpgradeRecipe(id, ItemFactory.create(itemMeta as EquipmentMeta), recipeJson.outputRarity, requirements);
     }
 }

@@ -77,12 +77,4 @@ export class EquipmentAttributes {
     get criticalBoost(): number {
         return this._meta.criticalBoost;
     }
-
-    get uniqueUtility(): string[] {
-        return this._meta.uniqueUtility;
-    }
-
-    get setName(): string {
-        return this._meta.setName;
-    }
 }

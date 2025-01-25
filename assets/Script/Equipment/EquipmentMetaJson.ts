@@ -2,6 +2,7 @@ import { EquipmentAttributesMeta } from "db://assets/Script/Equipment/EquipmentA
 import { EquipmentType } from "db://assets/Script/Equipment/EquipmentType";
 import { ItemMetaJson } from "db://assets/Script/Item/ItemMetaJson";
 import { EquipmentMeta } from "db://assets/Script/Equipment/EquipmentMeta";
+import { PASSIVE_EFFECT_TABLE, SET_BONUS_TABLE } from "db://assets/Script/DataTable";
 
 /**
  * 装备元数据
@@ -18,6 +19,16 @@ export class EquipmentMetaJson extends ItemMetaJson {
     readonly attributes: EquipmentAttributesMeta;
 
     /**
+     * 独门妙用名称
+     */
+    readonly uniqueEffect: string;
+
+    /**
+     * 套装效果名称
+     */
+    readonly setBonus: string;
+
+    /**
      * 转换为EquipmentMeta
      *
      * @param id   ID
@@ -25,6 +36,9 @@ export class EquipmentMetaJson extends ItemMetaJson {
      * @return {EquipmentMeta} EquipmentMeta
      */
     static toEquipmentMeta(id: number, json: EquipmentMetaJson): EquipmentMeta {
-        return new EquipmentMeta(ItemMetaJson.toItemMeta(id, json), json.equipmentType, EquipmentAttributesMeta.fromObject(json.attributes));
+        const attributesMeta = EquipmentAttributesMeta.fromObject(json.attributes);
+        const uniqueEffect = PASSIVE_EFFECT_TABLE.get(json.uniqueEffect);
+        const setBonus = SET_BONUS_TABLE.get(json.setBonus);
+        return new EquipmentMeta(ItemMetaJson.toItemMeta(id, json), json.equipmentType, attributesMeta, uniqueEffect, setBonus);
     }
 }

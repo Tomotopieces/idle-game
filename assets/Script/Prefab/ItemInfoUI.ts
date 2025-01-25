@@ -2,7 +2,7 @@ import { _decorator, Component, Label, Layout, Sprite, SpriteFrame } from "cc";
 import { Item } from "db://assets/Script/Item/Item";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { Equipment } from "db://assets/Script/Equipment/Equipment";
-import { SET_BONUS_TABLE, UNIQUE_UTILITY_TABLE } from "db://assets/Script/DataTable";
+import { PASSIVE_EFFECT_TABLE } from "db://assets/Script/DataTable";
 import { ItemType } from "db://assets/Script/Item/ItemType";
 import { ItemRarity } from "db://assets/Script/Item/ItemRarity";
 import { EquipmentType } from "db://assets/Script/Equipment/EquipmentType";
@@ -52,7 +52,7 @@ export class ItemInfoUI extends Component {
     /**
      * 独门妙用 Label
      */
-    private _uniqueUtilityLabel: Label;
+    private _uniqueEffectLabel: Label;
 
     /**
      * 套装效果 Label
@@ -76,7 +76,7 @@ export class ItemInfoUI extends Component {
         // 装备信息
         const weaponInfoNode = this.node.getChildByName('WeaponInfo');
         this._attributesLabel = weaponInfoNode.getChildByName('Attributes').getComponent(Label);
-        this._uniqueUtilityLabel = weaponInfoNode.getChildByName('UniqueUtility').getComponent(Label);
+        this._uniqueEffectLabel = weaponInfoNode.getChildByName('UniqueEffect').getComponent(Label);
         this._setBonusLabel = weaponInfoNode.getChildByName('SetBonus').getComponent(Label);
     }
 
@@ -85,9 +85,9 @@ export class ItemInfoUI extends Component {
      *
      * @param item                         物品
      * @param rarity                       物品品质，默认为物品原始品质
-     * @param showSetBonusActivationStatus 是否显示套装效果激活状态，默认为 true
+     * @param showSetBonusActivationStatus 是否显示套装效果激活状态，默认为 false
      */
-    show(item: Item, rarity: ItemRarity = item.rarity, showSetBonusActivationStatus: boolean = true) {
+    show(item: Item, rarity: ItemRarity = item.rarity, showSetBonusActivationStatus: boolean = false) {
         // 基础信息
         ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, item.icon, (spriteFrame: SpriteFrame) => {
             this._iconSprite.spriteFrame = spriteFrame;
@@ -104,13 +104,13 @@ export class ItemInfoUI extends Component {
         if (item instanceof Equipment) {
             this._attributesLabel.string = ItemInfoUI.attributesText(item, rarity);
             this._attributesLabel.node.active = !!this._attributesLabel.string;
-            this._uniqueUtilityLabel.string = ItemInfoUI.uniqueUtilityText(item);
-            this._uniqueUtilityLabel.node.active = !!this._uniqueUtilityLabel.string;
+            this._uniqueEffectLabel.string = ItemInfoUI.uniqueEffectText(item);
+            this._uniqueEffectLabel.node.active = !!this._uniqueEffectLabel.string;
             this._setBonusLabel.string = ItemInfoUI.setBonusText(item, showSetBonusActivationStatus);
             this._setBonusLabel.node.active = !!this._setBonusLabel.string;
         } else {
             this._attributesLabel.node.active = false;
-            this._uniqueUtilityLabel.node.active = false;
+            this._uniqueEffectLabel.node.active = false;
             this._setBonusLabel.node.active = false;
         }
 
@@ -145,8 +145,8 @@ export class ItemInfoUI extends Component {
      * @param equipment 装备
      * @return 装备独门妙用信息
      */
-    private static uniqueUtilityText(equipment: Equipment): string {
-        const description = UNIQUE_UTILITY_TABLE.get(equipment.name)?.description;
+    private static uniqueEffectText(equipment: Equipment): string {
+        const description = PASSIVE_EFFECT_TABLE.get(equipment.name)?.description;
         return description ? `独门妙用：\n${description}` : ``;
     }
 
@@ -157,13 +157,10 @@ export class ItemInfoUI extends Component {
      * @param showActivationStatus 是否显示套装效果激活状态
      * @return 套装效果信息
      */
-    private static setBonusText(equipment: Equipment, showActivationStatus: boolean = true): string {
-        const bonus = SET_BONUS_TABLE.get(equipment.attributes.setName);
+    private static setBonusText(equipment: Equipment, showActivationStatus: boolean): string {
+        const bonus = equipment.setBonus;
         return bonus ?
-            `套装效果：` + Array.from(bonus.levelEffectMap.entries())
-                .map(([level, effect]) =>
-                    `\nLv.${level}：${effect.description} ${showActivationStatus ? effect.active ? '✔' : '❌' : ''}`)
-                .join('') :
+            `套装效果：(${bonus.level} / ${bonus.requirement})：${bonus.effect.description} ${showActivationStatus ? bonus.active ? '✔' : '❌' : ''}` : // TODO 改为RichText，通过颜色来区分是否激活
             ``;
     }
 

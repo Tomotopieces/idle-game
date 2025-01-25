@@ -1,4 +1,4 @@
-import { UniqueUtility } from "db://assets/Script/Equipment/UniqueUtility/UniqueUtility";
+import { PassiveEffect } from "db://assets/Script/PassiveEffect/PassiveEffect";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
 import { PlayerDrinkEvent } from "db://assets/Script/Event/Events/PlayerDrinkEvent";
@@ -10,7 +10,7 @@ import { GourdState } from "db://assets/Script/Drink/Gourd/GourdState";
  *
  * 盛满酒时，饮下第一口酒，可恢复全部生命
  */
-export class GourdEffectZhengXianHongHuLu extends UniqueUtility {
+export class GourdEffectZhengXianHongHuLu extends PassiveEffect {
     static readonly NAME: string = `zheng_xian_hong_hu_lu`;
     static readonly DESCRIPTION: string = `盛满酒时，饮下第一口酒，可恢复全部生命`;
 
@@ -18,7 +18,7 @@ export class GourdEffectZhengXianHongHuLu extends UniqueUtility {
         super(GourdEffectZhengXianHongHuLu.NAME, GourdEffectZhengXianHongHuLu.DESCRIPTION);
     }
 
-    onActivate(): void {
+    activate(): void {
         EventCenter.register(EventName.PLAYER_DRINK, GourdEffectZhengXianHongHuLu.NAME, (event: PlayerDrinkEvent) => {
             if (PlayerController.PLAYER.drink.gourd.state === GourdState.FULL) {
                 event.healthRecoverRatio = 1;
@@ -26,7 +26,7 @@ export class GourdEffectZhengXianHongHuLu extends UniqueUtility {
         });
     }
 
-    onDeactivate(): void {
+    deactivate(): void {
         EventCenter.unregister(EventName.PLAYER_DRINK, GourdEffectZhengXianHongHuLu.NAME);
     }
 

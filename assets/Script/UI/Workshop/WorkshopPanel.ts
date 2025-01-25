@@ -111,9 +111,9 @@ export class WorkshopPanel extends Component {
     }
 
     /**
-     * 填充配方栏
+     * 刷新配方栏
      */
-    private populateRecipeBar() {
+    private refreshRecipeBar() {
         this._recipeBarNode.removeAllChildren();
 
         const recipes: Recipe[] = this._workMode === WorkMode.CRAFT ?
@@ -149,9 +149,8 @@ export class WorkshopPanel extends Component {
             return;
         }
 
-        if (RecipeUtil.craft(this._currentRecipe)) {
-            this.populateRecipeBar();
-        }
+        RecipeUtil.craft(this._currentRecipe);
+        this.refreshRecipeBar();
     }
 
     /**
@@ -165,11 +164,11 @@ export class WorkshopPanel extends Component {
         if (RecipeUtil.upgrade(this._currentRecipe as UpgradeRecipe)) {
             const equipment = this._currentRecipe.output as Equipment;
             const equipments = PlayerController.PLAYER.equipments;
-            if (equipments.equipmentSlotMap.get(equipment.equipmentType).stack?.item.name === equipment.name) {
+            if (equipments.get(equipment.equipmentType)?.name === equipment.name) {
                 equipments.upgrade(equipment);
             }
 
-            this.populateRecipeBar();
+            this.refreshRecipeBar();
         }
     }
 
@@ -210,7 +209,7 @@ export class WorkshopPanel extends Component {
                 this._operationButtonImage.spriteFrame = this.upgradeButtonImage;
                 break;
         }
-        this.populateRecipeBar();
+        this.refreshRecipeBar();
     }
 
     /**
@@ -222,7 +221,7 @@ export class WorkshopPanel extends Component {
         this._show = !this._show;
         this._anim.play(this._show ? 'Enter' : 'Exit');
         if (this._show) {
-            this.populateRecipeBar();
+            this.refreshRecipeBar();
         }
     }
 }

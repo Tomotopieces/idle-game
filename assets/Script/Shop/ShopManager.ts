@@ -44,7 +44,7 @@ export class ShopManager {
      * @param product 库存
      */
     static buy(product: Product) {
-        if (Storehouse.countOne(LING_YUN_NAME, false) < product.price) {
+        if (Storehouse.count(LING_YUN_NAME) < product.price) {
             // 灵韵不足
             EventCenter.emit(EventName.UI_POST_MESSAGE, new UIPostMessageEvent(MessageType.WARNING, `没钱别摸`));
             return;
@@ -55,10 +55,9 @@ export class ShopManager {
         }
 
         // 购买
-        if (Storehouse.takeOut([ItemStack.of(LING_YUN_NAME, product.price)])) {
-            Storehouse.putIn([ItemStack.of(product.itemMeta, 1)]);
-            product.count--;
-        }
+        Storehouse.takeOut([ItemStack.of(LING_YUN_NAME, product.price)]);
+        Storehouse.putIn([ItemStack.of(product.itemMeta, 1)]);
+        product.count--;
 
         // 记账
         const scene = this.SHOP.scene;

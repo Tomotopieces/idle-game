@@ -83,7 +83,7 @@ export class ProductInfoUI extends Component {
      * @param lingYun 持有灵韵数量
      */
     private updatePriceLabel(lingYun?: number) {
-        lingYun = lingYun ?? Storehouse.countOne(LING_YUN_NAME);
+        lingYun = lingYun ?? Storehouse.count(LING_YUN_NAME);
         const price = this._product.price;
         this._priceLabel.string = `${lingYun} / ${price}`;
         this._priceLabel.color = lingYun >= price ? Color.WHITE : Color.RED;

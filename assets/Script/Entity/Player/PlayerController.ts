@@ -8,7 +8,6 @@ import { SkillLightAttack } from "db://assets/Script/Skill/Skills/SkillLightAtta
 import { PlayerTalentManager } from "db://assets/Script/Entity/Player/PlayerTalentManager";
 import { EventName } from "db://assets/Script/Event/EventName";
 import { SkillHeavyAttack } from "db://assets/Script/Skill/Skills/SkillHeavyAttack";
-import { DrinkManager } from "db://assets/Script/Entity/Player/DrinkManager";
 import { BuffManager } from "db://assets/Script/Buff/BuffManager";
 
 const { ccclass } = _decorator;
@@ -38,7 +37,7 @@ export class PlayerController extends Component {
     /**
      * 葫芦管理
      */
-    readonly drink: DrinkManager = new DrinkManager();
+    // TODO readonly drink: DrinkManager = new DrinkManager();
 
     /**
      * 技能管理器
@@ -75,7 +74,7 @@ export class PlayerController extends Component {
     update(dt: number) {
         this.skills.update(dt);
         this.buffs.update(dt);
-        this.drink.update(dt);
+        // TODO this.drink.update(dt);
     }
 
     /**

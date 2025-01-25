@@ -16,14 +16,14 @@ export class SaveDataJson {
     experience: number;
 
     /**
-     * 装备槽
-     */
-    equipmentSlot: ItemStackSerial[];
-
-    /**
      * 仓库数组
      */
     storehouse: ItemStackSerial[];
+
+    /**
+     * 装备槽
+     */
+    equipmentUUIDs: string[];
 
     /**
      * 章节名称
@@ -55,11 +55,11 @@ export class SaveDataJson {
      */
     ledger: LedgerRecord[];
 
-    constructor(level: number, experience: number, equipmentSlot: ItemStackSerial[], storehouse: ItemStackSerial[], chapterName: string, areaName: string, stageName: string, talents: string, enemyRecord: string, ledger: LedgerRecord[]) {
+    constructor(level: number, experience: number, storehouse: ItemStackSerial[], equipmentUUIDs: string[], chapterName: string, areaName: string, stageName: string, talents: string, enemyRecord: string, ledger: LedgerRecord[]) {
         this.level = level;
         this.experience = experience;
-        this.equipmentSlot = equipmentSlot;
         this.storehouse = storehouse;
+        this.equipmentUUIDs = equipmentUUIDs;
         this.chapterName = chapterName;
         this.areaName = areaName;
         this.stageName = stageName;

@@ -1,4 +1,4 @@
-import { UniqueUtility } from "db://assets/Script/Equipment/UniqueUtility/UniqueUtility";
+import { PassiveEffect } from "db://assets/Script/PassiveEffect/PassiveEffect";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { Unit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
 import { EventName } from "db://assets/Script/Event/EventName";
@@ -8,7 +8,7 @@ import { EventName } from "db://assets/Script/Event/EventName";
  *
  * 玩家角色每第4次攻击，最终伤害翻倍
  */
-export class UniqueUtilityLinGunShuangShe extends UniqueUtility {
+export class UniqueUtilityLinGunShuangShe extends PassiveEffect {
     static readonly NAME: string = "lin_gun_shuang_she";
     static readonly DESCRIPTION: string = "每第4次攻击，最终伤害翻倍。";
 
@@ -31,7 +31,7 @@ export class UniqueUtilityLinGunShuangShe extends UniqueUtility {
         super(UniqueUtilityLinGunShuangShe.NAME, UniqueUtilityLinGunShuangShe.DESCRIPTION);
     }
 
-    override onActivate(): void {
+    override activate(): void {
         this._attackCount = 0;
         EventCenter.register(EventName.DEAL_DAMAGE, UniqueUtilityLinGunShuangShe.NAME,
             (event: DealDamageEvent) => {
@@ -48,7 +48,7 @@ export class UniqueUtilityLinGunShuangShe extends UniqueUtility {
         );
     }
 
-    override onDeactivate(): void {
+    override deactivate(): void {
         EventCenter.unregister(EventName.DEAL_DAMAGE, UniqueUtilityLinGunShuangShe.NAME);
     }
 }

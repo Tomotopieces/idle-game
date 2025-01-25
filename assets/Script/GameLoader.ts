@@ -12,7 +12,6 @@ import {
     DataPath,
     ENEMY_TABLE,
     ITEM_META_TABLE,
-    SET_BONUS_TABLE,
     SHOP_TABLE,
     STAGE_TABLE,
     UPGRADE_RECIPE_LIST
@@ -114,14 +113,8 @@ export class GameLoader extends Component {
             err && console.error(err);
             const jsons = data.json! as EquipmentMetaJson[];
             const idOffset = ITEM_META_TABLE.size;
-            jsons.forEach((json, index) => {
-                const meta = EquipmentMetaJson.toEquipmentMeta(index + idOffset, json);
-                ITEM_META_TABLE.set(json.name, meta); // 存入道具表
-                if (meta.attributes.setName) {
-                    // 登记套装装备
-                    SET_BONUS_TABLE.get(meta.attributes.setName).record(meta.name);
-                }
-            });
+            jsons.forEach((json, index) =>
+                ITEM_META_TABLE.set(json.name, EquipmentMetaJson.toEquipmentMeta(index + idOffset, json)));
             this.loadStep++;
         });
     }

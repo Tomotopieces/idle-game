@@ -1,4 +1,4 @@
-import { UniqueUtility } from "db://assets/Script/Equipment/UniqueUtility/UniqueUtility";
+import { PassiveEffect } from "db://assets/Script/PassiveEffect/PassiveEffect";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
 import { Unit, DealDamageEvent } from "db://assets/Script/Event/Events/DealDamageEvent";
@@ -9,7 +9,7 @@ import { EnemyController } from "db://assets/Script/Entity/Enemy/EnemyController
  *
  * 攻击生命危急的对手时，获得一定程度伤害加成（攻击对手生命低于30%时，攻击力+15%）
  */
-export class UniqueUtilityBaiLianZi extends UniqueUtility {
+export class UniqueUtilityBaiLianZi extends PassiveEffect {
     static readonly NAME = `bai_lian_zi`;
     static readonly DESCRIPTION = `攻击生命危急的对手时，获得一定程度伤害加成`;
 
@@ -27,7 +27,7 @@ export class UniqueUtilityBaiLianZi extends UniqueUtility {
         super(UniqueUtilityBaiLianZi.NAME, UniqueUtilityBaiLianZi.DESCRIPTION);
     }
 
-    onActivate(): void {
+    activate(): void {
         EventCenter.register(EventName.DEAL_DAMAGE, UniqueUtilityBaiLianZi.NAME,
             (event: DealDamageEvent) => {
                 if (event.source !== Unit.PLAYER) {
@@ -41,7 +41,7 @@ export class UniqueUtilityBaiLianZi extends UniqueUtility {
         );
     }
 
-    onDeactivate(): void {
+    deactivate(): void {
         EventCenter.unregister(EventName.DEAL_DAMAGE, UniqueUtilityBaiLianZi.NAME);
     }
 

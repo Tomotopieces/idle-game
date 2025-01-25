@@ -43,7 +43,7 @@ export class RecipeUtil {
      * @return 是否能铸造
      */
     static canProduce(recipe: CraftRecipe): boolean {
-        return !recipe.output.unique || !Storehouse.countOne(recipe.output); // 非唯一，或不存在
+        return !recipe.output.unique || !Storehouse.count(recipe.output); // 非唯一，或不存在
     }
 
     /**
@@ -52,13 +52,10 @@ export class RecipeUtil {
      * @param recipe 配方
      * @returns 成功与否
      */
-    static craft(recipe: CraftRecipe): boolean {
+    static craft(recipe: CraftRecipe) {
         const requirements = recipe.requirements.filter(requirement => requirement.consume);
-        if (Storehouse.takeOut(this.requirementsToStacks(requirements))) {
-            Storehouse.putIn([ItemStack.of(recipe.output, 1)]);
-            return true;
-        }
-        return false;
+        Storehouse.takeOut(this.requirementsToStacks(requirements))
+        Storehouse.putIn([ItemStack.of(recipe.output, 1)]);
     }
 
     /**
@@ -67,12 +64,11 @@ export class RecipeUtil {
      * @param recipe 配方
      * @return 成功与否
      */
-    static upgrade(recipe: UpgradeRecipe): boolean {
+    static upgrade(recipe: UpgradeRecipe) {
         const requirements = recipe.requirements.filter(requirement => requirement.consume);
-        if (Storehouse.takeOut(this.requirementsToStacks(requirements))) {
-            (recipe.output as Equipment).upgrade();
-            return true;
-        }
+        Storehouse.takeOut(this.requirementsToStacks(requirements));
+        (recipe.output as Equipment).upgrade();
+        return true;
     }
 
     /**

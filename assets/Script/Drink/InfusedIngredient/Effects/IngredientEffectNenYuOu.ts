@@ -1,4 +1,4 @@
-import { UniqueUtility } from "db://assets/Script/Equipment/UniqueUtility/UniqueUtility";
+import { PassiveEffect } from "db://assets/Script/PassiveEffect/PassiveEffect";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
 import { PlayerDrinkEvent } from "db://assets/Script/Event/Events/PlayerDrinkEvent";
@@ -11,7 +11,7 @@ import { PlayerController } from "db://assets/Script/Entity/Player/PlayerControl
  *
  * 饮酒后一定时间内，少许增加防御（15s+5%防御）
  */
-export class IngredientEffectNenYuOu extends UniqueUtility {
+export class IngredientEffectNenYuOu extends PassiveEffect {
     static readonly NAME: string = `nen_yu_ou`;
     static readonly DESCRIPTION: string = `饮酒后一定时间内，少许增加防御`;
 
@@ -19,7 +19,7 @@ export class IngredientEffectNenYuOu extends UniqueUtility {
         super(IngredientEffectNenYuOu.NAME, IngredientEffectNenYuOu.DESCRIPTION);
     }
 
-    onActivate(): void {
+    activate(): void {
         EventCenter.register(EventName.PLAYER_DRINK, IngredientEffectNenYuOu.NAME, (_event: PlayerDrinkEvent) => {
             const buff = new Buff(IngredientEffectNenYuOu.NAME, Unit.PLAYER, BuffType.BUFF, 15, null,
                 () => PlayerController.PLAYER.attributes.defenseBoost += 0.05,
@@ -30,7 +30,7 @@ export class IngredientEffectNenYuOu extends UniqueUtility {
         });
     }
 
-    onDeactivate(): void {
+    deactivate(): void {
         EventCenter.unregister(EventName.PLAYER_DRINK, IngredientEffectNenYuOu.NAME);
     }
 

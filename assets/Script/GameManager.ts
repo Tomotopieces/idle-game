@@ -93,14 +93,12 @@ export class GameManager extends Component {
      */
     private restorePlayerAndStorehouseData(saveData: SaveData) {
         if (!saveData) {
-            this.equipStarterSet();
+            this.getStarterPack();
             return;
         }
 
         this.player.levelInfo.restore(saveData.level, saveData.experience);
-        saveData.equipmentSlot.forEach(slot => {
-            this.player.equipments.equip(slot.stack);
-        });
+        saveData.equipments.forEach(equipment => this.player.equipments.equip(equipment));
         this.player.attributes.levelUp(saveData.level);
         this.player.talents.restore(saveData.talents);
 
@@ -158,7 +156,7 @@ export class GameManager extends Component {
      * 保存存档
      */
     private saveData() {
-        const saveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, this.player.equipments.equipmentSlotMap, Storehouse.STOREHOUSE, Level.CHAPTER.name, Level.AREA.name, Level.STAGE.name, this.player.talents.talents, ENEMY_RECORD, ShopManager.LEDGER);
+        const saveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, Storehouse.STOREHOUSE, this.player.equipments.getAll(), Level.CHAPTER.name, Level.AREA.name, Level.STAGE.name, this.player.talents.talents, ENEMY_RECORD, ShopManager.LEDGER);
         sys.localStorage.setItem(LocalStorageDataName.SAVE_DATA, saveData.toJson());
         EventCenter.emit(EventName.UI_POST_MESSAGE, new UIPostMessageEvent(MessageType.DEFAULT, `保存成功`));
     }
@@ -243,23 +241,13 @@ export class GameManager extends Component {
      * @param event 事件参数
      */
     private handleEquip(event: EquipEvent) {
-        const equipment = event.equipmentStack.item as Equipment;
+        const equipment = event.equipment as Equipment;
         if (event.equip) {
-            if (!Storehouse.takeOutOne(equipment.name)) {
-                return;
-            }
-            const unequipped = this.player.equipments.equip(ItemStack.of(equipment, 1));
-            EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
-            if (unequipped) {
-                Storehouse.putIn([unequipped], false, false);
-            }
+            this.player.equipments.equip(equipment);
         } else {
-            if (!this.player.equipments.unequip(equipment.equipmentType)) {
-                return;
-            }
-            EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
-            Storehouse.putIn([event.equipmentStack], false, false);
+            this.player.equipments.unequip(equipment);
         }
+        EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
     }
 
     /**
@@ -302,7 +290,7 @@ export class GameManager extends Component {
         const sellable = stack.item as Sellable;
         const price = sellable.price * stack.count;
         Storehouse.takeOut([stack]);
-        Storehouse.putIn([ItemStack.of(LING_YUN_NAME, price)], false);
+        Storehouse.putIn([ItemStack.of(LING_YUN_NAME, price)]);
     }
 
     /**
@@ -315,13 +303,19 @@ export class GameManager extends Component {
     }
 
     /**
-     * 装备初始套装
+     * 获取并装备初始物品包
+     *
+     * 柳木棍、绵布扎腕、虎皮裙、面部腿绷
      */
-    private equipStarterSet() {
-        this.player.equipments.equip(ItemStack.of(`liu_mu_gun`, 1));
-        this.player.equipments.equip(ItemStack.of(`mian_bu_zha_wan`, 1));
-        this.player.equipments.equip(ItemStack.of(`hu_pi_qun`, 1));
-        this.player.equipments.equip(ItemStack.of(`mian_bu_tui_beng`, 1));
+    private getStarterPack() {
+        const starterPack = [
+            ItemStack.of(`liu_mu_gun`, 1),
+            ItemStack.of(`mian_bu_zha_wan`, 1),
+            ItemStack.of(`hu_pi_qun`, 1),
+            ItemStack.of(`mian_bu_tui_beng`, 1)
+        ];
+        Storehouse.putIn(starterPack, false);
+        starterPack.forEach(stack => this.player.equipments.equip(stack.item as Equipment));
     }
 
     /**
@@ -352,7 +346,7 @@ export class GameManager extends Component {
     }
 
     /**
-     * 获取百戏套装与铜云棒
+     * 获取百戏套装与铜云棒、金箍棒
      *
      * 按钮触发
      */

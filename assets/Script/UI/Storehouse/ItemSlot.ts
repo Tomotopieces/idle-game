@@ -75,7 +75,7 @@ export class ItemSlot extends Component {
         if (value) {
             ResourceManager.loadAsset(ResourceType.SPRITE_FRAME, this._stack.item.icon, (spriteFrame: SpriteFrame) =>
                 this._iconSprite.spriteFrame = spriteFrame);
-            this._countLabel.string = `${value.count}`;
+            this._countLabel.string = this._stack.item.unique ? `` : `${value.count}`;
         } else {
             this._iconSprite.spriteFrame = null;
             this._countLabel.string = '';
@@ -94,6 +94,6 @@ export class ItemSlot extends Component {
         }
 
         this._stack.count = value;
-        this._countLabel.string = `${value}`;
+        this._countLabel.string = this._stack.item.unique ? `` : `${value}`;
     }
 }

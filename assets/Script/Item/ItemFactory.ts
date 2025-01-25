@@ -90,8 +90,9 @@ export class ItemFactory {
      * 反序列化物品
      *
      * @param serial 序列化数据
+     * @return {Item} 物品
      */
-    static deserialize(serial: ItemSerial) {
+    static deserialize(serial: ItemSerial): Item {
         const meta = ITEM_META_TABLE.get(serial.name);
         return (this.deserializeRegistry.get(meta.constructor as Constructor<ItemMeta>) ?? ItemSerial.deserialize)(meta, serial);
     }

@@ -1,6 +1,6 @@
 import { Item } from "db://assets/Script/Item/Item";
 import { InfusedIngredientMeta } from "db://assets/Script/Drink/InfusedIngredient/InfusedIngredientMeta";
-import { UniqueUtility } from "db://assets/Script/Equipment/UniqueUtility/UniqueUtility";
+import { PassiveEffect } from "db://assets/Script/PassiveEffect/PassiveEffect";
 
 /**
  * 泡酒物
@@ -12,7 +12,7 @@ export class InfusedIngredient extends Item {
         super(meta, uuid);
     }
 
-    get drinkEffect(): UniqueUtility {
-        return this.meta.drinkEffect;
+    get effect(): PassiveEffect {
+        return this.meta.effect;
     }
 }

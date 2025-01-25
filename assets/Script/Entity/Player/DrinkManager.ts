@@ -107,9 +107,9 @@ export class DrinkManager {
     set gourd(gourd: Gourd) {
         // 切换葫芦的效果
         const oldGourd = this._gourd;
-        oldGourd?.drinkEffect.onDeactivate();
+        oldGourd?.effect.deactivate();
         this._gourd = gourd;
-        this._gourd.drinkEffect.onActivate();
+        this._gourd.effect.activate();
 
         // 计算剩余酒量
         this._gourd.remain = oldGourd ? Math.min(this._gourd.capacity, oldGourd.remain) : this._gourd.capacity;
@@ -122,15 +122,15 @@ export class DrinkManager {
     set liquor(liquor: Liquor) {
         // 切换酒的效果
         const oldLiquor = this._liquor;
-        oldLiquor?.drinkEffect.onDeactivate();
+        oldLiquor?.effect.deactivate();
         this._liquor = liquor;
-        this._liquor.drinkEffect.onActivate();
+        this._liquor.effect.activate();
 
         // 计算泡酒物数量
         if (this._liquor.ingredientCapacity < (oldLiquor?.ingredientCapacity ?? 0)) {
             // 取消被卸下的泡酒物的效果
             this._ingredients.splice(0, oldLiquor.ingredientCapacity - this._liquor.ingredientCapacity)
-                .forEach(ingredient => ingredient.drinkEffect.onDeactivate());
+                .forEach(ingredient => ingredient.effect.deactivate());
         }
     }
 
@@ -140,8 +140,8 @@ export class DrinkManager {
 
     setIngredient(ingredient: InfusedIngredient, index: number) {
         // 切换泡酒物的效果
-        this._ingredients[index].drinkEffect?.onDeactivate();
+        this._ingredients[index].effect?.deactivate();
         this._ingredients[index] = ingredient;
-        ingredient && ingredient.drinkEffect.onActivate();
+        ingredient && ingredient.effect.activate();
     }
 }

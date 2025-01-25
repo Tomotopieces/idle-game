@@ -1,9 +1,9 @@
 /**
- * 独门妙用
+ * 被动效果
  *
  * 装备/珍玩/葫芦/酒/泡酒物的独特效果
  */
-export abstract class UniqueUtility {
+export abstract class PassiveEffect {
     /**
      * 名称
      */
@@ -17,12 +17,12 @@ export abstract class UniqueUtility {
     /**
      * 激活
      */
-    abstract onActivate(): void;
+    abstract activate(): void;
 
     /**
      * 取消激活
      */
-    abstract onDeactivate(): void;
+    abstract deactivate(): void;
 
     protected constructor(name: string, description: string) {
         this.name = name;

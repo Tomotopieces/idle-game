@@ -25,6 +25,10 @@ export class Item {
         this.uuid = uuid ?? UUIDUtil.make();
     }
 
+    get id(): number {
+        return this.meta.id;
+    }
+
     get name(): string {
         return this.meta.name;
     }
