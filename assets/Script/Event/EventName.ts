@@ -40,12 +40,42 @@ export enum EventName {
     /**
      * 装备变更
      */
-    EQUIP = 'EQUIP',
+    UPDATE_EQUIPMENT = 'UPDATE_EQUIPMENT',
+
+    /**
+     * 更新酒饮物
+     */
+    UPDATE_DRINK = 'UPDATE_DRINK',
 
     /**
      * 造成伤害
      */
     DEAL_DAMAGE = 'DEAL_DAMAGE',
+
+    /**
+     * 获得棍势
+     */
+    GAIN_STANCE = 'GAIN_STANCE',
+
+    /**
+     * 天赋升级
+     */
+    TALENT_UPGRADE = 'TALENT_UPGRADE',
+
+    /**
+     * 卖出物品
+     */
+    SELL_ITEM = 'SELL_ITEM',
+
+    /**
+     * 商品购买（后）
+     */
+    PRODUCT_PURCHASED = 'PRODUCT_PURCHASED',
+
+    /**
+     * 玩家饮酒
+     */
+    PLAYER_DRINK = 'PLAYER_DRINK',
 
     /**
      * 点击物品槽UI
@@ -93,16 +123,6 @@ export enum EventName {
     UI_UPDATE_SPARKS = 'UI_UPDATE_SPARKS',
 
     /**
-     * 获得棍势
-     */
-    GAIN_STANCE = 'GAIN_STANCE',
-
-    /**
-     * 天赋升级
-     */
-    TALENT_UPGRADE = 'TALENT_UPGRADE',
-
-    /**
      * 更新天赋槽UI
      */
     UI_UPDATE_TALENT_SLOT = 'UI_UPDATE_TALENT_SLOT',
@@ -115,20 +135,5 @@ export enum EventName {
     /**
      * 点击商品槽UI
      */
-    UI_CLICK_PRODUCT_SLOT = 'UI_CLICK_PRODUCT_SLOT',
-
-    /**
-     * 卖出物品
-     */
-    SELL_ITEM = 'SELL_ITEM',
-
-    /**
-     * 商品购买（后）
-     */
-    PRODUCT_PURCHASED = 'PRODUCT_PURCHASED',
-
-    /**
-     * 玩家饮酒
-     */
-    PLAYER_DRINK = 'PLAYER_DRINK',
+    UI_CLICK_PRODUCT_SLOT = 'UI_CLICK_PRODUCT_SLOT'
 }

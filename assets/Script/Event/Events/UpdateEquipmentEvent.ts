@@ -4,7 +4,7 @@ import { Equipment } from "db://assets/Script/Equipment/Equipment";
 /**
  * 装备变更事件
  */
-export class EquipEvent extends EventArgument {
+export class UpdateEquipmentEvent extends EventArgument {
     /**
      * 装备
      */
@@ -15,7 +15,7 @@ export class EquipEvent extends EventArgument {
      */
     equip: boolean;
 
-    constructor(equipment: Equipment, equip: boolean) {
+    constructor(equipment: Equipment, equip: boolean = true) {
         super();
         this.equipment = equipment;
         this.equip = equip;

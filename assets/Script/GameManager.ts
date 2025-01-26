@@ -6,7 +6,7 @@ import { Storehouse } from "db://assets/Script/Storehouse/Storehouse";
 import { UpdateGameLevelEvent } from "db://assets/Script/Event/Events/UpdateGameLevelEvent";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
-import { EquipEvent } from "db://assets/Script/Event/Events/EquipEvent";
+import { UpdateEquipmentEvent } from "db://assets/Script/Event/Events/UpdateEquipmentEvent";
 import { Equipment } from "db://assets/Script/Equipment/Equipment";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { DealDamageEvent, Unit } from "db://assets/Script/Event/Events/DealDamageEvent";
@@ -24,6 +24,9 @@ import { GameLevelUpdatedEvent } from "db://assets/Script/Event/Events/GameLevel
 import { PlayerDrinkEvent } from "db://assets/Script/Event/Events/PlayerDrinkEvent";
 import { Gourd } from "db://assets/Script/Drink/Gourd/Gourd";
 import { Liquor } from "db://assets/Script/Drink/Liquor/Liquor";
+import { UpdateDrinkEvent } from "db://assets/Script/Event/Events/UpdateDrinkEvent";
+import { ItemType } from "db://assets/Script/Item/ItemType";
+import { InfusedIngredient } from "db://assets/Script/Drink/InfusedIngredient/InfusedIngredient";
 
 const { ccclass, property } = _decorator;
 
@@ -54,7 +57,8 @@ export class GameManager extends Component {
         // 监听处理事件
         EventCenter.on(EventName.DEAL_DAMAGE, this.node.name, (event: DealDamageEvent) => this.handleDealDamage(event));
         EventCenter.on(EventName.UPDATE_GAME_LEVEL, this.node.name, (event: UpdateGameLevelEvent) => this.handleUpdateGameLevel(event));
-        EventCenter.on(EventName.EQUIP, this.node.name, (event: EquipEvent) => this.handleEquip(event));
+        EventCenter.on(EventName.UPDATE_EQUIPMENT, this.node.name, (event: UpdateEquipmentEvent) => this.handleEquip(event));
+        EventCenter.on(EventName.UPDATE_DRINK, this.node.name, (event: UpdateDrinkEvent) => this.handleUpdateDrink(event));
         EventCenter.on(EventName.ENEMY_DIE, this.node.name, (enemy: EnemyController) => this.handleEnemyDie(enemy));
         EventCenter.on(EventName.GET_DROPS, this.node.name, (dropStackList: ItemStack[]) => this.handleGetDrops(dropStackList));
         EventCenter.on(EventName.GET_EXPERIENCE, this.node.name, (experience: number) => this.handleGetExperience(experience));
@@ -238,7 +242,7 @@ export class GameManager extends Component {
      *
      * @param event 事件参数
      */
-    private handleEquip(event: EquipEvent) {
+    private handleEquip(event: UpdateEquipmentEvent) {
         const equipment = event.equipment as Equipment;
         if (event.equip) {
             this._player.equipments.equip(equipment);
@@ -301,6 +305,29 @@ export class GameManager extends Component {
     }
 
     /**
+     * 处理更新酒饮物事件
+     *
+     * @param event 事件参数
+     */
+    private handleUpdateDrink(event: UpdateDrinkEvent) {
+        switch (event.drinkItem.itemType) {
+            case ItemType.GOURD:
+                this._player.drink.gourd = event.drinkItem as Gourd;
+                break;
+            case ItemType.LIQUOR:
+                this._player.drink.liquor = event.drinkItem as Liquor;
+                break;
+            case ItemType.INGREDIENT:
+                if (event.load) {
+                    this._player.drink.loadIngredient(event.drinkItem as InfusedIngredient);
+                } else {
+                    this._player.drink.unloadIngredient(event.drinkItem as InfusedIngredient);
+                }
+                break;
+        }
+    }
+
+    /**
      * 获取并装备初始物品包
      *
      * 柳木棍、绵布扎腕、虎皮裙、面部腿绷
@@ -319,7 +346,9 @@ export class GameManager extends Component {
         // 酒饮
         const laoHuLu = ItemStack.of(`lao_hu_lu`, 1);
         const yeZiJiu = ItemStack.of(`ye_zi_jiu`, 1);
-        Storehouse.putIn([laoHuLu, yeZiJiu], false);
+        const tieGuYinShen = ItemStack.of(`tie_gu_yin_shen`, 1);
+        const songLao = ItemStack.of(`song_lao`, 1);
+        Storehouse.putIn([laoHuLu, yeZiJiu, tieGuYinShen, songLao], false);
         this._player.drink.gourd = laoHuLu.item as Gourd;
         this._player.drink.liquor = yeZiJiu.item as Liquor;
     }

@@ -1,7 +1,7 @@
 import { Equipment } from "db://assets/Script/Equipment/Equipment";
 import { PlayerAttributeManager } from "db://assets/Script/Entity/Player/PlayerAttributeManager";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
-import { EquipEvent } from "db://assets/Script/Event/Events/EquipEvent";
+import { UpdateEquipmentEvent } from "db://assets/Script/Event/Events/UpdateEquipmentEvent";
 import { EventName } from "db://assets/Script/Event/EventName";
 import { EquipmentType } from "db://assets/Script/Equipment/EquipmentType";
 
@@ -70,7 +70,7 @@ export class PlayerEquipmentManager {
         equipment.uniqueEffect?.activate() // 独门妙用
         equipment.setBonus?.levelUp();
 
-        EventCenter.emit(EventName.UI_UPDATE_EQUIPMENT, new EquipEvent(equipment, true));
+        EventCenter.emit(EventName.UI_UPDATE_EQUIPMENT, new UpdateEquipmentEvent(equipment, true));
     }
 
     /**
@@ -84,7 +84,7 @@ export class PlayerEquipmentManager {
         unequipped?.setBonus?.levelDown();
         this.set(null, unequipped.equipmentType);
 
-        EventCenter.emit(EventName.UI_UPDATE_EQUIPMENT, new EquipEvent(unequipped, false));
+        EventCenter.emit(EventName.UI_UPDATE_EQUIPMENT, new UpdateEquipmentEvent(unequipped, false));
     }
 
     /**

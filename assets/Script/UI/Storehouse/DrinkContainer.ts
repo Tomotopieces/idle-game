@@ -4,7 +4,8 @@ import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import { EventName } from "db://assets/Script/Event/EventName";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 import { ItemStack } from "db://assets/Script/Item/ItemStack";
-import { ChangeDrinkItemEvent, ChangeDrinkItemType } from "db://assets/Script/Event/Events/ChangeDrinkItemEvent";
+import { UIUpdateDrinkEvent } from "db://assets/Script/Event/Events/UIUpdateDrinkEvent";
+import { ItemType } from "db://assets/Script/Item/ItemType";
 
 const { ccclass } = _decorator;
 
@@ -38,20 +39,20 @@ export class DrinkContainer extends Component {
             this.node.getChildByName('IngredientSlot4').getComponent(ItemSlot),
         ];
 
-        EventCenter.on(EventName.UI_UPDATE_DRINK, this.node.name, (event: ChangeDrinkItemEvent) => this.handleUpdateDrink(event));
+        EventCenter.on(EventName.UI_UPDATE_DRINK, this.node.name, (event: UIUpdateDrinkEvent) => this.handleUpdateDrink(event));
     }
 
     onDestroy() {
         EventCenter.idOff(this.node.name);
     }
 
-    private handleUpdateDrink(event: ChangeDrinkItemEvent) {
+    private handleUpdateDrink(event: UIUpdateDrinkEvent) {
         const drink = PlayerController.PLAYER.drink;
         switch (event.type) {
-            case ChangeDrinkItemType.GOURD:
+            case ItemType.GOURD:
                 this._gourdSlot.stack = ItemStack.of(drink.gourd, 1);
                 break;
-            case ChangeDrinkItemType.LIQUOR:
+            case ItemType.LIQUOR:
                 this._liquorSlot.stack = ItemStack.of(drink.liquor, 1);
                 this._ingredientSlots.forEach((slot, index) => {
                     if (index < drink.liquor.ingredientCapacity) {
@@ -62,9 +63,9 @@ export class DrinkContainer extends Component {
                     }
                 });
                 break;
-            case ChangeDrinkItemType.INGREDIENT:
-                drink.ingredients.forEach((ingredient, index) =>
-                    this._ingredientSlots[index].stack = ItemStack.of(ingredient, 1));
+            case ItemType.INGREDIENT:
+                this._ingredientSlots.forEach((slot, index) =>
+                    slot.stack = index < drink.ingredients.length ? ItemStack.of(drink.ingredients[index], 1) : null);
                 break;
         }
     }

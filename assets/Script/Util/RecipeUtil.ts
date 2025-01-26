@@ -5,6 +5,12 @@ import { RecipeRequirement } from "db://assets/Script/Recipe/RecipeRequirement";
 import { CRAFT_RECIPE_TABLE, UPGRADE_RECIPE_LIST } from "db://assets/Script/DataTable";
 import { UpgradeRecipe } from "db://assets/Script/Recipe/UpgradeRecipe";
 import { Equipment } from "db://assets/Script/Equipment/Equipment";
+import { Gourd } from "db://assets/Script/Drink/Gourd/Gourd";
+import { Liquor } from "db://assets/Script/Drink/Liquor/Liquor";
+import { EventCenter } from "db://assets/Script/Event/EventCenter";
+import { EventName } from "db://assets/Script/Event/EventName";
+import { UpdateEquipmentEvent } from "db://assets/Script/Event/Events/UpdateEquipmentEvent";
+import { UpdateDrinkEvent } from "db://assets/Script/Event/Events/UpdateDrinkEvent";
 
 /**
  * 配方工具
@@ -54,8 +60,14 @@ export class RecipeUtil {
      */
     static craft(recipe: CraftRecipe) {
         const requirements = recipe.requirements.filter(requirement => requirement.consume);
-        Storehouse.takeOut(this.requirementsToStacks(requirements))
+        Storehouse.takeOut(this.requirementsToStacks(requirements));
         Storehouse.putIn([ItemStack.of(recipe.output, 1)]);
+
+        if (recipe.output instanceof Equipment) {
+            EventCenter.emit(EventName.UPDATE_EQUIPMENT, new UpdateEquipmentEvent(recipe.output as Equipment));
+        } else if (recipe.output instanceof Gourd || recipe.output instanceof Liquor) {
+            EventCenter.emit(EventName.UPDATE_DRINK, new UpdateDrinkEvent(recipe.output));
+        }
     }
 
     /**
