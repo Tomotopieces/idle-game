@@ -16,6 +16,21 @@ export enum SlotType {
     EQUIPMENT = 'EQUIPMENT',
 
     /**
+     * 葫芦槽
+     */
+    GOURD = 'GOURD',
+
+    /**
+     * 酒槽
+     */
+    LIQUOR = 'LIQUOR',
+
+    /**
+     * 泡酒物槽
+     */
+    INGREDIENT = 'INGREDIENT',
+
+    /**
      * 仓库槽
      */
     STOREHOUSE = 'STOREHOUSE',
@@ -29,7 +44,7 @@ export class ItemSlot extends Component {
     /**
      * 物品槽类型
      */
-    @property({ type: Enum(SlotType), tooltip: '物品槽类型' })
+    @property({ type: Enum(SlotType), displayName: '物品槽类型' })
     slotType: SlotType = SlotType.STOREHOUSE;
 
     /**

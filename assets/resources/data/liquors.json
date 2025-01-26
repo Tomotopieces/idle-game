@@ -4,20 +4,26 @@
     "displayName": "椰子酒",
     "description": "快安排椰子酒来，与爷爷接风。",
     "healthRecoverRatio": 0.33,
-    "ingredientCapacity": 1
+    "ingredientCapacity": 1,
+    "unique": true,
+    "rarity": "common"
   },
   {
     "name": "gao_er_niang",
     "displayName": "羔儿酿",
     "description": "羊酒果盘，志诚奉献。",
     "healthRecoverRatio": 0.2,
-    "ingredientCapacity": 1
+    "ingredientCapacity": 1,
+    "unique": true,
+    "rarity": "rare"
   },
   {
     "name": "song_lao",
     "displayName": "松醪",
     "description": "观棋柯烂，伐木丁丁，云边谷口徐行。",
     "healthRecoverRatio": 0.35,
-    "ingredientCapacity": 2
+    "ingredientCapacity": 2,
+    "unique": true,
+    "rarity": "epic"
   }
 ]

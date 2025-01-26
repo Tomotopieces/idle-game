@@ -22,6 +22,8 @@ import { Sellable } from "db://assets/Script/Sellable/Sellable";
 import { ShopManager } from "db://assets/Script/Shop/ShopManager";
 import { GameLevelUpdatedEvent } from "db://assets/Script/Event/Events/GameLevelUpdatedEvent";
 import { PlayerDrinkEvent } from "db://assets/Script/Event/Events/PlayerDrinkEvent";
+import { Gourd } from "db://assets/Script/Drink/Gourd/Gourd";
+import { Liquor } from "db://assets/Script/Drink/Liquor/Liquor";
 
 const { ccclass, property } = _decorator;
 
@@ -33,27 +35,20 @@ const { ccclass, property } = _decorator;
 @ccclass('GameManager')
 export class GameManager extends Component {
     /**
-     * 玩家控制器
-     */
-    @property({ type: PlayerController, tooltip: '玩家控制器' })
-    player: PlayerController = null;
-
-    /**
-     * 敌人信息
-     */
-    @property({ type: EnemyController, tooltip: '敌人' })
-    enemy: EnemyController = null;
-
-    /**
      * 自动保存间隔（秒）
      */
     @property({ type: CCInteger, displayName: '自动保存间隔（秒）' })
     autoSaveInterval: number = 5 * 60;
 
     /**
-     * 自动存档回调
+     * 玩家控制器
      */
-    private _autoSaveCallback = () => this.saveData();
+    private _player: PlayerController = null;
+
+    /**
+     * 敌人信息
+     */
+    private _enemy: EnemyController = null;
 
     onLoad() {
         // 监听处理事件
@@ -71,6 +66,9 @@ export class GameManager extends Component {
     }
 
     start() {
+        this._player = PlayerController.PLAYER;
+        this._enemy = EnemyController.ENEMY;
+
         // 读取存档
         const saveData = this.loadSaveData();
         this.restorePlayerAndStorehouseData(saveData);
@@ -78,7 +76,7 @@ export class GameManager extends Component {
         this.restoreLedger(saveData);
 
         // 自动存档
-        this.schedule(this._autoSaveCallback, this.autoSaveInterval);
+        this.schedule(() => this.saveData(), this.autoSaveInterval);
     }
 
     onDestroy() {
@@ -97,13 +95,13 @@ export class GameManager extends Component {
             return;
         }
 
-        this.player.levelInfo.restore(saveData.level, saveData.experience);
-        saveData.equipments.forEach(equipment => this.player.equipments.equip(equipment));
-        this.player.attributes.levelUp(saveData.level);
-        this.player.talents.restore(saveData.talents);
+        this._player.levelInfo.restore(saveData.level, saveData.experience);
+        saveData.equipments.forEach(equipment => this._player.equipments.equip(equipment));
+        this._player.attributes.levelUp(saveData.level);
+        this._player.talents.restore(saveData.talents);
 
-        EventCenter.emit(EventName.UI_UPDATE_PLAYER_LEVEL_INFO, this.player.levelInfo);
-        EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
+        EventCenter.emit(EventName.UI_UPDATE_PLAYER_LEVEL_INFO, this._player.levelInfo);
+        EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this._player.attributes);
 
         Storehouse.STOREHOUSE = saveData.storehouse;
         EventCenter.emit(EventName.UI_UPDATE_STOREHOUSE, Array.from(Storehouse.STOREHOUSE.values()));
@@ -125,7 +123,7 @@ export class GameManager extends Component {
             Level.AREA = AREA_TABLE.get(DefaultLevelName.AREA);
             Level.STAGE = STAGE_TABLE.get(DefaultLevelName.STAGE);
         }
-        this.enemy.info = Level.STAGE.enemyInfo;
+        this._enemy.info = Level.STAGE.enemyInfo;
 
         EventCenter.emit(EventName.GAME_LEVEL_UPDATED, new GameLevelUpdatedEvent());
     }
@@ -156,7 +154,7 @@ export class GameManager extends Component {
      * 保存存档
      */
     private saveData() {
-        const saveData = new SaveData(this.player.levelInfo.level, this.player.levelInfo.experience, Storehouse.STOREHOUSE, this.player.equipments.getAll(), Level.CHAPTER.name, Level.AREA.name, Level.STAGE.name, this.player.talents.talents, ENEMY_RECORD, ShopManager.LEDGER);
+        const saveData = new SaveData(this._player.levelInfo.level, this._player.levelInfo.experience, Storehouse.STOREHOUSE, this._player.equipments.getAll(), Level.CHAPTER.name, Level.AREA.name, Level.STAGE.name, this._player.talents.talents, ENEMY_RECORD, ShopManager.LEDGER);
         sys.localStorage.setItem(LocalStorageDataName.SAVE_DATA, saveData.toJson());
         EventCenter.emit(EventName.UI_POST_MESSAGE, new UIPostMessageEvent(MessageType.DEFAULT, `保存成功`));
     }
@@ -174,7 +172,7 @@ export class GameManager extends Component {
         Level.CHAPTER = event.chapter;
         Level.AREA = event.area;
         Level.STAGE = event.stage;
-        this.enemy.info = event.stage.enemyInfo;
+        this._enemy.info = event.stage.enemyInfo;
 
         EventCenter.emit(EventName.GAME_LEVEL_UPDATED, new GameLevelUpdatedEvent());
     }
@@ -187,10 +185,10 @@ export class GameManager extends Component {
     private handleDealDamage(event: DealDamageEvent) {
         switch (event.source) {
             case Unit.ENEMY:
-                this.player.hurt(event.damage);
+                this._player.hurt(event.damage);
                 break;
             case Unit.PLAYER:
-                this.enemy.hurt(event.damage);
+                this._enemy.hurt(event.damage);
                 break;
         }
     }
@@ -232,7 +230,7 @@ export class GameManager extends Component {
      * @param experience 经验值
      */
     private handleGetExperience(experience: number) {
-        this.player.levelInfo.gainExperience(experience);
+        this._player.levelInfo.gainExperience(experience);
     }
 
     /**
@@ -243,11 +241,11 @@ export class GameManager extends Component {
     private handleEquip(event: EquipEvent) {
         const equipment = event.equipment as Equipment;
         if (event.equip) {
-            this.player.equipments.equip(equipment);
+            this._player.equipments.equip(equipment);
         } else {
-            this.player.equipments.unequip(equipment);
+            this._player.equipments.unequip(equipment);
         }
-        EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
+        EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this._player.attributes);
     }
 
     /**
@@ -256,10 +254,10 @@ export class GameManager extends Component {
      * @param level 新等级
      */
     private handlePlayerLevelUp(level: number) {
-        this.player.attributes.levelUp(level);
-        this.player.updateHealthBar();
-        this.player.talents.levelUp(level);
-        EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this.player.attributes);
+        this._player.attributes.levelUp(level);
+        this._player.updateHealthBar();
+        this._player.talents.levelUp(level);
+        EventCenter.emit(EventName.UI_UPDATE_ATTRIBUTE_PANEL, this._player.attributes);
         EventCenter.emit(EventName.UI_POST_MESSAGE, new UIPostMessageEvent(MessageType.LEVEL_UP, level));
     }
 
@@ -269,7 +267,7 @@ export class GameManager extends Component {
      * @param stance 棍势值
      */
     private handleGainStance(stance: number) {
-        this.player.skills.resources.stance += stance;
+        this._player.skills.resources.stance += stance;
     }
 
     /**
@@ -278,7 +276,7 @@ export class GameManager extends Component {
      * @param talentTreeNode 天赋树节点
      */
     private handleTalentUpgrade(talentTreeNode: TalentTreeNode) {
-        this.player.talents.upgradeTalent(talentTreeNode);
+        this._player.talents.upgradeTalent(talentTreeNode);
     }
 
     /**
@@ -299,7 +297,7 @@ export class GameManager extends Component {
      * @param event 事件参数
      */
     private handlePlayerDrink(event: PlayerDrinkEvent) {
-        this.player.recover(event.healthRecoverRatio);
+        this._player.recover(event.healthRecoverRatio);
     }
 
     /**
@@ -308,14 +306,22 @@ export class GameManager extends Component {
      * 柳木棍、绵布扎腕、虎皮裙、面部腿绷
      */
     private getStarterPack() {
-        const starterPack = [
+        // 披挂
+        const equipments = [
             ItemStack.of(`liu_mu_gun`, 1),
             ItemStack.of(`mian_bu_zha_wan`, 1),
             ItemStack.of(`hu_pi_qun`, 1),
             ItemStack.of(`mian_bu_tui_beng`, 1)
         ];
-        Storehouse.putIn(starterPack, false);
-        starterPack.forEach(stack => this.player.equipments.equip(stack.item as Equipment));
+        Storehouse.putIn(equipments, false);
+        equipments.forEach(stack => this._player.equipments.equip(stack.item as Equipment));
+
+        // 酒饮
+        const laoHuLu = ItemStack.of(`lao_hu_lu`, 1);
+        const yeZiJiu = ItemStack.of(`ye_zi_jiu`, 1);
+        Storehouse.putIn([laoHuLu, yeZiJiu], false);
+        this._player.drink.gourd = laoHuLu.item as Gourd;
+        this._player.drink.liquor = yeZiJiu.item as Liquor;
     }
 
     /**

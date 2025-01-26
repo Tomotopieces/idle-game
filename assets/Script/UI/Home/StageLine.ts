@@ -1,5 +1,5 @@
 import { _decorator, Component, instantiate, Prefab, Widget } from 'cc';
-import { StageButton } from "db://assets/Script/UI/StageButton";
+import { StageButton } from "db://assets/Script/UI/Home/StageButton";
 import { Level } from "db://assets/Script/Level/Level";
 import { UpdateGameLevelEvent } from "db://assets/Script/Event/Events/UpdateGameLevelEvent";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";

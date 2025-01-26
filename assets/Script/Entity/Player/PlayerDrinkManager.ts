@@ -6,11 +6,12 @@ import { EventName } from "db://assets/Script/Event/EventName";
 import { PlayerDrinkEvent } from "db://assets/Script/Event/Events/PlayerDrinkEvent";
 import { GourdState } from "db://assets/Script/Drink/Gourd/GourdState";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
+import { ChangeDrinkItemEvent, ChangeDrinkItemType } from "db://assets/Script/Event/Events/ChangeDrinkItemEvent";
 
 /**
  * 饮酒管理
  */
-export class DrinkManager {
+export class PlayerDrinkManager {
     /**
      * 葫芦
      */
@@ -105,14 +106,20 @@ export class DrinkManager {
     }
 
     set gourd(gourd: Gourd) {
+        if (this._gourd === gourd) {
+            return;
+        }
+
         // 切换葫芦的效果
         const oldGourd = this._gourd;
-        oldGourd?.effect.deactivate();
+        oldGourd?.effect?.deactivate();
         this._gourd = gourd;
-        this._gourd.effect.activate();
+        this._gourd.effect?.activate();
 
         // 计算剩余酒量
         this._gourd.remain = oldGourd ? Math.min(this._gourd.capacity, oldGourd.remain) : this._gourd.capacity;
+
+        EventCenter.emit(EventName.UI_UPDATE_DRINK, new ChangeDrinkItemEvent(ChangeDrinkItemType.GOURD));
     }
 
     get liquor(): Liquor {
@@ -120,17 +127,23 @@ export class DrinkManager {
     }
 
     set liquor(liquor: Liquor) {
+        if (this._liquor === liquor) {
+            return;
+        }
+
         // 切换酒的效果
         const oldLiquor = this._liquor;
-        oldLiquor?.effect.deactivate();
+        oldLiquor?.effect?.deactivate();
         this._liquor = liquor;
-        this._liquor.effect.activate();
+        this._liquor.effect?.activate();
+        EventCenter.emit(EventName.UI_UPDATE_DRINK, new ChangeDrinkItemEvent(ChangeDrinkItemType.LIQUOR));
 
         // 计算泡酒物数量
         if (this._liquor.ingredientCapacity < (oldLiquor?.ingredientCapacity ?? 0)) {
             // 取消被卸下的泡酒物的效果
             this._ingredients.splice(0, oldLiquor.ingredientCapacity - this._liquor.ingredientCapacity)
                 .forEach(ingredient => ingredient.effect.deactivate());
+            EventCenter.emit(EventName.UI_UPDATE_DRINK, new ChangeDrinkItemEvent(ChangeDrinkItemType.INGREDIENT));
         }
     }
 
@@ -138,10 +151,37 @@ export class DrinkManager {
         return this._ingredients;
     }
 
+    /**
+     * 设置泡酒物
+     *
+     * @param ingredient 泡酒物
+     * @param index      位置索引
+     */
     setIngredient(ingredient: InfusedIngredient, index: number) {
+        if (this._ingredients[index] === ingredient) {
+            return;
+        }
+
         // 切换泡酒物的效果
         this._ingredients[index].effect?.deactivate();
         this._ingredients[index] = ingredient;
         ingredient && ingredient.effect.activate();
+        EventCenter.emit(EventName.UI_UPDATE_DRINK, new ChangeDrinkItemEvent(ChangeDrinkItemType.INGREDIENT));
+    }
+
+    /**
+     * 添加泡酒物
+     *
+     * 超过数量上限时，移除第一个泡酒物
+     *
+     * @param ingredient 泡酒物
+     */
+    pushIngredient(ingredient: InfusedIngredient) {
+        this._ingredients.push(ingredient);
+        ingredient.effect.activate();
+        if (this._ingredients.length >= this._liquor.ingredientCapacity) {
+            this._ingredients.shift().effect.deactivate();
+        }
+        EventCenter.emit(EventName.UI_UPDATE_DRINK, new ChangeDrinkItemEvent(ChangeDrinkItemType.INGREDIENT));
     }
 }

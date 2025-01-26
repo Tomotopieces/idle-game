@@ -73,6 +73,11 @@ export enum EventName {
     UI_UPDATE_EQUIPMENT = 'UI_UPDATE_EQUIPMENT',
 
     /**
+     * 更新酒饮栏UI
+     */
+    UI_UPDATE_DRINK = 'UI_UPDATE_DRINK',
+
+    /**
      * 点击天赋槽UI
      */
     UI_CLICK_TALENT_SLOT = 'UI_CLICK_TALENT_SLOT',
@@ -126,9 +131,4 @@ export enum EventName {
      * 玩家饮酒
      */
     PLAYER_DRINK = 'PLAYER_DRINK',
-
-    /**
-     * 玩家饮酒结束
-     */
-    PLAYER_DRINK_END = 'PLAYER_DRINK_END',
 }
