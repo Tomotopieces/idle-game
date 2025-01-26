@@ -60,6 +60,8 @@ export class RecipeInfoUI extends Component {
      * @param recipe 配方
      */
     show(recipe: Recipe) {
+        this.node.active = true;
+
         this._recipe = recipe;
         const item = recipe.output;
         const rarity = recipe instanceof UpgradeRecipe ? recipe.outputRarity : item.rarity;
