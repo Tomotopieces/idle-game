@@ -21,7 +21,7 @@ export class StageLine extends Component {
     stageButtonPrefab: Prefab;
 
     onLoad() {
-        EventCenter.on(EventName.GAME_LEVEL_UPDATED, this.node.name, (event: GameLevelUpdatedEvent) => this.handleGameLevelUpdate(event));
+        EventCenter.on(EventName.UI_UPDATE_GAME_LEVEL, this.node.name, (event: GameLevelUpdatedEvent) => this.handleGameLevelUpdate(event));
     }
 
     onDestroy() {
@@ -46,7 +46,7 @@ export class StageLine extends Component {
             targetArea = Level.lastAreaOf(targetChapter);
         }
         const stage = Level.firstStageOf(targetArea);
-        EventCenter.emit(EventName.UPDATE_GAME_LEVEL, new UpdateGameLevelEvent(targetChapter, targetArea, stage));
+        EventCenter.emit(EventName.UPDATE_GAME_LEVEL, new UpdateGameLevelEvent(stage));
     }
 
     /**
@@ -67,7 +67,7 @@ export class StageLine extends Component {
             targetArea = Level.firstAreaOf(targetChapter);
         }
         const stage = Level.firstStageOf(targetArea);
-        EventCenter.emit(EventName.UPDATE_GAME_LEVEL, new UpdateGameLevelEvent(targetChapter, targetArea, stage));
+        EventCenter.emit(EventName.UPDATE_GAME_LEVEL, new UpdateGameLevelEvent(stage));
     }
 
     /**

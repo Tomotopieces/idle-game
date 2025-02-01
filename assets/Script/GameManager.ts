@@ -37,6 +37,8 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('GameManager')
 export class GameManager extends Component {
+    // TODO 修改事件的整体处理逻辑，改为各个事件内部独立处理，而非堆积在GameManager中。GameManager只保留存档恢复与自动存档（改名？）。
+
     /**
      * 自动保存间隔（秒）
      */
@@ -100,7 +102,8 @@ export class GameManager extends Component {
         }
 
         this._player.levelInfo.restore(saveData.level, saveData.experience);
-        saveData.equipments.forEach(equipment => this._player.equipments.equip(equipment));
+        saveData.equipments.forEach(equipment => this._player.equipments.equip(equipment as Equipment));
+        this._player.drink.restore(saveData.drinks);
         this._player.attributes.levelUp(saveData.level);
         this._player.talents.restore(saveData.talents);
 
@@ -118,9 +121,9 @@ export class GameManager extends Component {
      */
     private restoreLevelAndEnemyData(saveData: SaveData) {
         if (saveData) {
-            Level.AREA = AREA_TABLE.get(saveData.areaName);
             Level.STAGE = STAGE_TABLE.get(saveData.stageName);
-            Level.CHAPTER = CHAPTER_TABLE.get(saveData.chapterName);
+            Level.AREA = Level.areaOf(Level.STAGE);
+            Level.CHAPTER = Level.chapterOf(Level.AREA);
             saveData.enemyRecord.forEach((value, key) => ENEMY_RECORD.set(key, value));
         } else {
             Level.CHAPTER = CHAPTER_TABLE.get(DefaultLevelName.CHAPTER);
@@ -129,7 +132,7 @@ export class GameManager extends Component {
         }
         this._enemy.info = Level.STAGE.enemyInfo;
 
-        EventCenter.emit(EventName.GAME_LEVEL_UPDATED, new GameLevelUpdatedEvent());
+        EventCenter.emit(EventName.UI_UPDATE_GAME_LEVEL, new GameLevelUpdatedEvent());
     }
 
     /**
@@ -148,17 +151,14 @@ export class GameManager extends Component {
      */
     private loadSaveData(): SaveData {
         const rawData = sys.localStorage.getItem(LocalStorageDataName.SAVE_DATA);
-        if (!rawData) {
-            return;
-        }
-        return SaveData.fromJson(rawData);
+        return rawData ? SaveData.fromJson(rawData) : null;
     }
 
     /**
      * 保存存档
      */
     private saveData() {
-        const saveData = new SaveData(this._player.levelInfo.level, this._player.levelInfo.experience, Storehouse.STOREHOUSE, this._player.equipments.getAll(), Level.CHAPTER.name, Level.AREA.name, Level.STAGE.name, this._player.talents.talents, ENEMY_RECORD, ShopManager.LEDGER);
+        const saveData = new SaveData(this._player.levelInfo.level, this._player.levelInfo.experience, Storehouse.STOREHOUSE, this._player.equipments.getAll(), this._player.drink.getAll(), Level.STAGE.name, this._player.talents.talents, ENEMY_RECORD, ShopManager.LEDGER);
         sys.localStorage.setItem(LocalStorageDataName.SAVE_DATA, saveData.toJson());
         EventCenter.emit(EventName.UI_POST_MESSAGE, new UIPostMessageEvent(MessageType.DEFAULT, `保存成功`));
     }
@@ -169,7 +169,7 @@ export class GameManager extends Component {
      * @param event 事件参数
      */
     private handleUpdateGameLevel(event: UpdateGameLevelEvent) {
-        if (Level.CHAPTER === event.chapter && Level.AREA === event.area && Level.STAGE === event.stage) {
+        if (Level.STAGE === event.stage) {
             return;
         }
 
@@ -178,7 +178,7 @@ export class GameManager extends Component {
         Level.STAGE = event.stage;
         this._enemy.info = event.stage.enemyInfo;
 
-        EventCenter.emit(EventName.GAME_LEVEL_UPDATED, new GameLevelUpdatedEvent());
+        EventCenter.emit(EventName.UI_UPDATE_GAME_LEVEL, new GameLevelUpdatedEvent());
     }
 
     /**

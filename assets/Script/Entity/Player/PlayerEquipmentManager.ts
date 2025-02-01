@@ -152,6 +152,9 @@ export class PlayerEquipmentManager {
         }
     }
 
+    /**
+     * 获取所有装备
+     */
     getAll(): Equipment[] {
         return [this._weapon, this._head, this._chest, this._arm, this._leg, this._curios];
     }

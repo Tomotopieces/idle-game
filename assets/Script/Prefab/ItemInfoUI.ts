@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Layout, Sprite, SpriteFrame } from "cc";
+import { _decorator, Color, Component, Label, Layout, RichText, Sprite, SpriteFrame, UITransform } from "cc";
 import { Item } from "db://assets/Script/Item/Item";
 import { ResourceManager, ResourceType } from "db://assets/Script/ResourceManager";
 import { Equipment } from "db://assets/Script/Equipment/Equipment";
@@ -55,9 +55,9 @@ export class ItemInfoUI extends Component {
     private _uniqueEffectLabel: Label;
 
     /**
-     * 套装效果 Label
+     * 套装效果 RichText
      */
-    private _setBonusLabel: Label;
+    private _setBonusRichText: RichText;
 
     onLoad() {
         // Layout
@@ -77,7 +77,7 @@ export class ItemInfoUI extends Component {
         const weaponInfoNode = this.node.getChildByName('WeaponInfo');
         this._attributesLabel = weaponInfoNode.getChildByName('Attributes').getComponent(Label);
         this._uniqueEffectLabel = weaponInfoNode.getChildByName('UniqueEffect').getComponent(Label);
-        this._setBonusLabel = weaponInfoNode.getChildByName('SetBonus').getComponent(Label);
+        this._setBonusRichText = weaponInfoNode.getChildByName('SetBonus').getComponent(RichText);
     }
 
     /**
@@ -106,12 +106,13 @@ export class ItemInfoUI extends Component {
             this._attributesLabel.node.active = !!this._attributesLabel.string;
             this._uniqueEffectLabel.string = ItemInfoUI.uniqueEffectText(item);
             this._uniqueEffectLabel.node.active = !!this._uniqueEffectLabel.string;
-            this._setBonusLabel.string = ItemInfoUI.setBonusText(item, showSetBonusActivationStatus);
-            this._setBonusLabel.node.active = !!this._setBonusLabel.string;
+            this._setBonusRichText.string = ItemInfoUI.setBonusText(item, showSetBonusActivationStatus);
+            this._setBonusRichText.node.active = !!this._setBonusRichText.string;
+            this._setBonusRichText.maxWidth = this.getComponent(UITransform).width;
         } else {
             this._attributesLabel.node.active = false;
             this._uniqueEffectLabel.node.active = false;
-            this._setBonusLabel.node.active = false;
+            this._setBonusRichText.node.active = false;
         }
 
         // 更新Layout
@@ -159,9 +160,10 @@ export class ItemInfoUI extends Component {
      */
     private static setBonusText(equipment: Equipment, showActivationStatus: boolean): string {
         const bonus = equipment.setBonus;
+        const color = showActivationStatus && bonus.active ? Color.GREEN : Color.WHITE;
         return bonus ?
-            `套装效果：(${bonus.level} / ${bonus.requirement})：${bonus.effect.description} ${showActivationStatus ? bonus.active ? '✔' : '❌' : ''}` : // TODO 改为RichText，通过颜色来区分是否激活
-            ``;
+               `套装效果：\n<color=${color.toHEX(`#rrggbb`)}>(${bonus.requirement}) ${bonus.effect.description}</color>` :
+               ``;
     }
 
     /**

@@ -10,8 +10,25 @@ import { EventName } from "db://assets/Script/Event/EventName";
 import { SkillHeavyAttack } from "db://assets/Script/Skill/Skills/SkillHeavyAttack";
 import { BuffManager } from "db://assets/Script/Buff/BuffManager";
 import { PlayerDrinkManager } from "db://assets/Script/Entity/Player/PlayerDrinkManager";
+import { Level } from "db://assets/Script/Level/Level";
+import { UpdateGameLevelEvent } from "db://assets/Script/Event/Events/UpdateGameLevelEvent";
 
 const { ccclass } = _decorator;
+
+/**
+ * 玩家状态
+ */
+export enum PlayerState {
+    /**
+     * 存活
+     */
+    ALIVE,
+
+    /**
+     * 死亡
+     */
+    DEAD,
+}
 
 /**
  * 玩家控制器
@@ -56,6 +73,11 @@ export class PlayerController extends Component {
     readonly buffs: BuffManager = new BuffManager();
 
     /**
+     * 状态
+     */
+    private _state: PlayerState = PlayerState.ALIVE;
+
+    /**
      * 血条UI
      */
     private _healthBar: ProgressBar;
@@ -73,9 +95,15 @@ export class PlayerController extends Component {
     }
 
     update(dt: number) {
-        this.skills.update(dt);
-        this.buffs.update(dt);
-        this.drink.update(dt);
+        switch (this._state) {
+            case PlayerState.ALIVE:
+                this.skills.update(dt);
+                this.buffs.update(dt);
+                this.drink.update(dt);
+                break;
+            case PlayerState.DEAD:
+                break;
+        }
     }
 
     /**
@@ -94,22 +122,63 @@ export class PlayerController extends Component {
      * @param damage 伤害值
      */
     hurt(damage: number) {
+        if (this._state === PlayerState.DEAD) {
+            return; // 死亡后不计算伤害
+        }
+
         this.attributes.getHurt(damage);
         this.updateHealthBar();
 
         if (this.attributes.health === 0) {
-            EventCenter.emit(EventName.PLAYER_DIE, this);
-            // TODO 复活
+            this.die();
+        }
+    }
+
+    /**
+     * 死亡
+     */
+    die() {
+        this._state = PlayerState.DEAD; // 设置状态
+
+        // 切换stage到当前character的第一个stage
+        const stage = Level.firstStageOf(Level.firstAreaOf(Level.CHAPTER));
+        EventCenter.emit(EventName.UPDATE_GAME_LEVEL, new UpdateGameLevelEvent(stage));
+
+        this._anim.play('Die'); // 播放动画
+
+        EventCenter.emit(EventName.PLAYER_DIE, this);
+    }
+
+    /**
+     * 点击
+     *
+     * 存活时：无效果
+     * 死亡时：每次点击时恢复35%血量，恢复满后复活
+     *
+     * 按钮触发
+     */
+    click() {
+        switch (this._state) {
+            case PlayerState.ALIVE:
+                break;
+            case PlayerState.DEAD:
+                this.recover(0.35);
+                if (this.attributes.health === this.attributes.finalHealth()) {
+                    this._anim.play('Idle'); // 恢复贴图姿态
+                    this._state = PlayerState.ALIVE;
+                }
+                break;
         }
     }
 
     /**
      * 恢复血量
      *
-     * @param value 恢复值，准确值(1, )或百分比值(0, 1]
+     * @param value 恢复值，准确值(1, +∞)或百分比值(0, 1]
      */
     recover(value: number) {
         this.attributes.health += (value > 1 ? value : value * this.attributes.finalHealth());
+        this.updateHealthBar();
     }
 
     /**

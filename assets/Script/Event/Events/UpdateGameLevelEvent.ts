@@ -26,14 +26,12 @@ export class UpdateGameLevelEvent extends EventArgument {
     /**
      * 构造函数
      *
-     * @param chapter 章节, null则为当前章节
-     * @param area    区域，null则为当前区域
-     * @param stage   舞台，null则为当前舞台
+     * @param stage 舞台，null则为当前舞台
      */
-    constructor(chapter: Chapter, area: Area, stage: Stage) {
+    constructor(stage: Stage) {
         super();
-        this.chapter = chapter ?? Level.CHAPTER;
-        this.area = area ?? Level.AREA;
         this.stage = stage ?? Level.STAGE;
+        this.area = Level.areaOf(this.stage);
+        this.chapter = Level.chapterOf(this.area);
     }
 }

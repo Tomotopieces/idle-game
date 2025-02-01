@@ -28,11 +28,6 @@ export enum EventName {
     UPDATE_GAME_LEVEL = 'UPDATE_GAME_LEVEL',
 
     /**
-     * 游戏关卡更新（后）
-     */
-    GAME_LEVEL_UPDATED = 'GAME_LEVEL_UPDATED',
-
-    /**
      * 玩家升级
      */
     PLAYER_LEVEL_UP = 'PLAYER_LEVEL_UP',
@@ -76,6 +71,11 @@ export enum EventName {
      * 玩家饮酒
      */
     PLAYER_DRINK = 'PLAYER_DRINK',
+
+    /**
+     * UI更新游戏关卡
+     */
+    UI_UPDATE_GAME_LEVEL = 'UI_UPDATE_GAME_LEVEL',
 
     /**
      * 点击物品槽UI

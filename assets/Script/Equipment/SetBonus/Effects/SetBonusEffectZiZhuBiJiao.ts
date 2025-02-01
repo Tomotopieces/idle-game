@@ -11,7 +11,7 @@ import { PassiveEffect } from "db://assets/Script/PassiveEffect/PassiveEffect";
  */
 export class SetBonusEffectZiZhuBiJiao extends PassiveEffect {
     static NAME: string = 'zi_zhu_bi_jiao';
-    static DESCRIPTION: string = '打杀对手后少许增加获得的灵蕴(+10%)。';
+    static DESCRIPTION: string = '打杀对手后少许增加获得的灵蕴。';
     static REQUIREMENT: number = 4;
 
     constructor() {

@@ -30,7 +30,7 @@ export class StageButton extends Component {
      */
     click() {
         const stage = STAGE_TABLE.get(this.stageName);
-        EventCenter.emit(EventName.UPDATE_GAME_LEVEL, new UpdateGameLevelEvent(null, null, stage));
+        EventCenter.emit(EventName.UPDATE_GAME_LEVEL, new UpdateGameLevelEvent(stage));
     }
 
     /**

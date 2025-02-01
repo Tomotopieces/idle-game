@@ -1,6 +1,6 @@
 import { Area } from "db://assets/Script/Level/Area";
 import { Stage } from "db://assets/Script/Level/Stage";
-import { CHAPTERS } from "db://assets/Script/DataTable";
+import { AREAS, CHAPTERS } from "db://assets/Script/DataTable";
 import { Chapter } from "db://assets/Script/Level/Chapter";
 
 /**
@@ -114,5 +114,23 @@ export class Level {
         const chapter = CHAPTERS.find(chapter => chapter.areas.some(area => area.name === currentArea.name));
         const currentIndex = chapter.areas.findIndex(area => area.name === currentArea.name);
         return currentIndex === chapter.areas.length - 1 ? null : chapter.areas[currentIndex + 1];
+    }
+
+    /**
+     * 获取舞台的所在区域
+     *
+     * @return 区域
+     */
+    static areaOf(level: Stage): Area {
+        return AREAS.find(area => area.stages.some(stage => stage.name === level.name));
+    }
+
+    /**
+     * 获取舞台或区域的所在章节
+     *
+     * @return 章节
+     */
+    static chapterOf(level: Area): Chapter {
+        return CHAPTERS.find(chapter => chapter.areas.some(area => area.name === level.name));
     }
 }

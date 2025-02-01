@@ -8,6 +8,7 @@ import { GourdState } from "db://assets/Script/Drink/Gourd/GourdState";
 import { PlayerController } from "db://assets/Script/Entity/Player/PlayerController";
 import { UIUpdateDrinkEvent } from "db://assets/Script/Event/Events/UIUpdateDrinkEvent";
 import { ItemType } from "db://assets/Script/Item/ItemType";
+import { Item } from "db://assets/Script/Item/Item";
 
 /**
  * 饮酒管理
@@ -186,7 +187,7 @@ export class PlayerDrinkManager {
         ingredient.effect.activate();
 
         if (this._ingredients.length > this._liquor.ingredientCapacity) {
-            this._ingredients.shift().effect.deactivate();
+            this._ingredients.shift().effect.deactivate(); // 移除第一个泡酒物并取消激活其效果
         }
 
         EventCenter.emit(EventName.UI_UPDATE_DRINK, new UIUpdateDrinkEvent(ItemType.INGREDIENT));
@@ -199,5 +200,33 @@ export class PlayerDrinkManager {
         this._ingredients.splice(this._ingredients.indexOf(ingredient), 1);
         ingredient.effect.deactivate();
         EventCenter.emit(EventName.UI_UPDATE_DRINK, new UIUpdateDrinkEvent(ItemType.INGREDIENT));
+    }
+
+    /**
+     * 获取所有酒饮物
+     */
+    getAll(): Item[] {
+        return [this._gourd, this._liquor, ...this._ingredients];
+    }
+
+    /**
+     * 恢复酒饮物
+     *
+     * @param drinks 酒饮物
+     */
+    restore(drinks: Item[]) {
+        drinks.forEach(drink => {
+            switch (drink.itemType) {
+                case ItemType.GOURD:
+                    this.gourd = drink as Gourd;
+                    break;
+                case ItemType.LIQUOR:
+                    this.liquor = drink as Liquor;
+                    break;
+                case ItemType.INGREDIENT:
+                    this.loadIngredient(drink as InfusedIngredient);
+                    break;
+            }
+        });
     }
 }

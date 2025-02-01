@@ -362,7 +362,7 @@
     "name": "huang_feng",
     "displayName": "黄风",
     "health": 100,
-    "damage": 10,
+    "damage": 200,
     "icon": "enemy/hamster",
     "dropList": [],
     "experience": 25

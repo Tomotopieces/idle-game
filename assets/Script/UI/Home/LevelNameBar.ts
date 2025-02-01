@@ -20,7 +20,7 @@ export class LevelNameBar extends Component {
     label: Label;
 
     onLoad() {
-        EventCenter.on(EventName.GAME_LEVEL_UPDATED, this.node.name, (event: GameLevelUpdatedEvent) => this.handleGameLevelUpdated(event));
+        EventCenter.on(EventName.UI_UPDATE_GAME_LEVEL, this.node.name, (event: GameLevelUpdatedEvent) => this.handleGameLevelUpdated(event));
     }
 
     onDestroy() {

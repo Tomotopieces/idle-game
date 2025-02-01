@@ -5,7 +5,7 @@ import { StageJson } from "db://assets/Script/Level/StageJson";
 import { AreaJson } from "db://assets/Script/Level/AreaJson";
 import { EventCenter } from "db://assets/Script/Event/EventCenter";
 import {
-    AREA_TABLE,
+    AREA_TABLE, AREAS,
     CHAPTER_TABLE,
     CHAPTERS,
     CRAFT_RECIPE_TABLE,
@@ -220,8 +220,11 @@ export class GameLoader extends Component {
         resources.load(DataPath.AREA_TABLES, JsonAsset, (err: any, data: JsonAsset) => {
             err && console.error(err);
             const rawAreas = data.json! as AreaJson[];
-            rawAreas.forEach((rawArea: AreaJson, index: number) =>
-                AREA_TABLE.set(rawArea.name, AreaJson.toArea(index, rawArea)));
+            rawAreas.forEach((rawArea: AreaJson, index: number) => {
+                const area = AreaJson.toArea(index, rawArea);
+                AREA_TABLE.set(rawArea.name, area);
+                AREAS.push(area);
+            });
             this.loadStep++;
         });
     }

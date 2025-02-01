@@ -72,7 +72,7 @@ export enum DataPath {
     /**
      * 敌人配置表
      */
-    ENEMY_TABLES = 'data/enemys',
+    ENEMY_TABLES = 'data/enemies',
 
     /**
      * 关卡配置表
@@ -129,6 +129,7 @@ export const STAGE_TABLE = new Map<string, Stage>();
  * 区域表
  */
 export const AREA_TABLE = new Map<string, Area>();
+export const AREAS: Area[] = [];
 
 /**
  * 章节表
