@@ -4,13 +4,12 @@ import { EventCenter } from "db://assets/Script/Event/EventCenter";
 
 import { EventName } from "db://assets/Script/Event/EventName";
 
-const { ccclass, executeInEditMode } = _decorator;
+const { ccclass } = _decorator;
 
 /**
  * 天赋卡片
  */
 @ccclass('TalentCard')
-@executeInEditMode(true)
 export class TalentCard extends Component {
     /**
      * 天赋树节点

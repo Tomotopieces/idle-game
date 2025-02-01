@@ -160,7 +160,7 @@ export class ItemInfoUI extends Component {
      */
     private static setBonusText(equipment: Equipment, showActivationStatus: boolean): string {
         const bonus = equipment.setBonus;
-        const color = showActivationStatus && bonus.active ? Color.GREEN : Color.WHITE;
+        const color = showActivationStatus && bonus?.active ? Color.GREEN : Color.WHITE;
         return bonus ?
                `套装效果：\n<color=${color.toHEX(`#rrggbb`)}>(${bonus.requirement}) ${bonus.effect.description}</color>` :
                ``;

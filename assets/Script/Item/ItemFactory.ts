@@ -15,6 +15,9 @@ import { InfusedIngredient } from "db://assets/Script/Drink/InfusedIngredient/In
 import { InfusedIngredientMeta } from "db://assets/Script/Drink/InfusedIngredient/InfusedIngredientMeta";
 import { GourdSerial } from "db://assets/Script/Drink/Gourd/GourdSerial";
 import { Constructor } from "db://assets/Script/Util/Functions";
+import { SellableSerial } from "db://assets/Script/Sellable/SellableSerial";
+import { LiquorSerial } from "db://assets/Script/Item/LiquorSerial";
+import { InfusedIngredientSerial } from "db://assets/Script/Drink/InfusedIngredient/InfusedIngredientSerial";
 
 /**
  * 物品工厂
@@ -50,18 +53,18 @@ export class ItemFactory {
         // 注册序列化构造
         this.serialRegistry.set(Item, ItemSerial);
         this.serialRegistry.set(Equipment, EquipmentSerial);
-        this.serialRegistry.set(Sellable, ItemSerial);
+        this.serialRegistry.set(Sellable, SellableSerial);
         this.serialRegistry.set(Gourd, GourdSerial);
-        this.serialRegistry.set(Liquor, ItemSerial);
-        this.serialRegistry.set(InfusedIngredient, ItemSerial);
+        this.serialRegistry.set(Liquor, LiquorSerial);
+        this.serialRegistry.set(InfusedIngredient, InfusedIngredientSerial);
 
         // 注册反序列化方法（直接使用将Serial作为参数的Item构造函数将导致循环依赖）
         this.deserializeRegistry.set(ItemMeta, ItemSerial.deserialize);
         this.deserializeRegistry.set(EquipmentMeta, EquipmentSerial.deserialize);
-        this.deserializeRegistry.set(SellableMeta, ItemSerial.deserialize);
+        this.deserializeRegistry.set(SellableMeta, SellableSerial.deserialize);
         this.deserializeRegistry.set(GourdMeta, GourdSerial.deserialize);
-        this.deserializeRegistry.set(LiquorMeta, ItemSerial.deserialize);
-        this.deserializeRegistry.set(InfusedIngredientMeta, ItemSerial.deserialize);
+        this.deserializeRegistry.set(LiquorMeta, LiquorSerial.deserialize);
+        this.deserializeRegistry.set(InfusedIngredientMeta, InfusedIngredientSerial.deserialize);
     }
 
     /**

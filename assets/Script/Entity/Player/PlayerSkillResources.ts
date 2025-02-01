@@ -1,3 +1,7 @@
+import { EventCenter } from "db://assets/Script/Event/EventCenter";
+import { EventName } from "db://assets/Script/Event/EventName";
+import { UIUpdateStanceProcessEvent } from "db://assets/Script/Event/Events/UIUpdateStanceProcessEvent";
+
 /**
  * 棍势升级所需值
  */
@@ -56,9 +60,10 @@ export class PlayerSkillResources {
             return false;
         }
 
-        const ratio = this._stance / STANCE_LEVEL_UP_REQUIREMENT.get(this._stanceLevel);
+        const ratio = this.stanceRatio;
         this._stanceLevel--;
         this._stance = Math.round(ratio * STANCE_LEVEL_UP_REQUIREMENT.get(this._stanceLevel)); // 重新计算棍势等级
+        EventCenter.emit(EventName.UI_UPDATE_STANCE_PROCESS, new UIUpdateStanceProcessEvent(this._stanceLevel, ratio));
         return true;
     }
 
@@ -71,10 +76,11 @@ export class PlayerSkillResources {
         }
 
         const level = this._stanceLevel;
-        const ratio = this._stance / STANCE_LEVEL_UP_REQUIREMENT.get(this._stanceLevel);
+        const ratio = this.stanceRatio;
         this._stanceLevel = 0;
-        this._stance = STANCE_LEVEL_UP_REQUIREMENT.get(0) * ratio;
+        this._stance = Math.round(STANCE_LEVEL_UP_REQUIREMENT.get(0) * ratio);
 
+        EventCenter.emit(EventName.UI_UPDATE_STANCE_PROCESS, new UIUpdateStanceProcessEvent(this._stanceLevel, ratio));
         return level;
     }
 
@@ -101,6 +107,8 @@ export class PlayerSkillResources {
         if (this._stanceLevel === 4) {
             this._stance = 0;
         }
+
+        EventCenter.emit(EventName.UI_UPDATE_STANCE_PROCESS, new UIUpdateStanceProcessEvent(this._stanceLevel, this.stanceRatio));
     }
 
     get stanceLevel(): number {
@@ -137,5 +145,12 @@ export class PlayerSkillResources {
 
     set manaBoost(value: number) {
         this._manaBoost = value;
+    }
+
+    /**
+     * 棍势等级进度
+     */
+    get stanceRatio(): number {
+        return this._stance / STANCE_LEVEL_UP_REQUIREMENT.get(this._stanceLevel);
     }
 }

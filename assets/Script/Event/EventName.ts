@@ -135,5 +135,15 @@ export enum EventName {
     /**
      * 点击商品槽UI
      */
-    UI_CLICK_PRODUCT_SLOT = 'UI_CLICK_PRODUCT_SLOT'
+    UI_CLICK_PRODUCT_SLOT = 'UI_CLICK_PRODUCT_SLOT',
+
+    /**
+     * 更新葫芦进度UI
+     */
+    UI_UPDATE_GOURD_PROCESS = 'UI_UPDATE_GOURD_PROCESS',
+
+    /**
+     * 更新棍势进度UI
+     */
+    UI_UPDATE_STANCE_PROCESS = 'UI_UPDATE_STANCE_PROCESS',
 }

@@ -9,6 +9,7 @@ import { PlayerController } from "db://assets/Script/Entity/Player/PlayerControl
 import { UIUpdateDrinkEvent } from "db://assets/Script/Event/Events/UIUpdateDrinkEvent";
 import { ItemType } from "db://assets/Script/Item/ItemType";
 import { Item } from "db://assets/Script/Item/Item";
+import { UIUpdateGourdProcessEvent } from "db://assets/Script/Event/Events/UIUpdateGourdProcessEvent";
 
 /**
  * 饮酒管理
@@ -57,6 +58,7 @@ export class PlayerDrinkManager {
                 this._autoRecoverTimer -= this._gourd.autoRecoverInterval;
                 this.recover();
             }
+            EventCenter.emit(EventName.UI_UPDATE_GOURD_PROCESS, new UIUpdateGourdProcessEvent(this._gourd.remain, this.autoRecoverRatio));
         }
 
         // 根据时间自动饮用
@@ -69,8 +71,8 @@ export class PlayerDrinkManager {
         // 根据血量自动饮用
         const attributes = PlayerController.PLAYER.attributes;
         while (attributes.health < attributes.finalHealth() * this._dangerousRatio && this._gourd.remain > 0) {
-            this.drink();
             this._autoDrinkTimer = 0; // 重置自动饮用计时器
+            this.drink();
         }
     }
 
@@ -87,6 +89,7 @@ export class PlayerDrinkManager {
         this._gourd.remain = Math.min(this._gourd.capacity, this._gourd.remain + count);
         if (this._gourd.remain === this._gourd.capacity) {
             this._autoRecoverTimer = 0; // 重置自动饮用计时器
+            EventCenter.emit(EventName.UI_UPDATE_GOURD_PROCESS, new UIUpdateGourdProcessEvent(this._gourd.remain, this.autoRecoverRatio));
         }
     }
 
@@ -101,6 +104,7 @@ export class PlayerDrinkManager {
         // 饮用效果
         EventCenter.emit(EventName.PLAYER_DRINK, new PlayerDrinkEvent(this._liquor.healthRecoverRatio));
         this._gourd.remain--;
+        EventCenter.emit(EventName.UI_UPDATE_GOURD_PROCESS, new UIUpdateGourdProcessEvent(this._gourd.remain, 0))
     }
 
     get gourd(): Gourd {
@@ -151,24 +155,6 @@ export class PlayerDrinkManager {
 
     get ingredients(): InfusedIngredient[] {
         return this._ingredients;
-    }
-
-    /**
-     * 设置泡酒物
-     *
-     * @param ingredient 泡酒物
-     * @param index      位置索引
-     */
-    setIngredient(ingredient: InfusedIngredient, index: number) {
-        if (this._ingredients[index] === ingredient) {
-            return;
-        }
-
-        // 切换泡酒物的效果
-        this._ingredients[index].effect?.deactivate();
-        this._ingredients[index] = ingredient;
-        ingredient && ingredient.effect.activate();
-        EventCenter.emit(EventName.UI_UPDATE_DRINK, new UIUpdateDrinkEvent(ItemType.INGREDIENT));
     }
 
     /**
@@ -228,5 +214,12 @@ export class PlayerDrinkManager {
                     break;
             }
         });
+    }
+
+    /**
+     * 获取自动恢复酒量进度
+     */
+    private get autoRecoverRatio(): number {
+        return this._autoRecoverTimer / this._gourd.autoRecoverInterval;
     }
 }
